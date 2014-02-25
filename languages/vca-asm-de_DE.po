@@ -1,0 +1,2182 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: VcA Activity & Supporter Management v1.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: \n"
+"PO-Revision-Date: 2012-06-06 21:53:29+0000\n"
+"Last-Translator: Johannes Pilkahn <johannes@pilkahn.org>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=n != 1;\n"
+"X-Poedit-Language: \n"
+"X-Poedit-Country: \n"
+"X-Poedit-SourceCharset: utf-8\n"
+"X-Poedit-KeywordsList: __;_e;__ngettext:1,2;_n:1,2;__ngettext_noop:1,2;_n_noop:1,2;_c,_nc:4c,1,2;_x:1,2c;_ex:1,2c;_nx:4c,1,2;_nx_noop:4c,1,2;\n"
+"X-Poedit-Basepath: \n"
+"X-Poedit-Bookmarks: \n"
+"X-Poedit-SearchPath-0: .\n"
+"X-Textdomain-Support: yes"
+
+#: admin/class-vca-asm-admin.php:223
+#: admin/class-vca-asm-admin.php:224
+#: admin/class-vca-asm-admin.php:304
+#@ vca-asm
+msgid "Regions"
+msgstr "Regionen"
+
+#: admin/class-vca-asm-admin.php:241
+#: includes/class-vca-asm-regions.php:595
+#@ vca-asm
+msgid "Add New Region"
+msgstr "Neue Region"
+
+#: admin/class-vca-asm-admin.php:242
+#@ vca-asm
+msgid "Add new"
+msgstr "Hinzufügen"
+
+#: includes/class-vca-asm-regions.php:308
+#@ vca-asm
+msgid "The selected region has been successfully deleted."
+msgstr "Die gewählte Region wurde erfolgreich gelöscht."
+
+#: includes/class-vca-asm-regions.php:400
+#@ vca-asm
+msgid "Region successfully updated!"
+msgstr "Region erfolgreich gespeichert."
+
+#: includes/class-vca-asm-regions.php:418
+#@ vca-asm
+msgid "Region successfully added!"
+msgstr "Die neue Region wurde erfolgreich hinzugefügt!"
+
+#: admin/class-vca-asm-admin-applications.php:303
+#: admin/class-vca-asm-admin-applications.php:516
+#: admin/class-vca-asm-admin-applications.php:729
+#: admin/class-vca-asm-admin-supporters.php:111
+#: admin/class-vca-asm-admin-supporters.php:222
+#: admin/class-vca-asm-admin-supporters.php:347
+#: ajax/export-excel.php:24
+#: includes/class-vca-asm-regions.php:471
+#@ vca-asm
+msgid "Region"
+msgstr "Region"
+
+#: includes/class-vca-asm-regions.php:489
+#@ vca-asm
+msgid "Members"
+msgstr "Mitglieder"
+
+#: includes/class-vca-asm-regions.php:494
+#@ vca-asm
+msgid "Regions: Cells &amp; Local Crews"
+msgstr "Regionen: Zellen &amp; Local Crews"
+
+#: templates/admin-table.php:62
+#: templates/admin-table.php:95
+#, php-format
+#@ vca-asm
+msgid "Edit %s"
+msgstr "%s Editieren"
+
+#: templates/admin-table.php:97
+#@ vca-asm
+msgid "Edit"
+msgstr "Editieren"
+
+#: templates/admin-table.php:107
+#@ vca-asm
+msgid "Delete"
+msgstr "Löschen"
+
+#: includes/class-vca-asm-regions.php:225
+#@ vca-asm
+msgid "Name of region"
+msgstr "Name der Region"
+
+#: includes/class-vca-asm-regions.php:598
+#, php-format
+#@ vca-asm
+msgid "Edit \"%s\""
+msgstr "\"%s\" Editieren"
+
+#: includes/class-vca-asm-regions.php:609
+#@ vca-asm
+msgid "Save Region"
+msgstr "Region Speichern"
+
+#: includes/class-vca-asm-activities.php:34
+#@ vca-asm
+msgctxt "Tools Meta Box"
+msgid "Cups"
+msgstr "Pfandbecher Sammeln"
+
+#: includes/class-vca-asm-activities.php:38
+#@ vca-asm
+msgctxt "Tools Meta Box"
+msgid "Guest List"
+msgstr "Gästelisten-Euros"
+
+#: includes/class-vca-asm-activities.php:42
+#@ vca-asm
+msgctxt "Tools Meta Box"
+msgid "Info Counter"
+msgstr "Infostand"
+
+#: includes/class-vca-asm-activities.php:46
+#@ vca-asm
+msgctxt "Tools Meta Box"
+msgid "Water Bottles"
+msgstr "Quellwasser"
+
+#: includes/class-vca-asm-activities.php:78
+#@ vca-asm
+msgctxt "Finances Meta Box"
+msgid "Cups"
+msgstr "Gesamtzahl Becher"
+
+#: includes/class-vca-asm-activities.php:111
+#@ vca-asm
+msgctxt "Region Meta Box"
+msgid "Region"
+msgstr "Region"
+
+#: includes/class-vca-asm-activities.php:128
+#@ vca-asm
+msgctxt "Festival Data Meta Box"
+msgid "Location"
+msgstr "Ort"
+
+#: includes/class-vca-asm-activities.php:129
+#@ vca-asm
+msgctxt "Festival Data Meta Box"
+msgid "Where the festival takes place"
+msgstr "Wo das Festival stattfindet"
+
+#: includes/class-vca-asm-activities.php:134
+#@ vca-asm
+msgctxt "Festival Data Meta Box"
+msgid "Website"
+msgstr "Webseite"
+
+#: includes/class-vca-asm-activities.php:135
+#@ vca-asm
+msgctxt "Festival Data Meta Box"
+msgid "The festival's Website"
+msgstr "Der Webauftritt des Festivals"
+
+#: includes/class-vca-asm-activities.php:140
+#@ vca-asm
+msgctxt "Festival Data Meta Box"
+msgid "Directions"
+msgstr "Anfahrt"
+
+#: includes/class-vca-asm-activities.php:141
+#@ vca-asm
+msgctxt "Festival Data Meta Box"
+msgid "Description of how to reach the festival grounds"
+msgstr "Wie kommt man da hin?"
+
+#: includes/class-vca-asm-activities.php:275
+#@ vca-asm
+msgctxt "post type general name"
+msgid "Festivals"
+msgstr "Festivals"
+
+#: includes/class-vca-asm-activities.php:276
+#@ vca-asm
+msgctxt "post type singular name"
+msgid "Festival"
+msgstr "Festival"
+
+#: includes/class-vca-asm-activities.php:277
+#@ vca-asm
+msgctxt "festival"
+msgid "Add New"
+msgstr "Hinzufügen"
+
+#: includes/class-vca-asm-activities.php:278
+#@ vca-asm
+msgid "Add New Festival"
+msgstr "Neues Festival"
+
+#: includes/class-vca-asm-activities.php:279
+#@ vca-asm
+msgid "Edit Festival"
+msgstr "Festival Editieren"
+
+#: includes/class-vca-asm-activities.php:280
+#@ vca-asm
+msgid "New Festival"
+msgstr "Neues Festival"
+
+#: includes/class-vca-asm-activities.php:281
+#@ vca-asm
+msgid "All Festivals"
+msgstr "Alle Festivals"
+
+#: includes/class-vca-asm-activities.php:282
+#@ vca-asm
+msgid "View Festival"
+msgstr "Festival Ansehen"
+
+#: includes/class-vca-asm-activities.php:283
+#@ vca-asm
+msgid "Search Festivals"
+msgstr "Festivals Durchsuchen"
+
+#: includes/class-vca-asm-activities.php:284
+#@ vca-asm
+msgid "No Festivals found"
+msgstr "Keine Festivals gefunden..."
+
+#: includes/class-vca-asm-activities.php:285
+#@ vca-asm
+msgid "No Festivals found in Trash"
+msgstr "Keine Festivals im Papierkorb..."
+
+#: includes/class-vca-asm-activities.php:561
+#@ vca-asm
+msgctxt "meta box title, festival"
+msgid "Tools"
+msgstr "Werkzeuge"
+
+#: includes/class-vca-asm-activities.php:535
+#@ vca-asm
+msgctxt "meta box title, festival"
+msgid "The Festival"
+msgstr "Das Festival"
+
+#: includes/class-vca-asm-activities.php:552
+#@ vca-asm
+msgctxt "meta box title, festival"
+msgid "Region"
+msgstr "Region"
+
+#: includes/class-vca-asm-activities.php:601
+#@ vca-asm
+msgctxt "meta box title, festival"
+msgid "Finances"
+msgstr "Finanzen"
+
+#: includes/class-vca-asm-profile.php:44
+#@ vca-asm
+msgctxt "User Profile"
+msgid "City"
+msgstr "Aktueller Wohnort"
+
+#: includes/class-vca-asm-profile.php:50
+#@ vca-asm
+msgctxt "User Profile"
+msgid "Birthday"
+msgstr "Geburtstag"
+
+#: templates/admin-custom-fields.php:133
+#@ vca-asm
+msgctxt "taxonomy selection for acitivity"
+msgid "Select One"
+msgstr "Eine Auswählen"
+
+#: admin/class-vca-asm-admin-emails.php:40
+#: admin/class-vca-asm-admin-emails.php:49
+#: admin/class-vca-asm-admin-emails.php:170
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Receipient"
+msgstr "Empfänger"
+
+#: admin/class-vca-asm-admin-emails.php:67
+#: admin/class-vca-asm-admin-emails.php:123
+#@ vca-asm
+msgid "Testmail to yourself"
+msgstr "Test-Email an dich selbst"
+
+#: admin/class-vca-asm-admin-emails.php:150
+#: includes/class-vca-asm-regions.php:70
+#: includes/class-vca-asm-regions.php:243
+#: templates/admin-table.php:76
+#@ vca-asm
+msgid "Cell"
+msgstr "Zelle"
+
+#: admin/class-vca-asm-admin-emails.php:156
+#: includes/class-vca-asm-regions.php:73
+#: includes/class-vca-asm-regions.php:239
+#: templates/admin-table.php:78
+#@ vca-asm
+msgid "Local Crew"
+msgstr "Local Crew"
+
+#: admin/class-vca-asm-admin-emails.php:173
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Select who receives the email. If the region is a Cell or Local Crew, you may chose to only write to the supporters with membership status. Choose the \"Testmail to yourself\" to see how it will look in your own inbox."
+msgstr "Wähle aus, wer die Mail erhalten soll. Bei einer Region, die eine Zelle oder Local Crew ist, kannst Du auswählen, ob du allen dort wohnenden Supportern oder nur solchen mit Mitgliedschaftsstatus schreiben willst. Wähle \"Test-Email an dich selbst\" aus, um zu checken, wie die Mail in deiner Inbox aussieht."
+
+#: admin/class-vca-asm-admin-emails.php:187
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Sender"
+msgstr "Absender"
+
+#: admin/class-vca-asm-admin-emails.php:195
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "My own email address"
+msgstr "Meine eigene Email-Adresse"
+
+#: admin/class-vca-asm-admin-emails.php:199
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Send the email either from your personal email address or select the generic no-reply."
+msgstr "Schicke die Nachricht entweder von deiner persönlichen Email-Adresse oder von der generischen \"no-reply\"."
+
+#: admin/class-vca-asm-admin-emails.php:203
+#: admin/class-vca-asm-admin-emails.php:400
+#: admin/class-vca-asm-admin-emails.php:422
+#: admin/class-vca-asm-admin-emails.php:444
+#: admin/class-vca-asm-admin-emails.php:466
+#: admin/class-vca-asm-admin-emails.php:488
+#: admin/class-vca-asm-admin-emails.php:510
+#: admin/class-vca-asm-admin-emails.php:532
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Subject"
+msgstr "Betreff"
+
+#: admin/class-vca-asm-admin-emails.php:205
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "The email's subject line"
+msgstr "Die Betreffszeile der Nachricht"
+
+#: admin/class-vca-asm-admin-emails.php:209
+#: admin/class-vca-asm-admin-emails.php:406
+#: admin/class-vca-asm-admin-emails.php:428
+#: admin/class-vca-asm-admin-emails.php:450
+#: admin/class-vca-asm-admin-emails.php:472
+#: admin/class-vca-asm-admin-emails.php:494
+#: admin/class-vca-asm-admin-emails.php:516
+#: admin/class-vca-asm-admin-emails.php:538
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Message"
+msgstr "Nachricht"
+
+#: admin/class-vca-asm-admin-emails.php:211
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Message Body"
+msgstr "Text der Nachricht"
+
+#: admin/class-vca-asm-admin-emails.php:222
+#@ vca-asm
+msgid "Send an email"
+msgstr "Schicke eine Email raus"
+
+#: admin/class-vca-asm-admin-emails.php:235
+#@ vca-asm
+msgid "Send Email now?"
+msgstr "Email jetzt verschicken?"
+
+#: admin/class-vca-asm-admin-emails.php:238
+#@ vca-asm
+msgid "Send Mail!"
+msgstr "Mail verschicken!"
+
+#: admin/class-vca-asm-admin-emails.php:367
+#, php-format
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "The Email titled \"%s\" has been successfully sent."
+msgstr "Die Nachricht mit dem Titel \"%s\" wurde erfolgreich verschickt."
+
+#: admin/class-vca-asm-admin-emails.php:390
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Application Confirmation"
+msgstr "Bestätigung des Bewerbungseingangs"
+
+#: admin/class-vca-asm-admin-emails.php:394
+#: admin/class-vca-asm-admin-emails.php:416
+#: admin/class-vca-asm-admin-emails.php:438
+#: admin/class-vca-asm-admin-emails.php:460
+#: admin/class-vca-asm-admin-emails.php:482
+#: admin/class-vca-asm-admin-emails.php:504
+#: admin/class-vca-asm-admin-emails.php:526
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Send Mail Switch"
+msgstr "Ein/Aus Schalter"
+
+#: admin/class-vca-asm-admin-emails.php:396
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Enable/disable application confirmations"
+msgstr "Bestätigung von Bewerbungen ein- und ausschalten."
+
+#: admin/class-vca-asm-admin-emails.php:402
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Subject line for application confirmations"
+msgstr "Betreffszeile für Bewerbungsbestätigungen"
+
+#: admin/class-vca-asm-admin-emails.php:408
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Message body for application confirmations"
+msgstr "Nachrichtentext für Bewerbungsbestätigungen"
+
+#: admin/class-vca-asm-admin-emails.php:412
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Registration Confirmation / Application Acceptance"
+msgstr "Zusage von Bewerbungen"
+
+#: admin/class-vca-asm-admin-emails.php:418
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Enable/disable registration confirmations"
+msgstr "Zusagen ein- und ausschalten"
+
+#: admin/class-vca-asm-admin-emails.php:424
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Subject line for acceptance to event"
+msgstr "Betreffszeile für Zusagen"
+
+#: admin/class-vca-asm-admin-emails.php:430
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Message body for acceptance to event"
+msgstr "Nachrichtentext für Zusagen"
+
+#: admin/class-vca-asm-admin-emails.php:434
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Deny Application"
+msgstr "Absage einer Bewerbung"
+
+#: admin/class-vca-asm-admin-emails.php:440
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Enable/disable application denial notifications"
+msgstr "Absagen ein- oder ausschalten"
+
+#: admin/class-vca-asm-admin-emails.php:446
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Subject line for application denial"
+msgstr "Betreffszeile für Absagen"
+
+#: admin/class-vca-asm-admin-emails.php:452
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Message body for application denial"
+msgstr "Nachrichtentext für Absagen"
+
+#: admin/class-vca-asm-admin-emails.php:456
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Withdraw Registration"
+msgstr "Zusage Zurückziehen"
+
+#: admin/class-vca-asm-admin-emails.php:462
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Enable/disable notifications of revoked registrations"
+msgstr "Benachrichtigung bei zurückgezogenen Zusagen ein- oder ausschalten"
+
+#: admin/class-vca-asm-admin-emails.php:468
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Subject line for notifications of revoked registrations"
+msgstr "Betreffszeile bei zurückgezogenen Zusagen"
+
+#: admin/class-vca-asm-admin-emails.php:474
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Message body for notifications of revoked registrations"
+msgstr "Nachrichtentext bei zurückgezogenen Zusagen"
+
+#: admin/class-vca-asm-admin-emails.php:478
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Accept Membership"
+msgstr "Mitgliedsstatus Akzeptieren"
+
+#: admin/class-vca-asm-admin-emails.php:484
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Enable/disable notifications of accepted memberships to Cell / Local Crew"
+msgstr "Benachrichtigung bei Aufnahme in Zelle / Local Crew ein- oder ausschalten"
+
+#: admin/class-vca-asm-admin-emails.php:490
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Subject line for notifications of accepted memberships to Cell / Local Crew"
+msgstr "Betreffszeile bei Aufnahme in Zelle / Local Crew"
+
+#: admin/class-vca-asm-admin-emails.php:496
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Message body for notifications of accepted memberships to Cell / Local Crew"
+msgstr "Nachrichtentext bei Aufnahme in Zelle oder Local Crew"
+
+#: admin/class-vca-asm-admin-emails.php:500
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Deny Membership"
+msgstr "Mitgliedschaft Verweigern"
+
+#: admin/class-vca-asm-admin-emails.php:506
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Enable/disable notifications of denied memberships to Cell / Local Crew"
+msgstr "Nachricht bei Verweigerung des Mitgliedsstatus ein- oder ausschalten"
+
+#: admin/class-vca-asm-admin-emails.php:512
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Subject line for notifications of denied memberships to Cell / Local Crew"
+msgstr "Betreffszeile für Verweigerung des Mitgliedsstatus für Zelle / LocaL Crew"
+
+#: admin/class-vca-asm-admin-emails.php:518
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Message body for notifications of denied memberships to Cell / Local Crew"
+msgstr "Nachrichtentext bei Verweigerung des Mitgliedsstatus für Zelle / Local Crew"
+
+#: admin/class-vca-asm-admin-emails.php:522
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Cancel Membership"
+msgstr "Mitgliedschaft Beenden"
+
+#: admin/class-vca-asm-admin-emails.php:528
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Enable/disable notifications when memberships to Cell / Local Crew are cancelled"
+msgstr "Benachrichtigung bei zurückgezogenem Mitgliedsstatus ein- oder ausschalten"
+
+#: admin/class-vca-asm-admin-emails.php:534
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Subject line for notifications when memberships to Cell / Local Crew are cancelled"
+msgstr "Betreffszeile bei zurückgezogenem Mitgliedsstatus"
+
+#: admin/class-vca-asm-admin-emails.php:540
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Message body for notifications when memberships to Cell / Local Crew are cancelled"
+msgstr "Nachrichtentext bei zurückgezogenem Mitgliedsstatus"
+
+#: admin/class-vca-asm-admin-emails.php:545
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Edit Automatic Responses"
+msgstr "Automatische Antworten Editieren"
+
+#: admin/class-vca-asm-admin-emails.php:613
+#@ vca-asm
+msgid "Options successfully updated!"
+msgstr "Optionen erfolgreich gespeichert!"
+
+#: admin/class-vca-asm-admin-emails.php:622
+#@ vca-asm
+msgid "Save Automatic Response Texts"
+msgstr "Automatische Antworten Speichern"
+
+#: admin/class-vca-asm-admin-supporters.php:59
+#@ vca-asm
+msgid "Pending..."
+msgstr "Wartet..."
+
+#: admin/class-vca-asm-admin-supporters.php:62
+#@ vca-asm
+msgid "Ja"
+msgstr "Ja"
+
+#: admin/class-vca-asm-admin-supporters.php:66
+#@ vca-asm
+msgid "Nein"
+msgstr "Nein"
+
+#: admin/class-vca-asm-admin-applications.php:289
+#: admin/class-vca-asm-admin-applications.php:502
+#: admin/class-vca-asm-admin-applications.php:715
+#: admin/class-vca-asm-admin-supporters.php:200
+#: admin/class-vca-asm-admin-supporters.php:324
+#: ajax/export-excel.php:22
+#@ vca-asm
+msgid "First Name"
+msgstr "Vorname"
+
+#: admin/class-vca-asm-admin-applications.php:297
+#: admin/class-vca-asm-admin-applications.php:510
+#: admin/class-vca-asm-admin-applications.php:723
+#: admin/class-vca-asm-admin-supporters.php:206
+#: admin/class-vca-asm-admin-supporters.php:331
+#: ajax/export-excel.php:23
+#@ vca-asm
+msgid "Last Name"
+msgstr "Nachname"
+
+#: admin/class-vca-asm-admin-supporters.php:212
+#: admin/class-vca-asm-admin-supporters.php:337
+#@ vca-asm
+msgid "Email Address"
+msgstr "Email Adresse"
+
+#: admin/class-vca-asm-admin-supporters.php:227
+#@ vca-asm
+msgid "Membership Status"
+msgstr "Mitgliedsstatus"
+
+#: admin/class-vca-asm-admin-applications.php:308
+#: admin/class-vca-asm-admin-applications.php:521
+#: admin/class-vca-asm-admin-applications.php:734
+#: admin/class-vca-asm-admin-supporters.php:106
+#: admin/class-vca-asm-admin-supporters.php:232
+#: admin/class-vca-asm-admin-supporters.php:352
+#: ajax/export-excel.php:25
+#@ vca-asm
+msgid "Age"
+msgstr "Alter"
+
+#: admin/class-vca-asm-admin.php:169
+#: admin/class-vca-asm-admin.php:170
+#: admin/class-vca-asm-admin.php:305
+#@ vca-asm
+msgid "Supporter"
+msgstr "Supporter"
+
+#: admin/class-vca-asm-admin.php:179
+#: admin/class-vca-asm-admin.php:180
+#@ vca-asm
+msgid "All Supporters"
+msgstr "Alle Supporter"
+
+#: admin/class-vca-asm-admin.php:196
+#: admin/class-vca-asm-admin.php:197
+#@ vca-asm
+msgid "Emails"
+msgstr "Emails"
+
+#: admin/class-vca-asm-admin.php:206
+#@ vca-asm
+msgid "Send an E-Mail"
+msgstr "Email schicken"
+
+#: admin/class-vca-asm-admin.php:207
+#@ vca-asm
+msgid "Send Mail"
+msgstr "Email schicken"
+
+#: admin/class-vca-asm-admin.php:214
+#: admin/class-vca-asm-admin.php:215
+#@ vca-asm
+msgid "Auto Responses"
+msgstr "Auto-Antworten"
+
+#: admin/class-vca-asm-admin.php:233
+#: admin/class-vca-asm-admin.php:234
+#@ vca-asm
+msgid "All Regions"
+msgstr "Alle Regionen"
+
+#: includes/class-vca-asm-activities.php:64
+#@ vca-asm
+msgctxt "Timeframe Meta Box"
+msgid "Start Date"
+msgstr "Start Datum"
+
+#: includes/class-vca-asm-activities.php:65
+#@ vca-asm
+msgctxt "Timeframe"
+msgid "The beginning of the festival"
+msgstr "Der erste Tag des Festivals"
+
+#: includes/class-vca-asm-activities.php:70
+#@ vca-asm
+msgctxt "Timeframe Meta Box"
+msgid "End Date"
+msgstr "End Datum"
+
+#: includes/class-vca-asm-activities.php:71
+#@ vca-asm
+msgctxt "Timeframe"
+msgid "The last day of the festival"
+msgstr "Der letzte Tag des Festivals"
+
+#: includes/class-vca-asm-activities.php:112
+#@ vca-asm
+msgctxt "Region Meta Box"
+msgid "Associate with the activity with a region. This is irrelevant to slot allocation and only matters for categorization and sorting."
+msgstr "Die Aktivität einer Region zuordnen. Dies ist nicht relevant für die Platzvergabe und dient nur der Kategorisierung von Aktivitäten."
+
+#: includes/class-vca-asm-activities.php:146
+#@ vca-asm
+msgctxt "Festival Data Meta Box"
+msgid "Parking Lot(s)"
+msgstr "Parkplätze"
+
+#: includes/class-vca-asm-activities.php:147
+#@ vca-asm
+msgctxt "Festival Data Meta Box"
+msgid "How many parking lots are where?"
+msgstr "Wieviele Parkmöglichkeiten sind wo zu finden?"
+
+#: includes/class-vca-asm-activities.php:154
+#@ vca-asm
+msgctxt "Applications Meta Box"
+msgid "Open Slots"
+msgstr "Offene Plätze"
+
+#: includes/class-vca-asm-activities.php:155
+#@ vca-asm
+msgctxt "Applications Meta Box"
+msgid "Allocate open slots either globally, regionally, or both"
+msgstr "Lege offene Plätze fest, entweder global, regional oder beides"
+
+#: includes/class-vca-asm-activities.php:467
+#@ vca-asm
+msgid "Festival"
+msgstr "Festival"
+
+#: includes/class-vca-asm-activities.php:468
+#: templates/frontend-activities.php:62
+#@ vca-asm
+msgid "Location"
+msgstr "Ort"
+
+#: includes/class-vca-asm-activities.php:543
+#@ vca-asm
+msgctxt "meta box title, festival"
+msgid "Timeframe"
+msgstr "Zeitraum"
+
+#: includes/class-vca-asm-activities.php:585
+#@ vca-asm
+msgctxt "meta box title, festival"
+msgid "Applications"
+msgstr "Bewerbungen"
+
+#: includes/class-vca-asm-lists.php:114
+#@ vca-asm
+msgid "Currently there are no festivals in the registration phase"
+msgstr "Derzeit sind keine Festivals in der Bewerbungsphase."
+
+#: includes/class-vca-asm-lists.php:182
+#@ vca-asm
+msgid "Current Applications"
+msgstr "Aktuelle Bewerbungen"
+
+#: admin/class-vca-asm-admin-applications.php:459
+#: includes/class-vca-asm-lists.php:208
+#@ vca-asm
+msgid "Waiting List"
+msgstr "Warteliste"
+
+#: includes/class-vca-asm-mailer.php:53
+#@ vca-asm
+msgid "Successful application!"
+msgstr "Erfolgreiche Bewerbung!"
+
+#: includes/class-vca-asm-mailer.php:54
+#, php-format
+#@ vca-asm
+msgid "You have successfully applied to support Viva con Agua at \"%s\""
+msgstr "Du hast dich erfolgreich beworben, Viva con Agua bei \"%s\" zu unterstützen."
+
+#: includes/class-vca-asm-mailer.php:57
+#@ vca-asm
+msgid "Your application has been accepted!"
+msgstr "Deine Bewerbung wurde angenommen!"
+
+#: includes/class-vca-asm-mailer.php:61
+#@ vca-asm
+msgid "Your application has been denied."
+msgstr "Deine Bewerbung wurde leider abgelehnt."
+
+#: includes/class-vca-asm-mailer.php:62
+#, php-format
+#@ vca-asm
+msgid "Sorry this time there weren't enough open slots for \"%s\" and your application had to be denied. You have been moved to the waiting list."
+msgstr "Sorry, dieses Mal gab's nicht genügend Plätze für \"%s\" und wir mussten deine Bewerbung ablehnen. Du stehst jetzt auf der Warteliste."
+
+#: includes/class-vca-asm-mailer.php:65
+#@ vca-asm
+msgid "Registration revoked."
+msgstr "Zusage zurückgezogen."
+
+#: includes/class-vca-asm-mailer.php:66
+#, php-format
+#@ vca-asm
+msgid "Your registration to \"%s\" has been revoked."
+msgstr "Deine Registrierung zu \"%s\" wurde zurückgezogen."
+
+#: includes/class-vca-asm-mailer.php:69
+#@ vca-asm
+msgid "Membership confirmed."
+msgstr "Mitgliedsschaft akzeptiert."
+
+#: includes/class-vca-asm-mailer.php:70
+#, php-format
+#@ vca-asm
+msgid "Your membership to \"%s\" has been confirmed."
+msgstr "Deine Mitgliedsschaft bei \"%s\" wurde bestätigt."
+
+#: includes/class-vca-asm-mailer.php:73
+#@ vca-asm
+msgid "Membership denied."
+msgstr "Mitgliedsschaft nicht akzeptiert."
+
+#: includes/class-vca-asm-mailer.php:74
+#, php-format
+#@ vca-asm
+msgid "Your membership to \"%s\" has been denied."
+msgstr "Deine Mitgliedsschaft bei \"%s\" wurde nicht akzeptiert. Sorry."
+
+#: includes/class-vca-asm-mailer.php:77
+#@ vca-asm
+msgid "Membership cancelled."
+msgstr "Mitgliedsschaft beendet."
+
+#: includes/class-vca-asm-mailer.php:78
+#, php-format
+#@ vca-asm
+msgid "Your membership to \"%s\" has been cencelled, either by yourself or a Head Of"
+msgstr "Deine Mitgliedsschaft bei \"%s\" wurde beendet, entweder auf deinen Wunsch oder von einem Head Of."
+
+#: includes/class-vca-asm-profile.php:40
+#@ vca-asm
+msgctxt "User Profile"
+msgid "About you"
+msgstr "Über Dich"
+
+#: includes/class-vca-asm-profile.php:56
+#@ vca-asm
+msgctxt "User Profile"
+msgid "Gender"
+msgstr "Geschlecht"
+
+#: includes/class-vca-asm-profile.php:61
+#@ vca-asm
+msgid "female"
+msgstr "weiblich"
+
+#: includes/class-vca-asm-profile.php:65
+#@ vca-asm
+msgid "male"
+msgstr "männlich"
+
+#: includes/class-vca-asm-profile.php:81
+#: includes/class-vca-asm-profile.php:147
+#: includes/class-vca-asm-profile.php:172
+#: includes/class-vca-asm-profile.php:197
+#@ vca-asm
+msgctxt "User Profile"
+msgid "Region"
+msgstr "Region"
+
+#: includes/class-vca-asm-profile.php:150
+#@ vca-asm
+msgctxt "User Profile"
+msgid "You currently are a confirmed member of this Cell or Local Crew. You can change your regional affiliation again only if you choose to cancel your membership. You will have to apply for membership of the new region's Cell or Local Crew again."
+msgstr "Derzeit bist du ein bestätigtes Mitglied dieser Zelle oder Local Crew. Du kannst deine Region erst wieder ändern, wenn du deine Mitgliedsschaft beendest. In der neuen Zelle oder Local Crew musst du dich wieder um die Mitgliedsschaft bewerben."
+
+#: includes/class-vca-asm-profile.php:164
+#@ vca-asm
+msgctxt "User Profile"
+msgid "Uncheck to cancel membership"
+msgstr "Entferne das Häkchen um die Mitgliedsschaft zu beenden"
+
+#: includes/class-vca-asm-profile.php:175
+#@ vca-asm
+msgctxt "User Profile"
+msgid "You have applied for membership status in the selected region. You can change your regional affiliation again only if you choose to withdraw your membership application."
+msgstr "Du hast dich in der gewählten Region um Mitgliedsstatus in der entsprechenden Zelle oder Local Crew beworben. Du kannst deine Region erst wieder ändern, wenn du die Bewerbung zurückziehst."
+
+#: includes/class-vca-asm-profile.php:184
+#@ vca-asm
+msgctxt "User Profile"
+msgid "You have applied for membership of this region's Cell or Local Crew. To withdraw your application, simply uncheck the box."
+msgstr "Entferne das Häkchen, um deine Bewerbung auf Zellen- bzw. LC-Mitgliedsschaft zurückzuziehen."
+
+#: includes/class-vca-asm-regions.php:76
+#@ vca-asm
+msgid "geographical only"
+msgstr "nur geographisch"
+
+#: includes/class-vca-asm-regions.php:231
+#: includes/class-vca-asm-regions.php:478
+#@ vca-asm
+msgid "Status"
+msgstr "Status"
+
+#: includes/class-vca-asm-regions.php:235
+#@ vca-asm
+msgid "Geographical region only"
+msgstr "nur geographische Region"
+
+#: templates/admin-table.php:67
+#: templates/admin-table.php:116
+#, php-format
+#@ vca-asm
+msgid "Promote %s"
+msgstr "%s zum Mitglied machen"
+
+#: templates/admin-table.php:80
+#@ vca-asm
+msgid "Geographical Only"
+msgstr "Nur geographisch"
+
+#: templates/admin-table.php:101
+#, php-format
+#@ vca-asm
+msgid "Delete %s"
+msgstr "%s Löschen"
+
+#: templates/admin-table.php:103
+#, php-format
+#@ vca-asm
+msgid "Really delete &quot;%s&quot;?"
+msgstr "&quot;%s&quot; wirklich löschen?"
+
+#: templates/admin-table.php:118
+#@ vca-asm
+msgid "Promote"
+msgstr "(Zum Mitglied) Befördern"
+
+#: templates/admin-table.php:122
+#, php-format
+#@ vca-asm
+msgid "Deny membership to %s"
+msgstr "%s die Mitgliedschaft verweigern"
+
+#: templates/admin-table.php:128
+#@ vca-asm
+msgid "Deny membership"
+msgstr "Mitgliedschaft verweigern"
+
+#: includes/class-vca-asm-activities.php:469
+#: templates/frontend-activities.php:57
+#@ vca-asm
+msgid "Timeframe"
+msgstr "Zeitraum"
+
+#: templates/frontend-activities-past.php:34
+#: templates/frontend-activities.php:59
+#@ vca-asm
+msgid "until"
+msgstr "bis"
+
+#: templates/frontend-activities.php:65
+#@ vca-asm
+msgid "Application Deadline"
+msgstr "Bewerbung möglich bis"
+
+#: includes/class-vca-asm-activities.php:28
+#@ vca-asm
+msgctxt "Tools Meta Box"
+msgid "What tools do we employ?"
+msgstr "Welche VcA-Werkzeuge werden eingesetzt?"
+
+#: includes/class-vca-asm-activities.php:115
+#: includes/class-vca-asm-activities.php:158
+#@ vca-asm
+msgctxt "Regions"
+msgid "global"
+msgstr "global"
+
+#: includes/class-vca-asm-activities.php:178
+#@ vca-asm
+msgctxt "Applications Meta Box"
+msgid "Applications"
+msgstr "Bewerbungen"
+
+#: includes/class-vca-asm-activities.php:470
+#@ vca-asm
+msgid "Application Phase"
+msgstr "Bewerbungsphase"
+
+#: includes/class-vca-asm-activities.php:471
+#@ vca-asm
+msgid "Slots (Apps)"
+msgstr "Plätze (Bewerbungen)"
+
+#: includes/class-vca-asm-activities.php:577
+#@ vca-asm
+msgctxt "meta box title, festival"
+msgid "Slot Allocation"
+msgstr "Platzvergabe"
+
+#: includes/class-vca-asm-profile.php:151
+#: includes/class-vca-asm-profile.php:176
+#: includes/class-vca-asm-profile.php:191
+#: includes/class-vca-asm-profile.php:193
+#: includes/class-vca-asm-regions.php:95
+#@ vca-asm
+msgctxt "Regions"
+msgid "no specific region"
+msgstr "keine spezifische Region"
+
+#: templates/frontend-activities.php:71
+#@ vca-asm
+msgid "Website"
+msgstr "Webseite"
+
+#: templates/frontend-activities.php:120
+#@ vca-asm
+msgid "Directions"
+msgstr "Anfahrt"
+
+#: templates/frontend-activities.php:117
+#@ vca-asm
+msgid "none"
+msgstr "keine"
+
+#: templates/frontend-activities.php:171
+#@ vca-asm
+msgid "Apply"
+msgstr "Bewerben"
+
+#: admin/class-vca-asm-admin-emails.php:547
+#, php-format
+#@ vca-asm
+msgctxt "Admin Email Autoresponse Options"
+msgid "Here you can enable or disable, as well as overwrite the default autoresponses sent when a supporter completes a certain action. The title of the activity in question may be inserted via the placeholder \"%s\" (without quotation marks)."
+msgstr "Hier können die bei einer Aktion eines Supporters automatisch verschickten Benachrichtungen an- und ausgeschaltet, sowie editiert werden. Um die Standardbenachrichtigung zu verwenden, lösche einfach die Inhalte eines Feldes und speichere die Optionen. Als Platzhalter für den Namen der Aktivität oder der Region kann \"%s\" (ohne Anführungszeichen) verwandt werden."
+
+#: includes/class-vca-asm-activities.php:166
+#@ vca-asm
+msgctxt "Applications Meta Box"
+msgid "Start of application phase"
+msgstr "Start der Bewerbungsphase"
+
+#: includes/class-vca-asm-activities.php:167
+#@ vca-asm
+msgctxt "Applications"
+msgid "Before this date, the activity will not be displayed to supporters"
+msgstr "Vor diesem Datum wird die Aktivität den Supportern nicht angezeigt"
+
+#: includes/class-vca-asm-activities.php:172
+#@ vca-asm
+msgctxt "Applications Meta Box"
+msgid "Application Deadline"
+msgstr "Bewerbungs Deadline"
+
+#: includes/class-vca-asm-activities.php:173
+#@ vca-asm
+msgctxt "Applications"
+msgid "The end of the application phase"
+msgstr "Ende der Bewerbungsphase"
+
+#: admin/class-vca-asm-admin.php:187
+#: admin/class-vca-asm-admin.php:188
+#, php-format
+#@ vca-asm
+msgid "Membership Status (%s)"
+msgstr "Mitgliedsstatus (%s)"
+
+#: templates/admin-custom-fields.php:341
+#: templates/admin-custom-fields.php:400
+#@ vca-asm
+msgid "Please allocate slots first"
+msgstr "Bitte lege erst die Plätze fest"
+
+#: templates/admin-custom-fields.php:179
+#: templates/admin-custom-fields.php:190
+#@ vca-asm
+msgctxt "Contact Person Meta Box"
+msgid "Name"
+msgstr "Name"
+
+#: includes/class-vca-asm-activities.php:227
+#@ vca-asm
+msgctxt "Contact Person Meta Box"
+msgid "(This information will be visible to registered supporters only)"
+msgstr "(Diese Angaben werden nur den für die Aktivität registrierten Supportern gezeigt)"
+
+#: templates/admin-custom-fields.php:181
+#: templates/admin-custom-fields.php:192
+#@ vca-asm
+msgctxt "Contact Person Meta Box"
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: templates/admin-custom-fields.php:183
+#: templates/admin-custom-fields.php:194
+#@ vca-asm
+msgctxt "Contact Person Meta Box"
+msgid "Mobile Phone"
+msgstr "Handy Nummer"
+
+#: includes/class-vca-asm-activities.php:569
+#@ vca-asm
+msgctxt "meta box title, festival"
+msgid "Contact Person"
+msgstr "Ansprechpartner_innen"
+
+#: templates/frontend-activities.php:69
+#@ vca-asm
+msgid "Further Info"
+msgstr "weitere Infos"
+
+#: templates/frontend-activities.php:137
+#@ vca-asm
+msgid "Name"
+msgstr "Name"
+
+#: templates/frontend-activities.php:139
+#@ vca-asm
+msgid "E-Mail"
+msgstr "E-Mail"
+
+#: templates/frontend-activities.php:160
+#: templates/frontend-activities.php:165
+#@ vca-asm
+msgctxt "Frontend: Application Process"
+msgid "If you wish to send a message with your application, do so here."
+msgstr "Wenn du eine Nachricht mit deiner Bewerbung schicken willst, kannst du das hier tun."
+
+#: includes/class-vca-asm-lists.php:233
+#@ vca-asm
+msgid "Past Festivals"
+msgstr "Vergangene Festivals"
+
+#: includes/class-vca-asm-mailer.php:58
+#, php-format
+#@ vca-asm
+msgid "Your application to support us at \"%s\" has been accepted. Please login to the Pool to check who your contact person(s) is/are."
+msgstr "Deine Bewerbung, uns beim \"%s\" zu unterstützen wurde angenommen. Bitte log' dich in den Pool ein, um deine(n) Ansprechpartner_innen zu erfahren."
+
+#: includes/class-vca-asm-regions.php:227
+#@ vca-asm
+msgid "The name of title of the region"
+msgstr "Der Name der Region"
+
+#: includes/class-vca-asm-regions.php:247
+#@ vca-asm
+msgid "Select the type of the region - is it a Cell or Local Crew or simply a geographical region?"
+msgstr "Wähle die Art der Region aus. Handelt es sich um eine Zelle, eine Local Crew oder ist es nur eine geographische Region?"
+
+#: includes/class-vca-asm-regions.php:251
+#@ vca-asm
+msgid "Head Of User?"
+msgstr "Head Of Benutzer?"
+
+#: includes/class-vca-asm-regions.php:253
+#@ vca-asm
+msgid "If the region is supposed to have a dedicated Head Of user, check this box"
+msgstr "Wenn die Region einen Head Of Benutzer haben soll, setze hier ein Häckchen."
+
+#: includes/class-vca-asm-regions.php:257
+#@ vca-asm
+msgid "Head Of Username"
+msgstr "Head Of Bentuzername"
+
+#: includes/class-vca-asm-regions.php:263
+#@ vca-asm
+msgid "Head Of's Password"
+msgstr "Passwort"
+
+#: includes/class-vca-asm-regions.php:269
+#@ vca-asm
+msgid "Head Of's Email"
+msgstr "Email Adresse"
+
+#: includes/class-vca-asm-regions.php:320
+#@ vca-asm
+msgid "If this region is supposed to have a Head-Of User, please set its username, password and email."
+msgstr "Wenn diese Region einen Head Of Benutzer haben soll, gib bitte einen Bentuzernamen, Password und Email an."
+
+#: includes/class-vca-asm-regions.php:355
+#@ vca-asm
+msgid "Either the username is empty, already exists or the email is already in use."
+msgstr "Entweder hast du keinen Bentuzernamen eingegeben, jener wird schon verwandt oder die angegebene Email ist bereits in unserem System vorhanden."
+
+#: admin/class-vca-asm-admin-applications.php:422
+#: templates/admin-custom-fields.php:304
+#@ vca-asm
+msgid "No current applications..."
+msgstr "Keine Bewerbungen derzeit..."
+
+#: templates/admin-custom-fields.php:313
+#@ vca-asm
+msgid "Waiting List:"
+msgstr "Warte Liste:"
+
+#: templates/admin-custom-fields.php:332
+#@ vca-asm
+msgid "Currently no supporters on the waiting list..."
+msgstr "Derzeit sind keine Supporter auf der Warte Liste..."
+
+#: templates/frontend-activities.php:124
+#@ vca-asm
+msgid "Contact Person(s)"
+msgstr "Ansprechpartner_innen"
+
+#: templates/frontend-activities.php:181
+#@ vca-asm
+msgid "Revoke Application"
+msgstr "Bewerbung Zurückziehen"
+
+#: templates/frontend-activities.php:186
+#@ vca-asm
+msgid "Toggle additional info"
+msgstr "Zusätzliche Infos ein-/ausblenden"
+
+#: templates/frontend-activities.php:187
+#@ vca-asm
+msgid "More/Less"
+msgstr "Mehr/Weniger"
+
+#: includes/class-vca-asm-activities.php:50
+#@ vca-asm
+msgctxt "Tools Meta Box"
+msgid "Special"
+msgstr "Special (z.B. Theater, Schlauchboot, etc.)"
+
+#: includes/class-vca-asm-activities.php:79
+#@ vca-asm
+msgctxt "Finances Meta Box"
+msgid "Amount of cups collected"
+msgstr "Summe gesammelter Becher"
+
+#: includes/class-vca-asm-activities.php:90
+#@ vca-asm
+msgctxt "Finances Meta Box"
+msgid "Extra Donations"
+msgstr "Zusätzliche Spenden"
+
+#: includes/class-vca-asm-activities.php:103
+#@ vca-asm
+msgctxt "Finances Meta Box"
+msgid "Merch Sales"
+msgstr "Merch Verkauf"
+
+#: includes/class-vca-asm-activities.php:104
+#@ vca-asm
+msgctxt "Finances Meta Box"
+msgid "Merchandising Revenue (in Euro)"
+msgstr "Merch Umsatz (in Euro)"
+
+#: includes/class-vca-asm-activities.php:183
+#: includes/class-vca-asm-activities.php:190
+#: includes/class-vca-asm-activities.php:197
+#: includes/class-vca-asm-activities.php:211
+#@ vca-asm
+msgctxt "Registrations Meta Box"
+msgid "Email"
+msgstr "Email"
+
+#: admin/class-vca-asm-admin-applications.php:415
+#: admin/class-vca-asm-admin-applications.php:628
+#: admin/class-vca-asm-admin-applications.php:841
+#: templates/admin-custom-fields.php:288
+#, php-format
+#@ vca-asm
+msgid "Slots: %1$s, of which %2$s are free"
+msgstr "Plätze: %1$s, davon noch frei %2$s"
+
+#: includes/class-vca-asm-activities.php:91
+#@ vca-asm
+msgctxt "Finances Meta Box"
+msgid "Donations gathered in addition to collected cups (in Euro)"
+msgstr "Spenden, die zusätzlich zum Becherpfand generiert worden sind (in Euro)"
+
+#: includes/class-vca-asm-profile.php:200
+#@ vca-asm
+msgctxt "User Profile"
+msgid "Choose your region, if applicable. Should you not be able to find yours, please send an email to <a title=\"Send Mail\" href=\"mailto:Zellen@vivaconagua.org\">Zellen@vivaconagua.org</a>"
+msgstr "Wähle hier deine Region aus. Sollte diese nicht zu finden sein, wähle einfach \"keine spezifische Region\" und schick uns gerne eine Mail an <a title=\"Mail schicken\" href=\"mailto:Zellen@vivaconagua.org\">Zellen@vivaconagua.org</a>"
+
+#: includes/class-vca-asm-profile.php:208
+#@ vca-asm
+msgctxt "User Profile"
+msgid "<strong>Important:</strong> If you are an active member of this Cell or Local Crew, set this checkmark to apply for member status."
+msgstr "<strong>Wichtig:</strong>Wenn Du ein aktives VcA Mitglied Deiner Region bist, dann setzte hier bitte ein Häkchen - also wenn Du z.B. bei Teamtreffen dabei bist, Dich bei Aktionen einbringst oder im Bildungsbereich engagierst."
+
+#: includes/class-vca-asm-profile.php:35
+#@ vca-asm
+msgctxt "User Profile"
+msgid "Mobile Phone"
+msgstr "Handy Nummer"
+
+#: admin/class-vca-asm-admin-applications.php:313
+#: admin/class-vca-asm-admin-applications.php:526
+#: admin/class-vca-asm-admin-applications.php:739
+#: admin/class-vca-asm-admin-supporters.php:114
+#: admin/class-vca-asm-admin-supporters.php:118
+#: templates/frontend-activities.php:151
+#@ vca-asm
+msgid "Note"
+msgstr "Bemerkung"
+
+#: includes/class-vca-asm-lists.php:43
+#@ vca-asm
+msgid "In order to be able to register for any festivals, you should at least have filled out first- and lastname as well as your, location, mobile phone, gender and birthday in your user profile."
+msgstr "Um dich für Festivals bewerben zu können, muss dein Profil vollständiger ausgefüllt werden. Bitte mach' mindestens zu Vor- und Nachname, sowie Wohnort, Handy Nummer, Geschlecht und Alter Angaben. Danke!"
+
+#: includes/class-vca-asm-profile.php:87
+#@ vca-asm
+msgctxt "User Profile"
+msgid "Newsletter"
+msgstr "Newsletter"
+
+#: includes/class-vca-asm-profile.php:96
+#@ vca-asm
+msgid "Global &amp; regional news"
+msgstr "Allgemeine &amp; regionale News"
+
+#: includes/class-vca-asm-profile.php:100
+#@ vca-asm
+msgid "Only global news"
+msgstr "Nur allgemeine News"
+
+#: includes/class-vca-asm-profile.php:104
+#@ vca-asm
+msgid "Only regional news"
+msgstr "Nur regionale News"
+
+#: admin/class-vca-asm-admin-applications.php:372
+#: admin/class-vca-asm-admin-applications.php:585
+#: admin/class-vca-asm-admin-applications.php:798
+#: includes/class-vca-asm-profile.php:108
+#@ vca-asm
+msgid "None"
+msgstr "Keine"
+
+#: includes/class-vca-asm-profile.php:112
+#@ vca-asm
+msgid "Choose in what case to receive emails. News from your region, global news, both or none."
+msgstr "Wähle bitte ob und welche Neugikeiten aus dem VcA Kosmos Dir zugeschickt werden sollen."
+
+#: includes/class-vca-asm-regions.php:190
+#@ vca-asm
+msgid "Please select..."
+msgstr "Bitte wählen..."
+
+#: admin/class-vca-asm-admin-supporters.php:237
+#: includes/class-vca-asm-regions.php:484
+#@ vca-asm
+msgid "Supporters"
+msgstr "Supporter"
+
+#: includes/class-vca-asm-activities.php:227
+#@ vca-asm
+msgctxt "Contact Person Meta Box"
+msgid "First or full name, email address and mobile phone number of the contact person(s)"
+msgstr "Vor- oder voller Name, E-Mail Adresse und Handy Nummer der Ansprechpartner_innen"
+
+#: templates/frontend-activities.php:142
+#@ vca-asm
+msgid "Mobile Number"
+msgstr "Handy Nummer"
+
+#: includes/class-vca-asm-activities.php:593
+#@ vca-asm
+msgctxt "meta box title, festival"
+msgid "Accepted Applications"
+msgstr "Bestätigte Bewerbungen"
+
+#: includes/class-vca-asm-activities.php:96
+#@ vca-asm
+msgctxt "Finances Meta Box"
+msgid "Total Donations"
+msgstr "Gesamtspenden des Festivals"
+
+#: includes/class-vca-asm-activities.php:97
+#@ vca-asm
+msgctxt "Finances Meta Box"
+msgid "Cups x Deposit + Extra Donations (in Euro), calculated automatically"
+msgstr "Becher x Pfand + Zusätzliche Spenden (in Euro), automatisch berechnet"
+
+#: includes/class-vca-asm-activities.php:84
+#@ vca-asm
+msgctxt "Finances Meta Box"
+msgid "Donations via Cups"
+msgstr "Spendensumme aller Becher"
+
+#: includes/class-vca-asm-activities.php:85
+#@ vca-asm
+msgctxt "Finances Meta Box"
+msgid "Donations gathered via cup collecting (in Euro)"
+msgstr "Spenden, die durch das Becher Sammeln generiert worden sind (in Euro)"
+
+#: admin/class-vca-asm-admin-emails.php:43
+#, php-format
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "You are writing to a single supporter: %s."
+msgstr "Du schreibst einem/r einzelnen Supporter_in: %s"
+
+#: admin/class-vca-asm-admin-emails.php:132
+#@ vca-asm
+msgid "All members of cells and local crews"
+msgstr "Alle Mitglieder von Zellen und Local Crews"
+
+#: admin/class-vca-asm-admin-emails.php:128
+#@ vca-asm
+msgid "All users of the Pool"
+msgstr "Alle Benutzer des Pools"
+
+#: admin/class-vca-asm-admin-emails.php:140
+#@ vca-asm
+msgid "Supporters with no specific region"
+msgstr "Supporter mit keiner Region"
+
+#: admin/class-vca-asm-admin-supporters.php:183
+#@ vca-asm
+msgid "Send an email to this supporter"
+msgstr "Schicke diesem Supporter eine E-Mail"
+
+#: admin/class-vca-asm-admin-applications.php:672
+#: includes/class-vca-asm-activities.php:472
+#@ vca-asm
+msgid "Accepted Applications"
+msgstr "Bestätigte Bewerbungen"
+
+#: admin/class-vca-asm-admin-applications.php:412
+#: templates/admin-custom-fields.php:285
+#, php-format
+#@ vca-asm
+msgid "Applications for region \"%s\":"
+msgstr "Bewerbungen für Region \"%s\":"
+
+#: templates/admin-custom-fields.php:374
+#, php-format
+#@ vca-asm
+msgid "Accepted applications for region \"%1$s\" (%2$s / %3$s):"
+msgstr "Bestätigte Bewerbungen für Region \"%1$s\" (%2$s / %3$s):"
+
+#: includes/class-vca-asm-regions.php:36
+#@ vca-asm
+msgid "no region"
+msgstr "keine Region"
+
+#: admin/class-vca-asm-admin-supporters.php:107
+#@ vca-asm
+msgid "City"
+msgstr "Wohnort"
+
+#: admin/class-vca-asm-admin-supporters.php:119
+#@ vca-asm
+msgid "No Notes"
+msgstr "Keine Bemerkungen"
+
+#: templates/frontend-activities.php:167
+#@ vca-asm
+msgctxt "Frontend: Application Process"
+msgid "For insatance if you're applying with a friend, cannot reach on time, or the like."
+msgstr "z.B. Du hast dich mit einem Freund_in beworben, kannst erst später dazu stossen, etc."
+
+#: includes/class-vca-asm-profile.php:71
+#@ vca-asm
+msgctxt "User Profile"
+msgid "Avatar"
+msgstr "Profilbild"
+
+#: templates/frontend-profile.php:199
+#@ vca-asm
+msgid "No local avatar is set. Falling back to a gravatar, if exists."
+msgstr "Kein lokales Profilbild hochgeladen. Wenn du ein Gravatar hast, wird jenes genutzt."
+
+#: templates/frontend-profile.php:201
+#@ vca-asm
+msgid "Delete avatar"
+msgstr "Avatar Löschen"
+
+#: templates/frontend-profile.php:201
+#@ vca-asm
+msgid "Replace the local avatar by uploading a new avatar, or erase the local avatar (falling back to a gravatar) by checking the delete option."
+msgstr "Ersetze das aktuelle Avatar durch Hochladen eines neuen oder lösche es in dem du das Häkchen setzt."
+
+#: admin/class-vca-asm-admin-supporters.php:109
+#: admin/class-vca-asm-admin-supporters.php:217
+#: admin/class-vca-asm-admin-supporters.php:342
+#: ajax/export-excel.php:27
+#@ vca-asm
+msgid "Mobile Phone"
+msgstr "Handy Nummer"
+
+#: admin/class-vca-asm-admin-emails.php:163
+#@ vca-asm
+msgid "all"
+msgstr "gesamt"
+
+#: includes/class-vca-asm-activities.php:206
+#@ vca-asm
+msgctxt "Registrations Meta Box"
+msgid "Accepted Applicants"
+msgstr "Bestätigte Bewerber_innen"
+
+#: includes/class-vca-asm-activities.php:56
+#@ vca-asm
+msgctxt "Tools Meta Box"
+msgid "What special action?"
+msgstr "Welche Spezialaktion?"
+
+#: includes/class-vca-asm-activities.php:57
+#@ vca-asm
+msgctxt "Tools Meta Box"
+msgid "Description of the special action. If \"Special\" is checked above and you leave this field blank, the list of tools will include \"Special\", otherwise it will list what you've written here. If \"Special\" is not checked above, this field is irrelevant."
+msgstr "Beschreibung der Spezialaktion. Wenn \"Special\" in der oberen Liste ausgewählt und dieses Feld leer ist, wird in der Liste der Aktivitäten im Frontend \"Special\" angezeigt. Wenn du hier etwas einträgst, taucht deine Beschreibung statt dessen auf. Wenn \"Special\" oben nicht ausgewählt ist, ist dieses Feld irrelevant."
+
+#: includes/class-vca-asm-activities.php:29
+#@ vca-asm
+msgctxt "Tools Meta Box"
+msgid "Choose which of the common VcA Activities are employed this time."
+msgstr "Wähle aus, welche der gängigen VcA Aktivitäten hier verwandt werden."
+
+#: templates/frontend-activities.php:91
+#@ vca-asm
+msgid "VcA Activities"
+msgstr "VcA Aktivitäten"
+
+#: templates/frontend-activities.php:97
+#@ vca-asm
+msgctxt "VcA Tools"
+msgid "Cups"
+msgstr "Pfandbecher Sammeln"
+
+#: templates/frontend-activities.php:100
+#@ vca-asm
+msgctxt "VcA Tools"
+msgid "Guest List"
+msgstr "Gästelisten-Euros"
+
+#: templates/frontend-activities.php:103
+#@ vca-asm
+msgctxt "VcA Tools"
+msgid "Info Counter"
+msgstr "Infostand"
+
+#: templates/frontend-activities.php:106
+#@ vca-asm
+msgctxt "VcA Tools"
+msgid "Water Bottles"
+msgstr "Quellwasser"
+
+#: templates/frontend-activities.php:112
+#@ vca-asm
+msgctxt "VcA Tools"
+msgid "Special"
+msgstr "Special"
+
+#: includes/class-vca-asm-lists.php:61
+#, php-format
+#@ vca-asm
+msgid "Why this is a neccessity is explained in the <a href=\"%s\" title=\"Read the FAQs\">FAQ</a>."
+msgstr "Warum dies notwendig ist, erfährst Du in den <a href=\"%s\" title=\"Zu den FAQ\">FAQ</a>."
+
+#: includes/class-vca-asm-lists.php:73
+#, php-format
+#@ vca-asm
+msgid "Before you apply for a festival, please make sure you will indeed have spare time on your hands in the given timeframe. For general infos about festivals and VcA, please refer to the <a href=\"%s\" title=\"Read the FAQs\">FAQ</a>."
+msgstr "Bevor Du Dich für ein Festival bewirbst, stell' bitte sicher, dass Du im angegebenen Zeitraum wirklich Zeit hast. Grundsätzliche Informationen zum Ablauf eines Festivals mit VcA erfährst Du in den <a href=\"%s\" title=\"Zu den FAQ\">FAQ</a>."
+
+#: includes/class-vca-asm-lists.php:147
+#@ vca-asm
+msgid "These are the festivals you are participating in:"
+msgstr "An diesen Festivals nimmst du Teil:"
+
+#: includes/class-vca-asm-lists.php:173
+#@ vca-asm
+msgid "You are currently not registered for future festivals."
+msgstr "Du hast derzeit für keine zukünftigen Festivals feste Zusagen."
+
+#: includes/class-vca-asm-lists.php:184
+#@ vca-asm
+msgid "You have applied to participate in the following festivals. You will get an answer at the latest one day after the application deadline has passed."
+msgstr "Für folgende Festivals hast Du Dich aktuell beworben. Zu- und Absagen erfolgen spätestens unmittelbar nach dem Ende der Bewerbungsphase (siehe \"Bewerbung möglich bis\")."
+
+#: includes/class-vca-asm-profile.php:161
+#: includes/class-vca-asm-profile.php:181
+#: includes/class-vca-asm-profile.php:205
+#@ vca-asm
+msgctxt "User Profile"
+msgid "I am an active member of my region"
+msgstr "Ich bin aktiv in meiner Region"
+
+#: includes/class-vca-asm-profile.php:91
+#@ vca-asm
+msgctxt "User Profile"
+msgid "News Options"
+msgstr "News Optionen"
+
+#: includes/class-vca-asm-regions.php:259
+#@ vca-asm
+msgid "With the above box checked, this will the Head Of user's username. Please only use alphanumeric characters. Avoid spaces and special characters."
+msgstr "Wenn oben das Häkchen gesetzt ist, wird dies der Benutzername des Head-Of-Benutzerkontos sein. Bitte verwende nur alphanumerische Zeichen und weder Sonderzeichen noch Leerstellen."
+
+#: includes/class-vca-asm-regions.php:265
+#@ vca-asm
+msgid "With the above box checked, this will be the Head Of user's password."
+msgstr "Wenn oben das Häkchen gesetzt ist, wird dies das (vorläufige) Passwort des neuen Head-Of-Benutzerkontos sein."
+
+#: includes/class-vca-asm-regions.php:271
+#@ vca-asm
+msgid "With the above box checked, this will be the Head Of user's email address."
+msgstr "Wenn oben das Häkchen gesetzt ist, wird dies die E-Mail Adresse des neuen Head-Of-Benutzerkontos sein."
+
+#: includes/class-vca-asm-regions.php:556
+#@ vca-asm
+msgid "Attention"
+msgstr "Achtung"
+
+#: includes/class-vca-asm-regions.php:557
+#@ vca-asm
+msgid "This region is assigned a head of user. Unchecking this box and saving the region results in the permanent deletion of the user!"
+msgstr "Dieser Region ist ein Head-Of-Benutzer zugeordnet. Enfternen des Häkchens und Speichern der Region führt zur permanenten Löschung des Benutzerkontos!"
+
+#: includes/class-vca-asm-regions.php:561
+#@ vca-asm
+msgid "The username (login) of the head of user. It cannot be changed (other than through deletion and creation of a new user)."
+msgstr "Der Benutzername (Login) des Head-Of-Kontos. Dies kann nicht geändert werden (es sei denn durch Löschen des Benutzerkontos und Erstellen eines neuen)."
+
+#: admin/class-vca-asm-admin-emails.php:113
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Partial Selection"
+msgstr "Teilauswahl, Empfänger"
+
+#: admin/class-vca-asm-admin-emails.php:116
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Select which of the supporters to send the mail to."
+msgstr "Wähle, welchen der Supporter du schreiben willst."
+
+#: admin/class-vca-asm-admin.php:150
+#: admin/class-vca-asm-admin.php:151
+#@ vca-asm
+msgid "Home"
+msgstr "Home"
+
+#: includes/class-vca-asm-utilities.php:83
+#@ vca-asm
+msgid "Visit Site"
+msgstr "Seite besuchen"
+
+#: admin/class-vca-asm-admin.php:306
+#@ vca-asm
+msgid "Back to the frontend"
+msgstr "zurück ins Frontend"
+
+#: admin/class-vca-asm-admin.php:307
+#@ vca-asm
+msgid "Back to the front!"
+msgstr "Zurück nach vorne"
+
+#: admin/class-vca-asm-admin.php:308
+#@ vca-asm
+msgid "Log me out"
+msgstr "Log mich aus"
+
+#: admin/class-vca-asm-admin.php:309
+#@ vca-asm
+msgid "Logout"
+msgstr "Ausloggen"
+
+#: admin/class-vca-asm-admin-emails.php:396
+#: admin/class-vca-asm-admin-emails.php:418
+#: admin/class-vca-asm-admin-emails.php:440
+#: admin/class-vca-asm-admin-emails.php:462
+#: admin/class-vca-asm-admin-emails.php:484
+#: admin/class-vca-asm-admin-emails.php:506
+#: admin/class-vca-asm-admin-emails.php:528
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "(this goes for the default responses as well)"
+msgstr "(dies gilt auch für die Standard-Texte)"
+
+#: admin/class-vca-asm-admin-emails.php:177
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Ignore user settings?"
+msgstr "\"News Optionen\" (Benutzereinstellungen) ignorieren?"
+
+#: admin/class-vca-asm-admin-emails.php:179
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "As you know from your own profile, users may select which news to receive - general news, regional ones, both or none. In rare cases you have a message so important, that you might want to ignore the users wishes and reach everyone within your selected group. Tick this box to do so. Please do not make use of this feature frequently!"
+msgstr "Wie du aus deinem eigenen Supporterprofil weißt, können Benutzer auswählen, welche News-Mails sie erhalten wollen (allgemeine, regionale, beide oder keine). In seltenen Fällen mag eine Nachricht so wichtig sein, dass du die Benutzerpräferenz ignorieren möchtest und jeden in der ausgewählten Gruppe erreichen möchtest. Setze hier das Häkchen um dich darüber hinwegzusetzen. Bitte nutze diese Möglichkeit nicht inflationär!"
+
+#: admin/class-vca-asm-admin-applications.php:410
+#: templates/admin-custom-fields.php:283
+#@ vca-asm
+msgid "Global Applications"
+msgstr "Allgemeine Bewerbungen"
+
+#: includes/class-vca-asm-lists.php:210
+#@ vca-asm
+msgid "Your application to these festivals was denied. You are now on the waiting list and will be contacted, if slots open up again."
+msgstr "Deine Bewerbung für diese Festivals konnte leider nicht angenommen werden. Du stehst jetzt auf der Warteliste und wirst kontaktiert werden, falls wieder Plätze frei werden sollten."
+
+#: includes/class-vca-asm-lists.php:235
+#@ vca-asm
+msgid "These are the festivals you have participated in in the past."
+msgstr "An diesen Festivals hast du bereits teilgenommen."
+
+#: templates/frontend-activities.php:87
+#, php-format
+#@ vca-asm
+msgid "Visit &quot;%s&quot;"
+msgstr "&quot;%s&quot; besuchen"
+
+#: ajax/export-excel.php:10
+#@ vca-asm
+msgid "Participant_Data"
+msgstr "Teilnehmerdaten"
+
+#: ajax/export-excel.php:14
+#@ vca-asm
+msgid "Participant Data"
+msgstr "Teilnehmerdaten"
+
+#: ajax/export-excel.php:26
+#@ vca-asm
+msgid "Email-Address"
+msgstr "Email Adresse"
+
+#: includes/class-vca-asm-activities.php:218
+#@ vca-asm
+msgctxt "Registrations Meta Box"
+msgid "Download Data"
+msgstr "Daten Herunterladen"
+
+#: templates/admin-custom-fields.php:412
+#@ vca-asm
+msgid "Download participant data as an MS Excel spreadsheet"
+msgstr "Teilnehmerdaten als Excel Datei herunterladen"
+
+#: ajax/export-excel.php:28
+#@ vca-asm
+msgid "Ticket Received"
+msgstr "Ticket erhalten?"
+
+#: includes/class-vca-asm-lists.php:110
+#@ vca-asm
+msgid "Of course that's not the entire summer, further festivals will follow soon..."
+msgstr "Natürlich ist der Festivalsommer damit noch nicht zu Ende - weitere Festivals folgen bald!"
+
+#: templates/frontend-activities.php:132
+#@ vca-asm
+msgid "Not set yet..."
+msgstr "Steht noch nicht fest..."
+
+#: admin/class-vca-asm-admin-emails.php:52
+#, php-format
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "You are writing to supporters with accepted applications to %s."
+msgstr "Du schreibst allen Supportern, deren Bewerbungen für \\\"%s\\\" bereits bestätigt worden sind."
+
+#: admin/class-vca-asm-admin-emails.php:55
+#, php-format
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "You are writing to supporters currently applying to %s."
+msgstr "Du schreibst allen Supportern, die sich derzeit für \\\"%s\\\" bewerben."
+
+#: includes/class-vca-asm-activities.php:187
+#@ vca-asm
+msgid "Send an email to all current applicants"
+msgstr "Schicke eine Mail an alle derzeitigen Bewerber"
+
+#: includes/class-vca-asm-activities.php:215
+#@ vca-asm
+msgid "Send an email to all accepted applicants"
+msgstr "Schicke eine Mail an alle bestätigten Bewerber"
+
+#: admin/class-vca-asm-admin-emails.php:58
+#, php-format
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "You are writing to supporters currently applying to %s via the global contingent."
+msgstr "Du schreibst Supportern, die sich derzeit auf das globale Kontingent für \\\"%s\\\" bewerben."
+
+#: admin/class-vca-asm-admin-emails.php:61
+#, php-format
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "You are writing to supporters currently on the waiting list for %s."
+msgstr "Du schreibst Supportern, die sich derzeit auf der Warteliste für \\\"%s\\\" befinden."
+
+#: admin/class-vca-asm-admin-emails.php:136
+#@ vca-asm
+msgid "All Head Ofs"
+msgstr "Alle Head Ofs"
+
+#: includes/class-vca-asm-activities.php:194
+#@ vca-asm
+msgid "Send an email to all current applicants to the global contingent"
+msgstr "Schicke eine Mail an alle Bewerber auf das globale Kontingent"
+
+#: includes/class-vca-asm-activities.php:201
+#@ vca-asm
+msgid "Send an email to all supporters currently on the waiting list"
+msgstr "Schicke eine Mail an alle Supporter auf der Warteliste"
+
+#: includes/class-vca-asm-profile.php:310
+#@ vca-asm
+msgid "Please confirm that you agree to the terms &amp; conditions."
+msgstr "Bitte bestätige, dass du die Nutzungsbedingungen und Datenschutzerklärung akzeptierst."
+
+#: admin/class-vca-asm-admin-applications.php:243
+#@ vca-asm
+msgid "Applications"
+msgstr "Bewerbungen"
+
+#: admin/class-vca-asm-admin-applications.php:263
+#@ vca-asm
+msgid "Accept"
+msgstr "Annehmen"
+
+#: admin/class-vca-asm-admin-applications.php:264
+#@ vca-asm
+msgid "Deny"
+msgstr "Ablehnen"
+
+#: admin/class-vca-asm-admin-applications.php:267
+#@ vca-asm
+msgid "Execute"
+msgstr "Ausführen"
+
+#: admin/class-vca-asm-admin-applications.php:269
+#@ vca-asm
+msgid "Manage all selected applications?"
+msgstr "Alle ausgewählten Bewerbungen bearbeiten?"
+
+#: admin/class-vca-asm-admin-applications.php:274
+#, php-format
+#@ vca-asm
+msgid "Applications for \"%s\""
+msgstr "Bewerbungen für \"%s\""
+
+#: admin/class-vca-asm-admin-applications.php:284
+#: admin/class-vca-asm-admin-applications.php:497
+#: admin/class-vca-asm-admin-applications.php:710
+#@ vca-asm
+msgid "Avatar"
+msgstr "Avatar"
+
+#: admin/class-vca-asm-admin-applications.php:369
+#: admin/class-vca-asm-admin-applications.php:582
+#: admin/class-vca-asm-admin-applications.php:795
+#@ vca-asm
+msgid "YES!"
+msgstr "JA!"
+
+#: admin/class-vca-asm-admin-applications.php:480
+#@ vca-asm
+msgid "Accept application(s)"
+msgstr "Bewerbung(en) annehmen"
+
+#: admin/class-vca-asm-admin-applications.php:482
+#@ vca-asm
+msgid "Accept all selected applications?"
+msgstr "Alle ausgewählten Bewerbungen annehmen?"
+
+#: admin/class-vca-asm-admin-applications.php:487
+#, php-format
+#@ vca-asm
+msgid "Waiting List for \"%s\""
+msgstr "Warte Liste für \"%s\""
+
+#: admin/class-vca-asm-admin-applications.php:623
+#@ vca-asm
+msgid "Global Waiting List"
+msgstr "Allgemeine Warte Liste"
+
+#: admin/class-vca-asm-admin-applications.php:625
+#, php-format
+#@ vca-asm
+msgid "Waiting List for region \"%s\":"
+msgstr "Warte Liste der Region \"%s\""
+
+#: admin/class-vca-asm-admin-applications.php:635
+#@ vca-asm
+msgid "No supporters currently on the Waiting List..."
+msgstr "Keine Supporter auf der Warte Liste..."
+
+#: admin/class-vca-asm-admin-applications.php:693
+#@ vca-asm
+msgid "Revoke!"
+msgstr "Zurückziehen!"
+
+#: admin/class-vca-asm-admin-applications.php:695
+#@ vca-asm
+msgid "Revoke all selected accepted applications?"
+msgstr "Alle ausgewählten bestätigten Bewerbungen zurückziehen?"
+
+#: admin/class-vca-asm-admin-applications.php:700
+#, php-format
+#@ vca-asm
+msgid "Accepted Applications for \"%s\""
+msgstr "Bestätigte Bewerbungen für \"%s\""
+
+#: admin/class-vca-asm-admin-applications.php:836
+#@ vca-asm
+msgid "Global Accepted Applications"
+msgstr "Allgemeine bestätigte Bewerbungen"
+
+#: admin/class-vca-asm-admin-applications.php:838
+#, php-format
+#@ vca-asm
+msgid "Accepted Applications for region \"%s\":"
+msgstr "Bestätigte Bewerbungen für die Region \"%s\""
+
+#: admin/class-vca-asm-admin-applications.php:848
+#: templates/admin-custom-fields.php:393
+#@ vca-asm
+msgid "No accepted applications yet..."
+msgstr "Noch keine bestätigten Bewerbungen..."
+
+#: admin/class-vca-asm-admin-supporters.php:357
+#@ vca-asm
+msgid "Membership Applications"
+msgstr "Mitgliedsschaftsbewerbungen"
+
+#: admin/class-vca-asm-admin.php:250
+#: admin/class-vca-asm-admin.php:251
+#: admin/class-vca-asm-admin.php:260
+#: admin/class-vca-asm-admin.php:261
+#, php-format
+#@ vca-asm
+msgid "Applications (%s)"
+msgstr "Bewerbungen (%s)"
+
+#: includes/class-vca-asm-activities.php:118
+#@ vca-asm
+msgctxt "Region Meta Box"
+msgid "Delegation"
+msgstr "Delegierung"
+
+#: includes/class-vca-asm-activities.php:119
+#@ vca-asm
+msgctxt "Region Meta Box"
+msgid "Delegate to the selected region's Head Of(s). If you choose to do so, the region's Head Of User can edit the festival, as well as accept and deny applications globally. If the selected region does not have a Head Of User assigned, this option is irrelevant."
+msgstr "Delegiere dieses Festival an den/die Head Of(s) der gewählten Region. Wenn du  dies auswählst, kann der Head Of Benutzer dieser Region das Festival editieren sowie alle Bewerbungen verwalten. Wenn der ausgewählten Region kein Head Of Benutzer zugeordnet ist, ist diese Option irrelevant."
+
+#: includes/class-vca-asm-activities.php:122
+#@ vca-asm
+msgctxt "Region Meta Box"
+msgid "Yes, delegate"
+msgstr "Ja, delegieren"
+
+#: templates/admin-custom-fields.php:337
+#@ vca-asm
+msgid "Accept selected applications"
+msgstr "Ausgewählte Bewerbungen annehmen"
+
+#: templates/admin-custom-fields.php:339
+#@ vca-asm
+msgid "Deny selected applications"
+msgstr "Ausgewählte Bewerbungen ablehnen"
+
+#: templates/admin-custom-fields.php:398
+#@ vca-asm
+msgid "Revoke selected accepted applications!"
+msgstr "Ausgewählte bestätigte Bewerbungen zurückziehen!"
+
+#: templates/admin-table.php:124
+#, php-format
+#@ vca-asm
+msgid "Really deny membership to %s?"
+msgstr "%s die Mitgliedschaft wirklich verweigern?"
+
+#: templates/admin-table.php:137
+#, php-format
+#@ vca-asm
+msgid "Accept %s's application"
+msgstr "Bewerbung von %s annehmen"
+
+#: templates/admin-table.php:139
+#: templates/admin-table.php:165
+#@ vca-asm
+msgid "Accept application"
+msgstr "Bewerbung annehmen"
+
+#: templates/admin-table.php:143
+#, php-format
+#@ vca-asm
+msgid "Deny %s's application"
+msgstr "Bewerbung von %s ablehnen"
+
+#: templates/admin-table.php:145
+#, php-format
+#@ vca-asm
+msgid "Really deny application of %s?"
+msgstr "Die Bewerbung von %s wirklich ablehnen?"
+
+#: templates/admin-table.php:149
+#@ vca-asm
+msgid "Deny application"
+msgstr "Bewerbung ablehnen"
+
+#: admin/class-vca-asm-admin-applications.php:261
+#@ vca-asm
+msgid "Handle selected applications"
+msgstr "Ausgewählte Bewerbungen bearbeiten"
+
+#: admin/class-vca-asm-admin-applications.php:478
+#@ vca-asm
+msgid "Move selected supporter off the waiting list"
+msgstr "Ausgewählte Supporter von der Warte Liste nehmen"
+
+#: admin/class-vca-asm-admin-applications.php:691
+#@ vca-asm
+msgid "Revoke selected accepted applications"
+msgstr "Ausgewählte bestätigte Bewerbungen zurückziehen"
+
+#: admin/class-vca-asm-admin.php:268
+#: admin/class-vca-asm-admin.php:269
+#, php-format
+#@ vca-asm
+msgid "Waiting List (%s)"
+msgstr "Warte Liste (%s)"
+
+#: admin/class-vca-asm-admin.php:276
+#: admin/class-vca-asm-admin.php:277
+#, php-format
+#@ vca-asm
+msgid "Accepted Applications (%s)"
+msgstr "Bestätigte Bewerbungen (%s)"
+
+#: templates/admin-table.php:159
+#, php-format
+#@ vca-asm
+msgid "Move %s off the Waiting List and accept his/her application"
+msgstr "%s von der Warte Liste streichen und seine/ihre Bewerbung annehmen"
+
+#: templates/admin-table.php:161
+#, php-format
+#@ vca-asm
+msgid "Really move %s off the list and accept application?"
+msgstr "%s wirklich von der Liste streichen und Bewerbung akzeptieren?"
+
+#: templates/admin-table.php:175
+#, php-format
+#@ vca-asm
+msgid "Revoke %s's accepted application"
+msgstr "Die bestätigte Bewerbung von %s zurückziehen"
+
+#: templates/admin-table.php:177
+#, php-format
+#@ vca-asm
+msgid "Really revoke the already accepted application of %s?"
+msgstr "Die bestätigte Bewerbung von %s wirklich zurückziehen?"
+
+#: templates/admin-table.php:181
+#@ vca-asm
+msgid "Revoke accepted application"
+msgstr "Bestätigte Bewerbung zurückziehen"
+
+#: templates/admin-custom-fields.php:372
+#, php-format
+#@ vca-asm
+msgid "Accepted global applications (%1$s / %2$s):"
+msgstr "Bestätigte allgemeine Bewerbungen (%1$s / %2$s):"
+
+#: includes/class-vca-asm-regions.php:326
+#@ vca-asm
+msgid "Please do not leave the password or email field blank as long as the region has a user assigned."
+msgstr "Bitte fülle die Felder für Passwort und Email aus, wenn der Region ein Benutzer zugeordnet ist. Willst du keinen Head Of Benutzer, musst du auch das entsprechende Häkchen entfernen."
+
+#: includes/class-vca-asm-regions.php:566
+#@ vca-asm
+msgid "This is the first password you gave to the user. It might not even be correct anymore, since it can be changed by Head Of's by logging in with the head of account and using the regular user profile. For security reasons, user passwords are encrypted and cannot be resolved once set. You may however overwrite the Head Of user's current password by entering a new one here. If you leave this field unchanged, the password will not be updated."
+msgstr "Die ist das Passwort, welches du bei Erstellung des Benutzers gewählt hast. Es muss nicht zwangsläufig mehr aktuell sein, denn es kann von Head Ofs im Benutzerprofil geändert werden. Aus Sicherheitsgründen sind Passwörter verschlüsselt und können nicht angezeigt werden. Du kannst das aktuelle Passwort aber überschreiben, wenn du hier ein neues eingibst. Willst du es nicht ändern, dann fasse dieses Feld einfach nicht an."
+
+#: includes/class-vca-asm-regions.php:572
+#@ vca-asm
+msgid "This is the current email address assigned to the Head Of User."
+msgstr "Die aktuelle Email Adresse des Head Of Benutzers"
+
+#: includes/class-vca-asm-activities.php:329
+#@ vca-asm
+msgid "Name of Festival"
+msgstr "Name des Festivals"
+
+#: includes/class-vca-asm-activities.php:338
+#@ vca-asm
+msgid "Submit to Byrro for Review"
+msgstr "Dem Büro zur Revision vorlegen"
+
+#: includes/class-vca-asm-activities.php:356
+#, php-format
+#@ vca-asm
+msgid "Festival updated. <a href=\"%s\">View Festival</a>"
+msgstr "Festival aktualisiert. <a href=\"%s\">Festival ansehen</a>"
+
+#: includes/class-vca-asm-activities.php:357
+#@ vca-asm
+msgid "Custom field updated."
+msgstr "Feld aktualisiert."
+
+#: includes/class-vca-asm-activities.php:358
+#@ vca-asm
+msgid "Custom field deleted."
+msgstr "Feld gelöscht."
+
+#: includes/class-vca-asm-activities.php:359
+#@ vca-asm
+msgid "Festival updated."
+msgstr "Festival aktualisiert."
+
+#: includes/class-vca-asm-activities.php:360
+#, php-format
+#@ vca-asm
+msgid "Festival restored to revision from %s"
+msgstr "Festival Revision vom %s wiederhergestellt"
+
+#: includes/class-vca-asm-activities.php:361
+#, php-format
+#@ vca-asm
+msgid "Festival published. <a href=\"%s\">View Festival</a>"
+msgstr "Festival veröfentlicht. <a href=\"%s\">Festival ansehen</a>"
+
+#: includes/class-vca-asm-activities.php:362
+#@ vca-asm
+msgid "Festival saved."
+msgstr "Festival gespeichert."
+
+#: includes/class-vca-asm-activities.php:363
+#, php-format
+#@ vca-asm
+msgid "Festival submitted. <a target=\"_blank\" href=\"%s\">Preview Festival</a>"
+msgstr "Festival abgegeben. <a target=\"_blank\" href=\"%s\">Festival Vorschau</a>"
+
+#: includes/class-vca-asm-activities.php:364
+#, php-format
+#@ vca-asm
+msgid "Festival scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Preview Festival</a>"
+msgstr "Festival für Veröffentlichung vorgesehen: <strong>%1$s</strong>. <a target=\"_blank\" href=\"%2$s\">Festival Vorschau</a>"
+
+#: includes/class-vca-asm-activities.php:366
+#, php-format
+#@ vca-asm
+msgid "Festival draft updated. <a target=\"_blank\" href=\"%s\">Preview Festival</a>"
+msgstr "Festival Entwurf aktualisiert. <a target=\"_blank\" href=\"%s\">Festival Vorschau</a>"
+
+#: includes/class-vca-asm-activities.php:332
+#@ vca-asm
+msgid "Update Festival"
+msgstr "Festival aktualisieren"
+
+#: includes/class-vca-asm-activities.php:335
+#@ vca-asm
+msgid "Publish Festival"
+msgstr "Festival veröffentlichen"
+
+#: includes/class-vca-asm-activities.php:141
+#: includes/class-vca-asm-activities.php:147
+#@ vca-asm
+msgid "You can use &lt;br /&gt; tags for line breaks."
+msgstr "Du kannst  &lt;br /&gt; Tags für Zeilenumbrüche verwenden."
+
