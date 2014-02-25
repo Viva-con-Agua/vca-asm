@@ -112,7 +112,7 @@ class VcA_ASM_Utilities {
 	/**
 	 * Returns a phone number without whitespaces, zeroes or a plus sign
 	 *
-	 * @since 1.0
+	 * @since 1.2
 	 * @access public
 	 */
 	public function normalize_phone_number( $number, $nice = false ) {
@@ -134,6 +134,95 @@ class VcA_ASM_Utilities {
 			$number = __( 'not set', 'vca-asm' );
 		}
 		return $number;
+	}
+
+	/**
+	 * Handles determination of how to order tabular data
+	 * (Often recurring code block in Administrative Backend)
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function table_order( $default_orderby = 'name' ) {
+
+		if( isset( $_GET['orderby'] ) ) {
+			$orderby = $_GET['orderby'];
+		} else {
+			$orderby = $default_orderby;
+		}
+		if( isset( $_GET['order'] ) ) {
+			$order = $_GET['order'];
+			if( 'ASC' == $order ) {
+				$toggle_order = 'DESC';
+			} else {
+				$toggle_order = 'ASC';
+			}
+		} else {
+			$order = 'ASC';
+			$toggle_order = 'DESC';
+		}
+
+		return array(
+			'order' => $order,
+			'orderby' => $orderby,
+			'toggle_order' => $toggle_order
+		);
+	}
+
+	/**
+	 * Sorting Methods
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function sort_by_key( $arr, $key, $order = 'ASC' ) {
+	    global $vca_asm_key2sort;
+		$vca_asm_key2sort = $key;
+		if( $order == 'DESC' ) {
+			usort( $arr, array(&$this, 'sbk_cmp_desc') );
+		} else {
+			usort( $arr, array(&$this, 'sbk_cmp_asc') );
+		}
+		return ( $arr );
+	}
+	private function sbk_cmp_asc( $a, $b ) {
+		global $vca_asm_key2sort;
+		$encoding = mb_internal_encoding();
+		return strcmp( mb_strtolower( $a[$vca_asm_key2sort], $encoding ), mb_strtolower( $b[$vca_asm_key2sort], $encoding ) );
+	}
+	private function sbk_cmp_desc( $b, $a ) {
+		global $vca_asm_key2sort;
+		$encoding = mb_internal_encoding();
+		return strcmp( mb_strtolower( $a[$vca_asm_key2sort], $encoding ), mb_strtolower( $b[$vca_asm_key2sort], $encoding ) );
+	}
+
+	/**
+	 * Custom do_settings_sections (WP-core function)
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function do_settings_sections( $page ) {
+		global $wp_settings_sections, $wp_settings_fields;
+
+		if ( ! isset( $wp_settings_sections ) || !isset( $wp_settings_sections[$page] ) ) {
+			return;
+		}
+
+		foreach ( (array) $wp_settings_sections[$page] as $section ) {
+			if ( $section['title'] ) {
+				echo '<div class="postbox"><h3 class="no-hover"><span>' . $section['title'] . '</span></h3><div class="inside">';
+			}
+			if ( $section['callback'] ) {
+				call_user_func( $section['callback'], $section );
+			}
+			if ( ! isset( $wp_settings_fields ) || !isset( $wp_settings_fields[$page] ) || !isset( $wp_settings_fields[$page][$section['id']] ) ) {
+				continue;
+			}
+			echo '<table class="form-table">';
+			do_settings_fields( $page, $section['id'] );
+			echo '</table></div></div>';
+		}
 	}
 
 } // class

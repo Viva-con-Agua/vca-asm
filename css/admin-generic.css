@@ -25,6 +25,11 @@ h2 .nav-tab img {
 .wrap h2 {
 	padding: 10px 15px 3px 0;
 }
+
+h4 {
+	margin: 0;
+}
+
 a,
 #adminmenu a,
 #the-comment-list p.comment-author strong a,
@@ -64,7 +69,8 @@ a:focus,
 }
 #adminmenu a.current:hover,
 #adminmenu a.current:active,
-#adminmenu a.current:focus {
+#adminmenu a.current:focus,
+#adminmenu li.opensub a.menu-top:not(:hover) {
 	color: #e9619c !important;
 }
 #adminmenu a.wp-has-current-submenu:hover,
@@ -102,6 +108,31 @@ input.button-primary:focus {
 	color: #d5ecf1 !important;
 	border-color: #e2007a !important;
 }
+a.button-primary.margin,
+input.button-primary.margin,
+a.button-secondary.margin,
+input.button-secondary.margin {
+	margin-right: .8em;
+}
+.actions .wp-core-ui .button,
+.actions .wp-core-ui .button-primary,
+.actions .wp-core-ui .button-secondary {
+	 min-height: 25px;
+}
+.plugins a.delete:hover,
+#all-plugins-table .plugins a.delete:hover,
+#search-plugins-table .plugins a.delete:hover,
+.submitbox .submitdelete {
+	color: #e2007a !important;
+	border-bottom-color: #e2007a !important;
+}
+.submitbox .submitdelete:hover,
+.submitbox .submitdelete:active,
+.submitbox .submitdelete:focus {
+	color: #ffffff !important;
+	background-color: #e2007a !important;
+}
+
 body table.widefat span.delete a,
 body table.widefat span.trash a,
 body table.widefat span.spam a,
@@ -110,8 +141,54 @@ body #dashboard_recent_comments .trash a,
 body #dashboard_recent_comments .spam a {
 	color: #e9619c;
 }
-
-
+input[type="radio"],
+input[type="checkbox"] {
+	 margin: 2px 2px 0 0;
+}
+select {
+	 min-width: 10em;
+}
+select.hour,
+select.minutes,
+select.day,
+select.months  {
+	 min-width: 1em;
+}
+select.year  {
+	 min-width: 2em;
+}
+.js .postbox h3.no-hover:hover,
+.js .postbox h3.no-hover:active,
+.js .postbox h3.no-hover:focus {
+	color: #464646;
+	cursor: default;
+}
+.postbox table.form-table {
+	margin-top: 0;
+}
+div#slugdiv {
+	 display: none !important;
+}
+form.blk-action-form div.tablenav.top {
+	 margin-bottom: .5em;
+}
+form.blk-action-form div.tablenav div.actions span.desc {
+	 float: left;
+	 line-height: 2em;
+}
+form.blk-action-form div.tablenav div.actions select {
+	 max-width: 350px;
+}
+form.blk-action-form div.tablenav div.actions input {
+	 float: left;
+}
+p.submit {
+	 padding: 0;
+	 margin: 0 0 20px;
+}
+#poststuff {
+	 padding: 20px 0 0;
+}
 
 /* UTILITY STYLES
 ----------------------------------------- */
@@ -121,7 +198,6 @@ body #dashboard_recent_comments .spam a {
 }
 .no-js-hide {
 	display: none;
-	visibility: hidden;
 }
 
 div.message,
@@ -166,13 +242,45 @@ div.urgent-pa p {
 	color: #e9619c;
 }
 div.error-pa p,
-div.error p {
-	color: #e2007a;
+div.error p,
+div.error-pa a,
+div.error a {
+	color: #e2007a !important;
+}
+div.error-pa a:hover,
+div.error-pa a:active,
+div.error-pa a:focus,
+div.error a:hover,
+div.error a:active,
+div.error a:focus {
+	color: #e9619c !important;
 }
 div.message-secondary p {
 	font-weight: 400;
 	margin: .5em 0;
 	padding: 2px;
+}
+span.required.empty {
+	 color: #e2007a;
+}
+input.warning,
+select.warning {
+	 background-color: #f9d3e3;
+}
+ul.horiz-list {
+	 margin: 0 0 1em;
+	 padding: 0;
+	 list-style-type: none;
+}
+ul.horiz-list li {
+	 display: inline;
+	 margin: 0 1em 0 0;
+}
+.no-margins {
+	 margin: 0;
+}
+.noflow {
+	 overflow: hidden;
 }
 
 
@@ -186,10 +294,14 @@ div.message-secondary p {
 
 .profile-table td {
 	padding-right: 1.2em;
+	vertical-align: top;
 }
 .profile-table td:nth-of-type(2n) {
 	padding-right: 0;
 	font-weight: bold;
+}
+.profile-table img {
+	margin-top: .4em;
 }
 .widefat .column-age {
 	width: 4.5em;
@@ -209,17 +321,30 @@ div.message-secondary p {
 .widefat .column-mobile {
 	width: 11em;
 }
+.widefat .column-role {
+	width: 9em;
+}
 .widefat .column-user_email {
 	width: 16%;
 }
 .widefat .column-last_name {
 	min-width: 9em;
 }
+.widefat .column-start_app,
+.widefat .column-end_app {
+	width: 14em;
+}
 .table-inside-table td {
 	padding: 0 30px 2px 0;
 	margin-bottom: 0;
 }
-
+h3.table-headline {
+	 margin: 2em 0 0;
+}
+div.alignleft h3.table-headline {
+	 padding-top: .4em;
+	 margin: 0;
+}
 
 @media handheld, only screen and (min-width: 1599px) {
 	.widefat .column-age {
@@ -249,25 +374,31 @@ div.message-secondary p {
 ----------------------------------------- */
 
 .icon32-pa,
+.icon32-posts-concert,
 .icon32-posts-festival,
+.icon32-posts-miscactions,
+.icon32-posts-nwgathering,
 #icon-edit.icon32 {
 	background: transparent;
-	background-image: url(../admin/images/icons32.png);
+	background-image: url(../img/icons32.png);
 	background-repeat: no-repeat;
 	width: 32px;
 	height: 32px;
 	margin: 8px 12px 2px 0;
 	float: left;
 }
-.nav-tab-icon {
+.nav-tab-icon,
+.tbl-icon {
 	background: transparent;
-	background-image: url(../admin/images/icons32.png);
+	background-image: url(../img/icons32.png);
 	background-repeat: no-repeat;
 	display: inline-block;
 	width: 16px;
 	height: 16px;
 	margin: 0 .6em 0 0;
-	background-size: 464px 32px;
+	background-size: 576px 32px;
+}
+.nav-tab-icon {
 	filter: alpha(opacity=60);
 	opacity: 0.6;
 }
@@ -286,15 +417,26 @@ div.message-secondary p {
 #icon-supporter {
 	background-position: -32px 0px;
 }
+.nt-icon-supporter {
+	 background-position: -16px 0px;
+}
 #icon-supporters {
 	background-position: -64px 0px;
 }
-#icon-regions,
-#icon-network {
+.nt-icon-supporters {
+	 background-position: -32px 0px;
+}
+#icon-network,
+.icon32-posts-nwgathering {
 	background-position: -96px 0px;
 }
+.nt-icon-network,
 .nt-icon-slots {
 	background-position: -48px 0px;
+}
+a:hover .nt-icon-network,
+a:hover .nt-icon-slots {
+	background-position: -48px -16px;
 }
 #icon-newsletter,
 #icon-emails,
@@ -348,10 +490,20 @@ a:hover .nt-icon-waiting {
 	background-position: -128px -16px;
 }
 #icon-festival,
+#icon-actions,
 .icon32-posts-festival {
 	background-position: -288px 0px;
 }
-#icon-concert {
+.nt-icon-action,
+.nt-icon-actions {
+	 background-position: -144px 0px;
+}
+a:hover .nt-icon-action,
+a:hover .nt-icon-actions {
+	 background-position: -144px -16px;
+}
+#icon-concert,
+.icon32-posts-concert {
 	background-position: -320px 0px;
 }
 #icon-mic,
@@ -359,7 +511,7 @@ a:hover .nt-icon-waiting {
 	background-position: -352px 0px;
 }
 #icon-vinyl,
-#icon-cluub,
+#icon-club,
 #icon-party {
 	background-position: -384px 0px;
 }
@@ -368,6 +520,12 @@ a:hover .nt-icon-waiting {
 }
 #icon-education {
 	background-position: -448px 0px;
+}
+.nt-icon-education {
+	background-position: -224px 0px;
+}
+a:hover .nt-icon-education {
+	background-position: -224px -16px;
 }
 #icon-donations,
 #icon-finances {
@@ -406,7 +564,8 @@ a:hover .nt-icon-waiting {
 #icon-star {
 	background-position: -800px 0px;
 }
-#icon-cups {
+#icon-cups,
+.icon32-posts-miscactions {
 	background-position: -832px 0px;
 }
 #icon-padlock-open {
@@ -421,6 +580,108 @@ a:hover .nt-icon-waiting {
 }
 a:hover .nt-icon-security {
 	background-position: -448px -16px;
+}
+#icon-stats {
+	background-position: -928px 0px;
+}
+.nt-icon-stats {
+	background-position: -464px 0px;
+}
+a:hover .nt-icon-stats {
+	background-position: -464px -16px;
+}
+#icon-tasks {
+	background-position: -960px 0px;
+}
+.nt-icon-tasks {
+	background-position: -480px 0px;
+}
+a:hover .nt-icon-tasks {
+	background-position: -480px -16px;
+}
+#icon-log {
+	background-position: -992px 0px;
+}
+.nt-icon-log {
+	background-position: -496px 0px;
+}
+a:hover .nt-icon-log {
+	background-position: -496px -16px;
+}
+#icon-city,
+#icon-cities {
+	background-position: -1024px 0px;
+}
+.nt-icon-city,
+.nt-icon-cities {
+	background-position: -512px 0px;
+}
+a:hover .nt-icon-city,
+a:hover .nt-icon-cities {
+	background-position: -512px -16px;
+}
+#icon-cg,
+#icon-cty-group,
+#icon-cty-groups,
+#icon-city-group,
+#icon-city-groups {
+	background-position: -1056px 0px;
+}
+.nt-icon-cg,
+.nt-icon-group,
+.nt-icon-cty-groups,
+.nt-icon-city-group,
+.nt-icon-city-groups {
+	background-position: -528px 0px;
+}
+a:hover .nt-icon-cg,
+a:hover .nt-icon-group,
+a:hover .nt-icon-cty-groups,
+a:hover .nt-icon-city-group,
+a:hover .nt-icon-city-groups {
+	background-position: -528px -16px;
+}
+#icon-country,
+#icon-countries,
+#icon-nation,
+#icon-nations {
+	background-position: -1088px 0px;
+}
+.nt-icon-country,
+.nt-icon-countries,
+.nt-icon-nation,
+.nt-icon-nations {
+	background-position: -544px 0px;
+}
+a:hover .nt-icon-country,
+a:hover .nt-icon-countries,
+a:hover .nt-icon-nation,
+a:hover .nt-icon-nations {
+	background-position: -544px -16px;
+}
+#icon-geography,
+#icon-ng,
+#icon-country-group,
+#icon-country-groups,
+#icon-nation-group,
+#icon-nation-groups {
+	background-position: -1120px 0px;
+}
+.nt-icon-geography,
+.nt-icon-ng,
+.nt-icon-country-group,
+.nt-icon-country-groups,
+.nt-icon-nation-group,
+.nt-icon-nation-groups {
+	background-position: -560px 0px;
+}
+a:hover .nt-icon-geography,
+a:hover .nt-icon-ng,
+a:hover .nt-icon-country-group,
+a:hover .nt-icon-country-groups,
+a:hover .nt-icon-nation-group,
+a:hover .nt-icon-nation-groups {
+	background-position: -560px -16px;
 }
 
 
@@ -506,7 +767,8 @@ body #pass-strength-result.strong {
 	div.mobile-pa {
 		display: block;
 	}
-	.screen-pa {
+	.screen-pa,
+	.mobile-hide-pa {
 		display: none;
 		visibility: hidden;
 	}
@@ -553,7 +815,7 @@ only screen and (min-resolution: 1.5dppx) {
 	.icon32-pa,
 	.icon32-posts-festival,
 	#icon-edit {
-		background-image: url(../admin/images/icon64.png);
+		background-image: url(../img/icon64.png);
 		background-size: 928px 32px;
 	}
 }

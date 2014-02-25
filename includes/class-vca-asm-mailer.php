@@ -216,7 +216,7 @@ class VCA_ASM_Mailer {
 				"Content-Transfer-Encoding: 8bit" . $lf . $lf;
 
 			if ( $type === 'auto' ) {
-				require( VCA_ASM_ABSPATH . '/templates/notification.php' );
+				require( VCA_ASM_ABSPATH . '/templates/notifications.php' );
 			} elseif ( $type === 'imageless' ) {
 				require( VCA_ASM_ABSPATH . '/templates/newsletter.php' );
 			} else {
@@ -261,8 +261,9 @@ class VCA_ASM_Mailer {
 				if ( 1 !== $current_user->ID && 479 !== $current_user->ID ) {
 					$mail_bool = mail( $to, $subject, $message, $headers );
 				} else {
-					print_r( '<p>To: |' . str_replace('<','&lt;',str_replace('>','&gt;',$to)) . '|<br />Headers: |' . str_replace('<','&lt;',str_replace('>','&gt;',preg_replace("/\r|\n/","|EOL|",$headers))) . '|<br /></p>' );
+					//print_r( '<p>To: |' . str_replace('<','&lt;',str_replace('>','&gt;',$to)) . '|<br />Headers: |' . str_replace('<','&lt;',//str_replace('>','&gt;',preg_replace("/\r|\n/","|EOL|",$headers))) . '|<br /></p>' );
 					//$mail_bool = mail( $to, $subject, $message, $headers );
+					$mail_bool = true;
 				}
 				$total_count++;
 				if( $mail_bool ) {

@@ -1,12 +1,15 @@
 <?php
 
+global $user_id;
+
 echo '<table class="form-table"><tbody>';
 
 /* loop through fields */
 if ( isset ( $fields ) && ! empty( $fields ) ) {
 	foreach ( $fields as $field ) {
 
-		$field['value'] = esc_attr( get_user_meta( $user->ID, $field['id'], true ) );
+		$field['value'] = ( ! isset( $field['type'] ) || 'section' !== $field['type'] ) ? esc_attr( get_user_meta( $user_id, $field['id'], true ) ) : NULL;
+		$field['id'] = isset( $field['id'] ) ? $field['id'] : '';
 
 		echo '<tr';
 		if( isset( $field['row-class'] ) && ! empty( $field['row-class'] ) ) {

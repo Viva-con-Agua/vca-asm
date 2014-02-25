@@ -10,7 +10,7 @@
 	global $current_user, $vca_asm_utilities;
 	get_currentuserinfo();
 
-	$user_region = get_user_meta( $current_user->ID, 'region', true );
+	$user_city = get_user_meta( $current_user->ID, 'region', true );
 	$user_mem_status = get_user_meta( $current_user->ID, 'membership', true );
 
 	if( ! isset( $output ) ) {
@@ -31,15 +31,15 @@
 
 	while ( $activities->have_posts() ) : $activities->the_post();
 
-		$slots_arr = get_post_meta( get_the_ID(), 'slots', true );
-		if( ! array_key_exists( 0, $slots_arr ) ) {
-			if( ! array_key_exists( $user_region, $slots_arr ) || $user_mem_status != 2 ) {
-				continue;
-			}
+		$the_activity = new VCA_ASM_Activity( get_the_ID() );
+		$eligible_quota = $the_activity->is_eligible( $current_user->ID );
+
+		if ( ! is_numeric( $eligible_quota ) ) {
+			continue;
 		}
 
 		if( isset( $split_months ) && $split_months === true ) {
-			$stamp = intval( get_post_meta( get_the_ID(), 'start_date', true ) );
+			$stamp = intval( get_post_meta( get_the_ID(), 'start_act', true ) );
 			$month_num = date( 'n', $stamp );
 			if( $month_num != $month_cur ) {
 				$month_cur = $month_num;
@@ -50,12 +50,16 @@
 		}
 
 		$output .= '<li class="activity toggle-wrapper">' .
-			'<h4>' . get_the_title() . '</h4>' .
+			'<h4>';
+		if ( 'concert' === $the_activity->post_object->post_type ) {
+			$output .= __( 'Concert', 'vca-asm' ) . ': ';
+		}
+		$output .= get_the_title() . '</h4>' .
 			'<ul class="head-block"><li>' .
 				__( 'Timeframe', 'vca-asm' ) . ': ' .
-				strftime( '%A, %e.%m.%Y', intval( get_post_meta( get_the_ID(), 'start_date', true ) ) ) .
+				strftime( '%A, %e.%m.%Y, %H:%M', intval( get_post_meta( get_the_ID(), 'start_act', true ) ) ) .
 				' ' . __( 'until', 'vca-asm' ) . ' ' .
-				strftime( '%A, %e.%m.%Y', intval( get_post_meta( get_the_ID(), 'end_date', true ) ) ) .
+				strftime( '%A, %e.%m.%Y, %H:%M', intval( get_post_meta( get_the_ID(), 'end_act', true ) ) ) .
 			'</li><li>' .
 				__( 'Location', 'vca-asm' ) . ': ' .
 				get_post_meta( get_the_ID(), 'location', true ) .
@@ -116,7 +120,7 @@
 		}
 		$output .= $tools . '</li><li>' .
 				__( 'Directions', 'vca-asm' ) . ': ' .
-				$vca_asm_utilities->urls_to_links( get_post_meta( get_the_ID(), 'directions', true ) ) .
+				nl2br( $vca_asm_utilities->urls_to_links( get_post_meta( get_the_ID(), 'directions', true ) ) ) .
 			'</li></ul>';
 		if( isset( $show_xtra_info ) && $show_xtra_info === true ) {
 			$output .= '<h5>' . __( 'Contact Person(s)', 'vca-asm' ) . '</h5>';
@@ -124,23 +128,25 @@
 			$contact_emails = get_post_meta( get_the_ID(), 'contact_email', true );
 			$contact_mobiles = get_post_meta( get_the_ID(), 'contact_mobile', true );
 			$i = 0;
-			foreach( $contacts as $contact_name ) {
-				if( empty( $contact_name ) ) {
-					if( $i === 0 ) {
-						$output .= '<p>' . __( 'Not set yet...', 'vca-asm' ) . '</p>';
+			if ( is_array( $contacts ) ) {
+				foreach( $contacts as $contact_name ) {
+					if( empty( $contact_name ) ) {
+						if( $i === 0 ) {
+							$output .= '<p>' . __( 'Not set yet...', 'vca-asm' ) . '</p>';
+						}
+						continue;
 					}
-					continue;
+					$output .= '<ul><li>' .
+						__( 'Name', 'vca-asm' ) . ': ' . $contact_name;
+					if( ! empty( $contact_emails[$i] ) ) {
+						$output .= '</li><li>' . __( 'E-Mail', 'vca-asm' ) . ': ' . $contact_emails[$i];
+					}
+					if( ! empty( $contact_mobiles[$i] ) ) {
+						$output .= '</li><li>' . __( 'Mobile Number', 'vca-asm' ) . ': ' . $contact_mobiles[$i];
+					}
+					$output .= '</li></ul>';
+					$i++;
 				}
-				$output .= '<ul><li>' .
-					__( 'Name', 'vca-asm' ) . ': ' . $contact_name;
-				if( ! empty( $contact_emails[$i] ) ) {
-					$output .= '</li><li>' . __( 'E-Mail', 'vca-asm' ) . ': ' . $contact_emails[$i];
-				}
-				if( ! empty( $contact_mobiles[$i] ) ) {
-					$output .= '</li><li>' . __( 'Mobile Number', 'vca-asm' ) . ': ' . $contact_mobiles[$i];
-				}
-				$output .= '</li></ul>';
-				$i++;
 			}
 		}
 

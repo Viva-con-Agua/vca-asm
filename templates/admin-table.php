@@ -1,5 +1,12 @@
 <?php
 
+/**
+ * Template for tabular data used in the backend
+ *
+ * DEPRECATED -- DO NOT USE FOR FUTURE MODULES
+ *
+ **/
+
 if( ! isset( $output ) ) {
 	$output = '';
 }
@@ -341,6 +348,7 @@ if ( ! empty( $rows ) ) {
 			}
 			$output .= '</td>';
 		}
+		$output .= '</tr>';
 	}
 }
 $output .= '</tbody></table>';

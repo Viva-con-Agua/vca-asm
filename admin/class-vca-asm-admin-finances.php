@@ -21,13 +21,15 @@ class VCA_ASM_Admin_Finances {
 	 * @access public
 	 */
 	public function control() {
-
-		$output = '<div class="wrap">' .
-			'<div id="icon-finances" class="icon32-pa"></div><h2>' . _x( 'Finances', 'Finances Admin Menu', 'vca-asm' ) . '</h2><br /><br />' .
-				'<p><dfn>Verfügbar ab Version 1.3</dfn></p>' .
-			'</div>';
-
-		echo $output;
+		echo '<div class="wrap">' .
+			'<div id="icon-finances" class="icon32-pa"></div><h2>(Zellen-)Finanzen</h2>';
+		$feech = new VCA_ASM_Admin_Future_Feech( array(
+			'title' => '(Zellen-)Finanzen',
+			'version' => '1.4',
+			'explanation' => 'Hier werden in Zukunft die Spenden- und Wirtschaftskonten der Zellen verwaltet werden können.'
+		));
+		$feech->output();
+		echo '</div>';
 	}
 
 } // class

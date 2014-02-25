@@ -4,6 +4,8 @@
  * Template for forms used in the backend
  * (not to be used for CPTs & CFs)
  *
+ * DEPRECATED -- DO NOT USE FOR FUTURE MODULES
+ *
  **/
 
 if ( ! isset( $output ) ) {
@@ -140,51 +142,56 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 					$cols = 3;
 				}
 
-				if( $cols !== 1 ) {
-					$output .= '<table class="table-inside-table table-mobile-collapse"><tr><td>';
-					$i = 1;
-					$end = count( $field['options'] );
-				}
-				foreach( $field['options'] as $option ) {
-
-					$output .= '<input type="checkbox"' .
-						'value="' . $option['value'] . '" ' .
-						'name="' . $field['id'] . '[]" ' .
-						'class="' . $field['id'] . '" ' .
-						'id="' . $field['id'] . '_' . $option['value'] . '"';
-
-					if( ( isset( $field['value'] ) && is_array( $field['value'] ) && in_array( $option['value'], $field['value'] ) )
-						|| ( isset( $option['checked'] ) && $option['checked'] === true ) ) {
-						$output .= ' checked="checked"';
-					}
-					if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
-						$output .= ' disabled="disabled"';
-					}
-
-					$output .= ' /><label for="' . $field['id'] . '_' . $option['value'] . '">' .
-						$option['label'] .
-						'</label>';
+				if ( ! empty( $field['options'] ) ) {
 
 					if( $cols !== 1 ) {
-						if( ( $i % $cols ) === 0 ) {
-							if( $i === $end ) {
+						$output .= '<table class="table-inside-table table-mobile-collapse"><tr><td>';
+						$i = 1;
+						$end = count( $field['options'] );
+					}
+					foreach( $field['options'] as $option ) {
+
+						$output .= '<input type="checkbox"' .
+							'value="' . $option['value'] . '" ' .
+							'name="' . $field['id'] . '[]" ' .
+							'class="' . $field['id'] . '" ' .
+							'id="' . $field['id'] . '_' . $option['value'] . '"';
+
+						if( ( isset( $field['value'] ) && is_array( $field['value'] ) && in_array( $option['value'], $field['value'] ) )
+							|| ( isset( $option['checked'] ) && true === $option['checked'] ) ) {
+							$output .= ' checked="checked"';
+						}
+						if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
+							$output .= ' disabled="disabled"';
+						}
+
+						$output .= ' /><label for="' . $field['id'] . '_' . $option['value'] . '">' .
+							$option['label'] .
+							'</label>';
+
+						if( $cols !== 1 ) {
+							if( ( $i % $cols ) === 0 ) {
+								if( $i === $end ) {
+									$output .= '</td></tr></table>';
+								} else {
+									$output .= '</td></tr><tr><td>';
+								}
+							} elseif( $i === $end ) {
+								$empty_cell = '</td><td>';
+								for( $i = 0; $i < ( $i % $cols ); $i++ ) {
+									$$output .= $empty_cell;
+								}
 								$output .= '</td></tr></table>';
 							} else {
-								$output .= '</td></tr><tr><td>';
+								$output .= '</td><td>';
 							}
-						} elseif( $i === $end ) {
-							$empty_cell = '</td><td>';
-							for( $i = 0; $i < ( $i % $cols ); $i++ ) {
-								$$output .= $empty_cell;
-							}
-							$output .= '</td></tr></table>';
+							$i++;
 						} else {
-							$output .= '</td><td>';
+							$output .= '<br />';
 						}
-						$i++;
-					} else {
-						$output .= '<br />';
 					}
+				} else {
+					$output .= '<p>' . __( 'There is no data to select...', 'vca-asm' ) . '</p>';
 				}
 
 				if ( isset( $field['extra'] ) && 'bulk_deselect' === $field['extra'] ) {

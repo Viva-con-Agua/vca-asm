@@ -3,10 +3,10 @@
 /*
 Plugin Name: VcA Activity & Supporter Management
 Plugin URI: http://pool.vivaconagua.org
-Description: Tool for Viva con Agua to manage it's supporters and their activities within the network
-Version: 1.1
+Description: Tool for Viva con Agua (NGO) to manage its supporters and their activities within their network
+Version: 1.3
 Author: Johannes Pilkahn
-Author URI: http://tramprennen.org    // subject to change
+Author URI: http://tramprennen.org // subject to change
 License: GPL3
 */
 
@@ -20,7 +20,6 @@ License: GPL3
     along with this program; if not, write to the Free Software
     Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
-
 
 /**
  * Holds the absolute location of the main plugin file (this file)
@@ -55,37 +54,91 @@ if ( !defined( 'VCA_ASM_DIRNAME' ) )
 	define( 'VCA_ASM_DIRNAME', basename( VCA_ASM_ABSPATH ) );
 
 /**
- * Enqueue the plugin's javascript
+ * Enqueue the plugin's javascript & styles
  *
  * @since 1.0
  */
 function vca_asm_enqueue() {
-	if( is_admin() ) {
-		wp_register_script( 'vca-asm-custom-field-instances', VCA_ASM_RELPATH . 'js/repeatable-custom-fields.js',
-			array( 'jquery-ui-slider', 'jquery-ui-datepicker' ), '1.191', true );
-		wp_register_script( 'vca-asm-admin-generic', VCA_ASM_RELPATH . 'js/admin-generic.js', false, '1.193', true );
-		wp_register_script( 'vca-asm-admin-email-preview', VCA_ASM_RELPATH . 'js/admin-email-preview.js', false, '1.191', true );
-		wp_register_script( 'vca-asm-admin-profile', VCA_ASM_RELPATH . 'js/admin-profile.js', false, '1.191', true );
-		wp_register_script( 'vca-asm-admin-settings', VCA_ASM_RELPATH . 'js/admin-settings.js', false, '1.193', true );
-		wp_register_script( 'vca-asm-tooltip', VCA_ASM_RELPATH . 'js/tooltip.js', false, '1.191', true );
+	$jqui_params = array(
+		'monthNames' => array(
+			_x( 'January', 'Months', 'vca-asm' ),
+			_x( 'February', 'Months', 'vca-asm' ),
+			_x( 'March', 'Months', 'vca-asm' ),
+			_x( 'April', 'Months', 'vca-asm' ),
+			_x( 'May', 'Months', 'vca-asm' ),
+			_x( 'June', 'Months', 'vca-asm' ),
+			_x( 'July', 'Months', 'vca-asm' ),
+			_x( 'August', 'Months', 'vca-asm' ),
+			_x( 'September', 'Months', 'vca-asm' ),
+			_x( 'October', 'Months', 'vca-asm' ),
+			_x( 'November', 'Months', 'vca-asm' ),
+			_x( 'December', 'Months', 'vca-asm' )
+		),
+		'dayNamesMin' => array(
+			_x( 'Sun', 'Weekdays, Shortform', 'vca-asm' ),
+			_x( 'Mon', 'Weekdays, Shortform', 'vca-asm' ),
+			_x( 'Tue', 'Weekdays, Shortform', 'vca-asm' ),
+			_x( 'Wed', 'Weekdays, Shortform', 'vca-asm' ),
+			_x( 'Thu', 'Weekdays, Shortform', 'vca-asm' ),
+			_x( 'Fri', 'Weekdays, Shortform', 'vca-asm' ),
+			_x( 'Sat', 'Weekdays, Shortform', 'vca-asm' )
+		)
+	);
+	$generic_params = array(
+		'strings' => array(
+			'btnDeselect' => __( 'Deselect all', 'vca-asm' ),
+			'btnSelect' => __( 'Select all', 'vca-asm' )
+		)
+	);
 
-		wp_enqueue_script( 'vca-asm-custom-field-instances' );
-		wp_enqueue_script( 'jquery-ui-datepicker' );
+	if( is_admin() ) {
+		wp_register_script( 'vca-asm-admin-email-preview', VCA_ASM_RELPATH . 'js/admin-email-preview.js', false, '1.2', true );
+		wp_register_script( 'vca-asm-admin-generic', VCA_ASM_RELPATH . 'js/admin-generic.js', false, '1.2', true );
+		wp_register_script( 'vca-asm-admin-repeatable-custom-fields', VCA_ASM_RELPATH . 'js/admin-repeatable-custom-fields.js',
+			array( 'jquery-ui-slider', 'jquery-ui-datepicker' ), '1.2', true );
+		wp_register_script( 'vca-asm-admin-jquery-ui-integration', VCA_ASM_RELPATH . 'js/admin-jquery-ui-integration.js',
+			array( 'jquery-ui-slider', 'jquery-ui-datepicker' ), '1.2', true );
+		wp_register_script( 'vca-asm-admin-profile', VCA_ASM_RELPATH . 'js/admin-profile.js', false, '1.2', true );
+		wp_register_script( 'vca-asm-admin-quotas', VCA_ASM_RELPATH . 'js/admin-quotas.js',
+			array( 'jquery-ui-slider' ), '1.2', true );
+		wp_register_script( 'vca-asm-admin-settings', VCA_ASM_RELPATH . 'js/admin-settings.js', false, '1.2', true );
+		wp_register_script( 'vca-asm-admin-supporter-filter', VCA_ASM_RELPATH . 'js/admin-supporter-filter.js', false, '1.2', true );
+		wp_register_script( 'vca-asm-admin-validation', VCA_ASM_RELPATH . 'js/admin-validation.js', false, '1.2', true );
+		wp_register_script( 'vca-asm-excel-export', VCA_ASM_RELPATH . 'js/excel-export.js', false, '1.2', true );
+		wp_register_script( 'vca-asm-tooltip', VCA_ASM_RELPATH . 'js/tooltip.js', false, '1.2', true );
+
+		/* used throughout the backend, enqueued everywhere */
 		wp_enqueue_script( 'jquery-ui-slider' );
-		wp_enqueue_script( 'vca-asm-admin-profile' );
 		wp_enqueue_script( 'vca-asm-admin-generic' );
 		wp_enqueue_script( 'vca-asm-tooltip' );
 
+		wp_localize_script( 'vca-asm-admin-generic', 'genericParams', $generic_params );
+
+		global $pagenow;
+		/* used on activity/post edit screens only */
+		if( 'post.php' == $pagenow || 'post-new.php' == $pagenow ) {
+			wp_enqueue_script( 'jquery-ui-datepicker' );
+			wp_enqueue_script( 'vca-asm-admin-validation' );
+			wp_enqueue_script( 'vca-asm-admin-jquery-ui-integration' );
+			wp_enqueue_script( 'vca-asm-admin-repeatable-custom-fields' );
+			wp_enqueue_script( 'vca-asm-admin-quotas' );
+			wp_localize_script( 'vca-asm-admin-jquery-ui-integration', 'jquiParams', $jqui_params );
+		}
+		/* conditional (context) based enqueue as well ? */
+		wp_enqueue_script( 'vca-asm-admin-profile' );
+		wp_enqueue_script( 'vca-asm-excel-export' );
+
+		wp_enqueue_style( 'jquery-ui-framework', VCA_ASM_RELPATH . 'css/jquery-ui-framework.css' );
 		wp_enqueue_style( 'jquery-ui-custom', VCA_ASM_RELPATH . 'css/jquery-ui-custom.css' );
-		wp_enqueue_style( 'vca-asm-admin-generic-style', VCA_ASM_RELPATH . 'css/admin-generic.css', false, '1.193' );
-		wp_enqueue_style( 'vca-asm-tooltips', VCA_ASM_RELPATH . 'css/admin-tooltips.css', false, '1.191' );
+		wp_enqueue_style( 'vca-asm-admin-generic-style', VCA_ASM_RELPATH . 'css/admin-generic.css', false, '1.23' );
+		wp_enqueue_style( 'vca-asm-tooltips', VCA_ASM_RELPATH . 'css/admin-tooltips.css', false, '1.2' );
 	} else {
-		wp_register_script( 'vca-asm-profile', VCA_ASM_RELPATH . 'js/profile.js', false, '1.191', true );
-		wp_register_script( 'vca-asm-strength-meter-init', VCA_ASM_RELPATH . 'js/strength-meter-init.js', false, '1.19', true );
+		wp_register_script( 'vca-asm-profile', VCA_ASM_RELPATH . 'js/profile.js', false, '1.2', true );
+		wp_register_script( 'vca-asm-strength-meter-init', VCA_ASM_RELPATH . 'js/strength-meter-init.js', false, '1.2', true );
 
 		wp_enqueue_script( 'vca-asm-profile' );
 
-		wp_enqueue_style( 'vca-asm-activities', VCA_ASM_RELPATH . 'css/activities.css', false, '1.191' );
+		wp_enqueue_style( 'vca-asm-activities', VCA_ASM_RELPATH . 'css/activities.css', false, '1.2' );
 	}
 }
 add_action( 'wp_loaded', 'vca_asm_enqueue' );
@@ -95,26 +148,22 @@ add_action( 'wp_loaded', 'vca_asm_enqueue' );
  *
  * @since 1.0
  */
+/* core of the plugin, frontend (usually insantiated only once)*/
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-activities.php' );
+require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-geography.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-lists.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-mailer.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-profile.php' );
-require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-regions.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-registrations.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-security.php' );
-require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-supporter.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-utilities.php' );
-require_once( VCA_ASM_ABSPATH . '/includes/class-php2excel.php' );
-
-
-/**
- * VCA_ASM Objects
- *
- * @global object $vca_asm
- * @since 1.0
- */
-$GLOBALS['vca_asm'] =& new VCA_ASM();
+/* classes that hold data sets (multiple instances) */
+require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-activity.php' );
+require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-stats.php' );
+require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-supporter.php' );
+/* foreign code */
+require_once( VCA_ASM_ABSPATH . '/lib/class-php2excel.php' );
 
 /**
  * Admin UI
@@ -122,28 +171,43 @@ $GLOBALS['vca_asm'] =& new VCA_ASM();
  * @since 1.0
  */
 if ( is_admin() ) {
+	/* functional classes (usually insantiated only once) */
 	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin.php' );
-	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-activities.php' );
-	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-applications.php' );
+	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-actions.php' );
+	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-education.php' );
 	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-emails.php' );
+	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-home.php' );
 	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-finances.php' );
+	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-geography.php' );
+	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-network.php' );
 	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-settings.php' );
+	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-slot-allocation.php' );
 	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-supporters.php' );
-	require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-stats.php' );
+
+	/* so far only used in the backend... */
+	require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-roles.php' );
+	require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-validation.php' );
+
+	/* template classes (non-OOP templates are included on the spot) */
+	require_once( VCA_ASM_ABSPATH . '/templates/class-vca-asm-admin-form.php' );
+	require_once( VCA_ASM_ABSPATH . '/templates/class-vca-asm-admin-future-feech.php' );
+	require_once( VCA_ASM_ABSPATH . '/templates/class-vca-asm-admin-metaboxes.php' );
+	require_once( VCA_ASM_ABSPATH . '/templates/class-vca-asm-admin-page.php' );
+	require_once( VCA_ASM_ABSPATH . '/templates/class-vca-asm-admin-table.php' );
+	/* WP-core classes */
 	require_once( ABSPATH . '/wp-admin/includes/user.php' );
-	/**
-	 * vca_asm_admin object
-	 *
-	 * @since 1.0
-	 */
-	$vca_asm_admin =& new VCA_ASM_Admin();
-	$GLOBALS['vca_asm_admin_activities'] =& new VCA_ASM_Admin_Activities();
-	$GLOBALS['vca_asm_admin_applications'] =& new VCA_ASM_Admin_Applications();
-	$GLOBALS['vca_asm_admin_emails'] =& new VCA_ASM_Admin_Emails();
-	$GLOBALS['vca_asm_admin_finances'] =& new VCA_ASM_Admin_Finances();
-	$GLOBALS['vca_asm_admin_settings'] =& new VCA_ASM_Admin_Settings();
-	$GLOBALS['vca_asm_admin_supporters'] =& new VCA_ASM_Admin_Supporters();
+
+	/* used on major updates */
+	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-update.php' );
 }
+
+/**
+ * VCA_ASM Initial Object
+ *
+ * @global object $vca_asm
+ * @since 1.0
+ */
+$vca_asm =& new VCA_ASM();
 
 /**
  * Incrementing database version
@@ -161,7 +225,7 @@ $vca_asm_db_version = "3.7";
  * The install method is only triggered on plugin installation
  * and when the database version number
  * ( "$vca_asm_db_version", see above )
- * has changed.
+ * is changed.
  *
  * @since 1.0
  */
@@ -170,14 +234,6 @@ function vca_asm_install() {
 
 	/* SQL statements to create required tables */
 	$sql = array();
-	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_applications (
-		id int UNSIGNED NOT NULL AUTO_INCREMENT ,
-		supporter int UNSIGNED NOT NULL ,
-		activity int UNSIGNED NOT NULL ,
-		state tinyint UNSIGNED ,
-		notes text NOT NULL ,
-		UNIQUE KEY id (id)
-    );";
 	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_emails (
 		id int UNSIGNED NOT NULL AUTO_INCREMENT ,
 		time bigint NOT NULL ,
@@ -189,16 +245,32 @@ function vca_asm_install() {
 		receipient_id int NOT NULL ,
 		UNIQUE KEY id (id)
 	);";
-	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_regions (
+	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_geography (
 		id int UNSIGNED NOT NULL AUTO_INCREMENT ,
 		name varchar(255) NOT NULL ,
-		status tinytext NOT NULL ,
+		type tinytext NOT NULL ,
+		members int NOT NULL ,
+		supporters int NOT NULL ,
 		has_user tinyint UNSIGNED ,
 		user_id bigint NOT NULL ,
 		user varchar(255) NOT NULL ,
 		pass varchar(255) NOT NULL ,
-		supporters int NOT NULL ,
-		members int NOT NULL ,
+		country_code int UNSIGNED NOT NULL,
+		UNIQUE KEY id (id)
+    );";
+	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_geography_hierarchy (
+		id int UNSIGNED NOT NULL AUTO_INCREMENT ,
+		ancestor int UNSIGNED NOT NULL ,
+		ancestor_type tinytext NOT NULL ,
+		descendant int UNSIGNED NOT NULL ,
+		UNIQUE KEY id (id)
+    );";
+	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_applications (
+		id int UNSIGNED NOT NULL AUTO_INCREMENT ,
+		supporter int UNSIGNED NOT NULL ,
+		activity int UNSIGNED NOT NULL ,
+		state tinyint UNSIGNED ,
+		notes text NOT NULL ,
 		UNIQUE KEY id (id)
     );";
 	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_registrations (
@@ -212,13 +284,15 @@ function vca_asm_install() {
 	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_registrations_old (
 		id int UNSIGNED NOT NULL AUTO_INCREMENT ,
 		supporter int UNSIGNED NOT NULL ,
-		activities text NOT NULL ,
+		activity int UNSIGNED NOT NULL ,
+		notes text NOT NULL ,
 		UNIQUE KEY id (id)
 	);";
 	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_applications_old (
 		id int UNSIGNED NOT NULL AUTO_INCREMENT ,
 		supporter int UNSIGNED NOT NULL ,
-		activities text NOT NULL ,
+		activity int UNSIGNED NOT NULL ,
+		notes text NOT NULL ,
 		UNIQUE KEY id (id)
 	);";
 	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_auto_responses (
@@ -230,9 +304,45 @@ function vca_asm_install() {
 		UNIQUE KEY id (id)
 	);";
 
+	/* set up custom taxonomies */
+	$activities_id = NULL;
+	if ( ! is_category( 'activities' ) ) {
+		$activities_id = wp_create_category( array(
+			'cat_name' => 'Activities',
+			'category_description' => "Parent Category to group all of VcA's Activities",
+			'category_nicename' => 'activites'
+		) );
+	}
+	if ( ! empty( $activities_id ) ) {
+		if ( ! is_category( 'actions' ) ) {
+			$activities_id = wp_create_category( array(
+				'cat_name' => 'Actions',
+				'category_description' => "Activities of the Action-Department",
+				'category_nicename' => 'actions',
+				'category_parent' => $activities_id
+			) );
+		}
+		if ( ! is_category( 'education' ) ) {
+			$activities_id = wp_create_category( array(
+				'cat_name' => 'Education',
+				'category_description' => "Activities of the Education-Department",
+				'category_nicename' => 'education',
+				'category_parent' => $activities_id
+			) );
+		}
+		if ( ! is_category( 'network' ) ) {
+			$activities_id = wp_create_category( array(
+				'cat_name' => 'Network',
+				'category_description' => "Activities of the Network-Department",
+				'category_nicename' => 'network',
+				'category_parent' => $activities_id
+			) );
+		}
+	}
+
 	/* comparison of above with db, db adjustments */
-	require_once(ABSPATH . 'wp-admin/includes/upgrade.php');
-	dbDelta($sql);
+	require_once( ABSPATH . 'wp-admin/includes/upgrade.php' );
+	dbDelta( $sql );
 
 	/* set default options */
 	if( ! get_option( 'pass_strength_supporter' ) ) {
@@ -253,7 +363,10 @@ function vca_asm_install() {
 
 	$users = get_users();
 	foreach ( $users as $user ) {
-		update_user_meta( $user->ID, 'vca_asm_last_pass_reset', time() );
+		$last_reset = get_user_meta( $user->ID, 'vca_asm_last_pass_reset', true );
+		if ( empty( $last_reset ) ) {
+			update_user_meta( $user->ID, 'vca_asm_last_pass_reset', time() );
+		}
 	}
 
 	/* fill autoresponses table, dirty!, replace! */
@@ -284,7 +397,7 @@ function vca_asm_install() {
 	}
 
 	/* update db version number */
-   update_option( "vca_asm_db_version", $vca_asm_db_version );
+   update_option( 'vca_asm_db_version', $vca_asm_db_version );
 }
 
 function vca_asm_update_db_check() {
@@ -292,21 +405,6 @@ function vca_asm_update_db_check() {
     if( get_site_option( 'vca_asm_db_version' ) != $vca_asm_db_version ) {
         vca_asm_install();
     }
-}
-
-
-function update_umetar() {
-	global $wpdb;
-
-	$wpdb->update(
-		'vca1312_usermeta',
-		array(
-			'meta_key' => 'vca1312_capabilities'
-		),
-		array( 'meta_key' => 'wp_capabilities' ),
-		array( '%s'	),
-		array( '%s' )
-	);
 }
 
 add_action( 'plugins_loaded', 'vca_asm_update_db_check' );

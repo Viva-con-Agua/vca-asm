@@ -1,17 +1,21 @@
-jQuery(document).ready(function() {
+(function($){ // closure
+
+$(document).ready(function() {
 	toggleMemSelector();
 });
 
-jQuery('.region-selector').change(function() {
+$('.region-selector').change(function() {
 	toggleMemSelector()
 });
 
 function toggleMemSelector() {
-	if( jQuery('.region-selector option:selected').hasClass('region')
-		|| jQuery('.region-selector option:selected').hasClass('global')
-		|| jQuery('.region-selector option:selected').hasClass('please-select') ) {
-		jQuery('.membership-selector').css( 'display', 'none' );
+	if( $('.region-selector option:selected').hasClass('region')
+		|| $('.region-selector option:selected').hasClass('global')
+		|| $('.region-selector option:selected').hasClass('please-select') ) {
+		$('.membership-selector').css( 'display', 'none' );
 	} else {
-		jQuery('.membership-selector').css( 'display', 'table-row' );		
+		$('.membership-selector').css( 'display', 'table-row' );
 	}
 }
+
+})(jQuery); // closure

@@ -1,16 +1,18 @@
-jQuery(document).ready(function(){
-  if(jQuery("#pass-strength-result").length > 0){
-		jQuery("#pass1").bind("keyup", function(){
-		var pass1 = jQuery("#pass1").val();
-		var pass2 = jQuery("#pass2").val();
-		var username = jQuery("#user_login").val();
+(function($){ // closure
+
+$(document).ready(function(){
+  if($("#pass-strength-result").length > 0){
+		$("#pass1").bind("keyup", function(){
+		var pass1 = $("#pass1").val();
+		var pass2 = $("#pass2").val();
+		var username = $("#user_login").val();
 		var strength = passwordStrength(pass1, username, pass2);
 		updateStrength(strength);
 		});
-		jQuery("#pass2").bind("keyup", function(){
-		var pass1 = jQuery("#pass1").val();
-		var pass2 = jQuery("#pass2").val();
-		var username = jQuery("#user_login").val();
+		$("#pass2").bind("keyup", function(){
+		var pass1 = $("#pass1").val();
+		var pass2 = $("#pass2").val();
+		var username = $("#user_login").val();
 		var strength = passwordStrength(pass1, username, pass2);
 		updateStrength(strength);
 		});
@@ -18,7 +20,7 @@ jQuery(document).ready(function(){
 });
 
 function updateStrength(strength){
-    var dom = jQuery("#pass-strength-result");
+    var dom = $("#pass-strength-result");
     switch(strength){
 		case 1:
 		  dom.removeClass().addClass(VCAasmMeter.classes[strength]).text(VCAasmMeter.terms[strength]);
@@ -38,3 +40,5 @@ function updateStrength(strength){
 		default:
     }
 }
+
+})(jQuery); // closure

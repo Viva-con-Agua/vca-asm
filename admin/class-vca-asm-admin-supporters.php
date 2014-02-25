@@ -20,32 +20,1426 @@ if ( ! class_exists( 'VCA_ASM_Admin_Supporters' ) ) :
 
 class VCA_ASM_Admin_Supporters {
 
+	/**** THE ADMIN PAGE *****/
+
 	/**
-	 * Sorting Methods
+	 * Supporters Admin Menu Controller
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
+	public function control() {
+		global $current_user, $vca_asm_mailer, $vca_asm_geography;
+		get_currentuserinfo();
+
+		$admin_city = get_user_meta( $current_user->ID, 'region', true );
+		$admin_nation = $vca_asm_geography->has_nation( $admin_city );
+
+		$messages = array();
+
+		if( isset( $_GET['profile'] ) ) {
+			$profile_url = 'admin.php?page=vca-asm-supporters';
+			if( isset( $_GET['orderby'] ) ) {
+				$profile_url .= '&orderby=' . $_GET['orderby'];
+			}
+			if( isset( $_GET['order'] ) ) {
+				$profile_url .= '&order=' . $_GET['order'];
+			}
+			if( isset( $_GET['todo'] ) ) {
+			   if( 'search' ===  $_GET['todo'] &&
+					( isset( $_POST['term'] ) || isset( $_GET['term'] ) )
+				) {
+					if( isset( $_POST['term'] ) ) {
+						$term = $_POST['term'];
+					} else {
+						$term = $_GET['term'];
+					}
+					$profile_url .= '&todo=search&term=' . $term;
+			   } elseif( 'filter' ===  $_GET['todo'] ) {
+					$profile_url .= '&todo=filter';
+					if( isset( $_POST['dead-filter'] ) ) {
+						$profile_url .= '&df=1';
+					} elseif( isset( $_GET['df'] ) && $_GET['df'] == 1 ) {
+						$profile_url .= '&df=1';
+					}
+					if( isset( $_POST['membership-filter'] ) ) {
+						$profile_url .= '&mf=' . htmlspecialchars( serialize( $_POST['membership-filter'] ) );
+					} elseif( isset( $_GET['mf'] ) ) {
+						$profile_url .= '&mf=' . htmlspecialchars( $_GET['mf'] );
+					}
+					if( isset( $_POST['geo-filter'] ) ) {
+						$profile_url .= '&gf=' . htmlspecialchars( serialize( $_POST['geo-filter'] ) );
+					} elseif( isset( $_GET['gf'] ) ) {
+						$profile_url .= '&gf=' . htmlspecialchars( $_GET['gf'] );
+					}
+					if( isset( $_POST['geo-filter-by'] ) ) {
+						$profile_url .= '&gfb=' . $_POST['geo-filter-by'];
+					} elseif( isset( $_GET['gfb'] ) ) {
+						$profile_url .= '&gfb=' . $_GET['gfb'];
+					}
+					if( isset( $_POST['role-filter'] ) ) {
+						$profile_url .= '&rf=' . htmlspecialchars( serialize( $_POST['role-filter'] ) );
+					} elseif( isset( $_GET['rf'] ) ) {
+						$profile_url .= '&rf=' . htmlspecialchars( $_GET['rf'] );
+					}
+			   }
+			}
+			$supporter = new VCA_ASM_Supporter( intval( $_GET['profile'] ) );
+			if( $supporter->exists ) {
+				$this->supporter_profile( $supporter, $profile_url );
+				return true;
+			}
+		}
+
+		if( isset( $_GET['id'] ) ) {
+			$name = get_user_meta( $_GET['id'], 'first_name', true );
+		} else {
+			$multiple_names = '';
+			$name_arr = array();
+		}
+
+		$success = 0;
+
+		$todo = isset( $_GET['todo'] ) ? $_GET['todo'] : '';
+
+		switch ( $todo ) {
+
+			case "remove":
+			case "deny":
+				if( isset( $_GET['id'] ) ) {
+					$user_city = get_user_meta( $_GET['id'], 'region', true );
+					if( $current_user->has_cap('vca_asm_promote_supporters_global') ||
+					   (
+							$current_user->has_cap('vca_asm_promote_supporters_nation') &&
+							$admin_nation &&
+							$admin_nation == $vca_asm_geography->has_nation( $user_city )
+					   ) ||
+					   (
+							$current_user->has_cap('vca_asm_promote_supporters') &&
+							$admin_city == $user_city
+					   )
+					) {
+						update_user_meta( $_GET['id'], 'membership', '0' );
+						$region_name = $regions[ get_user_meta( $_GET['id'], 'region', true ) ];
+						$vca_asm_mailer->auto_response( $_GET['id'], 'mem_denied', $region_name );
+						$success++;
+					}
+				} elseif( isset( $_GET['supporters'] ) && is_array( $_GET['supporters'] ) ) {
+					foreach( $_GET['supporters'] as $supporter ) {
+						$user_city = get_user_meta( intval( $supporter ), 'region', true );
+						if( $current_user->has_cap('vca_asm_promote_supporters_global') ||
+						   (
+								$current_user->has_cap('vca_asm_promote_supporters_nation') &&
+								$admin_nation &&
+								$admin_nation == $vca_asm_geography->has_nation( $user_city )
+						   ) ||
+						   (
+								$current_user->has_cap('vca_asm_promote_supporters') &&
+								$admin_city == $user_city
+						   )
+						) {
+							if( 0 != $user_city ) {
+								$success++;
+								update_user_meta( intval( $supporter ), 'membership', '0' );
+								$region_name = $regions[ get_user_meta( intval( $supporter ), 'region', true ) ];
+								$vca_asm_mailer->auto_response( intval( $supporter ), 'mem_denied', $region_name );
+								$tmp_name = get_user_meta( intval( $supporter ), 'first_name', true );
+								$name_arr[] = ! empty( $tmp_name ) ? $tmp_name : __( 'unknown Supporter', 'vca-asm' );
+							}
+						}
+					}
+					$last_name = array_shift( $name_arr );
+					$multiple_names = implode( ', ', $name_arr ) . ' &amp; ' . $last_name;
+				}
+				if ( $success > 1 ) {
+					$messages[] = array(
+						'type' => 'message-pa',
+						'message' => sprintf( _x( 'Denied membership or revoked it, respectively, to %1$s (%2$d).', 'Admin Supporters', 'vca-asm' ), $multiple_names, $success )
+					);
+				} elseif ( $success === 1 ) {
+					if( ! empty( $name ) ) {
+						$messages[] = array(
+							'type' => 'message-pa',
+							'message' => sprintf( _x( 'Denied membership to %s, or revoked it, respectively.', 'Admin Supporters', 'vca-asm' ), $name )
+						);
+					} elseif ( ! empty( $name_arr[0] ) ) {
+						$messages[] = array(
+							'type' => 'message-pa',
+							'message' => sprintf( _x( 'Denied membership to %s, or revoked it, respectively.', 'Admin Supporters', 'vca-asm' ), $name_arr[0] )
+						);
+					} else {
+						$messages[] = array(
+							'type' => 'message',
+							'message' => _x( 'Denied membership to one supporter.', 'Message', 'vca-asm' )
+						);
+					}
+				} else {
+					$messages[] = array(
+						'type' => 'error-pa',
+						'message' => _x( 'No memberships denied / revoked...', 'Admin Supporters', 'vca-asm' )
+					);
+				}
+				unset( $_GET['todo'], $_GET['id'], $_GET['supporters'] );
+				$this->list_supporters( $messages );
+			break;
+
+			case "accept":
+			case "promote":
+				if ( isset( $_GET['id'] ) ) {
+					$user_city = get_user_meta( $_GET['id'], 'region', true );
+					if ( $current_user->has_cap('vca_asm_promote_supporters_global') ||
+					   (
+							$current_user->has_cap('vca_asm_promote_supporters_nation') &&
+							$admin_nation &&
+							$admin_nation == $vca_asm_geography->has_nation( $user_city )
+					   ) ||
+					   (
+							$current_user->has_cap('vca_asm_promote_supporters') &&
+							$admin_city == $user_city
+					   )
+					) {
+						update_user_meta( $_GET['id'], 'membership', '2' );
+						$region_name = $regions[ get_user_meta( $_GET['id'], 'region', true ) ];
+						$vca_asm_mailer->auto_response( $_GET['id'], 'mem_accepted', $region_name );
+						$name = get_user_meta( intval( $_GET['id'] ), 'first_name', true );
+						$success = empty( $name ) ? 1 : $name;
+					}
+				} elseif( isset( $_GET['supporters'] ) && is_array( $_GET['supporters'] ) ) {
+					foreach( $_GET['supporters'] as $supporter ) {
+						$user_city = get_user_meta( intval( $supporter ), 'region', true );
+						if ( $current_user->has_cap('vca_asm_promote_supporters_global') ||
+						   (
+								$current_user->has_cap('vca_asm_promote_supporters_nation') &&
+								$admin_nation &&
+								$admin_nation == $vca_asm_geography->has_nation( $user_city )
+						   ) ||
+						   (
+								$current_user->has_cap('vca_asm_promote_supporters') &&
+								$admin_city == $user_city
+						   )
+						) {
+							if ( 2 != $user_city ) {
+								$success++;
+								update_user_meta( intval( $supporter ), 'membership', '2' );
+								$region_name = $regions[ get_user_meta( intval( $supporter ), 'region', true ) ];
+								$vca_asm_mailer->auto_response( intval( $supporter ), 'mem_accepted', $region_name );
+								$tmp_name = get_user_meta( intval( $supporter ), 'first_name', true );
+								$name_arr[] = ! empty( $tmp_name ) ? $tmp_name : __( 'unknown Supporter', 'vca-asm' );
+							}
+						}
+					}
+					$last_name = array_shift( $name_arr );
+					$multiple_names = implode( ', ', $name_arr ) . ' &amp; ' . $last_name;
+				}
+				if( $success > 1 ) {
+					$messages[] = array(
+						'type' => 'message',
+						'message' => sprintf( _x( 'Successfully promoted %1$s (%2$d)!', 'Message', 'vca-asm' ), $multiple_names, $success )
+					);
+				} elseif( $success === 1 ) {
+					if( ! empty( $name ) ) {
+						$messages[] = array(
+							'type' => 'message-pa',
+							'message' => sprintf( _x( 'Successfully promoted %s!', 'Admin Supporters', 'vca-asm' ), $name )
+						);
+					} elseif( ! empty( $name_arr[0] ) ) {
+						$messages[] = array(
+							'type' => 'message',
+							'message' => sprintf( _x( 'Successfully promoted %1$s (%2$d)!', 'Message', 'vca-asm' ), $name_arr[0], $success )
+						);
+					} else {
+						$messages[] = array(
+							'type' => 'message',
+							'message' => _x( 'Successfully promoted one supporter!', 'Message', 'vca-asm' )
+						);
+					}
+				} else {
+					$messages[] = array(
+						'type' => 'error-pa',
+						'message' => _x( 'No supporters promoted...', 'Admin Supporters', 'vca-asm' )
+					);
+				}
+				unset( $_GET['todo'], $_GET['id'], $_GET['supporters'] );
+				$this->list_supporters( $messages );
+			break;
+
+			case "delete":
+				if( isset( $_GET['id'] ) ) {
+					$user_city = get_user_meta( $_GET['id'], 'region', true );
+					if( $current_user->has_cap('vca_asm_promote_supporters_global') ||
+					   (
+							$current_user->has_cap('vca_asm_promote_supporters_nation') &&
+							$admin_nation &&
+							$admin_nation == $vca_asm_geography->has_nation( $user_city )
+					   ) ||
+					   (
+							$current_user->has_cap('vca_asm_promote_supporters') &&
+							$admin_city == $user_city
+					   )
+					) {
+						$first_name = get_user_meta( $_GET['id'], 'first_name', true );
+						$deleted = wp_delete_user( intval( $_GET['id'] ) );
+						if( $deleted === true ) {
+							if( ! empty( $first_name ) ) {
+								$message = sprintf( _x( 'Successfully deleted %s', 'Admin Supporters', 'vca-asm' ), $first_name );
+							} else {
+								$message = _x( 'Successfully deleted the selected supporter', 'Admin Supporters', 'vca-asm' );
+							}
+							$messages[] = array(
+								'type' => 'message-pa',
+								'message' => $message
+							);
+						} else {
+							$messages[] = array(
+								'type' => 'error-pa',
+								'message' => _x( 'Could not delete the selected supporter...', 'Admin Supporters', 'vca-asm' )
+							);
+						}
+					} else {
+						$messages[] = array(
+							'type' => 'error-pa',
+							'message' => _x( 'You do not have the right to delete supporters!', 'Admin Supporters', 'vca-asm' )
+						);
+					}
+				}
+				unset( $_GET['todo'], $_GET['id'] );
+				$this->list_supporters( $messages );
+			break;
+
+			default:
+				$this->list_supporters( $messages );
+		}
+	}
+
+	/**** VIEWS *****/
+
+	/**
+	 * Outputs a complete Supporter Profile
+	 *
+	 * @since 1.2
+	 * @access private
+	 */
+	public function supporter_profile( $supporter, $back_action = 'admin.php?page=vca-asm-supporters' ) {
+		global $current_user, $wp_roles, $vca_asm_geography, $vca_asm_roles, $vca_asm_utilities, $vca_asm_admin;
+		get_currentuserinfo();
+
+		$messages = array();
+
+		$admin_city = get_user_meta( $current_user->ID, 'region', true );
+		$admin_nation = $vca_asm_geography->has_nation( $admin_city );
+
+		if ( isset( $_GET['profile_todo'] ) && 'update_role' === $_GET['profile_todo'] ) {
+			$current_roles = $current_user->roles;
+			$current_role = array_shift( $current_roles );
+			if ( in_array( $current_role, $vca_asm_roles->admin_roles ) &&
+				in_array( $supporter->role_slug, $vca_asm_roles->user_sub_roles() ) &&
+				(
+					in_array( $current_role, $vca_asm_roles->global_admin_roles ) ||
+					(
+						$admin_nation &&
+						$vca_asm_geography->has_nation( $supporter->city_id ) &&
+						$admin_nation == $vca_asm_geography->has_nation( $supporter->city_id )
+					)
+				)
+			) {
+				if (
+					isset( $_GET['role'] ) &&
+					in_array( $_GET['role'], $vca_asm_roles->user_sub_roles() ) &&
+					array_key_exists( $_GET['role'], $wp_roles->roles )
+				) {
+					$user_obj = new WP_User( $supporter->ID );
+					$user_obj->set_role( $_GET['role'] );
+
+					$messages[] = array(
+						'type' => 'message-pa',
+						'message' => sprintf(
+							__( 'Successfully updated %1$s from &quot;%2$s&quot; to &quot;%3$s&quot;.', 'vca-asm' ),
+							$supporter->nice_name,
+							$supporter->role,
+							$vca_asm_roles->translated_roles[$_GET['role']]
+						)
+					);
+					$update_role_success = true;
+				} else {
+					$messages[] = array(
+						'type' => 'error-pa',
+						'message' => __( 'Could not change role...', 'vca-asm' )
+					);
+				}
+			} else {
+				$messages[] = array(
+					'type' => 'error-pa',
+					'message' => __( 'You do not have the rights required to change this user&apos;s role. Sorry.', 'vca-asm' )
+				);
+			}
+		}
+
+		$page = new VCA_ASM_Admin_Page( array(
+			'echo' => true,
+			'icon' => 'icon-supporter',
+			'title' => $supporter->nice_name,
+			'url' => 'admin.php?page=vca-asm-supporters',
+			'messages' => $messages
+		));
+
+		$page->top();
+
+		if (
+			$current_user->has_cap( 'vca_asm_view_supporters_global' ) ||
+			(
+				$current_user->has_cap( 'vca_asm_view_supporters_nation' ) &&
+				$admin_nation &&
+				$vca_asm_geography->has_nation( $supporter->city_id ) &&
+				$admin_nation == $vca_asm_geography->has_nation( $supporter->city_id )
+			) ||
+			(
+				$current_user->has_cap( 'vca_asm_view_supporters' ) &&
+				$admin_city &&
+				$admin_city == $supporter->city_id
+			)
+		) {
+			$mbs = new VCA_ASM_Admin_Metaboxes( array(
+				'echo' => true,
+				'title' => __( 'Profile', 'vca-asm' ) . ': ' . $supporter->nice_name,
+				'id' => 'profile'
+			));
+			$mbs->top();
+			$mbs->mb_top();
+
+			$table = '<table class="profile-table">' .
+					'<tr><td>' .
+						$supporter->avatar .
+					'</td><td>'.
+						'<table>' .
+							'<tr><td>' .
+								__( 'City', 'vca-asm' ) .
+							'</td><td>' .
+								$supporter->region .
+							'</td></tr>' .
+							'<tr><td>' .
+								_x( 'Membership', 'Admin Supporters', 'vca-asm' ) .
+							'</td><td>' .
+								$supporter->membership .
+							'</td></tr>' .
+							'<tr><td>&nbsp;</td><td></td></tr>' .
+							'<tr><td>' .
+								_x( 'Email Address', 'Admin Supporters', 'vca-asm' ) .
+							'</td><td>' .
+								$supporter->email .
+							'</td></tr>' .
+							'<tr><td>' .
+								_x( 'Mobile Phone', 'Admin Supporters', 'vca-asm' ) .
+							'</td><td>' .
+								$supporter->mobile .
+							'</td></tr>' .
+							'<tr><td>&nbsp;</td><td></td></tr>' .
+							'<tr><td>' .
+								_x( 'Birthday', 'Admin Supporters', 'vca-asm' ) .
+							'</td><td>' .
+								$supporter->birthday_combined .
+							'</td></tr>' .
+							'<tr><td>' .
+								_x( 'Gender', 'Admin Supporters', 'vca-asm' ) .
+							'</td><td>' .
+								$supporter->gender .
+							'</td></tr>' .
+							'<tr><td>' .
+								_x( 'City', 'Admin Supporters', 'vca-asm' ) .
+							'</td><td>' .
+								$supporter->city .
+							'</td></tr>' .
+							'<tr><td>&nbsp;</td><td></td></tr>' .
+							'<tr><td>' .
+								_x( 'Registered since', 'Admin Supporters', 'vca-asm' ) .
+							'</td><td>' .
+								$supporter->registration_date .
+							'</td></tr>' .
+							'<tr><td>' .
+								_x( 'Last Login', 'Admin Supporters', 'vca-asm' ) .
+							'</td><td>' .
+								$supporter->last_activity .
+							'</td></tr>' .
+						'</table>' .
+					'</td></tr>' .
+				'</table>';
+
+			echo $table;
+
+			$mbs->mb_bottom();
+
+			if ( isset( $_GET['change'] ) && 'role' === $_GET['change'] ) {
+				$current_roles = $current_user->roles;
+				$current_role = array_shift( $current_roles );
+				if ( in_array( $current_role, $vca_asm_roles->admin_roles ) &&
+					in_array( $supporter->role_slug, $vca_asm_roles->user_sub_roles() ) &&
+					(
+						in_array( $current_role, $vca_asm_roles->global_admin_roles ) ||
+						(
+							$admin_nation &&
+							$vca_asm_geography->has_nation( $supporter->city_id ) &&
+							$admin_nation == $vca_asm_geography->has_nation( $supporter->city_id )
+						)
+					)
+				) {
+					$mbs->mb_top( array( 'title' => __( 'Change role', 'vca-asm' ), 'id' => 'role' ) );
+
+					$role_options = array();
+					foreach ( $vca_asm_roles->user_sub_roles() as $role_slug ) {
+						$role_options[] = array(
+							'label' => $vca_asm_roles->translated_roles[$role_slug],
+							'value' => $role_slug
+						);
+					}
+
+					$role_fields = array(
+						array(
+							'type' => 'select',
+							'id' => 'role',
+							'label' => __( 'Role', 'vca-asm' ),
+							'options' => $role_options,
+							'desc' => __( 'Change this user&apos;s role', 'vca-asm' ),
+							'value' => ( isset( $_GET['role'] ) && isset( $update_role_success ) && true === $update_role_success ) ? $_GET['role'] : $supporter->role
+						),
+						array(
+							'type' => 'hidden',
+							'id' => 'profile_todo',
+							'value' => 'update_role'
+						),
+						array(
+							'type' => 'hidden',
+							'id' => 'page',
+							'value' => 'vca-asm-supporters'
+						)
+					);
+
+					if ( isset( $_GET['gf'] ) ) {
+						$role_fields[] = array(
+							'type' => 'hidden',
+							'id' => 'gf',
+							'value' => htmlspecialchars( $_GET['gf'] )
+						);
+					}
+					if ( isset( $_GET['gfb'] ) ) {
+						$role_fields[] = array(
+							'type' => 'hidden',
+							'id' => 'gfb',
+							'value' => $_GET['gfb']
+						);
+					}
+					if ( isset( $_GET['mf'] ) ) {
+						$role_fields[] = array(
+							'type' => 'hidden',
+							'id' => 'mf',
+							'value' => htmlspecialchars( $_GET['mf'] )
+						);
+					}
+					if ( isset( $_GET['rf'] ) ) {
+						$role_fields[] = array(
+							'type' => 'hidden',
+							'id' => 'rf',
+							'value' => $_GET['rf']
+						);
+					}
+					if ( isset( $_GET['df'] ) ) {
+						$role_fields[] = array(
+							'type' => 'hidden',
+							'id' => 'df',
+							'value' => $_GET['df']
+						);
+					}
+					if ( isset( $_GET['term'] ) ) {
+						$role_fields[] = array(
+							'type' => 'hidden',
+							'id' => 'term',
+							'value' => $_GET['term']
+						);
+					}
+					if ( isset( $_GET['order'] ) ) {
+						$role_fields[] = array(
+							'type' => 'hidden',
+							'id' => 'order',
+							'value' => $_GET['order']
+						);
+					}
+					if ( isset( $_GET['orderby'] ) ) {
+						$role_fields[] = array(
+							'type' => 'hidden',
+							'id' => 'orderby',
+							'value' => $_GET['orderby']
+						);
+					}
+					if ( isset( $_GET['profile'] ) ) {
+						$role_fields[] = array(
+							'type' => 'hidden',
+							'id' => 'profile',
+							'value' => $_GET['profile']
+						);
+					}
+					if ( isset( $_GET['todo'] ) ) {
+						$role_fields[] = array(
+							'type' => 'hidden',
+							'id' => 'todo',
+							'value' => $_GET['todo']
+						);
+					}
+					if ( isset( $_GET['change'] ) ) {
+						$role_fields[] = array(
+							'type' => 'hidden',
+							'id' => 'change',
+							'value' => $_GET['change']
+						);
+					}
+
+					$role_form = new VCA_ASM_Admin_Form( array(
+						'echo' => true,
+						'form' => true,
+						'method' => 'get',
+						'url' => '#',
+						'action' => '',
+						'button' => __( 'Change', 'vca-asm' ),
+						'top_button' => false,
+						'fields' => $role_fields
+					));
+
+					$role_form->output();
+
+					$mbs->mb_bottom();
+				}
+			}
+
+			$mbs->bottom();
+
+		} else {
+			$messages[] = array(
+				'type' => 'error-pa',
+				'message' => __( 'You do not have the rights required to view this supporter profile. Sorry.', 'vca-asm' )
+			);
+			echo $vca_asm_admin->convert_messages( $messages );
+		}
+
+		echo '<form name="vca_asm_supporter_all" method="post" action="' . $back_action . '">' .
+					'<input type="hidden" name="submitted" value="y"/>' .
+					'<p class="submit">' .
+						'<input type="submit" name="submit" id="submit" class="button"' .
+							' value="&larr; ' . _x( 'back', 'Admin Supporters', 'vca-asm' ) .
+				'"></p></form>';
+
+		$page->bottom();
+	}
+
+	/**
+	 * Lists all supporters
 	 *
 	 * @since 1.0
 	 * @access private
 	 */
-	private function sort_by_key( $arr, $key, $order ) {
-	    global $vca_asm_key2sort;
-		$vca_asm_key2sort = $key;
-		if( $order == 'DESC' ) {
-			usort( $arr, array(&$this, 'sbk_cmp_desc') );
+	private function list_supporters( $messages = array() ) {
+		global $current_user, $wpdb, $vca_asm_admin, $vca_asm_geography, $vca_asm_utilities;
+		get_currentuserinfo();
+
+		$admin_city = get_user_meta( $current_user->ID, 'region', true );
+		$status = $vca_asm_geography->get_status( $admin_city );
+		$admin_nation = $vca_asm_geography->has_nation( $admin_city );
+
+		$url = "admin.php?page=vca-asm-supporters";
+		$sort_url = $url;
+
+		/* table order */
+		if( isset( $_GET['orderby'] ) ) {
+			$orderby = $_GET['orderby'];
 		} else {
-			usort( $arr, array(&$this, 'sbk_cmp_asc') );
+			$orderby = 'first_name';
 		}
-		return ( $arr );
+		if( isset( $_GET['order'] ) ) {
+			$order = $_GET['order'];
+			if( $order == 'ASC') {
+				$toggle_order = 'DESC';
+			} else {
+				$toggle_order = 'ASC';
+			}
+		} else {
+			$order = 'ASC';
+			$toggle_order = 'DESC';
+		}
+
+		$headline = _x( 'Supporter Overview', 'Admin Supporters', 'vca-asm' );
+		$table_headline = _x( 'All Supporters', 'Admin Supporters', 'vca-asm' );
+		$metaqueries = array();
+		$metaqueries['relation'] = 'AND';
+
+		if( ! $current_user->has_cap('vca_asm_view_supporters_global') ) {
+			$headline = str_replace( '%region_status%', $status, _x( 'Supporters of your %region_status%', 'Admin Supporters', 'vca-asm' ) );
+			$table_headline = str_replace( '%region_status%', $status, _x( 'All Supporters of your %region_status%', 'Admin Supporters', 'vca-asm' ) );
+			$metaqueries[] = array(
+				'key' => 'region',
+				'value' => intval( $admin_city )
+			);
+		}
+
+		if( isset( $_GET['todo'] ) && 'filter' ===  $_GET['todo'] ) {
+			$geo_filter_by = 'city';
+			if ( isset( $_POST['geo-filter-by'] ) && in_array( $_POST['geo-filter-by'], array( 'cg', 'nation', 'ng' ) ) ) {
+				$geo_filter_by = $_POST['geo-filter-by'];
+			} elseif ( isset( $_GET['gfb'] ) && in_array( $_GET['gfb'], array( 'cg', 'nation', 'ng' ) ) ) {
+				$geo_filter_by = $_GET['gfb'];
+			}
+			$table_headline = _x( 'Filtered Supporters', 'Admin Supporters', 'vca-asm' );
+			$sort_url = $url . '&amp;todo=filter';
+			if( $current_user->has_cap('vca_asm_view_supporters_global') || $current_user->has_cap('vca_asm_view_supporters_nation') ) {
+				if( isset( $_POST['geo-filter-'.$geo_filter_by] ) && is_array( $_POST['geo-filter-'.$geo_filter_by] ) ||
+				    isset( $_GET['gf'] )
+				) {
+					$cities = isset( $_POST['geo-filter-'.$geo_filter_by] ) ? $_POST['geo-filter-'.$geo_filter_by] : unserialize( htmlspecialchars_decode( $_GET['gf'] ) );
+					$units = $cities;
+					if ( 'city' !== $geo_filter_by ) {
+						switch ( $geo_filter_by ) {
+							case 'cg':
+								$cities = array();
+								foreach ( $units as $cg ) {
+									if ( 0 == $cg ) {
+										$cg_cities = $vca_asm_geography->get_cities_without( 'cg' );
+									} else {
+										$cg_cities = $vca_asm_geography->get_descendants( $cg, 'type=city&data=id' );
+									}
+									$cities = array_merge( $cities, $cg_cities );
+								}
+							break;
+
+							case 'nation':
+								$cities = array();
+								foreach ( $units as $nation ) {
+									if ( 0 == $nation ) {
+										$nation_cities = $vca_asm_geography->get_cities_without( 'nation' );
+									} else {
+										$nation_cities = $vca_asm_geography->get_descendants( $nation, 'type=city&data=id' );
+									}
+									$cities = array_merge( $cities, $nation_cities );
+								}
+							break;
+
+							case 'ng':
+								$cities = array();
+								foreach ( $units as $ng ) {
+									if ( 0 == $ng ) {
+										$ng_cities = $vca_asm_geography->get_cities_without( 'ng' );
+									} else {
+										$ng_cities = $vca_asm_geography->get_descendants( $ng, 'type=city&data=id' );
+									}
+									$cities = array_merge( $cities, $ng_cities );
+								}
+							break;
+						}
+					}
+
+					$gf_serialized = htmlspecialchars( serialize( $units ) );
+					$sort_url .= '&gf=' . $gf_serialized .'&gfb=' . $geo_filter_by;
+					$metaqueries[] = array(
+						'key' => 'region',
+						'value' => $cities,
+						'compare' => 'IN'
+					);
+				}
+			} else {
+				$table_headline =
+					str_replace( '%region_status%', $status,
+						_x( 'Filtered Supporters of your %region_status%', 'Admin Supporters', 'vca-asm' ) );
+			}
+			if( isset( $_POST['membership-filter'] ) && is_array( $_POST['membership-filter'] ) ) {
+				$mf_serialized = htmlspecialchars( serialize( $_POST['membership-filter'] ) );
+				$sort_url .= '&amp;mf=' . $mf_serialized;
+				$metaqueries[] = array(
+					'key' => 'membership',
+					'value' => $_POST['membership-filter'],
+					'compare' => 'IN'
+				);
+			} elseif( isset( $_GET['mf'] ) ) {
+				$sort_url .= '&mf=' . htmlspecialchars( $_GET['mf'] );
+				$mf_unserialized = unserialize( htmlspecialchars_decode( $_GET['mf'] ) );
+				$metaqueries[] = array(
+					'key' => 'membership',
+					'value' => $mf_unserialized,
+					'compare' => 'IN'
+				);
+			}
+			if( isset( $_POST['role-filter'] ) && is_array( $_POST['role-filter'] ) ) {
+				if ( 1 === count( $_POST['role-filter'] ) ) {
+					$rf = $_POST['role-filter'][0];
+				} else {
+					$rf = 'all';
+				}
+				$sort_url .= '&amp;rf=' . $rf;
+			} elseif( isset( $_GET['rf'] ) ) {
+				$rf = $_GET['rf'];
+				$sort_url .= '&amp;rf=' . $rf;
+			}
+			if( isset( $_POST['dead-filter'] ) ) {
+				$sort_url .= '&amp;df=1';
+			} elseif( isset( $_GET['df'] ) && $_GET['df'] == 1 ) {
+				$sort_url .= '&amp;df=1';
+			}
+			$empty_message = __( 'No results for the current filter criteria...', 'vca-asm' );
+		}
+
+		if ( isset( $rf ) && 'supporter' !== $rf ) {
+			$args = array(
+				'meta_query' => $metaqueries
+			);
+		} else {
+			$args = array(
+				'role' => 'supporter',
+				'meta_query' => $metaqueries
+			);
+		}
+		$supporters = get_users( $args );
+
+		if( isset( $_GET['todo'] ) &&
+		   'search' ===  $_GET['todo'] &&
+		   ( isset( $_POST['term'] ) || isset( $_GET['term'] ) )
+		) {
+			if( isset( $_POST['term'] ) ) {
+				$term = $_POST['term'];
+			} else {
+				$term = $_GET['term'];
+			}
+			$sort_url = $url . '&amp;todo=search&amp;term=' . $term;
+			$supp_query_results = $supporters;
+			$supporters = array();
+			$supp_ids = array();
+			foreach( $supp_query_results as $temp_supp ) {
+				if( strstr( mb_strtolower( get_user_meta( $temp_supp->ID, 'first_name', true ) ), mb_strtolower( $term ) ) ||
+					strstr( mb_strtolower( get_user_meta( $temp_supp->ID, 'last_name', true ) ), mb_strtolower( $term ) )
+				) {
+					$supporters[] = $temp_supp;
+					$supp_ids[] = $temp_supp->ID;
+				}
+			}
+			$supporters_by_mail = $wpdb->get_results(
+				"SELECT ID FROM " .
+				$wpdb->prefix . "users " .
+				"WHERE user_email LIKE '%" . $term . "%'", ARRAY_A
+			);
+			foreach( $supporters_by_mail as $temp_supp ) {
+				$temp_sobj = new WP_User( $temp_supp['ID'] );
+				if( ( $current_user->has_cap('vca_asm_view_supporters_global') ||
+				   $admin_city === get_user_meta( $temp_supp['ID'], 'region', true ) ) &&
+				   in_array( 'supporter', $temp_sobj->roles ) &&
+				   ! in_array( $temp_supp['ID'], $supp_ids ) )
+				{
+					$supporters[] = get_userdata( $temp_supp['ID'] );
+				}
+			}
+			$table_headline = str_replace( '%results%', count( $supporters ), str_replace( '%term%', $term, _x( 'Showing %results% search results for &quot;%term%&quot;', 'Admin Supporters', 'vca-asm' ) ) );
+			$empty_message = sprintf( __( 'No results for the search term &quot;%s&quot;...', 'vca-asm' ), $term );
+		}
+
+		$profile_url = $sort_url . '&orderby=' . $orderby . '&order=' . $order;
+
+		$regions = $vca_asm_geography->get_ids();
+		$stati = $vca_asm_geography->get_stati();
+		$stati_conv = $vca_asm_geography->get_stati_conv();
+
+		$supporters_ordered = array();
+		$i = 0;
+		foreach ( $supporters as $key => $supporter ) {
+			$supporter_roles = $supporter->roles;
+			$supporter_role = array_shift( $supporter_roles );
+			if ( ( empty( $supporter->roles ) || ! in_array( $supporter_role, array( 'head_of', 'city' ) ) ) &&
+				( ( ! isset( $rf  ) || '!supp' !== $rf ) ||
+					(
+						! empty( $supporter->roles ) &&
+						'supporter' !== $supporter_role
+					)
+				)
+			) {
+				$supp_fname = get_user_meta( $supporter->ID, 'first_name', true );
+				$supp_lname = get_user_meta( $supporter->ID, 'last_name', true );
+				if( ( ! isset( $_GET['todo'] ) || 'search' !== $_GET['todo'] ) && ( ! isset( $_GET['df'] ) || 1 != $_GET['df'] ) && empty( $_POST['dead-filter'] ) && ( empty( $supp_fname ) || empty( $supp_lname ) ) ) {
+					continue;
+				}
+				if ( $orderby === 'city' ||  $orderby === 'membership' ) {
+					$supp_region = get_user_meta( $supporter->ID, 'region', true );
+					$supporters_ordered[$i]['city'] = mb_substr( $regions[$supp_region], 0, 3 );
+					if( $orderby === 'membership' ) {
+						$supporters_ordered[$i]['membership'] = ( isset( $supp_region ) && $supp_region != 0 ) ? $this->get_membership_status( $supporter->ID, $stati[$supp_region] ) : __( 'No', 'vca-asm' );
+					}
+				} elseif ( $orderby === 'user_email' ) {
+					$supporters_ordered[$i]['user_email'] = $supporter->user_email;
+				} elseif ( $orderby === 'role' ) {
+					$supporters_ordered[$i]['role'] = $supporter_role;
+				} elseif ( $orderby === 'age' ) {
+					$supp_bday = get_user_meta( $supporter->ID, 'birthday', true );
+					$supporters_ordered[$i]['age'] = empty( $supp_bday ) ? 1 : ( doubleval(555555555555) - doubleval( $supp_bday ) );
+				} elseif ( $orderby === 'mobile' ) {
+					$raw_num = $vca_asm_utilities->normalize_phone_number( get_user_meta( $supporter->ID, 'mobile', true ) );
+					$supporters_ordered[$i]['mobile'] = empty( $raw_num ) ? '999999999999999' : substr( $raw_num . '0000000000000000000', 0, 15 );
+				} elseif ( $orderby === 'gender' ) {
+					$supporters_ordered[$i]['gender'] = $vca_asm_utilities->convert_strings( get_user_meta( $supporter->ID, 'gender', true ) );
+				} else {
+					$supporters_ordered[$i][$orderby] = get_user_meta( $supporter->ID, $orderby, true );
+				}
+				$supporters_ordered[$i]['key'] = $key;
+				$i++;
+			}
+		}
+		$supporters_ordered = $vca_asm_utilities->sort_by_key( $supporters_ordered, $orderby, $order );
+
+		$user_count = count( $supporters_ordered );
+		if ( $user_count > 100 ) {
+			$cur_page = isset( $_GET['p'] ) ? $_GET['p'] : 1;
+			$pagination_offset = 100 * ( $cur_page - 1 );
+			$total_pages = ceil( $user_count / 100 );
+			$cur_end = $total_pages == $cur_page ? $pagination_offset + ( $user_count % 100 ) : $pagination_offset + 100;
+
+			$pagination_args = array(
+				'pagination' => true,
+				'total_pages' => $total_pages,
+				'current_page' => $cur_page
+			);
+		} else {
+			$cur_page = 1;
+			$pagination_offset = 0;
+			$cur_end = $user_count;
+			$pagination_args = array( 'pagination' => false );
+		}
+
+		$rows = array();
+		for ( $i = $pagination_offset; $i < $cur_end; $i++ ) {
+			$supp_obj = $supporters[$supporters_ordered[$i]['key']];
+			$supp_roles = $supp_obj->roles;
+			$supp_role = array_shift( $supp_roles );
+			$supp_id = $supp_obj->ID;
+			$supp_fname = get_user_meta( $supp_id, 'first_name', true );
+			$supp_lname = get_user_meta( $supp_id, 'last_name', true );
+			$supp_region = get_user_meta( $supp_id, 'region', true );
+			$supp_bday = get_user_meta( $supp_id, 'birthday', true );
+			$supp_age = ! empty( $supp_bday ) ? $vca_asm_utilities->date_diff( time(), intval( $supp_bday ) ) : array( 'year' => __( 'not set', 'vca-asm' ) );
+			if( empty ( $supp_region ) ) {
+				$supp_region = '0';
+			}
+			$photo_info = $this->photo_info( $supp_id );
+			$supp_role = ! empty( $supp_role ) ? $supp_role : 'supporter';
+			$supp_role_slug = $supp_role;
+			$roles = get_option( 'wp_user_roles' );
+			$supp_role = ! empty( $roles[$supp_role]['name'] ) ? $roles[$supp_role]['name'] : $supp_role;
+
+			$rows[$i]['check'] = $supp_id;
+			$rows[$i]['avatar'] = '<span class="photo-tooltip tooltip-trigger" onmouseover="tooltip(' .
+					$photo_info .
+				');" onmouseout="exit();">' .
+					get_avatar( $supp_id, 32 ) .
+				'</span>';
+			$rows[$i]['id'] = $supp_id;
+			$rows[$i]['username'] = $supp_obj->user_name;
+			$rows[$i]['first_name'] = empty( $supp_fname ) ? __( 'not set', 'vca-asm' ) : $supp_fname;
+			$rows[$i]['last_name'] = empty( $supp_lname ) ? __( 'not set', 'vca-asm' ) : $supp_lname;
+			$rows[$i]['user_email'] = $supp_obj->user_email;
+			$rows[$i]['mobile'] = $vca_asm_utilities->normalize_phone_number( get_user_meta( $supp_id, 'mobile', true ), true );
+			$rows[$i]['region'] = $regions[$supp_region];
+			if ( $supp_region != 0 ) {
+				$rows[$i]['region'] .= ' (' . $stati_conv[$supp_region] . ')';
+			}
+			$rows[$i]['city'] = $rows[$i]['region'];
+			$rows[$i]['role'] = $supp_role;
+			$rows[$i]['role_slug'] = $supp_role_slug;
+			$rows[$i]['membership'] = ( isset( $supp_region ) && $supp_region != 0 ) ? $this->get_membership_status( $supp_id, $stati[$supp_region] ) :  __( 'No', 'vca-asm' );
+			$rows[$i]['membership_raw'] = get_user_meta( $supp_id, 'membership', true );
+			$rows[$i]['age'] = $supp_age['year'];
+			$rows[$i]['gender'] = $vca_asm_utilities->convert_strings( get_user_meta( $supp_id, 'gender', true ) );
+		}
+
+		$columns = array(
+			array(
+				'id' => 'avatar',
+				'title' => __( 'Photo', 'vca-asm' ),
+				'sortable' => false,
+				'mobile' => false
+			),
+			array(
+				'id' => 'first_name',
+				'title' => __( 'First Name', 'vca-asm' ),
+				'sortable' => true,
+				'strong' => true,
+				'actions' => array( 'profile', 'delete-user' ),
+				'cap' => array( 'profile', 'delete-user' )
+			),
+			array(
+				'id' => 'last_name',
+				'title' => __( 'Last Name', 'vca-asm' ),
+				'sortable' => true,
+				'strong' => true
+			)
+		);
+
+		if( $current_user->has_cap( 'vca_asm_view_supporters_nation' ) || $current_user->has_cap( 'vca_asm_view_supporters_global' ) ) {
+			$columns[] = array(
+				'id' => 'city',
+				'title' => __( 'City', 'vca-asm' ),
+				'sortable' => true
+			);
+			$columns[] = array(
+				'id' => 'role',
+				'title' => __( 'User role', 'vca-asm' ),
+				'sortable' => true,
+				'actions' => array( 'role' ),
+				'cap' => 'role'
+			);
+		}
+
+		$columns[] = array(
+			'id' => 'membership',
+			'title' => __( 'Membership Status', 'vca-asm' ),
+			'sortable' => true,
+			'conversion' => 'membership',
+			'actions' => array( 'edit_membership' ),
+			'cap' => 'promote'
+		);
+		$columns[] = array(
+			'id' => 'user_email',
+			'title' => __( 'Email Address', 'vca-asm' ),
+			'sortable' => true
+		);
+		$columns[] = array(
+			'id' => 'mobile',
+			'title' => __( 'Mobile Phone', 'vca-asm' ),
+			'sortable' => true,
+			'legacy-screen' => false
+		);
+		$columns[] = array(
+			'id' => 'age',
+			'title' => __( 'Age', 'vca-asm' ),
+			'sortable' => true,
+			'tablet' => false
+		);
+		$columns[] = array(
+			'id' => 'gender',
+			'title' => __( 'Gender', 'vca-asm' ),
+			'sortable' => true,
+			'legacy-screen' => false
+		);
+
+		$search_fields = array(
+			array(
+				'type' => 'text',
+				'label' =>  _x( 'Search Supporters', 'Admin Supporters', 'vca-asm' ),
+				'id' => 'term',
+				'desc' => _x( "You can search the supporters by first and last name as well as email address.", 'Admin Supporters', 'vca-asm' )
+			)
+		);
+
+		$filter_fields = array();
+
+		if( $current_user->has_cap('vca_asm_view_supporters_global') ) {
+			wp_enqueue_script( 'vca-asm-admin-supporter-filter' );
+			$filter_params = array(
+				'gfb' => ! empty( $_POST['geo-filter-by'] ) ? $_POST['geo-filter-by'] : ( ! empty( $_GET['gfb'] ) ? $_GET['gfb'] : 'city' )
+			);
+			wp_localize_script( 'vca-asm-admin-supporter-filter', 'filterParams', $filter_params );
+			$filter_fields[] = array(
+				'type' => 'select',
+				'label' => _x( 'Filter by', 'Admin Supporters', 'vca-asm' ),
+				'id' => 'geo-filter-by',
+				'options' => array(
+					array(
+						'label' => __( 'Cities', 'vca-asm' ),
+						'value' => 'city'
+					),
+					array(
+						'label' => __( 'City Groups', 'vca-asm' ),
+						'value' => 'cg'
+					),
+					array(
+						'label' => __( 'Countries', 'vca-asm' ),
+						'value' => 'nation'
+					),
+					array(
+						'label' => __( 'Country Groups', 'vca-asm' ),
+						'value' => 'ng'
+					)
+				),
+				'desc' => _x( 'Select which geographical unit to filter by', 'Admin Supporters', 'vca-asm' ),
+				'js-only' => true,
+				'value' => $filter_params['gfb']
+			);
+		}
+		if ( $current_user->has_cap('vca_asm_view_supporters_global') || $current_user->has_cap('vca_asm_view_supporters_nation') ) {
+			if ( $current_user->has_cap('vca_asm_view_supporters_global') ) {
+				$limit = false;
+			} else {
+				$limit = $admin_nation ? $admin_nation : 0;
+			}
+			$region_options_raw = $vca_asm_geography->options_array( array(
+				'global_option' => __( 'not (yet) chosen', 'vca-asm' ),
+				'type' => 'city',
+				'descendants_of' => $limit
+			));
+			$region_options = array();
+			foreach( $region_options_raw as $region_option ) {
+				if( isset( $_POST['geo-filter-city'] ) && is_array( $_POST['geo-filter-city'] ) ) {
+					if( in_array( $region_option['value'], $_POST['geo-filter-city'] ) ) {
+						$region_option['checked'] = true;
+					}
+				} elseif( isset( $_GET['gf'] ) ) {
+					$gf_unserialized = unserialize( htmlspecialchars_decode( $_GET['gf'] ) );
+					if( in_array( $region_option['value'], $gf_unserialized ) ) {
+						$region_option['checked'] = true;
+					}
+				} else {
+					$region_option['checked'] = true;
+				}
+				$region_options[] = $region_option;
+			}
+			$filter_fields[] = array(
+				'type' => 'checkbox_group',
+				'label' => __( 'Cities', 'vca-asm' ),
+				'id' => 'geo-filter-city',
+				'row-class' => 'geo-filter',
+				'options' => $region_options,
+				'desc' => _x( 'Show only supporters from certain cities', 'Admin Supporters', 'vca-asm' ),
+				'cols' => 3,
+				'extra' => 'bulk_deselect'
+			);
+
+			$membership_labels = array(
+				2 => _x( 'Supporters that are &quot;active members&quot; of their city', 'Admin Supporters', 'vca-asm' ),
+				1 => _x( 'Supporters that have applied for membership status', 'Admin Supporters', 'vca-asm' ),
+				0 => _x( 'Supporters that simply are registered to the Pool', 'Admin Supporters', 'vca-asm' )
+			);
+		} else {
+			$membership_labels = array(
+				2 => str_replace( '%region_status%', $status, _x( 'Supporters that are &quot;active members&quot; of your %region_status%', 'Admin Supporters', 'vca-asm' ) ),
+				1 => str_replace( '%region_status%', $status, _x( 'Supporters that have applied for membership to your %region_status%', 'Admin Supporters', 'vca-asm' ) ),
+				0 => _x( 'Supporters that simply live in your city', 'Admin Supporters', 'vca-asm' )
+			);
+		}
+
+		if( $current_user->has_cap('vca_asm_view_supporters_global') ) {
+			$region_options_raw = $vca_asm_geography->options_array( array(
+				'global_option' => __( 'not part of any group', 'vca-asm' ),
+				'type' => 'cg'
+			));
+			$region_options = array();
+			foreach( $region_options_raw as $region_option ) {
+				if( isset( $_POST['geo-filter-cg'] ) && is_array( $_POST['geo-filter-cg'] ) ) {
+					if( in_array( $region_option['value'], $_POST['geo-filter-cg'] ) ) {
+						$region_option['checked'] = true;
+					}
+				} elseif( isset( $_GET['gf'] ) ) {
+					$gf_unserialized = unserialize( htmlspecialchars_decode( $_GET['gf'] ) );
+					if( in_array( $region_option['value'], $gf_unserialized ) ) {
+						$region_option['checked'] = true;
+					}
+				} else {
+					$region_option['checked'] = true;
+				}
+				$region_options[] = $region_option;
+			}
+			$filter_fields[] = array(
+				'type' => 'checkbox_group',
+				'label' => __( 'City Groups', 'vca-asm' ),
+				'id' => 'geo-filter-cg',
+				'row-class' => 'geo-filter',
+				'options' => $region_options,
+				'desc' => _x( 'Show only supporters from certain city groups', 'Admin Supporters', 'vca-asm' ),
+				'cols' => 3,
+				'extra' => 'bulk_deselect',
+				'js-only' => true
+			);
+
+			$region_options_raw = $vca_asm_geography->options_array( array(
+				'global_option' => __( 'without associated country', 'vca-asm' ),
+				'type' => 'nation'
+			));
+			$region_options = array();
+			foreach( $region_options_raw as $region_option ) {
+				if( isset( $_POST['geo-filter-nation'] ) && is_array( $_POST['geo-filter-nation'] ) ) {
+					if( in_array( $region_option['value'], $_POST['geo-filter-nation'] ) ) {
+						$region_option['checked'] = true;
+					}
+				} elseif( isset( $_GET['gf'] ) ) {
+					$gf_unserialized = unserialize( htmlspecialchars_decode( $_GET['gf'] ) );
+					if( in_array( $region_option['value'], $gf_unserialized ) ) {
+						$region_option['checked'] = true;
+					}
+				} else {
+					$region_option['checked'] = true;
+				}
+				$region_options[] = $region_option;
+			}
+			$filter_fields[] = array(
+				'type' => 'checkbox_group',
+				'label' => __( 'Countries', 'vca-asm' ),
+				'id' => 'geo-filter-nation',
+				'row-class' => 'geo-filter',
+				'options' => $region_options,
+				'desc' => _x( 'Show only supporters from certain countries', 'Admin Supporters', 'vca-asm' ),
+				'cols' => 3,
+				'extra' => 'bulk_deselect',
+				'js-only' => true
+			);
+
+			$region_options_raw = $vca_asm_geography->options_array( array(
+				'global_option' => __( 'without associated country group', 'vca-asm' ),
+				'type' => 'ng'
+			));
+			$region_options = array();
+			foreach( $region_options_raw as $region_option ) {
+				if( isset( $_POST['geo-filter-ng'] ) && is_array( $_POST['geo-filter-ng'] ) ) {
+					if( in_array( $region_option['value'], $_POST['geo-filter-ng'] ) ) {
+						$region_option['checked'] = true;
+					}
+				} elseif( isset( $_GET['gf'] ) ) {
+					$gf_unserialized = unserialize( htmlspecialchars_decode( $_GET['gf'] ) );
+					if( in_array( $region_option['value'], $gf_unserialized ) ) {
+						$region_option['checked'] = true;
+					}
+				} else {
+					$region_option['checked'] = true;
+				}
+				$region_options[] = $region_option;
+			}
+			$filter_fields[] = array(
+				'type' => 'checkbox_group',
+				'label' => __( 'Country Groups', 'vca-asm' ),
+				'id' => 'geo-filter-ng',
+				'row-class' => 'geo-filter',
+				'options' => $region_options,
+				'desc' => _x( 'Show only supporters from certain country groups', 'Admin Supporters', 'vca-asm' ),
+				'cols' => 3,
+				'extra' => 'bulk_deselect',
+				'js-only' => true
+			);
+		}
+
+		if ( $current_user->has_cap('vca_asm_view_supporters_global') || $current_user->has_cap('vca_asm_view_supporters_nation') ) {
+			$filter_fields[] = array(
+				'type' => 'checkbox_group',
+				'label' => __( 'User Role', 'vca-asm' ),
+				'id' => 'role-filter',
+				'options' => array(
+					array(
+						'value' => 'supporter',
+						'label' => _x( 'Supporter', 'Plural Form', 'vca-asm' )
+					),
+					array(
+						'value' => '!supp',
+						'label' => __( 'Users with access to Administration', 'vca-asm' )
+					)
+				),
+				'desc' => _x( 'Choose whether to only show supporters, administrative users or both.', 'Admin Supporters', 'vca-asm' ),
+				'cols' => 1,
+				'value' => ( isset( $_POST['role-filter'] ) ) ? $_POST['role-filter'] : ( ( isset( $_GET['rf'] ) ) ? ( 'all' === $_GET['rf'] ? array( 'supporter', '!supp' ) : $_GET['rf'] ) : array( 'supporter' ) )
+			);
+		}
+
+		if( isset( $_POST['membership-filter'] ) && is_array( $_POST['membership-filter'] ) ) {
+			$checked_mem_options = array(
+				0 => ( in_array( 0, $_POST['membership-filter'] ) ? true : false ),
+				1 => ( in_array( 1, $_POST['membership-filter'] ) ? true : false ),
+				2 => ( in_array( 2, $_POST['membership-filter'] ) ? true : false )
+			);
+		} elseif( isset( $_GET['mf'] ) ) {
+			$mf_unserialized = unserialize( htmlspecialchars_decode( $_GET['mf'] ) );
+			$checked_mem_options = array(
+				0 => ( in_array( 0, $mf_unserialized ) ? true : false ),
+				1 => ( in_array( 1, $mf_unserialized ) ? true : false ),
+				2 => ( in_array( 2, $mf_unserialized ) ? true : false )
+			);
+		} else {
+			$checked_mem_options = array(
+				0 => true,
+				1 => true,
+				2 => true
+			);
+		}
+
+		$filter_fields[] = array(
+			'type' => 'checkbox_group',
+			'label' => _x( 'Membership', 'Admin Supporters', 'vca-asm' ),
+			'id' => 'membership-filter',
+			'options' => array(
+				array(
+					'label' => $membership_labels[2],
+					'value' => 2,
+					'checked' => $checked_mem_options[2]
+				),
+				array(
+					'label' => $membership_labels[1],
+					'value' => 1,
+					'checked' => $checked_mem_options[1]
+				),
+				array(
+					'label' => $membership_labels[0],
+					'value' => 0,
+					'checked' => $checked_mem_options[0]
+				)
+			),
+			'desc' => _x( "Show only supporters with a certain membership status.", 'Admin Supporters', 'vca-asm' ),
+			'cols' => 1
+		);
+
+		if( ! empty( $_POST['dead-filter'] ) ) {
+			$value_df = 1;
+		} elseif( ! empty( $_GET['df'] ) ) {
+			$value_df = 1;
+		} else {
+			$value_df = 0;
+		}
+		$filter_fields[] = array(
+			'type' => 'checkbox',
+			'label' => _x( '&quot;Dead Profiles&quot;', 'Admin Supporters', 'vca-asm' ),
+			'id' => 'dead-filter',
+			'desc' => _x( "By default this list shows supporters that have at least provided their first and last names. To include those that have not, activate this Filter.", 'Admin Supporters', 'vca-asm' ),
+			'value' => $value_df
+		);
+
+		/* count membership applications */
+		if( $current_user->has_cap('vca_asm_promote_all_supporters') ) {
+			$pending =
+				$wpdb->get_var( "SELECT COUNT(*) FROM $wpdb->usermeta WHERE meta_key='membership' AND meta_value='1'" );
+		} elseif( $current_user->has_cap('vca_asm_promote_supporters') ) {
+			$pending_users = get_users( array(
+				'role' => 'supporter',
+				'meta_query' => array(
+					'relation' => 'AND',
+					array(
+						'key' => 'region',
+						'value' => $admin_city
+					),
+					array(
+						'key' => 'membership',
+						'value' => '1'
+					)
+				)
+			));
+			$pending = count( $pending_users );
+		}
+
+		/** OUTPUT **/
+
+		$page = new VCA_ASM_Admin_Page( array(
+			'echo' => true,
+			'icon' => 'icon-supporters',
+			'title' => $headline,
+			'url' => 'admin.php?page=vca-asm-supporters',
+			'messages' => $messages
+		));
+		$page->top();
+
+		$mbs = new VCA_ASM_Admin_Metaboxes( array(
+			'echo' => true,
+			'title' => _x( 'Membership Applications', 'Admin Supporters', 'vca-asm' ),
+			'id' => 'membership',
+			'js' => true
+		));
+		$mbs->top();
+
+		if( ! empty( $pending ) ) {
+			$mbs->mb_top();
+			if( $current_user->has_cap('vca_asm_promote_all_supporters') ) {
+				echo '<p><strong>' .
+						sprintf( _x( 'In total, currently %d supporters are waiting for their applications to be answered...', 'Admin Supporters', 'vca-asm' ), $pending ) .
+					'</strong></p>';
+			} else {
+				echo '<div class="message-pa"><p>' .
+						sprintf( _x( 'You have %d pending applications waiting to be answered...', 'Admin Supporters', 'vca-asm' ), $pending ) .
+					'</p></div>';
+			}
+			echo '<span class="description">' . _x( 'Supporters are categorized in two groups: Those that are active in their cells or local crews and part of the creative process revolving around Viva con Agua and those that simply take an interest in VcA and/or show up for a festival or the like once in a while. Supporters may apply for the status of $quot;active membership$quot; via their &quot;Profile &amp; Settings&quot; menu.', 'Admin Supporters', 'vca-asm' ) . '</span>';
+			$mbs->mb_bottom();
+		}
+
+		$mbs->mb_top( array(
+			'title' => _x( 'Search', 'Admin Supporters', 'vca-asm' ),
+			'id' => 'search'
+		));
+
+		$search_form = new VCA_ASM_Admin_Form( array(
+			'echo' => true,
+			'form' => true,
+			'method' => 'post',
+			'metaboxes' => false,
+			'url' => $url,
+			'action' => $url .'&amp;todo=search',
+			'id' => 0,
+			'button' => _x( 'Search', 'Admin Supporters', 'vca-asm' ),
+			'top_button' => false,
+			'back' => false,
+			'back_url' => '#',
+			'fields' => $search_fields
+		));
+		$search_form->output();
+
+		$mbs->mb_bottom();
+		$mbs->mb_top( array(
+			'title' => _x( 'Filter', 'Admin Supporters', 'vca-asm' ),
+			'id' => 'filter'
+		));
+
+		$filter_form = new VCA_ASM_Admin_Form( array(
+			'echo' => true,
+			'form' => true,
+			'method' => 'post',
+			'metaboxes' => false,
+			'url' => $url,
+			'action' => $url .'&amp;todo=filter',
+			'id' => 0,
+			'button' => _x( 'Filter', 'Admin Supporters', 'vca-asm' ),
+			'top_button' => false,
+			'back' => false,
+			'back_url' => '#',
+			'fields' => $filter_fields
+		));
+		$filter_form->output();
+
+		$mbs->mb_bottom();
+		$mbs->bottom();
+
+		$tbl_args = array(
+			'echo' => true,
+			'page_slug' => 'vca-asm-supporters',
+			'base_url' => 'admin.php?page=vca-asm-supporters',
+			'sort_url' => ! empty( $sort_url ) ? $sort_url : '',
+			'headline' => $table_headline,
+			'icon' => 'icon-supporters',
+			'dspl_cnt' => true,
+			'count' => $user_count,
+			'cnt_txt' => __( '%d Supporters', 'vca-asm' ),
+			'empty_message' => ! empty( $empty_message ) ? $empty_message : '',
+			'with_bulk' => true,
+			'bulk_confirm' => __( 'Manage the membership of all selected supporters?', 'vca-asm' ),
+			'bulk_name' => 'supporters',
+			'bulk_desc' => __( 'Change selected supporters\' Membership Status', 'vca-asm' ),
+			'bulk_actions' => array(
+				array(
+					'label' => __( 'Accept application / Add as members', 'vca-asm' ),
+					'value' => 'accept'
+				),
+				array(
+					'label' => __( 'Deny application / End membership', 'vca-asm' ),
+					'value' => 'deny'
+				)
+			)
+		);
+		$tbl_args = array_merge( $tbl_args, $pagination_args );
+		$tbl = new VCA_ASM_Admin_Table( $tbl_args, $columns, $rows );
+
+		$tbl->output();
+
+		if( isset( $_GET['todo'] ) ) {
+			echo '<form name="vca_asm_supporter_all" method="post" action="admin.php?page=vca-asm-supporters">' .
+					'<input type="hidden" name="submitted" value="y"/>' .
+					'<p class="submit">' .
+						'<input type="submit" name="submit" id="submit" class="button-secondary"' .
+							' value="&larr;&nbsp;' . _x( 'Show all supporters', 'Admin Supporters', 'vca-asm' ) .
+				'"></p></form>';
+		}
+
+		$page->bottom();
+
+		//echo $output;
 	}
-	private function sbk_cmp_asc( $a, $b ) {
-		global $vca_asm_key2sort;
-		$encoding = mb_internal_encoding();
-		return strcmp( mb_strtolower( $a[$vca_asm_key2sort], $encoding ), mb_strtolower( $b[$vca_asm_key2sort], $encoding ) );
-	}
-	private function sbk_cmp_desc( $b, $a ) {
-		global $vca_asm_key2sort;
-		$encoding = mb_internal_encoding();
-		return strcmp( mb_strtolower( $a[$vca_asm_key2sort], $encoding ), mb_strtolower( $b[$vca_asm_key2sort], $encoding ) );
-	}
+
+	/**** UTILITY METHODS *****/
 
 	/**
 	 * Fetches membership status from databse and converts to human readable form
@@ -111,7 +1505,7 @@ class VCA_ASM_Admin_Supporters {
 				"WHERE activity=" . $activity . " AND supporter=" . $supporter . ' LIMIT 1', ARRAY_A
 			);
 		}
-		$note = $notes[0]['notes'];
+		$note = isset( $notes[0]['notes'] ) ? $notes[0]['notes'] : '';
 
 		if( empty( $note ) ) {
 			return false;
@@ -123,890 +1517,6 @@ class VCA_ASM_Admin_Supporters {
 			'<p>' . $note . '</p>' . '\'';
 
 		return $note_info;
-	}
-
-	/**
-	 * Supporters Admin Menu Controller
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function supporters_control() {
-		global $current_user, $vca_asm_mailer, $vca_asm_regions;
-		get_currentuserinfo();
-		$admin_region = get_user_meta( $current_user->ID, 'region', true );
-		$messages = array();
-
-		if( isset( $_GET['profile'] ) ) {
-			$profile_url = 'admin.php?page=vca-asm-supporters';
-			if( isset( $_GET['orderby'] ) ) {
-				$profile_url .= '&orderby=' . $_GET['orderby'];
-			}
-			if( isset( $_GET['order'] ) ) {
-				$profile_url .= '&order=' . $_GET['order'];
-			}
-			if( isset( $_GET['todo'] ) ) {
-			   if( 'search' ===  $_GET['todo'] &&
-					( isset( $_POST['term'] ) || isset( $_GET['term'] ) )
-				) {
-					if( isset( $_POST['term'] ) ) {
-						$term = $_POST['term'];
-					} else {
-						$term = $_GET['term'];
-					}
-					$profile_url .= '&amp;todo=search&amp;term=' . $term;
-			   } elseif( 'filter' ===  $_GET['todo'] ) {
-					$profile_url .= '&amp;todo=filter';
-					if( isset( $_POST['dead-filter'] ) ) {
-						$profile_url .= '&amp;df=1';
-					} elseif( isset( $_GET['df'] ) && $_GET['df'] == 1 ) {
-						$profile_url .= '&amp;df=1';
-					}
-					if( isset( $_POST['membership-filter'] ) ) {
-						$profile_url .= '&amp;mf=' . htmlspecialchars( serialize( $_POST['membership-filter'] ) );
-					} elseif( isset( $_GET['mf'] ) ) {
-						$profile_url .= '&amp;mf=' . htmlspecialchars( $_GET['mf'] );
-					}
-					if( isset( $_POST['region-filter'] ) ) {
-						$profile_url .= '&amp;rf=' . htmlspecialchars( serialize( $_POST['region-filter'] ) );
-					} elseif( isset( $_GET['rf'] ) ) {
-						$profile_url .= '&amp;rf=' . htmlspecialchars( $_GET['rf'] );
-					}
-			   }
-			}
-			$supporter = new VCA_ASM_Supporter( intval( $_GET['profile'] ) );
-			if( $supporter->exists ) {
-				$this->supporter_profile( $supporter, $profile_url );
-				return true;
-			}
-		}
-
-		if( isset( $_GET['id'] ) ) {
-			$name = get_user_meta( $_GET['id'], 'first_name', true );
-		} else {
-			$multiple_names = '';
-			$name_arr = array();
-		}
-
-		$success = 0;
-
-		switch ( $_GET['todo'] ) {
-
-			case "remove":
-			case "deny":
-				if( isset( $_GET['id'] ) ) {
-					if( $current_user->has_cap('vca_asm_promote_all_supporters') ||
-					   ( $current_user->has_cap('vca_asm_promote_supporters') && $admin_region == get_user_meta( $_GET['id'], 'region', true ) )
-					) {
-						update_user_meta( $_GET['id'], 'membership', '0' );
-						$region_name = $regions[ get_user_meta( $_GET['id'], 'region', true ) ];
-						$vca_asm_mailer->auto_response( $_GET['id'], 'mem_denied', $region_name );
-						$success++;
-					}
-				} elseif( isset( $_GET['supporters'] ) && is_array( $_GET['supporters'] ) ) {
-					foreach( $_GET['supporters'] as $supporter ) {
-						if( $current_user->has_cap('vca_asm_promote_all_supporters') ||
-						   ( $current_user->has_cap('vca_asm_promote_supporters') && $admin_region == get_user_meta( intval( $supporter ), 'region', true ) )
-						) {
-							if( '0' != get_user_meta( intval( $supporter ), 'membership', true ) ) {
-								$success++;
-								update_user_meta( intval( $supporter ), 'membership', '0' );
-								$region_name = $regions[ get_user_meta( intval( $supporter ), 'region', true ) ];
-								$vca_asm_mailer->auto_response( intval( $supporter ), 'mem_denied', $region_name );
-								$tmp_name = get_user_meta( intval( $supporter ), 'first_name', true );
-								$name_arr[] = ! empty( $tmp_name ) ? $tmp_name : __( 'unknown Supporter', 'vca-asm' );
-							}
-						}
-					}
-					$last_name = array_shift( $name_arr );
-					$multiple_names = implode( ', ', $name_arr ) . ' &amp; ' . $last_name;
-				}
-				if( $success > 1 ) {
-					$messages[] = array(
-						'type' => 'message-pa',
-						'message' => sprintf( _x( 'Denied membership or revoked it, respectively, to %1$s (%2$d).', 'Admin Supporters', 'vca-asm' ), $multiple_names, $success )
-					);
-				} elseif( $success === 1 ) {
-					if( ! empty( $name ) ) {
-						$messages[] = array(
-							'type' => 'message-pa',
-							'message' => sprintf( _x( 'Denied membership to %s, or revoked it, respectively.', 'Admin Supporters', 'vca-asm' ), $name )
-						);
-					} elseif( ! empty( $name_arr[0] ) ) {
-						$messages[] = array(
-							'type' => 'message-pa',
-							'message' => sprintf( _x( 'Denied membership to %s, or revoked it, respectively.', 'Admin Supporters', 'vca-asm' ), $name_arr[0] )
-						);
-					} else {
-						$messages[] = array(
-							'type' => 'message',
-							'message' => _x( 'Denied membership to one supporter.', 'Message', 'vca-asm' )
-						);
-					}
-				} else {
-					$messages[] = array(
-						'type' => 'error-pa',
-						'message' => _x( 'No memberships denied / revoked...', 'Admin Supporters', 'vca-asm' )
-					);
-				}
-				unset( $_GET['todo'], $_GET['id'], $_GET['supporters'] );
-				if( $success === 0 ) {
-				} elseif( is_numeric( $success ) ) {
-				} else {
-				}
-				$this->list_supporters( $messages );
-			break;
-
-			case "accept":
-			case "promote":
-				if( isset( $_GET['id'] ) ) {
-					if( $current_user->has_cap('vca_asm_promote_all_supporters') ||
-					   ( $current_user->has_cap('vca_asm_promote_supporters') && $admin_region == get_user_meta( $_GET['id'], 'region', true ) )
-					) {
-						update_user_meta( $_GET['id'], 'membership', '2' );
-						$region_name = $regions[ get_user_meta( $_GET['id'], 'region', true ) ];
-						$vca_asm_mailer->auto_response( $_GET['id'], 'mem_accepted', $region_name );
-						$name = get_user_meta( intval( $_GET['id'] ), 'first_name', true );
-						$success = empty( $name ) ? 1 : $name;
-					}
-				} elseif( isset( $_GET['supporters'] ) && is_array( $_GET['supporters'] ) ) {
-					foreach( $_GET['supporters'] as $supporter ) {
-						if( $current_user->has_cap('vca_asm_promote_all_supporters') ||
-						   ( $current_user->has_cap('vca_asm_promote_supporters') && $admin_region == get_user_meta( intval( $supporter ), 'region', true ) )
-						) {
-							if( '2' != get_user_meta( intval( $supporter ), 'membership', true ) ) {
-								$success++;
-								update_user_meta( intval( $supporter ), 'membership', '2' );
-								$region_name = $regions[ get_user_meta( intval( $supporter ), 'region', true ) ];
-								$vca_asm_mailer->auto_response( intval( $supporter ), 'mem_accepted', $region_name );
-								$tmp_name = get_user_meta( intval( $supporter ), 'first_name', true );
-								$name_arr[] = ! empty( $tmp_name ) ? $tmp_name : __( 'unknown Supporter', 'vca-asm' );
-							}
-						}
-					}
-					$last_name = array_shift( $name_arr );
-					$multiple_names = implode( ', ', $name_arr ) . ' &amp; ' . $last_name;
-				}
-				if( $success > 1 ) {
-					$messages[] = array(
-						'type' => 'message',
-						'message' => sprintf( _x( 'Successfully promoted %1$s (%2$d)!', 'Message', 'vca-asm' ), $multiple_names, $success )
-					);
-				} elseif( $success === 1 ) {
-					if( ! empty( $name ) ) {
-						$messages[] = array(
-							'type' => 'message-pa',
-							'message' => sprintf( _x( 'Successfully promoted %s!', 'Admin Supporters', 'vca-asm' ), $name )
-						);
-					} elseif( ! empty( $name_arr[0] ) ) {
-						$messages[] = array(
-							'type' => 'message',
-							'message' => sprintf( _x( 'Successfully promoted %1$s (%2$d)!', 'Message', 'vca-asm' ), $name_arr[0], $success )
-						);
-					} else {
-						$messages[] = array(
-							'type' => 'message',
-							'message' => _x( 'Successfully promoted one supporter!', 'Message', 'vca-asm' )
-						);
-					}
-				} else {
-					$messages[] = array(
-						'type' => 'error-pa',
-						'message' => _x( 'No supporters promoted...', 'Admin Supporters', 'vca-asm' )
-					);
-				}
-				unset( $_GET['todo'], $_GET['id'], $_GET['supporters'] );
-				$this->list_supporters( $messages );
-			break;
-
-			case "delete":
-				if( isset( $_GET['id'] ) ) {
-					if( $current_user->has_cap('vca_asm_delete_all_supporters') ||
-					   ( $current_user->has_cap('vca_asm_delete_supporters') && $admin_region == get_user_meta( $_GET['id'], 'region', true ) )
-					) {
-						$first_name = get_user_meta( $_GET['id'], 'first_name', true );
-						$deleted = wp_delete_user( intval( $_GET['id'] ) );
-						if( $deleted === true ) {
-							if( ! empty( $first_name ) ) {
-								$message = sprintf( _x( 'Successfully deleted %s', 'Admin Supporters', 'vca-asm' ), $first_name );
-							} else {
-								$message = _x( 'Successfully deleted the selected supporter', 'Admin Supporters', 'vca-asm' );
-							}
-							$messages[] = array(
-								'type' => 'message-pa',
-								'message' => $message
-							);
-						} else {
-							$messages[] = array(
-								'type' => 'error-pa',
-								'message' => _x( 'Could not delete the selected supporter...', 'Admin Supporters', 'vca-asm' )
-							);
-						}
-					} else {
-						$messages[] = array(
-							'type' => 'error-pa',
-							'message' => _x( 'You do not have the right to delete supporters!', 'Admin Supporters', 'vca-asm' )
-						);
-					}
-				}
-				unset( $_GET['todo'], $_GET['id'] );
-				$this->list_supporters( $messages );
-			break;
-
-			default:
-				$this->list_supporters( $messages );
-		}
-	}
-
-	/**
-	 * Outputs a complete Supporter Profile
-	 *
-	 * @since 1.2
-	 * @access private
-	 */
-	public function supporter_profile( $supporter, $back_action = 'admin.php?page=vca-asm-supporters' ) {
-		global $vca_asm_utilities;
-
-		if( ! empty( $supporter->first_name ) && ! empty( $supporter->last_name ) ) {
-			$title = $supporter->first_name . ' ' . $supporter->last_name;
-		} elseif( ! empty( $supporter->first_name ) ) {
-			$title = $supporter->first_name;
-		} elseif( ! empty( $supporter->last_name ) ) {
-			$title = $supporter->last_name;
-		} else {
-			$title = __( 'unknown Supporter', 'vca-asm' );
-		}
-
-		$output = '<div class="wrap">' .
-			'<div id="icon-supporter" class="icon32-pa"></div><h2>' . $title . '</h2><br />' .
-				$supporter->avatar . '<br /><br />' .
-				'<table class="profile-table">' .
-				'<tr><td>' .
-					_x( 'Region', 'Admin Supporters', 'vca-asm' ) .
-				'</td><td>' .
-					$supporter->region .
-				'</td></tr>' .
-				'<tr><td>' .
-					_x( 'Membership', 'Admin Supporters', 'vca-asm' ) .
-				'</td><td>' .
-					$supporter->membership .
-				'</td></tr>' .
-				'<tr><td>&nbsp;</td><td></td></tr>' .
-				'<tr><td>' .
-					_x( 'Email Address', 'Admin Supporters', 'vca-asm' ) .
-				'</td><td>' .
-					$supporter->email .
-				'</td></tr>' .
-				'<tr><td>' .
-					_x( 'Mobile Phone', 'Admin Supporters', 'vca-asm' ) .
-				'</td><td>' .
-					$supporter->mobile .
-				'</td></tr>' .
-				'<tr><td>&nbsp;</td><td></td></tr>' .
-				'<tr><td>' .
-					_x( 'Birthday', 'Admin Supporters', 'vca-asm' ) .
-				'</td><td>' .
-					$supporter->birthday_combined .
-				'</td></tr>' .
-				'<tr><td>' .
-					_x( 'Gender', 'Admin Supporters', 'vca-asm' ) .
-				'</td><td>' .
-					$supporter->gender .
-				'</td></tr>' .
-				'<tr><td>' .
-					_x( 'City', 'Admin Supporters', 'vca-asm' ) .
-				'</td><td>' .
-					$supporter->city .
-				'</td></tr>' .
-				'<tr><td>&nbsp;</td><td></td></tr>' .
-				'<tr><td>' .
-					_x( 'Registered since', 'Admin Supporters', 'vca-asm' ) .
-				'</td><td>' .
-					$supporter->registration_date .
-				'</td></tr>' .
-				'<tr><td>' .
-					_x( 'Last Login', 'Admin Supporters', 'vca-asm' ) .
-				'</td><td>' .
-					$supporter->last_activity .
-				'</td></tr>' .
-				'</table>' .
-				'<form name="vca_asm_supporter_all" method="post" action="' . $back_action . '">' .
-					'<input type="hidden" name="submitted" value="y"/>' .
-					'<p class="submit">' .
-						'<input type="submit" name="submit" id="submit" class="button"' .
-							' value="&larr; ' . _x( 'back', 'Admin Supporters', 'vca-asm' ) .
-				'"></p></form></div>';
-
-		echo $output;
-	}
-
-	/**
-	 * Lists all supporters
-	 *
-	 * @since 1.0
-	 * @access private
-	 */
-	private function list_supporters( $messages = array() ) {
-		global $current_user, $wpdb, $vca_asm_admin, $vca_asm_regions, $vca_asm_utilities;
-		get_currentuserinfo();
-		$admin_region = get_user_meta( $current_user->ID, 'region', true );
-		$status = $vca_asm_regions->get_status( $admin_region );
-
-		if( $current_user->has_cap('vca_asm_promote_supporters') ) {
-			$promotable = true;
-		} else {
-			$promotable = false;
-		}
-		if( $current_user->has_cap('vca_asm_delete_supporters') ) {
-			$deletable = true;
-		} else {
-			$deletable = false;
-		}
-		//if( $current_user->has_cap('vca_asm_send_emails') ) {
-		//	$mailable = true;
-		//} else {
-		//	$mailable = false;
-		//}
-
-		$url = "admin.php?page=vca-asm-supporters";
-		$sort_url = $url;
-
-		/* table order */
-		if( isset( $_GET['orderby'] ) ) {
-			$orderby = $_GET['orderby'];
-		} else {
-			$orderby = 'first_name';
-		}
-		if( isset( $_GET['order'] ) ) {
-			$order = $_GET['order'];
-			if( $order == 'ASC') {
-				$toggle_order = 'DESC';
-			} else {
-				$toggle_order = 'ASC';
-			}
-		} else {
-			$order = 'ASC';
-			$toggle_order = 'DESC';
-		}
-
-		$headline = _x( 'Supporter Overview', 'Admin Supporters', 'vca-asm' );
-		$table_headline = _x( 'All Supporters', 'Admin Supporters', 'vca-asm' );
-		$metaqueries = array();
-		$metaqueries['relation'] = 'AND';
-
-		if( ! $current_user->has_cap('vca_asm_view_all_supporters') ) {
-			$headline = str_replace( '%region_status%', $status, _x( 'Supporters of your %region_status%', 'Admin Supporters', 'vca-asm' ) );
-			$table_headline = str_replace( '%region_status%', $status, _x( 'All Supporters of your %region_status%', 'Admin Supporters', 'vca-asm' ) );
-			$metaqueries[] = array(
-				'key' => 'region',
-				'value' => intval( $admin_region )
-			);
-		}
-
-		if( isset( $_GET['todo'] ) && 'filter' ===  $_GET['todo'] ) {
-			$table_headline = _x( 'Filtered Supporters', 'Admin Supporters', 'vca-asm' );
-			$sort_url = $url . '&amp;todo=filter';
-			if( $current_user->has_cap('vca_asm_view_all_supporters') ) {
-				if( isset( $_POST['region-filter'] ) && is_array( $_POST['region-filter'] ) ) {
-					$rf_serialized = htmlspecialchars( serialize( $_POST['region-filter'] ) );
-					$sort_url .= '&amp;rf=' . $rf_serialized;
-					$metaqueries[] = array(
-						'key' => 'region',
-						'value' => $_POST['region-filter'],
-						'compare' => 'IN'
-					);
-				} elseif( isset( $_GET['rf'] ) ) {
-					$rf_unserialized = unserialize( htmlspecialchars_decode( $_GET['rf'] ) );
-					$sort_url .= '&amp;rf=' . htmlspecialchars( $_GET['rf'] );
-					$metaqueries[] = array(
-						'key' => 'region',
-						'value' => $rf_unserialized,
-						'compare' => 'IN'
-					);
-				}
-			} else {
-				$table_headline =
-					str_replace( '%region_status%', $status,
-						_x( 'Filtered Supporters of your %region_status%', 'Admin Supporters', 'vca-asm' ) );
-			}
-			if( isset( $_POST['membership-filter'] ) && is_array( $_POST['membership-filter'] ) ) {
-				$mf_serialized = htmlspecialchars( serialize( $_POST['membership-filter'] ) );
-				$sort_url .= '&amp;mf=' . $mf_serialized;
-				$metaqueries[] = array(
-					'key' => 'membership',
-					'value' => $_POST['membership-filter'],
-					'compare' => 'IN'
-				);
-			} elseif( isset( $_GET['mf'] ) ) {
-				$sort_url .= '&amp;mf=' . htmlspecialchars( $_GET['mf'] );
-				$mf_unserialized = unserialize( htmlspecialchars_decode( $_GET['mf'] ) );
-				$metaqueries[] = array(
-					'key' => 'membership',
-					'value' => $mf_unserialized,
-					'compare' => 'IN'
-				);
-			}
-			if( isset( $_POST['dead-filter'] ) ) {
-				$sort_url .= '&amp;df=1';
-			} elseif( isset( $_GET['df'] ) && $_GET['df'] == 1 ) {
-				$sort_url .= '&amp;df=1';
-			}
-		}
-
-		$args = array(
-			'role' => 'supporter',
-			'meta_query' => $metaqueries
-		);
-		$supporters = get_users( $args );
-
-		if( isset( $_GET['todo'] ) &&
-		   'search' ===  $_GET['todo'] &&
-		   ( isset( $_POST['term'] ) || isset( $_GET['term'] ) )
-		) {
-			if( isset( $_POST['term'] ) ) {
-				$term = $_POST['term'];
-			} else {
-				$term = $_GET['term'];
-			}
-			$sort_url = $url . '&amp;todo=search&amp;term=' . $term;
-			$supp_query_results = $supporters;
-			$supporters = array();
-			$supp_ids = array();
-			foreach( $supp_query_results as $temp_supp ) {
-				if( strstr( mb_strtolower( get_user_meta( $temp_supp->ID, 'first_name', true ) ), mb_strtolower( $term ) ) ||
-					strstr( mb_strtolower( get_user_meta( $temp_supp->ID, 'last_name', true ) ), mb_strtolower( $term ) )
-				) {
-					$supporters[] = $temp_supp;
-					$supp_ids[] = $temp_supp->ID;
-				}
-			}
-			$supporters_by_mail = $wpdb->get_results(
-				"SELECT ID FROM " .
-				$wpdb->prefix . "users " .
-				"WHERE user_email LIKE '%" . $term . "%'", ARRAY_A
-			);
-			foreach( $supporters_by_mail as $temp_supp ) {
-				$temp_sobj = new WP_User( $temp_supp['ID'] );
-				if( ( $current_user->has_cap('vca_asm_view_all_supporters') ||
-				   $admin_region === get_user_meta( $temp_supp['ID'], 'region', true ) ) &&
-				   in_array( 'supporter', $temp_sobj->roles ) &&
-				   ! in_array( $temp_supp['ID'], $supp_ids ) )
-				{
-					$supporters[] = get_userdata( $temp_supp['ID'] );
-				}
-			}
-			$table_headline = str_replace( '%results%', count( $supporters ), str_replace( '%term%', $term, _x( 'Showing %results% search results for &quot;%term%&quot;', 'Admin Supporters', 'vca-asm' ) ) );
-		}
-
-		$profile_url = $sort_url . '&orderby=' . $orderby . '&order=' . $order;
-
-		$regions = $vca_asm_regions->get_ids();
-		$stati = $vca_asm_regions->get_stati();
-		$stati_conv = $vca_asm_regions->get_stati_conv();
-
-		$supporters_ordered = array();
-		$i = 0;
-		foreach ( $supporters as $key => $supporter ) {
-			$supp_fname = get_user_meta( $supporter->ID, 'first_name', true );
-			$supp_lname = get_user_meta( $supporter->ID, 'last_name', true );
-			if( 'search' !== $_GET['todo'] && 1 != $_GET['df'] && empty( $_POST['dead-filter'] ) && ( empty( $supp_fname ) || empty( $supp_lname ) ) ) {
-				continue;
-			}
-			if ( $orderby === 'region' ||  $orderby === 'membership' ) {
-				$supp_region = get_user_meta( $supporter->ID, 'region', true );
-				$supporters_ordered[$i]['region'] = mb_substr( $regions[$supp_region], 0, 3 );
-				if( $orderby === 'membership' ) {
-					$supporters_ordered[$i]['membership'] = $this->get_membership_status( $supporter->ID, $stati[$supp_region] );
-				}
-			} elseif ( $orderby === 'user_email' ) {
-				$supporters_ordered[$i]['user_email'] = $supporter->user_email;
-			} elseif ( $orderby === 'age' ) {
-				$supp_bday = get_user_meta( $supporter->ID, 'birthday', true );
-				$supporters_ordered[$i]['age'] = empty( $supp_bday ) ? 1 : ( doubleval(555555555555) - doubleval( $supp_bday ) );
-			} elseif ( $orderby === 'mobile' ) {
-				$raw_num = $vca_asm_utilities->normalize_phone_number( get_user_meta( $supporter->ID, 'mobile', true ) );
-				$supporters_ordered[$i]['mobile'] = empty( $raw_num ) ? '999999999999999' : substr( $raw_num . '0000000000000000000', 0, 15 );
-			} elseif ( $orderby === 'gender' ) {
-				$supporters_ordered[$i]['gender'] = $vca_asm_utilities->convert_strings( get_user_meta( $supporter->ID, 'gender', true ) );
-			} else {
-				$supporters_ordered[$i][$orderby] = get_user_meta( $supporter->ID, $orderby, true );
-			}
-			$supporters_ordered[$i]['key'] = $key;
-			$i++;
-		}
-		$supporters_ordered = $this->sort_by_key( $supporters_ordered, $orderby, $order );
-
-		$user_count = count( $supporters_ordered );
-		if( $user_count > 100 ) {
-			$cur_page = isset( $_GET['p'] ) ? $_GET['p'] : 1;
-			$pagination_offset = 100 * ( $cur_page - 1 );
-			$total_pages = ceil( $user_count / 100 );
-			$cur_end = $total_pages == $cur_page ? $pagination_offset + ( $user_count % 100 ) : $pagination_offset + 100;
-			$pagination_url =
-				str_replace( '{', '%lcurl%',
-					str_replace( '}', '%rcurl%',
-						str_replace( ':', '%colon%',
-							$sort_url
-						)
-					)
-				) .
-				'&orderby=' . $orderby . '&order=' . $order . '%_%';
-
-			$pagination_html = paginate_links( array(
-				'base' => $pagination_url,
-				'format' => '&p=%#%#tbl',
-				'prev_text' => __( '&laquo; Previous', 'vca-asm' ),
-				'next_text' => __( 'Next &raquo;', 'vca-asm' ),
-				'total' => $total_pages,
-				'current' => $cur_page,
-				'end_size' => 1,
-				'mid_size' => 2,
-			));
-			$pagination_html = str_replace( '%colon%', ':', str_replace( '%lcurl%', '{', str_replace( '%rcurl%', '}', $pagination_html ) ) );
-
-		} else {
-			$cur_page = 1;
-			$pagination_offset = 0;
-			$pagination_html = '';
-			$cur_end = $user_count;
-		}
-
-		$rows = array();
-		for ( $i = $pagination_offset; $i < $cur_end; $i++ ) {
-			$supp_obj = $supporters[$supporters_ordered[$i]['key']];
-			$supp_id = $supp_obj->ID;
-			$supp_fname = get_user_meta( $supp_id, 'first_name', true );
-			$supp_lname = get_user_meta( $supp_id, 'last_name', true );
-			$supp_region = get_user_meta( $supp_id, 'region', true );
-			$supp_bday = get_user_meta( $supp_id, 'birthday', true );
-			$supp_age = ! empty( $supp_bday ) ? $vca_asm_utilities->date_diff( time(), intval( $supp_bday ) ) : array( 'year' => __( 'not set', 'vca-asm' ) );
-			if( empty ( $supp_region ) ) {
-				$supp_region = '0';
-			}
-			$photo_info = $this->photo_info( $supp_id );
-
-			$rows[$i]['check'] = $supp_id;
-			$rows[$i]['avatar'] = '<span class="photo-tooltip tooltip-trigger" onmouseover="tooltip(' .
-					$photo_info .
-				');" onmouseout="exit();">' .
-					get_avatar( $supp_id, 32 ) .
-				'</span>';
-			$rows[$i]['id'] = $supp_id;
-			$rows[$i]['username'] = $supp_obj->user_name;
-			$rows[$i]['first_name'] = empty( $supp_fname ) ? __( 'not set', 'vca-asm' ) : $supp_fname;
-			$rows[$i]['last_name'] = empty( $supp_lname ) ? __( 'not set', 'vca-asm' ) : $supp_lname;
-			$rows[$i]['user_email'] = $supp_obj->user_email;
-			$rows[$i]['mobile'] = $vca_asm_utilities->normalize_phone_number( get_user_meta( $supp_id, 'mobile', true ), true );
-			$rows[$i]['region'] = $regions[$supp_region];
-			if( $supp_region != 0 ) {
-				$rows[$i]['region'] .= ' (' . $stati_conv[$supp_region] . ')';
-			}
-			$rows[$i]['membership'] = $this->get_membership_status( $supp_id, $stati[$supp_region] );
-			$rows[$i]['membership_raw'] = get_user_meta( $supp_id, 'membership', true );
-			$rows[$i]['age'] = $supp_age['year'];
-			$rows[$i]['gender'] = $vca_asm_utilities->convert_strings( get_user_meta( $supp_id, 'gender', true ) );
-		}
-
-		$columns = array(
-			array(
-				'id' => 'check',
-				'check' => true,
-				'name' => 'supporters'
-			),
-			array(
-				'id' => 'avatar',
-				'title' => __( 'Photo', 'vca-asm' ),
-				'sortable' => false,
-				'mobile' => false
-			),
-			array(
-				'id' => 'first_name',
-				'title' => __( 'First Name', 'vca-asm' ),
-				'sortable' => true,
-				'strong' => true,
-				'profileable' => true,
-				'deletable-user' => $deletable
-			),
-			array(
-				'id' => 'last_name',
-				'title' => __( 'Last Name', 'vca-asm' ),
-				'sortable' => true,
-				'strong' => true
-			)
-		);
-
-		if( $current_user->has_cap('vca_asm_view_all_supporters') ) {
-			$columns[] = array(
-				'id' => 'region',
-				'title' => __( 'Region', 'vca-asm' ),
-				'sortable' => true
-			);
-		}
-
-		$columns[] = array(
-			'id' => 'membership',
-			'title' => __( 'Membership Status', 'vca-asm' ),
-			'sortable' => true,
-			'promotable' => $promotable,
-			'conversion' => 'membership'
-		);
-		$columns[] = array(
-			'id' => 'user_email',
-			'title' => __( 'Email Address', 'vca-asm' ),
-			'sortable' => true,
-			'mailable' => false
-		);
-		$columns[] = array(
-			'id' => 'mobile',
-			'title' => __( 'Mobile Phone', 'vca-asm' ),
-			'sortable' => true,
-			'legacy-screen' => false
-		);
-		$columns[] = array(
-			'id' => 'age',
-			'title' => __( 'Age', 'vca-asm' ),
-			'sortable' => true,
-			'tablet' => false
-		);
-		$columns[] = array(
-			'id' => 'gender',
-			'title' => __( 'Gender', 'vca-asm' ),
-			'sortable' => true,
-			'legacy-screen' => false
-		);
-
-		$search_fields = array(
-			array(
-				'type' => 'text',
-				'label' =>  _x( 'Search Supporters', 'Admin Supporters', 'vca-asm' ),
-				'id' => 'term',
-				'desc' => _x( "You can search the supporters by first and last name as well as email address.", 'Admin Supporters', 'vca-asm' )
-			)
-		);
-
-		$filter_fields = array();
-
-		if( $current_user->has_cap('vca_asm_view_all_supporters') ) {
-			$region_options_raw = $vca_asm_regions->select_options( _x( 'no specific region', 'Regions', 'vca-asm' ) );
-			$region_options = array();
-			foreach( $region_options_raw as $region_option ) {
-				if( isset( $_POST['region-filter'] ) && is_array( $_POST['region-filter'] ) ) {
-					if( in_array( $region_option['value'], $_POST['region-filter'] ) ) {
-						$region_option['checked'] = true;
-					}
-				} elseif( isset( $_GET['rf'] ) ) {
-					$rf_unserialized = unserialize( htmlspecialchars_decode( $_GET['rf'] ) );
-					if( in_array( $region_option['value'], $rf_unserialized ) ) {
-						$region_option['checked'] = true;
-					}
-				} else {
-					$region_option['checked'] = true;
-				}
-				$region_options[] = $region_option;
-			}
-			$filter_fields[] = array(
-				'type' => 'checkbox_group',
-				'label' => _x( 'Region', 'Admin Supporters', 'vca-asm' ),
-				'id' => 'region-filter',
-				'options' => $region_options,
-				'desc' => _x( "Show only supporters of certain region(s)", 'Admin Supporters', 'vca-asm' ),
-				'cols' => 3,
-				'extra' => 'bulk_deselect'
-			);
-			$membership_labels = array(
-				2 => _x( 'Supporters that are &quot;active members&quot; of their region', 'Admin Supporters', 'vca-asm' ),
-				1 => _x( 'Supporters that have applied for membership status', 'Admin Supporters', 'vca-asm' ),
-				0 => _x( 'Supporters that simply are registered to the Pool', 'Admin Supporters', 'vca-asm' )
-			);
-		} else {
-			$membership_labels = array(
-				2 => str_replace( '%region_status%', $status, _x( 'Supporters that are &quot;active members&quot; of your %region_status%', 'Admin Supporters', 'vca-asm' ) ),
-				1 => str_replace( '%region_status%', $status, _x( 'Supporters that have applied for membership to your %region_status%', 'Admin Supporters', 'vca-asm' ) ),
-				0 => _x( 'Supporters that simply live in your region', 'Admin Supporters', 'vca-asm' )
-			);
-		}
-
-		if( isset( $_POST['region-filter'] ) && is_array( $_POST['region-filter'] ) ) {
-			$checked_mem_options = array(
-				0 => ( in_array( 0, $_POST['membership-filter'] ) ? true : false ),
-				1 => ( in_array( 1, $_POST['membership-filter'] ) ? true : false ),
-				2 => ( in_array( 2, $_POST['membership-filter'] ) ? true : false )
-			);
-		} elseif( isset( $_GET['mf'] ) ) {
-			$mf_unserialized = unserialize( htmlspecialchars_decode( $_GET['mf'] ) );
-			$checked_mem_options = array(
-				0 => ( in_array( 0, $mf_unserialized ) ? true : false ),
-				1 => ( in_array( 1, $mf_unserialized ) ? true : false ),
-				2 => ( in_array( 2, $mf_unserialized ) ? true : false )
-			);
-		} else {
-			$checked_mem_options = array(
-				0 => true,
-				1 => true,
-				2 => true
-			);
-		}
-
-		$filter_fields[] = array(
-			'type' => 'checkbox_group',
-			'label' => _x( 'Membership', 'Admin Supporters', 'vca-asm' ),
-			'id' => 'membership-filter',
-			'options' => array(
-				array(
-					'label' => $membership_labels[2],
-					'value' => 2,
-					'checked' => $checked_mem_options[2]
-				),
-				array(
-					'label' => $membership_labels[1],
-					'value' => 1,
-					'checked' => $checked_mem_options[1]
-				),
-				array(
-					'label' => $membership_labels[0],
-					'value' => 0,
-					'checked' => $checked_mem_options[0]
-				)
-			),
-			'desc' => _x( "Show only supporters with a certain membership status.", 'Admin Supporters', 'vca-asm' ),
-			'cols' => 1
-		);
-
-		if( ! empty( $_POST['dead-filter'] ) ) {
-			$value_df = 1;
-		} elseif( ! empty( $_GET['df'] ) ) {
-			$value_df = 1;
-		} else {
-			$value_df = 0;
-		}
-		$filter_fields[] = array(
-			'type' => 'checkbox',
-			'label' => _x( '&quot;Dead Profiles&quot;', 'Admin Supporters', 'vca-asm' ),
-			'id' => 'dead-filter',
-			'desc' => _x( "By default this list shows supporters that have at least provided their first and last names. To include those that have not, activate this Filter.", 'Admin Supporters', 'vca-asm' ),
-			'value' => $value_df
-		);
-
-		/* count membership applications */
-		if( $current_user->has_cap('vca_asm_promote_all_supporters') ) {
-			$pending =
-				$wpdb->get_var(
-					$wpdb->prepare(
-						"SELECT COUNT(*) FROM $wpdb->usermeta WHERE meta_key='membership' AND meta_value='1'" ) );
-		} elseif( $current_user->has_cap('vca_asm_promote_supporters') ) {
-			$pending_users = get_users( array(
-				'role' => 'supporter',
-				'meta_query' => array(
-					'relation' => 'AND',
-					array(
-						'key' => 'region',
-						'value' => $admin_region
-					),
-					array(
-						'key' => 'membership',
-						'value' => '1'
-					)
-				)
-			));
-			$pending = count( $pending_users );
-		}
-
-		$skip_wrap = true;
-
-		$output = '<div class="wrap">' .
-			'<div id="icon-supporters" class="icon32-pa"></div><h2>' . $headline . '</h2><br />';
-
-		if( ! empty( $messages ) ) {
-			$output .= $vca_asm_admin->convert_messages( $messages );
-		}
-
-		if( ! empty( $pending ) ) {
-			if( $current_user->has_cap('vca_asm_promote_all_supporters') ) {
-				$output .= '<h3 class="title">' . _x( 'Membership Applications', 'Admin Supporters', 'vca-asm' ) . '</h3>' .
-					'<p><strong>' .
-						sprintf( _x( 'In total, currently %d supporters are waiting for their applications to be answered...', 'Admin Supporters', 'vca-asm' ), $pending ) .
-					'</p></strong>';
-			} else {
-				$output .= '<h3 class="title">' . _x( 'Membership Applications', 'Admin Supporters', 'vca-asm' ) . '</h3>' .
-					'<div id="message" class="updated highlight"><p>' .
-						sprintf( _x( 'You have %d pending applications waiting to be answered...', 'Admin Supporters', 'vca-asm' ), $pending ) .
-					'</p></div>';
-			}
-			$output .= '<span class="description">' . _x( 'Supporters are categorized in two groups: Those that are active in their cells or local crews and part of the creative process revolving around Viva con Agua and those that simply take an interest in VcA and/or show up for a festival or the like once in a while. Supporters may apply for the status of $quot;active membership$quot; via their &quot;Profile &amp; Settings&quot; menu.', 'Admin Supporters', 'vca-asm' ) . '</span>';
-		}
-
-		$output .= '<h3 class="title title-top-pa">' . _x( 'Search', 'Admin Supporters', 'vca-asm' ) . '</h3>' .
-			'<form name="vca_asm_supporter_search" method="post" action="'.$url .'&amp;todo=search">' .
-				'<input type="hidden" name="submitted" value="y"/>';
-					$fields = $search_fields;
-					require( VCA_ASM_ABSPATH . '/templates/admin-form.php' );
-				$output .= '<input type="submit" name="submit" id="submit" class="button-primary"' .
-						' value="' . _x( 'Search', 'Admin Supporters', 'vca-asm' ) .
-					'"></form>' .
-			'<h3 class="title title-top-pa">' . _x( 'Filter', 'Admin Supporters', 'vca-asm' ) . '</h3>' .
-			'<form name="vca_asm_supporter_filter" method="post" action="'.$url .'&amp;todo=filter">' .
-				'<input type="hidden" name="submitted" value="y"/>';
-					$fields = $filter_fields;
-					require( VCA_ASM_ABSPATH . '/templates/admin-form.php' );
-				$output .= '<input type="submit" name="submit" id="submit" class="button-primary"' .
-						' value="' . _x( 'Filter', 'Admin Supporters', 'vca-asm' ) .
-					'"></form>' .
-			'<h3 id="tbl" class="title title-top-pa">' . $table_headline . '</h3>';
-
-			if( empty( $rows ) ) {
-				$output .= '';
-			} else {
-				$output .= '<form action="" class="bulk-action-form" method="get">' .
-					'<input type="hidden" name="page" value="vca-asm-supporters" />' .
-					'<div class="tablenav top">' .
-						'<div class="alignleft actions">' .
-							__( 'Change selected supporters\' Membership Status', 'vca-asm' ) . ': ' .
-							'<select name="todo" id="todo" class="bulk-action simul-select">' .
-								'<option value="accept">' . __( 'Accept application / Add as members', 'vca-asm' ) . '&nbsp;</option>' .
-								'<option value="deny">' . __( 'Deny application / End membership', 'vca-asm' ) . '&nbsp;</option>' .
-							'</select>' .
-							'<input type="submit" name="" id="handle-memberships" class="button-secondary do-bulk-action" value="' .
-								__( 'Execute', 'vca-asm' ) .
-							'" onclick="if ( confirm(\'' .
-								__( 'Manage the membership of all selected supporters?', 'vca-asm' ) .
-								'\') ) { return true; } return false;"  style="margin-left:6px" />' .
-						'</div>' .
-						'<div class="tablenav-pages">' .
-						'<span class="displaying-num">' . sprintf( __( '%d Supporters', 'vca-asm' ), $user_count ) . '</span>' .
-						'<span class="pagination-links">' . $pagination_html . '</span></div>' .
-					'</div>';
-				require( VCA_ASM_ABSPATH . '/templates/admin-table.php' );
-				$output .= '<div class="tablenav bottom">' .
-						'<div class="alignleft actions no-js-hide">' .
-							__( 'Change selected supporters\' Membership Status', 'vca-asm' ) . ': ' .
-							'<select name="todo" id="todo" class="bulk-action simul-select">' .
-								'<option value="accept">' . __( 'Accept application / Add as members', 'vca-asm' ) . '&nbsp;</option>' .
-								'<option value="deny">' . __( 'Deny application / End membership', 'vca-asm' ) . '&nbsp;</option>' .
-							'</select>' .
-							'<input type="submit" name="" id="handle-memberships" class="button-secondary do-bulk-action" value="' .
-								__( 'Execute', 'vca-asm' ) .
-							'" onclick="if ( confirm(\'' .
-								__( 'Manage the membership of all selected supporters?', 'vca-asm' ) .
-								'\') ) { return true; } return false;"  style="margin-left:6px">' .
-						'</div>' .
-						'<div class="tablenav-pages">' .
-						'<span class="displaying-num">' . sprintf( __( '%d Supporters', 'vca-asm' ), $user_count ) . '</span>' .
-						'<span class="pagination-links">' . $pagination_html . '</span></div>' .
-					'</div></form>';
-			}
-
-		if( isset( $_GET['todo'] ) ) {
-			$output .= '<form name="vca_asm_supporter_all" method="post" action="admin.php?page=vca-asm-supporters">' .
-					'<input type="hidden" name="submitted" value="y"/>' .
-					'<p class="submit">' .
-						'<input type="submit" name="submit" id="submit" class="button-primary"' .
-							' value="' . _x( 'Show all supporters', 'Admin Supporters', 'vca-asm' ) .
-				'"></p></form>';
-		}
-
-		$output .= '</div>';
-
-		echo $output;
 	}
 
 } // class

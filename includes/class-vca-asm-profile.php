@@ -138,7 +138,9 @@ class VCA_ASM_Profile {
 		global $vca_asm_regions;
 
 		if( is_admin() ) {
-			$mem = get_user_meta( $user->ID, 'membership', true );
+			global $user_id;
+			$edited_user = new WP_User( $user_id );
+			$mem = get_user_meta( $edited_user->ID, 'membership', true );
 		} else {
 			global $current_user;
 			get_currentuserinfo();

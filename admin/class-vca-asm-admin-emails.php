@@ -66,7 +66,7 @@ class VCA_ASM_Admin_Emails {
 
 		/* query arguments */
 		$where = '';
-		if( ! $current_user->has_cap('vca_asm_send_global_emails') ) {
+		if( ! ( $current_user->has_cap('vca_asm_view_emails_global') || $current_user->has_cap('vca_asm_view_emails_nation') ) ) {
 			$where = ' WHERE sent_by = ' . $current_user->ID;
 		}
 
@@ -456,7 +456,7 @@ class VCA_ASM_Admin_Emails {
 					'value' => 'please-select'
 				);
 			}
-			if( current_user_can( 'vca_asm_send_global_emails' ) ) {
+			if( current_user_can( 'vca_asm_send_emails_global' ) || current_user_can( 'vca_asm_send_emails_nation' ) ) {
 				$receipients[1] = array(
 					'label' => __( 'All users of the Pool', 'vca-asm' ),
 					'value' => 'all'
@@ -793,6 +793,7 @@ class VCA_ASM_Admin_Emails {
 				$user_obj = new WP_User( $supp_id );
 				$to[] = $user_obj->user_email;
 			}
+			var_dump($to);
 			$type = substr( $_POST['receipient'], 3, 4 );
 			if( 'appl' === $type || 'appg' === $type ) {
 				$receipient_group = 'applicants';

@@ -22,6 +22,7 @@ class VCA_ASM_Security {
 	 * @since 1.2
 	 */
 	private $options = array();
+	private $mode_options = array();
 	private $strength_terms = array();
 	private $strength_classes = array();
 
@@ -33,6 +34,7 @@ class VCA_ASM_Security {
 	 */
 	private function init() {
 		$this->options = get_option( 'vca_asm_security_options' );
+		$this->mode_options = get_option( 'vca_asm_mode_options' );
 		$this->strength_terms = array(
 			1 => __( 'very weak', 'vca-asm' ),
 			2 => __( 'weak', 'vca-asm' ),
@@ -181,7 +183,15 @@ class VCA_ASM_Security {
 	 */
 	public function on_login( $user_login, $user ) {
 		if ( $user->ID != null && $user->ID > 0 ) {
-			update_user_meta( $user->ID, 'vca_asm_last_activity', time() );
+			if (
+				'maintenance' === $this->mode_options['mode'] &&
+				! in_array( 'administrator', $user->roles ) &&
+				! in_array( 'management_global', $user->roles )
+			) {
+				wp_logout();
+			} else {
+				update_user_meta( $user->ID, 'vca_asm_last_activity', time() );
+			}
 		}
 	}
 
@@ -235,7 +245,7 @@ class VCA_ASM_Security {
 			return true;
 		}
 		$max_pass_age = $max_pass_age * 2678400;
-		$global_reset = $this->options['global_pass_reset'];
+		$global_reset = isset( $this->options['global_pass_reset'] ) ? $this->options['global_pass_reset'] : false;
 		$last_reset = get_user_meta( $user->ID, 'vca_asm_last_pass_reset', true );
 		if( true === $set_it && '' === $last_reset && empty( $global_reset ) ) {
 			$last_reset = time();
@@ -371,7 +381,16 @@ class VCA_ASM_Security {
 	 */
 	public function logout_message( $atts ) {
 		$output = '';
-		if ( ! is_user_logged_in() && 1 == $_GET['logged_out'] ) {
+		if ( 'maintenance' === $this->mode_options['mode'] ) {
+			$output = '<div class="system-error"><h3>' .
+						__( 'Maintenance Mode', 'vca-asm' ) .
+					'</h3><p>' .
+						__( 'The Pool is currently in maintenance mode. Please come back in 24 hours.', 'vca-asm' ) .
+					'</p><p>' .
+						__( 'Your friendly neighborhood Pool-Administration.', 'vca-asm' ) .
+					'</p>' .
+				'</div>';
+		} elseif ( ! is_user_logged_in() && isset( $_GET['logged_out'] ) && 1 == $_GET['logged_out'] ) {
 			$output = '<div class="system-error"><h3>' .
 						__( 'Logged out...', 'vca-asm' ) .
 					'</h3><p>' .
@@ -401,6 +420,7 @@ class VCA_ASM_Security {
 	 */
 	public function __construct() {
 		$this->init();
+		add_action( 'init', array( &$this, 'force_ssl' ) );
 		add_action( 'user_profile_update_errors', array( &$this, 'enforce_pass_strength' ), 0, 3 );
 		add_action( 'wp_login', array( &$this, 'on_login' ), 1, 2 );
 		add_filter( 'login_redirect', array( &$this, 'pass_reset_redirect' ), 10, 3 );

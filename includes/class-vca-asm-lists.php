@@ -51,9 +51,7 @@ class VCA_ASM_Lists {
 	 * @access public
 	 */
 	public function list_activities( $atts ) {
-		global $vca_asm_registrations, $current_user;
-
-		$
+		global $vca_asm_activities, $vca_asm_registrations;
 
 		$faq_link = '<a href="' . get_bloginfo( 'url' ) . '/faq" title="' . __( 'Read the FAQ', 'vca-asm' ) . '">' . __( 'FAQ', 'vca-asm' ) . '</a>';
 
@@ -73,14 +71,16 @@ class VCA_ASM_Lists {
 
 		$output = '<p class="message">' .
 				sprintf( __( 'Before you apply for an activity, please make sure you will indeed have spare time on your hands in the given timeframe. For general infos about festivals and VcA, please refer to the %s.', 'vca-asm' ), $faq_link ) .
+				'</p><p class="message">' .
+					__( 'Currently the following activities are open to registration for you:', 'vca-asm' ) .
 				'</p>';
 
 		$args = array(
 			'posts_per_page' 	=>	-1,
-			'post_type'         =>	'festival',
+			'post_type'         =>	$vca_asm_activities->activity_types,
 			'post_status'       =>	'publish',
 			'post__not_in'		=>	$exclude,
-			'meta_key'			=>	'start_date',
+			'meta_key'			=>	'start_act',
 			'orderby'           =>	'meta_value_num',
 			'order'             =>	'ASC',
 			'meta_query' => array(
@@ -127,7 +127,7 @@ class VCA_ASM_Lists {
 	 * @access public
 	 */
 	public function my_activities( $atts ) {
-		global $vca_asm_registrations;
+		global $vca_asm_activities, $vca_asm_registrations;
 
 		extract( shortcode_atts( array(
 			'class' => ''
@@ -150,10 +150,10 @@ class VCA_ASM_Lists {
 
 			$args = array(
 				'posts_per_page' 	=>	-1,
-				'post_type'         =>	'festival',
+				'post_type'         =>	$vca_asm_activities->activity_types,
 				'post_status'       =>	'publish',
 				'post__in'			=>	$registrations,
-				'meta_key'			=>	'end_date',
+				'meta_key'			=>	'end_act',
 				'orderby'           =>	'meta_value_num',
 				'order'             =>	'ASC'
 
@@ -185,10 +185,10 @@ class VCA_ASM_Lists {
 
 			$args = array(
 				'posts_per_page' 	=>	-1,
-				'post_type'         =>	'festival',
+				'post_type'         =>	$vca_asm_activities->activity_types,
 				'post_status'       =>	'publish',
 				'post__in'			=>	$applications,
-				'meta_key'			=>	'end_date',
+				'meta_key'			=>	'end_act',
 				'orderby'           =>	'meta_value_num',
 				'order'             =>	'ASC'
 
@@ -211,10 +211,10 @@ class VCA_ASM_Lists {
 
 			$args = array(
 				'posts_per_page' 	=>	-1,
-				'post_type'         =>	'festival',
+				'post_type'         =>	$vca_asm_activities->activity_types,
 				'post_status'       =>	'publish',
 				'post__in'			=>	$waiting,
-				'meta_key'			=>	'end_date',
+				'meta_key'			=>	'end_act',
 				'orderby'           =>	'meta_value_num',
 				'order'             =>	'ASC'
 
@@ -236,10 +236,10 @@ class VCA_ASM_Lists {
 
 			$args = array(
 				'posts_per_page' 	=>	-1,
-				'post_type'         =>	'festival',
+				'post_type'         =>	$vca_asm_activities->activity_types,
 				'post_status'       =>	'publish',
 				'post__in'			=>	$registrations_old,
-				'meta_key'			=>	'end_date',
+				'meta_key'			=>	'end_act',
 				'orderby'           =>	'meta_value_num',
 				'order'             =>	'DSC'
 
@@ -260,15 +260,13 @@ class VCA_ASM_Lists {
 	 *
 	 * Calls neccessary application method, if applicable
 	 *
-	 * @todo add temporary hash to avoid application via URL manipulation
-	 *
 	 * @since 1.0
 	 * @access private
 	 */
 	private function handle_applications() {
 		global $vca_asm_registrations;
 
-		if( isset( $_POST['todo'] ) && $_POST['todo'] == 'apply' && isset( $_POST['activity'] ) ) {
+		if( isset( $_POST['todo'] ) && $_POST['todo'] == 'apply' && isset( $_POST['activity'] ) && is_numeric( $_POST['activity'] ) ) {
 
 			/* Avoid form resubmission after page refresh */
 			session_start();
@@ -285,7 +283,7 @@ class VCA_ASM_Lists {
 				}
 			}
 
-			if( 'If you wish to send a message with your application' === substr( $_POST['notes'], 0, 51) ||
+			if( 'If you wish to send a message with your application' === substr( $_POST['notes'], 0, 51 ) ||
 			   'Wenn du eine Nachricht mit deiner Bewerbung schicken willst' === substr( $_POST['notes'], 0, 59 ) ) {
 				$notes = '';
 			} else {
@@ -297,7 +295,7 @@ class VCA_ASM_Lists {
 			}
 		}
 
-		if( isset( $_POST['todo'] ) && $_POST['todo'] == 'revoke_app' && isset( $_POST['activity'] ) ) {
+		if( isset( $_POST['todo'] ) && $_POST['todo'] == 'revoke_app' && isset( $_POST['activity'] ) && is_numeric( $_POST['activity'] ) ) {
 			$vca_asm_registrations->revoke_application( $_POST['activity'] );
 		}
 

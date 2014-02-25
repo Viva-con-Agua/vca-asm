@@ -18,6 +18,7 @@ class VCA_ASM_Supporter {
 	 *
 	 * @since 1.2
 	 */
+	public $ID = 0;
 	public $supporter_id = 0;
 
 	public $exists = false;
@@ -29,7 +30,7 @@ class VCA_ASM_Supporter {
 	public $age = '';
 	public $avatar = '';
 	public $birthday = '';
-	public $city = '';
+	public $birthday_combined = '';
 	public $email = '';
 	public $gender = '';
 	public $last_activity = '';
@@ -38,7 +39,11 @@ class VCA_ASM_Supporter {
 	public $mobile = '';
 	public $region = '';
 	public $region_id = '';
+	public $city = '';
+	public $city_id = '';
 	public $registration_date = '';
+	public $role_slug = '';
+	public $role = '';
 
 
 	/**
@@ -69,21 +74,23 @@ class VCA_ASM_Supporter {
 	 * @access public
 	 */
 	public function gather_meta( $supporter_id ) {
-		global $wpdb, $vca_asm_regions, $vca_asm_utilities;
+		global $wpdb, $wp_roles, $vca_asm_geography, $vca_asm_utilities;
 
 		$supp_region = get_user_meta( $supporter_id, 'region', true );
 		$supp_bday = get_user_meta( $supporter_id, 'birthday', true );
 		$supp_age = ! empty( $supp_bday ) ? $vca_asm_utilities->date_diff( time(), intval( $supp_bday ) ) : array( 'year' => __( 'not set', 'vca-asm' ) );
 		$user_obj = get_userdata( $supporter_id );
+		$user_roles = $user_obj->roles;
+		$user_role = array_shift( $user_roles );
 
 		$this->first_name = $user_obj->first_name;
 		$this->last_name = $user_obj->last_name;
-		if( ! empty( $supporter->first_name ) && ! empty( $supporter->last_name ) ) {
-			$this->nice_name = $supporter->first_name . ' ' . $supporter->last_name;
-		} elseif( ! empty( $supporter->first_name ) ) {
-			$this->nice_name = $supporter->first_name;
-		} elseif( ! empty( $supporter->last_name ) ) {
-			$this->nice_name = $supporter->last_name;
+		if( ! empty( $this->first_name ) && ! empty( $this->last_name ) ) {
+			$this->nice_name = $this->first_name . ' ' . $this->last_name;
+		} elseif( ! empty( $this->first_name ) ) {
+			$this->nice_name = $this->first_name;
+		} elseif( ! empty( $this->last_name ) ) {
+			$this->nice_name = $this->last_name;
 		} else {
 			$this->nice_name = __( 'unknown Supporter', 'vca-asm' );
 		}
@@ -92,8 +99,6 @@ class VCA_ASM_Supporter {
 		$this->avatar = get_avatar( $supporter_id );
 		$this->birthday = ! empty( $supp_bday ) ? strftime ( '%e. %B %Y', $supp_bday ) : __( 'not set', 'vca-asm' );
 		$this->birthday_combined = ! empty( $supp_bday ) ? strftime ( '%e. %B %Y', $supp_bday ) . ' (' . $supp_age['year'] . ')' : __( 'not set', 'vca-asm' );
-		$this->city = get_user_meta( $supporter_id, 'city', true );
-		$this->city = ! empty( $this->city ) ? $this->city : __( 'not set', 'vca-asm' );
 		$this->email = $user_obj->user_email;
 		$this->gender = $vca_asm_utilities->convert_strings( get_user_meta( $supporter_id, 'gender', true ) );
 		$this->gender = ! empty( $this->gender ) ? $this->gender : __( 'not set', 'vca-asm' );
@@ -101,9 +106,13 @@ class VCA_ASM_Supporter {
 		$this->membership_id = intval( get_user_meta( $supporter_id, 'membership', true ) );
 		$this->membership = $vca_asm_utilities->convert_strings( $this->membership_id );
 		$this->mobile = $vca_asm_utilities->normalize_phone_number( get_user_meta( $supporter_id, 'mobile', true ), true );
-		$this->region = $vca_asm_regions->get_name($supp_region);
+		$this->region = ! empty( $supp_region ) ? $vca_asm_geography->get_name( $supp_region ) : __( 'not set', 'vca-asm' );
 		$this->region_id = intval( $supp_region );
+		$this->city = $this->region;
+		$this->city_id = $this->region_id;
 		$this->registration_date = strftime( '%e. %B %Y', strtotime( $user_obj->user_registered ) );
+		$this->role_slug = ! empty( $user_role ) ? $user_role : 'supporter';
+		$this->role = $wp_roles->role_names[$this->role_slug];
 	}
 
 	/**
@@ -124,8 +133,8 @@ class VCA_ASM_Supporter {
 	 */
 	public function __construct( $supporter_id ) {
 		$this->supporter_id = $supporter_id;
+		$this->ID = $this->supporter_id;
 		$this->check_exists( $this->supporter_id );
-		add_shortcode( 'vca-asm-supporter-vcard', array( &$this, 'supporter_vcard' ) );
 	}
 
 } // class
