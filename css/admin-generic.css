@@ -147,6 +147,12 @@ body #dashboard_recent_comments .trash a,
 body #dashboard_recent_comments .spam a {
 	color: #e9619c;
 }
+input.cash-major-text {
+	 width: 4em;
+}
+input.cash-minor-text {
+	 width: 2em;
+}
 input[type="radio"],
 input[type="checkbox"] {
 	 margin: 2px 2px 0 0;

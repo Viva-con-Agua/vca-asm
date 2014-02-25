@@ -41,8 +41,29 @@ class VCA_ASM_Admin_Emails {
 			/* send it! */
 			$success = $this->process();
 			if ( $success ) {
-				$messages[] = $success;
+				list( $mail_id, $receipients_count ) = $success;
+				header( 'Location: ' . strtok( $_SERVER['REQUEST_URI'], '?' ) . '?page=vca-asm-outbox&todo=processed&id=' . $mail_id . '&cnt=' . $receipients_count );
 			}
+		} elseif( isset( $_GET['todo'] ) && $_GET['todo'] == 'processed' ) {
+			$mail_id = isset( $_GET['id'] ) ? $_GET['id'] : '0';
+			$receipients_count = isset( $_GET['cnt'] ) ? $_GET['cnt'] : 0;
+			$vca_asm_mailer->packet_size;
+			$messages[] = array(
+				'type' => 'message',
+				'message' => _x( 'The Email has been added to the sending queue.', 'Admin Email Interface', 'vca-asm' ) .
+					' ' . _x( 'Be patient, it may take a while until all are sent.', 'Admin Email Interface', 'vca-asm' ) .
+					'<br />' .
+					sprintf(
+						_x( 'It has been saved to %1$s and you can view it %2$s.', 'Admin Email Interface', 'vca-asm' ),
+						'<a href="admin.php?page=vca-asm-emails" title="' . __( 'View Sent Items', 'vca-asm' ) . '">' . __( 'Sent Items', 'vca-asm' ) . '</a>',
+						'<a href="' . get_site_url() . '/email/?id=' . $mail_id . '" title="' . __( 'Read the E-Mail', 'vca-asm' ) . '">' . __( 'here', 'vca-asm' ) . '</a>'
+					) .
+					'<br /><br />' .
+					'<a title="' . _x( 'One more...', 'Admin Email Interface', 'vca-asm' ) . '" ' .
+						'href="' . get_option( 'siteurl' ) . '/wp-admin/admin.php?page=vca-asm-compose">' .
+							'&larr; ' . _x( 'Send further mails', 'Admin Email Interface', 'vca-asm' ) .
+					'</a>'
+			);
 		} elseif( isset( $_GET['todo'] ) && $_GET['todo'] == 'test' ) {
 			echo $vca_asm_mailer->check_outbox();
 		}
@@ -382,8 +403,7 @@ class VCA_ASM_Admin_Emails {
 				'<div id="icon-emails" class="icon32-pa"></div>' .
 				'<h2>' . __( 'Sent Items', 'vca-asm' ) . '</h2>';
 
-		$output .= $message .
-			'<h3 class="title title-top-pa">' . _x( 'Search', 'Admin Emails', 'vca-asm' ) . '</h3>' .
+		$output .= '<h3 class="title title-top-pa">' . _x( 'Search', 'Admin Emails', 'vca-asm' ) . '</h3>' .
 			'<form name="vca_asm_email_search" method="post" action="'.$url .'&amp;search=1';
 						if( isset( $sbf ) ) {
 							$output .= '&amp;filter=1';
@@ -505,16 +525,17 @@ class VCA_ASM_Admin_Emails {
 		$admin_city_name = $vca_asm_geography->get_name( $admin_city );
 		$admin_nation_name = $vca_asm_geography->get_name( $admin_nation );
 
+		/* form parameters */
+		$url = "admin.php?page=vca-asm-compose";
+		$form_action = "admin.php?page=vca-asm-outbox&todo=process&noheader=true";
+
 		wp_enqueue_script( 'vca-asm-admin-email-preview' );
 		$params = array(
 			'url' => get_option( 'siteurl' ),
-			'btnVal' => __( 'Preview', 'vca-asm' )
+			'btnVal' => __( 'Preview', 'vca-asm' ),
+			'action' => $form_action
 		);
 		wp_localize_script( 'vca-asm-admin-email-preview', 'emailParams', $params );
-
-		/* form parameters */
-		$url = "admin.php?page=vca-asm-compose";
-		$form_action = "admin.php?page=vca-asm-outbox&amp;todo=process";
 
 		$initial = array(
 			'sent_by' => '',
@@ -798,7 +819,7 @@ class VCA_ASM_Admin_Emails {
 			);
 			$newsletter_boxes = array(
 				array(
-					'title' => sprintf( __( 'Newsletter to your %s', 'vca-asm' ), $vca_asm_geography->get_type( $current_user->ID ) ),
+					'title' => sprintf( __( 'Newsletter to your %s', 'vca-asm' ), $vca_asm_geography->get_type( get_user_meta( $current_user->ID, 'city', true ) ) ),
 					'fields' => $newsletter_meta_fields
 				),
 				$compose_box
@@ -987,7 +1008,6 @@ class VCA_ASM_Admin_Emails {
 	private function process() {
 		global $current_user, $wpdb,
 			$vca_asm_mailer, $vca_asm_geography;
-		get_currentuserinfo();
 
 		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
 		$membership = ( isset( $_POST['membership'] ) && in_array( $_POST['membership'], array( 0, 2 ) ) ) ? $_POST['membership'] : 0;
@@ -1001,7 +1021,7 @@ class VCA_ASM_Admin_Emails {
 
 		if ( ! empty( $receipient_group ) ) {
 
-			list( $receipient_id, $receipients ) = $vca_asm_mailer->receipient_id_from_group( $receipient_group, true );
+			list( $receipient_id, $receipients ) = $vca_asm_mailer->receipient_id_from_group( $receipient_group, true, $ignore_switch, $membership );
 
 			if ( ! in_array( 'city', $current_user->roles ) ) {
 				$from_name = trim( $current_user->first_name . ' ' . $current_user->last_name );
@@ -1030,24 +1050,9 @@ class VCA_ASM_Admin_Emails {
 				'time' => time()
 			);
 
-			$vca_asm_mailer->queue( $queue_args );
-
 			$success = array(
-				'type' => 'message',
-				'message' => sprintf(
-						_x( 'The Email has been added to the sending queue.', 'Admin Email Interface', 'vca-asm' ) . '</a>'
-					) .
-					'<br />' .
-					sprintf(
-						_x( 'It has been saved to %1$s and you can view it %2$s.', 'Admin Email Interface', 'vca-asm' ),
-						'<a href="admin.php?page=vca-asm-emails" title="' . __( 'View Sent Items', 'vca-asm' ) . '">' . __( 'Sent Items', 'vca-asm' ) . '</a>',
-						'<a href="' . get_site_url() . '/email/?id=' . $insert_id . '" title="' . __( 'Read the E-Mail', 'vca-asm' ) . '">' . __( 'here', 'vca-asm' ) . '</a>'
-					) .
-					'<br /><br />' .
-					'<a title="' . _x( 'One more...', 'Admin Email Interface', 'vca-asm' ) . '" ' .
-						'href="' . get_option( 'siteurl' ) . '/wp-admin/admin.php?page=vca-asm-compose">' .
-							'&larr; ' . _x( 'Send further mails', 'Admin Email Interface', 'vca-asm' ) .
-					'</a>'
+				$vca_asm_mailer->queue( $queue_args ),
+				count( $receipients )
 			);
 
 		} else {

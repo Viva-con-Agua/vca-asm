@@ -64,7 +64,7 @@ class VCA_ASM_Mail {
 
 		if ( ! empty( $mail_query ) ) {
 			$this->exists = true;
-			
+
 			$the_mail = $mail_query[0];
 
 			$this->$receipient_id = $the_mail['receipient_id'];
@@ -120,16 +120,6 @@ class VCA_ASM_Mail {
 
 			$this->$time_full = '';
 		}
-	}
-
-	/**
-	 * PHP4 style constructor
-	 *
-	 * @since 1.3.3
-	 * @access public
-	 */
-	public function VCA_ASM_Mail( $id, $args = array() ) {
-		$this->__construct( $id, $args = array() );
 	}
 
 	/**

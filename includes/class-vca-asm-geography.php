@@ -70,7 +70,7 @@ class VCA_ASM_Geography
 	{
 		global $wpdb;
 
-		if ( ! in_array( $type, array( 'name', 'code' ) ) ) {
+		if ( ! in_array( $type, array( 'name', 'minor_name', 'code' ) ) ) {
 			$type = 'name';
 		}
 
@@ -90,7 +90,7 @@ class VCA_ASM_Geography
 				$wpdb->prefix . "vca_asm_geography " .
 				"WHERE id = " . $nat_id . " LIMIT 1", ARRAY_A
 		);
-		$currency = $currency_query[0]['currency_'.$type];
+		$currency = ! empty( $currency_query[0]['currency_'.$type] ) ? $currency_query[0]['currency_'.$type] : ( 'minor_name' === $type ? 'Cent' : 'Euro' );
 
 		return $currency;
 	}
@@ -103,7 +103,8 @@ class VCA_ASM_Geography
 	}
 
 	/**
-	 * Returns the 2-letter ISO 3166-1 code of a geographical unit if fed its ID
+	 * Returns the 2-letter ISO 3166-1 code of a country or
+	 * a somewhat more arbitraty code of any other geographical unit if fed its ID
 	 *
 	 * @param int $id
 	 * @return string $alpha

@@ -18,9 +18,12 @@ function doTheIsotope( eventSelector, eventType, sortOverride ) {
 	sortTerm = $('#sort-by-selector').find('a.active-option').attr('data-sort');
 	sortOrder = $('#sort-by-selector').find('a.active-option').attr('data-order'); */
 
-	partialSelectors['month'] = $('#month-filter-dd').find('option:selected').attr('data-filter');
-	partialSelectors['ctr'] = $('#ctr-filter-dd').find('option:selected').attr('data-filter');
-	partialSelectors['type'] = $('#type-filter-dd').find('option:selected').attr('data-filter');
+	curSelector = $('#month-filter-dd').find('option:selected');
+	partialSelectors['month'] = curSelector.length > 0 ? curSelector.attr('data-filter') : '*';
+	curSelector = $('#ctr-filter-dd').find('option:selected');
+	partialSelectors['ctr'] = curSelector.length > 0 ? curSelector.attr('data-filter') : '*';
+	curSelector = $('#type-filter-dd').find('option:selected');
+	partialSelectors['type'] = curSelector.length > 0 ? curSelector.attr('data-filter') : '*';
 
 	sortTerm = $('#sort-by-selector-dd').find('option:selected').attr('data-sort');
 	sortOrder = $('#sort-order-selector-dd').find('option:selected').attr('data-order');
@@ -37,9 +40,7 @@ function doTheIsotope( eventSelector, eventType, sortOverride ) {
 			}
 		}
 	}
-	if ( '' === selector ) {
-		selector = '*';
-	}
+	selector = '' === selector ? '*': selector;
 
 	$('div.activities-container').isotope({
 		filter: selector,

@@ -117,7 +117,6 @@ class VCA_ASM_Admin_Table {
 	 */
 	public function output() {
 		global $current_user, $vca_asm_geography, $vca_asm_admin;
-		get_currentuserinfo();
 
 		extract( $this->args, EXTR_SKIP );
 		$columns = $this->columns;
@@ -551,6 +550,8 @@ class VCA_ASM_Admin_Table {
 			$name = $row['first_name'];
 		} elseif( ! empty( $row['username'] ) ) {
 			$name = __( 'username', 'vca-asm' ) . ' &quot;' . $row['username'] . '&quot;';
+		} elseif( ! empty( $row['name'] ) ) {
+			$name = $row['name'];
 		} else {
 			$name = __( 'this supporter', 'vca-asm' );
 		}
@@ -802,6 +803,15 @@ class VCA_ASM_Admin_Table {
 				}
 
 				switch( $actions[$i] ) {
+					case 'edit':
+						$output .= '<span class="edit">' .
+							'<a title="' .
+								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
+								'" href="' . $url . '&amp;todo=edit&amp;id=' . $row['id'] . '">' .
+								__( 'Edit', 'vca-asm' ) .
+							'</a></span>';
+					break;
+				
 					case 'edit':
 						$output .= '<span class="edit">' .
 							'<a title="' .

@@ -1480,7 +1480,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 			'headline' => 'Kontingente &amp; Plätze',
 			'title' => sprintf( 'Kontingente für %s', $the_activity->name ),
 			'explanation' => 'Hier wird in Zukunft analog zum Aktivitätsmenü die Verteilung von Plätzen auf Kontingente vorgenommen werden können. (sofern erforderliche Rechte vorhanden sind, versteht sich)',
-			'version' => '1.3.1'
+			'version' => '1.7'
 		));
 		$feech->output();
 	}

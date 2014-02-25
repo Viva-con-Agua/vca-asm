@@ -34,17 +34,7 @@ class VCA_ASM_Admin_Page {
 	private $args = array();
 
 	/**
-	 * PHP4 style constructor
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
-	public function VCA_ASM_Admin_Form( $args = array() ) {
-		$this->__construct( $args = array() );
-	}
-
-	/**
-	 * PHP5 style constructor
+	 * Constructor
 	 *
 	 * @since 1.3
 	 * @access public

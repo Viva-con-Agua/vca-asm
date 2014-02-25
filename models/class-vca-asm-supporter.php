@@ -136,16 +136,6 @@ class VCA_ASM_Supporter {
 	}
 
 	/**
-	 * PHP4 style constructor
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function VcA_ASM_Stats( $supporter_id ) {
-		$this->__construct( $supporter_id );
-	}
-
-	/**
 	 * PHP5 style constructor
 	 *
 	 * @since 1.0

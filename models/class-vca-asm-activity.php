@@ -623,17 +623,7 @@ class VCA_ASM_Activity {
 
 		return get_object_vars( $this );
 	}
-
-	/**
-	 * PHP4 style constructor
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
-	public function VCA_ASM_Activity( $id, $args = array() ) {
-		$this->__construct( $id, $args = array() );
-	}
-
+	
 	/**
 	 * PHP5 style constructor
 	 *

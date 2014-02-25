@@ -523,7 +523,7 @@ class VcA_ASM_Registrations {
 	}
 
 	/**
-	 * Writes an application to database
+	 * Writes an application to the database
 	 *
 	 * @since 1.0
 	 * @access public

@@ -257,9 +257,9 @@ class VCA_ASM_Validation {
 	 * where N is a digit
 	 *
 	 * @since 1.3
-	 * @access private
+	 * @access public
 	 */
-	private function is_date( $input ) {
+	public function is_date( $input ) {
 		$date = explode( '.', $input );
 
 		if (

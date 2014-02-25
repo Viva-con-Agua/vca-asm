@@ -14,7 +14,8 @@
 
 if ( ! class_exists( 'VCA_ASM_Lists' ) ) :
 
-class VCA_ASM_Lists {
+class VCA_ASM_Lists
+{
 
 	/**
 	 * Verifies whether a supporter's profile contains
@@ -23,7 +24,8 @@ class VCA_ASM_Lists {
 	 * @since 1.0
 	 * @access public
 	 */
-	public function verify_profile() {
+	public function verify_profile()
+	{
 		global $current_user;
 	    get_currentuserinfo();
 
@@ -376,8 +378,8 @@ class VCA_ASM_Lists {
 					}
 				}
 
-				if( 'If you wish to send a message with your application' === substr( $_POST['notes'], 0, 51 ) ||
-				   'Wenn du eine Nachricht mit deiner Bewerbung schicken willst' === substr( $_POST['notes'], 0, 59 ) ) {
+				if( 'If you wish to send' === mb_substr( $_POST['notes'], 0, 19 ) ||
+				   'Wenn du eine Nachri' === mb_substr( $_POST['notes'], 0, 19 ) ) {
 					$notes = '';
 				} else {
 					$notes = $_POST['notes'];

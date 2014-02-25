@@ -64,6 +64,7 @@ require_once( VCA_ASM_ABSPATH . '/templates/class-vca-asm-email-html.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-activities.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-cron.php' );
+require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-finances.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-geography.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-lists.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-mailer.php' );
@@ -73,6 +74,7 @@ require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-security.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-utilities.php' );
 /* classes that hold data sets (multiple instances) */
 require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-activity.php' );
+require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-city-finances.php' );
 require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-stats.php' );
 require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-supporter.php' );
 /* foreign code */
@@ -223,6 +225,15 @@ function vca_asm_install() {
 		mail_id int UNSIGNED NOT NULL ,
 		receipients longtext NOT NULL ,
 		total_receipients int UNSIGNED NOT NULL ,
+		UNIQUE KEY id (id)
+	) DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;";
+	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_finances_accounts (
+		UNIQUE KEY id (id)
+	) DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;";
+	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_finances_meta (
+		UNIQUE KEY id (id)
+	) DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;";
+	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_finances_transactions (
 		UNIQUE KEY id (id)
 	) DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;";
 	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_geography (

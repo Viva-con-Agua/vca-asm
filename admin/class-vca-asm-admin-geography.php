@@ -245,13 +245,14 @@ class VCA_ASM_Admin_Geography {
 									'alpha_code' => ( isset( $_POST['alpha_code'] ) && ! empty( $_POST['alpha_code'] ) ) ? $_POST['alpha_code'] : 'xx',
 									'currency_name' => ( isset( $_POST['currency_name'] ) && ! empty( $_POST['currency_name'] ) ) ? $_POST['currency_name'] : '',
 									'currency_code' => ( isset( $_POST['currency_code'] ) && ! empty( $_POST['currency_code'] ) ) ? $_POST['currency_code'] : '',
+									'currency_minor_name' => ( isset( $_POST['currency_minor_name'] ) && ! empty( $_POST['currency_minor_name'] ) ) ? $_POST['currency_minor_name'] : '',
 									'has_user' => $has_user,
 									'user_id' => $region_user_id,
 									'user' => $new_user,
 									'pass' => $new_pass
 								),
 								array( 'id'=> $_GET['id'] ),
-								array( '%s', '%s', '%d', '%s', '%s', '%s', '%d', '%d', '%s', '%s' ),
+								array( '%s', '%s', '%d', '%s', '%s', '%s', '%s', '%d', '%d', '%s', '%s' ),
 								array( '%d' )
 							);
 							$region_id = $_GET['id'];
@@ -421,8 +422,8 @@ class VCA_ASM_Admin_Geography {
 		global $current_user, $vca_asm_geography, $vca_asm_admin;
 		get_currentuserinfo();
 
-		if ( isset( $_GET[ 'tab' ] ) && in_array( $_GET[ 'tab' ], array( 'city', 'cg', 'nation', 'ng' ) ) ) {
-			$active_tab = $_GET[ 'tab' ];
+		if ( isset( $_GET['tab'] ) && in_array( $_GET['tab'], array( 'city', 'cg', 'nation', 'ng' ) ) ) {
+			$active_tab = $_GET['tab'];
 		} elseif ( ! in_array( $active_tab, array( 'city', 'cg', 'nation', 'ng' ) ) ) {
 			$active_tab = 'city';
 		}
@@ -604,9 +605,9 @@ class VCA_ASM_Admin_Geography {
 	 * @since 1.0
 	 * @access public
 	 */
-	public function edit( $args = array() ) {
+	public function edit( $args = array() )
+	{
 		global $current_user, $vca_asm_admin, $vca_asm_geography;
-		get_currentuserinfo();
 
 		$default_args = array(
 			'id' => NULL,
@@ -615,15 +616,15 @@ class VCA_ASM_Admin_Geography {
 		);
 		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
 
-		$url = "admin.php?page=vca-asm-geography";
+		$url = 'admin.php?page=vca-asm-geography';
 		if ( ! empty( $id ) ) {
-			$form_action = $url . "&amp;todo=save&id=" . $id;
+			$form_action = $url . '&todo=save&id=' . $id;
 		} else {
-			$form_action = $url . "&amp;todo=save&type=" . $type;
+			$form_action = $url . '&todo=save&type=' . $type;
 		}
 
 		if( NULL === $id ) {
-			$type = $_GET['type'] ? $_GET['type'] : $type;
+			$type = ! empty( $_GET['type'] ) ? $_GET['type'] : $type;
 			$fields = $this->create_fields( $type );
 			$title = sprintf( __( 'Add New %s', 'vca-asm' ), $vca_asm_geography->convert_type( $type ) );
 		} else {
@@ -729,7 +730,6 @@ class VCA_ASM_Admin_Geography {
 	 */
 	private function create_fields( $type = 'city' ) {
 		global $current_user, $vca_asm_geography;
-		get_currentuserinfo();
 
 		$ccbg_label = '';
 		$ccbg_desc = '';
@@ -823,6 +823,12 @@ class VCA_ASM_Admin_Geography {
 								'label' => __( 'Currency (Code)', 'vca-asm' ),
 								'id' => 'currency_code',
 								'desc' => __( 'The 3-letter code of the local currency (as defined by <a target="_blank" title="Read the standard" href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a>)', 'vca-asm' )
+							),
+							array(
+								'type' => 'text',
+								'label' => __( 'Currency (Minor Unit, Name)', 'vca-asm' ),
+								'id' => 'currency_minor_name',
+								'desc' => __( 'The name of the minor unit of the local currency', 'vca-asm' )
 							)
 						)
 					),
@@ -904,6 +910,12 @@ class VCA_ASM_Admin_Geography {
 									)
 								),
 								'desc' => __( 'Select the type of the region - is it just a city or also a Cell or Local Crew?', 'vca-asm' )
+							),
+							array(
+								'type' => 'text',
+								'label' => __( 'City Code', 'vca-asm' ),
+								'id' => 'alpha_code',
+								'desc' => __( 'A 2- to 3-letter abbreviation for this city. Choose something intuitive, such as a car number plate of the region.', 'vca-asm' )
 							)
 						)
 					)

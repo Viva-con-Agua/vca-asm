@@ -100,8 +100,11 @@ class VCA_ASM_Admin_Form {
 						'&larr; ' . __( 'back', 'vca-asm' ) .
 					'</a>';
 			}
+			if ( $top_button && $has_cap && ! $back ) {
+				$output .= '<br />';
+			}
 			if ( $top_button && $has_cap ) {
-				$output .= $the_button;
+				$output .=  $the_button;
 			}
 			$output .= '<input type="hidden" name="submitted" value="y"/>' .
 					'<input type="hidden" name="edit_val" value="' . $id . '"/>' ;
@@ -214,6 +217,19 @@ class VCA_ASM_Admin_Form {
 				$output .= '<h3>' . $field['label'] . '</h3>';
 			break;
 
+			case 'note':
+				$output .= '<p class="note">' . $field['value'] . '</p>';
+			break;
+
+			case 'note_hidden':
+				$output .= '<p class="note">' . $field['value'] . '</p>' .
+					'<input type="hidden" ' .
+						'name="' . $field['name'] .
+						'" id="' . $field['id'] .
+						'" class="input' .
+						'" value="' . $field['value'] . '" />';
+			break;
+
 			case 'hidden':
 				$output .= '<input type="hidden" ' .
 					'name="' . $field['name'] .
@@ -242,6 +258,39 @@ class VCA_ASM_Admin_Form {
 					$output .= ' disabled="disabled"';
 				}
 				$output .= ' />';
+			break;
+
+			case 'cash_amount':
+				$value_minor = ! empty( $field['value'] ) ? str_pad( abs( $field['value'] % 100 ), 2, '0', STR_PAD_LEFT ) : '';
+				$value_major = ! empty( $field['value'] ) ? floor( abs( $field['value'] / 100 ) ) : '';
+				$output .= '<input type="text"' .
+					'name="' . $field['name'] .
+					'_major" id="' . $field['id'] .
+					'_major" class="input cash-major-text' .
+					'" maxlength="5" size="5';
+				if ( ! empty( $field['class'] ) ) {
+					$output .= ' ' . $field['class'];
+				}
+				$output .= '" value="' . $value_major . '" size="40"';
+				if ( isset( $field['disabled'] ) && $field['disabled'] === true ) {
+					$output .= ' disabled="disabled"';
+				}
+				$output .= ' />';
+				$output .= '&nbsp;' . $field['currency_major'] . '&nbsp;&nbsp;&nbsp;';
+				$output .= '<input type="text"' .
+					'name="' . $field['name'] .
+					'_minor" id="' . $field['id'] .
+					'_minor" class="input cash-minor-text' .
+					'" maxlength="2" size="2';
+				if ( ! empty( $field['class'] ) ) {
+					$output .= ' ' . $field['class'];
+				}
+				$output .= '" value="' . $value_minor . '" size="40"';
+				if ( isset( $field['disabled'] ) && $field['disabled'] === true ) {
+					$output .= ' disabled="disabled"';
+				}
+				$output .= ' />';
+				$output .= '&nbsp;' . $field['currency_minor'];
 			break;
 
 			case 'textarea':
@@ -298,7 +347,6 @@ class VCA_ASM_Admin_Form {
 			break;
 
 			case 'radio':
-
 				if( isset( $field['cols'] ) ) {
 					$cols = $field['cols'];
 				} else {
@@ -445,6 +493,78 @@ class VCA_ASM_Admin_Form {
 				}
 			break;
 
+			case 'date':
+				if( ! empty( $field['value'] ) ) {
+					$field['value'] = intval( $field['value'] );
+					$value = date( 'd.m.Y', $field['value'] );
+					$day_val = date( 'd', $field['value'] );
+					$month_val = date( 'm', $field['value'] );
+					$year_val = date( 'Y', $field['value'] );
+				} else {
+					$value = '';
+					$day_val = date( 'd' );
+					$month_val = date( 'm' );
+					$year_val = date( 'Y' );
+				}
+				$output .= '<input type="text" class="no-js-hide datepicker date';
+				if ( isset( $field['required'] ) ) {
+					$output .= ' required';
+				}
+				$output .= '" name="' . $field['id'] .
+					'" id="' . $field['id'] .
+					'" value="' . $value .
+					'" size="30"';
+				if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
+					$output .= ' disabled="disabled"';
+				}
+				$output .= ' /><select class="day js-hide js-hide" id="' . $field['id'] . '_day" name="' . $field['id'] . '_day"';
+				if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
+					$output .= ' disabled="disabled"';
+				}
+				$output .= '>';
+				for ( $i = 1; $i < 32; $i++ ) {
+					$string = str_pad( $i, 2, '0', STR_PAD_LEFT );
+					$output .= '<option value="' . $string . '"';
+					if ( $day_val === $string ) {
+						$output .= ' selected="selected"';
+					}
+					$output .= '>' .
+							$string . '&nbsp;' .
+						'</option>';
+				}
+				$output .= '</select><select class="months js-hide js-hide" id="' . $field['id'] . '_month" name="' . $field['id'] . '_month"';
+				if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
+					$output .= ' disabled="disabled"';
+				}
+				$output .= '>';
+				for ( $i = 1; $i < 13; $i++ ) {
+					$string = str_pad( $i, 2, '0', STR_PAD_LEFT );
+					$output .= '<option value="' . $string . '"';
+					if ( $month_val === $string ) {
+						$output .= ' selected="selected"';
+					}
+					$output .= '>' .
+							$string . '&nbsp;' .
+						'</option>';
+				}
+				$output .= '</select><select class="year js-hide js-hide" id="' . $field['id'] . '_year" name="' . $field['id'] . '_year"';
+				if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
+					$output .= ' disabled="disabled"';
+				}
+				$output .= '>';
+				for ( $i = 0; $i < 20; $i++ ) {
+					$string = strval( 2012 + $i );
+					$output .= '<option value="' . $string . '"';
+					if ( $year_val === $string ) {
+						$output .= ' selected="selected"';
+					}
+					$output .= '>' .
+							$string . '&nbsp;' .
+						'</option>';
+				}
+				$output .= '</select>';
+			break;
+
 			case 'text':
 			default:
 				$output .= '<input type="text"' .
@@ -459,11 +579,14 @@ class VCA_ASM_Admin_Form {
 					$output .= ' disabled="disabled"';
 				}
 				$output .= ' />';
+				if ( ! empty( $field['unit'] ) ) {
+					$output .= '&nbsp;' . $field['unit'];
+				}
 			break;
 		} // type switch
 
 		if( isset( $field['desc'] ) && ! empty( $field['desc'] ) ) {
-			if ( ! in_array( $field['type'], array( 'hidden', 'checkbox_group', 'checkbox-group', 'radio' ) ) ) {
+			if ( ! in_array( $field['type'], array( 'hidden', 'checkbox_group', 'checkbox-group', 'radio', 'note', 'note_hidden' ) ) ) {
 				$output .= '<br />';
 			}
 			$output .= '<span class="description">' . $field['desc'] . '</span>';
