@@ -80,6 +80,9 @@ class VCA_ASM_Frontend_Activities {
 				if ( isset( $_GET['mnth'] ) && is_numeric( $_GET['mnth'] ) ) {
 					$mnth_filter = $_GET['mnth'];
 					$mnth_qs = '&mnth=' . $mnth_filter;
+				} else {
+					$mnth_filter = date( 'n' );
+					$mnth_qs = '&mnth=' . $mnth_filter;
 				}
 				if ( isset( $_GET['ctr'] ) && is_numeric( $_GET['ctr'] ) ) {
 					$nat_filter = $_GET['ctr'];
@@ -127,6 +130,11 @@ class VCA_ASM_Frontend_Activities {
 			if ( ! isset( $nat_filter ) || ! in_array( $nat_filter, $this->nations ) ) {
 				$nat_filter = 0;
 				$nat_qs = '&ctr=' . $nat_filter;
+			}
+
+			if ( ! isset( $mnth_filter ) || ! in_array( $mnth_filter, $this->months ) ) {
+				$mnth_filter = 0;
+				$mnth_qs = '&mnth=' . $mnth_filter;
 			}
 
 			$output = '';
@@ -189,11 +197,11 @@ class VCA_ASM_Frontend_Activities {
 
 								if ( strftime( '%e.%m.%Y', $the_activity->start_act ) === strftime( '%e.%m.%Y', $the_activity->end_act ) ) {
 									$output .= $start_act_string .
-										' ' . __( 'until', 'vca-theme' ) . ' ' .
+										' ' . __( 'until', 'vca-asm' ) . ' ' .
 										strftime( '%H:%M', $the_activity->end_act );
 								} else {
 									$output .= $start_act_string .
-										' ' . __( 'until', 'vca-theme' ) . ' ' .
+										' ' . __( 'until', 'vca-asm' ) . ' ' .
 										$end_act_string;
 								}
 
@@ -231,28 +239,28 @@ class VCA_ASM_Frontend_Activities {
 					if( ! empty( $tools_enc ) ) {
 						$tools = array();
 						if( in_array( '1', $tools_enc ) ) {
-							$tools[] = _x( 'Cups', 'VcA Tools', 'vca-theme' );
+							$tools[] = _x( 'Cups', 'VcA Tools', 'vca-asm' );
 						}
 						if( in_array( '2', $tools_enc ) ) {
-							$tools[] = _x( 'Guest List', 'VcA Tools', 'vca-theme' );
+							$tools[] = _x( 'Guest List', 'VcA Tools', 'vca-asm' );
 						}
 						if( in_array( '3', $tools_enc ) ) {
-							$tools[] = _x( 'Info Counter', 'VcA Tools', 'vca-theme' );
+							$tools[] = _x( 'Info Counter', 'VcA Tools', 'vca-asm' );
 						}
 						if( in_array( '4', $tools_enc ) ) {
-							$tools[] = _x( 'Water Bottles', 'VcA Tools', 'vca-theme' );
+							$tools[] = _x( 'Water Bottles', 'VcA Tools', 'vca-asm' );
 						}
 						if( in_array( '5', $tools_enc ) ) {
 							if( isset( $special_desc ) && ! empty( $special_desc ) ) {
 								$tools[] = $special_desc;
 							} else {
-								$tools[] = _x( 'Special', 'VcA Tools', 'vca-theme' );
+								$tools[] = _x( 'Special', 'VcA Tools', 'vca-asm' );
 							}
 						}
 						$tools = implode( ', ', $tools );
 
 						$subput .= '<tr>' .
-								'<td><p class="label">' . __( 'VcA Activities', 'vca-theme' ) . '</p>' .
+								'<td><p class="label">' . __( 'VcA Activities', 'vca-asm' ) . '</p>' .
 								'<p class="metadata">' .
 									$tools .
 								'</p></td>' .
@@ -262,7 +270,7 @@ class VCA_ASM_Frontend_Activities {
 					$site = get_post_meta( get_the_ID(), 'website', true );
 					if ( ! empty( $site ) ) {
 						$subput .= '<tr>' .
-								'<td><p class="label">' . __( 'Website', 'vca-theme' ) . '</p>' .
+								'<td><p class="label">' . __( 'Website', 'vca-asm' ) . '</p>' .
 								'<p class="metadata">' .
 									$vca_asm_utilities->urls_to_links( $site ) .
 								'</p></td>' .
@@ -272,7 +280,7 @@ class VCA_ASM_Frontend_Activities {
 					$directions = get_post_meta( get_the_ID(), 'directions', true );
 					if ( ! empty( $directions ) ) {
 						$subput .= '<tr>' .
-								'<td><p class="label">' . __( 'Directions', 'vca-theme' ) . '</p>' .
+								'<td><p class="label">' . __( 'Directions', 'vca-asm' ) . '</p>' .
 								'<p class="metadata">' .
 									preg_replace( '#(<br */?>\s*){2,}#i', '<br><br>' , preg_replace( '/[\r|\n]/', '<br>' , $vca_asm_utilities->urls_to_links( $directions ) ) ) .
 								'</p></td>' .
@@ -282,7 +290,7 @@ class VCA_ASM_Frontend_Activities {
 					$notes = get_post_meta( get_the_ID(), 'notes', true );
 					if ( ! empty( $notes ) ) {
 						$subput .= '<tr>' .
-								'<td><p class="label">' . __( 'additional Notes', 'vca-theme' ) . '</p>' .
+								'<td><p class="label">' . __( 'additional Notes', 'vca-asm' ) . '</p>' .
 								'<p class="metadata">' .
 									preg_replace( '#(<br */?>\s*){2,}#i', '<br><br>' , preg_replace( '/[\r|\n]/', '<br>' , $vca_asm_utilities->urls_to_links( $notes ) ) ) .
 								'</p></td>' .
@@ -290,7 +298,7 @@ class VCA_ASM_Frontend_Activities {
 					}
 
 					if ( ! empty( $subput ) ) {
-						$output .= '<h5>' . __( 'Further Info', 'vca-theme' ) . '</h5>' .
+						$output .= '<h5>' . __( 'Further Info', 'vca-asm' ) . '</h5>' .
 							'<table class="meta-table">' . $subput . '</table>';
 						$subput = '';
 					}
@@ -329,7 +337,7 @@ class VCA_ASM_Frontend_Activities {
 							'<div class="form-row">' .
 								'<input type="submit" id="submit_form" name="submit_form" value="' . __( 'Revoke Application', 'vca-asm' ) . '" />' .
 							'</div></form>';
-							
+
 					}
 
 					$output .= '</div></div><div class="toggle-arrows-wrap">' .
@@ -423,7 +431,7 @@ class VCA_ASM_Frontend_Activities {
 						'<h4><a title="' . __( 'Give me more information!', 'vca-asm' ) . '" href="' . get_permalink() . '">' . get_the_title() . '</a></h4>' .
 						'<p class="type">' . $the_activity->nice_type . '</p>' .
 						'<p class="no-margin">' .
-							strftime( '%B %Y', intval( get_post_meta( get_the_ID(), 'start_date', true ) ) ) .
+							strftime( '%B %Y', intval( get_post_meta( get_the_ID(), 'start_act', true ) ) ) .
 						'</p>' .
 
 					'</li>';

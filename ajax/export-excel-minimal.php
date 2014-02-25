@@ -6,9 +6,26 @@ global $wpdb, $vca_asm_geography, $vca_asm_registrations, $vca_asm_utilities;
 
 $id = $_GET['activity'];
 $title = str_replace( ' ', '_', get_the_title( $id ) );
+
+$start_act = get_post_meta( $id, 'start_act', true );
 $end_act = get_post_meta( $id, 'end_act', true );
-$year = date( 'Y', $end_act );
-$filename = __( 'Participant_Data', 'vca-asm' ) . '_' . $title . '_' . $year . '.xls';
+$act_date = date( 'd-m-Y', $start_act );
+
+$act_city = get_post_meta( $id, 'city', true );
+$act_nation = get_post_meta( $id, 'nation', true );
+$delegation = get_post_meta( $id, 'delegate', true );
+
+$filename = __( 'Participant_Data', 'vca-asm' ) . '_' . $title . '_' . $act_date;
+if (
+	( in_array( 'city', $current_user->roles ) || in_array( 'head_of', $current_user->roles ) )
+	&&
+	'delegate' === $delegation
+	&&
+	! empty( $act_city )
+) {
+	$filename .= '_' . str_replace( ' ', '-', $vca_asm_geography->get_type( $act_city ) ) . '-' . $vca_asm_geography->get_name( $act_city );
+}
+$filename .= '.xls';
 
 $xls = new ExportXLS( $filename );
 
@@ -65,7 +82,7 @@ foreach( $registered_supporters as $supporter ) {
 		$rows[$i] = array(
 			$supp_info->first_name,
 			$supp_info->last_name,
-			$vca_asm_geography->get_name( get_user_meta( $supporter, 'region', true ) ),
+			$vca_asm_geography->get_name( get_user_meta( $supporter, 'city', true ) ),
 			$supp_info->user_email
 		);
 	} else {

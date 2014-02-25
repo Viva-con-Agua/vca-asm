@@ -14,6 +14,13 @@ if ( ! class_exists( 'VcA_ASM_Utilities' ) ) :
 class VcA_ASM_Utilities {
 
 	/**
+	 * Class Properties
+	 *
+	 * @since 1.3
+	 */
+	private $sort_key = '';
+
+	/**
 	 * Calculates age,
 	 * i.e. the difference between two Unix Timestamps
 	 *
@@ -102,6 +109,12 @@ class VcA_ASM_Utilities {
 			$string = __( 'has applied...', 'vca-asm' );
 		} elseif( $string == 2 ) {
 			$string = __( 'Active Member', 'vca-asm' );
+		} elseif ( $string === 'Switzerland' ) {
+			$string = __( 'Switzerland', 'vca-asm' );
+		} elseif ( $string === 'Germany' ) {
+			$string = __( 'Germany', 'vca-asm' );
+		} elseif ( $string === 'Austria' ) {
+			$string = __( 'Austria', 'vca-asm' );
 		} elseif( empty( $string ) ) {
 			$string = __( 'not set', 'vca-asm' );
 		}
@@ -190,8 +203,7 @@ class VcA_ASM_Utilities {
 	 * @access public
 	 */
 	public function sort_by_key( $arr, $key, $order = 'ASC' ) {
-	    global $vca_asm_key2sort;
-		$vca_asm_key2sort = $key;
+		$this->sort_key = $key;
 		if( $order == 'DESC' ) {
 			usort( $arr, array(&$this, 'sbk_cmp_desc') );
 		} else {
@@ -200,14 +212,12 @@ class VcA_ASM_Utilities {
 		return ( $arr );
 	}
 	private function sbk_cmp_asc( $a, $b ) {
-		global $vca_asm_key2sort;
 		$encoding = mb_internal_encoding();
-		return strcmp( mb_strtolower( $a[$vca_asm_key2sort], $encoding ), mb_strtolower( $b[$vca_asm_key2sort], $encoding ) );
+		return strcmp( mb_strtolower( $a[$this->sort_key], $encoding ), mb_strtolower( $b[$this->sort_key], $encoding ) );
 	}
 	private function sbk_cmp_desc( $b, $a ) {
-		global $vca_asm_key2sort;
 		$encoding = mb_internal_encoding();
-		return strcmp( mb_strtolower( $a[$vca_asm_key2sort], $encoding ), mb_strtolower( $b[$vca_asm_key2sort], $encoding ) );
+		return strcmp( mb_strtolower( $a[$this->sort_key], $encoding ), mb_strtolower( $b[$this->sort_key], $encoding ) );
 	}
 
 	/**

@@ -60,7 +60,7 @@ class VCA_ASM_Admin_Form {
 		$this->args = wp_parse_args( $args, $this->default_args );
 
 		if ( true === $this->args['js'] ) {
-			add_action( 'admin_enqueue_scripts', wp_enqueue_script( 'postbox' ) );
+			wp_enqueue_script( 'postbox' );
 			add_action( 'admin_footer', array( $this, 'print_script' ) );
 		}
 	}
@@ -358,7 +358,9 @@ class VCA_ASM_Admin_Form {
 				}
 
 				if ( isset( $field['extra'] ) && 'bulk_deselect' === $field['extra'] ) {
-					$output .= '<input type="submit" name="" class="button-secondary bulk-deselect" value="' .
+					$default_btn = isset( $this->args['button'] ) ? $this->args['button'] : __( 'Save', 'vca-asm' );
+					$output .= '<input type="submit" class="button-primary default-button" name="submit" value="' . $default_btn . '">' .
+						'<input type="submit" name="" class="button-secondary bulk-deselect" value="' .
 								__( 'Deselect all', 'vca-asm' ) . '" /><br />';
 				}
 			break;

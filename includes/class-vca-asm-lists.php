@@ -31,14 +31,16 @@ class VCA_ASM_Lists {
 		$nation = get_user_meta( $current_user->ID, 'nation', true );
 		$mobile = get_user_meta( $current_user->ID, 'mobile', true );
 
-		if( ! empty( $current_user->user_firstname ) &&
+		if (
+			! empty( $current_user->user_firstname ) &&
 			! empty( $current_user->user_lastname ) &&
 			! empty( $mobile ) &&
 			$birthday !== '' &&
-			! empty( $nation ) ) {
+			( ! empty( $nation ) || 0 === $nation || '0' === $nation )
+		) {
 			return true;
 		} else {
-			return __( "In order to be able to register for activities, you should at least have filled out first- and lastname, your mobile phone and birthday, as well as selected a country in your user profile.", 'vca-asm' );
+			return __( "In order to be able to register for activities, you should at least have filled out first- and lastname, your mobile phone and date of birth, as well as selected a country in your user profile.", 'vca-asm' );
 		}
 	}
 
@@ -85,7 +87,7 @@ class VCA_ASM_Lists {
 				),
 				array(
 					'key' => 'end_app',
-					'value' => time() - 86400,
+					'value' => time() - 60*60*22,
 					'compare' => '>=',
 					'type' => 'numeric'
 				)

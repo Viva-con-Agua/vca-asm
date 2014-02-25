@@ -97,7 +97,7 @@ if ( ! empty( $rows ) ) {
 					__( 'ID Card', 'vca-asm' ) .
 				'</a>' .
 			'</span>';
-		if( 'waiting' === $list_type ) {
+		if( isset( $list_type ) && 'waiting' === $list_type ) {
 			$accept_title = sprintf( __( 'Accept the application retrospectively and move %s to the participants', 'vca-asm' ), $name );
 		} else {
 			$accept_title = sprintf( __( 'Accept the application by %s', 'vca-asm' ), $name );

@@ -91,7 +91,7 @@ class VCA_ASM_Admin_Home {
 		get_currentuserinfo();
 
 		$stats = new VCA_ASM_Stats();
-		$admin_region = get_user_meta( $current_user->ID, 'region', true );
+		$admin_region = get_user_meta( $current_user->ID, 'city', true );
 		$admin_region_name = $vca_asm_geography->get_name( $admin_region );
 		$admin_region_status = $vca_asm_geography->get_status( $admin_region );
 

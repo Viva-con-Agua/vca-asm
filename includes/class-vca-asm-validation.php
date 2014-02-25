@@ -90,7 +90,7 @@ class VCA_ASM_Validation {
 				if ( false === $sanitized ) {
 					$this->has_errors = true;
 					if ( ! in_array( 'date_time', $this->errors ) ) {
-						$this->errors[] = $type;
+						$this->errors[] = 'date_time';
 					}
 					$this->erroneous_fields[] = $id;
 					$sanitized = time();
@@ -285,7 +285,7 @@ class VCA_ASM_Validation {
 	 * @access public
 	 */
 	public function VCA_ASM_Validation() {
-
+		$this->__construct();
 	}
 
 	/**

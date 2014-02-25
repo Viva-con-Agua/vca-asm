@@ -5,22 +5,25 @@
  *
  **/
 
-if( empty( $message ) ) {
+if ( empty( $message ) ) {
 	$html_message = '<p>&nbsp;</p>';
 } else {
 	$html_message = $message;
 }
-if( ! isset( $mpart_message ) ) {
+if ( ! isset( $mpart_message ) ) {
 	$mpart_message = '';
 }
-if( ! isset( $subject ) ) {
+if ( ! isset( $subject ) ) {
 	$subject = 'Newsletter';
 }
-if( ! isset( $from_name ) ) {
+if ( ! isset( $from_name ) ) {
 	$from_name = '?';
 }
-if( ! isset( $time ) ) {
+if ( ! isset( $time ) ) {
 	$time = time();
+}
+if ( ! isset( $mail_nation ) || ! is_string( $mail_nation ) || ! in_array( $mail_nation, array( 'ch', 'at' ) ) ) {
+	$mail_nation = 'de';
 }
 if( 2 == $membership ) {
 	if ( 'region' == $receipient_group ) {
@@ -59,6 +62,27 @@ if( ! isset( $append ) ) {
 }
 $lf = "\n";
 $eol = "\r\n";
+
+switch ( $mail_nation ) {
+	case 'ch':
+		$logo = 'logo-ch@2x.gif';
+		$link_url = 'http://' . _x( 'vivaconagua.ch', 'utility translation', 'vca-asm' );
+		$organization_title = __( 'Viva con Agua Switzerland', 'vca-asm' );
+	break;
+
+	case 'at':
+		$logo = 'logo@2x.gif';
+		$link_url = 'http://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
+		$organization_title = __( 'Viva con Agua de Sankt Pauli e.V.', 'vca-asm' );
+	break;
+
+	case 'de':
+	default:
+		$logo = 'logo@2x.gif';
+		$link_url = 'http://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
+		$organization_title = __( 'Viva con Agua de Sankt Pauli e.V.', 'vca-asm' );
+	break;
+}
 
 $mpart_message .=  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' .$lf .
 	'<html style="width:100% !important;height:100% !important;">' .$lf .
@@ -204,7 +228,7 @@ $mpart_message .=  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//E
 			'<h1 style="display:block;color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-weight:bold;font-size:30px;line-height:1;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;"><span style="font-family:\'Gill Sans Condensed\',\'Gill Sans MT Condensed\',\'Gill Sans\',\'Gill Sans MT\',Verdana,Helvetica,Arial,sans-serif;"><img alt="NEWS" src="' . get_option( 'siteurl' ) . '/email_assets/news-logo@2x.gif" align="middle" style="border:0;height:auto;line-height:100%;outline:none;text-decoration:none;margin-top:0;margin-right:auto;margin-bottom:0;margin-left:auto;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;display:block;vertical-align:middle;" height="36" width="153"></span></h1>' .
 		'</td>' .
 		'<td class="header-right mobile-legacy-hide" width="33%" valign="baseline" style="width:33%;text-align:right;padding-top:21px;padding-right:21px;padding-bottom:16px;padding-left:0;border-collapse:collapse;vertical-align:baseline;">' .
-			'<a title="' . __( 'Visit the Viva con Agua website', 'vca-asm' ) . '" href="http://' . __( 'vivaconagua.org', 'vca-asm' ) . '"><h1 style="display:block;color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-weight:bold;font-size:42px;line-height:1;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;"><span style="font-family:\'Gill Sans Condensed\',\'Gill Sans MT Condensed\',\'Gill Sans\',\'Gill Sans MT\',Verdana,Helvetica,Arial,sans-serif;"><img alt="VcA" src="' . get_option( 'siteurl' ) . '/email_assets/logo@2x.gif" align="right" style="border:0;height:auto;line-height:100%;outline:none;text-decoration:none;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;display:block;" height="79" width="153"></span></h1></a>' .
+			'<a title="' . __( 'Visit the Viva con Agua website', 'vca-asm' ) . '" href="' . $link_url . '"><h1 style="display:block;color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-weight:bold;font-size:42px;line-height:1;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;"><span style="font-family:\'Gill Sans Condensed\',\'Gill Sans MT Condensed\',\'Gill Sans\',\'Gill Sans MT\',Verdana,Helvetica,Arial,sans-serif;"><img alt="VcA" src="' . get_option( 'siteurl' ) . '/email_assets/' . $logo . '" align="right" style="border:0;height:auto;line-height:100%;outline:none;text-decoration:none;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;display:block;" height="79" width="153"></span></h1></a>' .
 		'</td>' .
 		'</tr>' .
 		'</tbody></table>' .
@@ -230,7 +254,7 @@ $mpart_message .=  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//E
 		'<tr>' . $lf .
 		'<td valign="bottom" align="center" bgcolor="#00A8CF" style="background-color:#00a8cf;text-align:center;border-collapse:collapse;vertical-align:bottom;" class="footer">' .
 		'<div style="width:100%;height:auto;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-align:center;background:-moz-linear-gradient(top, #00a8cf 0%, #008fc1 100%);background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#00a8cf), color-stop(100%,#008fc1));background:-webkit-linear-gradient(top, #00a8cf 0%,#008fc1 100%);background:-o-linear-gradient(top, #00a8cf 0%,#008fc1 100%);background:-ms-linear-gradient(top, #00a8cf 0%,#008fc1 100%);background: linear-gradient(to bottom, #00a8cf 0%,#008fc1 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=\'#00a8cf\',endColorstr=\'#008fc1\',GradientType=0 );">' .
-		'<p style="color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-size:14px;line-height:1;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:21px;padding-right:21px;padding-bottom:21px;padding-left:21px;"><a title="' . __( 'Visit the Viva con Agua website', 'vca-asm' ) . '" href="http://' . __( 'vivaconagua.org', 'vca-asm' ) . '" style="color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-size:14px;line-height:1;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;"><span style="color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-size:14px;line-height:1;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;"><span style="font-family:\'Gill Sans Condensed\',\'Gill Sans MT Condensed\',\'Gill Sans\',\'Gill Sans MT\',Verdana,Helvetica,Arial,sans-serif;">Viva con Agua de Sankt Pauli e.V.</span></a></span></p>' .
+		'<p style="color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-size:14px;line-height:1;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:21px;padding-right:21px;padding-bottom:21px;padding-left:21px;"><a title="' . __( 'Visit the Viva con Agua website', 'vca-asm' ) . '" href="' . $link_url . '" style="color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-size:14px;line-height:1;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;"><span style="color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-size:14px;line-height:1;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;"><span style="font-family:\'Gill Sans Condensed\',\'Gill Sans MT Condensed\',\'Gill Sans\',\'Gill Sans MT\',Verdana,Helvetica,Arial,sans-serif;">' . $organization_title . '</span></a></span></p>' .
 		'</div>' .
 		'</td>' . $lf .
 		'</tr>' . $lf .

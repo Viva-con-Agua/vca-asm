@@ -196,9 +196,6 @@ class VCA_ASM_Roles {
 			'watchdog_national' => _x( 'Watchdog', 'Role Names', 'vca-asm' ) . ' (' . _x( 'national', 'Role Scope', 'vca-asm' ) . ')',
 			'watchdog_global' => _x( 'Watchdog', 'Role Names', 'vca-asm' ) . ' (' . _x( 'global', 'Role Scope', 'vca-asm' ) . ')'
 		);
-
-		//add_action( 'init', array( &$this, 'translatable_role_names'), 1 );
-		//add_filter( 'option_wp_user_roles', array( &$this, 'translatable_role_names'), 11 );
 	}
 
 } // class

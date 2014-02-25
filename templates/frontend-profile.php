@@ -88,7 +88,18 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 
 				foreach ($field['options'] as $option) {
 					echo '<option';
-					if( $field['value'] === $option['value'] ) {
+					if(
+						$field['value'] === $option['value']
+						||
+						(
+							/* this is shit! (but works) */
+							( $field['value'] === 0 || $field['value'] === '0' )
+							&&
+							( $option['value'] === 0 || $option['value'] === '0' )
+							&&
+							$field['value'] == $option['value']
+						)
+					) {
 						echo ' selected="selected"';
 					}
 					if( isset( $option['class'] ) && ! empty( $option['class'] ) ) {

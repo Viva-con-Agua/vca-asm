@@ -5,9 +5,8 @@
  *
  * This class contains properties and methods to
  * update the data structure of the Pool
- * from Version 1.2 to 1.3
  *
- * Could be reused for any further major structural updates
+ * This is subject to constant change
  *
  * @package VcA Activity & Supporter Management
  * @since 1.3
@@ -48,22 +47,59 @@ class VCA_ASM_Admin_Update {
 		if ( isset( $_GET['todo'] ) && 'update' === $_GET['todo'] ) {
 			$updated = true;
 
-			//$users = get_users();
-			//
-			//foreach ( $users as $user ) {
-			//	if( 1 !== $user->ID ) {
-			//	$residence = get_user_meta( $user->ID, 'city', true );
-			//	$city = get_user_meta( $user->ID, 'region', true );
-			//	update_user_meta( $user->ID, 'residence', $residence );
-			//	update_user_meta( $user->ID, 'city', $city );
-			//	$nation = $vca_asm_geography->has_nation( $city );
-			//	if ( $nation ) {
-			//		update_user_meta( $user->ID, 'nation', $nation );
-			//	} else {
-			//		update_user_meta( $user->ID, 'nation', 0 );
-			//	}
-			//	}
+			$users = get_users();
+
+			//$cities = $vca_asm_geography->get_all( 'name', 'ASC', 'city' );
+			//$cts = array();
+			//foreach ( $cities as $ct ) {
+			//	$cts[] = $ct['id'];
 			//}
+			//$nations = $vca_asm_geography->get_all( 'name', 'ASC', 'nation' );
+			//$nts = array();
+			//foreach ( $nations as $nt ) {
+			//	$nts[] = $nt['id'];
+			//}
+
+			$cases = 0;
+			$cases2 = 0;
+			$vals = array();
+			$vals2 = array();
+
+			foreach ( $users as $user ) {
+				$city = get_user_meta( $user->ID, 'city', true );
+				$region = get_user_meta( $user->ID, 'region', true );
+				$nation = get_user_meta( $user->ID, 'nation', true );
+				$supp_fname = get_user_meta( $user->ID, 'first_name', true );
+				$supp_lname = get_user_meta( $user->ID, 'last_name', true );
+
+				if ( empty( $supp_fname ) || empty( $supp_lname ) ) {
+					//update_user_meta( $user->ID, 'nation', NULL );
+					//update_user_meta( $user->ID, 'city', 0 );
+					//update_user_meta( $user->ID, 'region', 0 );
+					//update_user_meta( $user->ID, 'membership', 0 );
+					$cases++;
+				}
+				if ( empty( $nation ) && 0 !== $nation && '0' !== $nation ) {
+					//update_user_meta( $user->ID, 'nation', NULL );
+					$cases2++;
+				}
+			}
+
+			print '<pre>$cases = '
+    . htmlspecialchars( print_r( $cases, TRUE ), ENT_QUOTES, 'utf-8', FALSE )
+    . "</pre>\n";
+
+			print '<pre>$cases2 = '
+    . htmlspecialchars( print_r( $cases2, TRUE ), ENT_QUOTES, 'utf-8', FALSE )
+    . "</pre>\n";
+
+			print '<pre>$vals = '
+    . htmlspecialchars( print_r( $vals, TRUE ), ENT_QUOTES, 'utf-8', FALSE )
+    . "</pre>\n";
+
+			print '<pre>$vals2 = '
+    . htmlspecialchars( print_r( $vals2, TRUE ), ENT_QUOTES, 'utf-8', FALSE )
+    . "</pre>\n";
 
 			//$activities = get_posts(
 			//	array(
@@ -108,7 +144,7 @@ class VCA_ASM_Admin_Update {
 			$messages = array(
 				array(
 					'type' => 'message-pa',
-					'message' => 'Updated.'
+					'message' => 'Updated ' . $cases . ' Data Sets.'
 				)
 			);
 			echo $vca_asm_admin->convert_messages( $messages );

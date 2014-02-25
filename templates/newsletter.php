@@ -22,6 +22,9 @@ if( ! isset( $from_name ) ) {
 if( ! isset( $time ) ) {
 	$time = time();
 }
+if ( ! isset( $mail_nation ) || ! is_string( $mail_nation ) || ! in_array( $mail_nation, array( 'ch', 'at' ) ) ) {
+	$mail_nation = 'de';
+}
 if( 2 == $membership ) {
 	if ( 'region' == $receipient_group ) {
 		global $vca_asm_regions;
@@ -59,6 +62,24 @@ if( ! isset( $append ) ) {
 }
 $lf = "\n";
 $eol = "\r\n";
+
+switch ( $mail_nation ) {
+	case 'ch':
+		$link_url = 'http://' . _x( 'vivaconagua.ch', 'utility translation', 'vca-asm' );
+		$organization_title = __( 'Viva con Agua Switzerland', 'vca-asm' );
+	break;
+
+	case 'at':
+		$link_url = 'http://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
+		$organization_title = __( 'Viva con Agua de Sankt Pauli e.V.', 'vca-asm' );
+	break;
+
+	case 'de':
+	default:
+		$link_url = 'http://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
+		$organization_title = __( 'Viva con Agua de Sankt Pauli e.V.', 'vca-asm' );
+	break;
+}
 
 $mpart_message .=  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">' .$lf .
 	'<html style="width:100% !important;height:100% !important;">' .$lf .
@@ -223,7 +244,7 @@ $mpart_message .=  '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//E
 		'<tr>' . $lf .
 		'<td valign="bottom" align="center" bgcolor="#00A8CF" style="background-color:#00a8cf;text-align:center;border-collapse:collapse;vertical-align:bottom;" class="footer">' .
 		'<div style="width:100%;height:auto;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-align:center;background:-moz-linear-gradient(top, #00a8cf 0%, #008fc1 100%);background:-webkit-gradient(linear, left top, left bottom, color-stop(0%,#00a8cf), color-stop(100%,#008fc1));background:-webkit-linear-gradient(top, #00a8cf 0%,#008fc1 100%);background:-o-linear-gradient(top, #00a8cf 0%,#008fc1 100%);background:-ms-linear-gradient(top, #00a8cf 0%,#008fc1 100%);background: linear-gradient(to bottom, #00a8cf 0%,#008fc1 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=\'#00a8cf\',endColorstr=\'#008fc1\',GradientType=0 );">' .
-		'<p style="color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-size:14px;line-height:1;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:21px;padding-right:21px;padding-bottom:21px;padding-left:21px;"><a title="' . __( 'Visit the Viva con Agua website', 'vca-asm' ) . '" href="http://' . __( 'vivaconagua.org', 'vca-asm' ) . '" style="color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-size:14px;line-height:1;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;"><span style="color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-size:14px;line-height:1;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;"><span style="font-family:\'Gill Sans Condensed\',\'Gill Sans MT Condensed\',\'Gill Sans\',\'Gill Sans MT\',Verdana,Helvetica,Arial,sans-serif;">Viva con Agua de Sankt Pauli e.V.</span></a></span></p>' .
+		'<p style="color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-size:14px;line-height:1;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:21px;padding-right:21px;padding-bottom:21px;padding-left:21px;"><a title="' . __( 'Visit the Viva con Agua website', 'vca-asm' ) . '" href="' . $link_url . '" style="color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-size:14px;line-height:1;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;"><span style="color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-size:14px;line-height:1;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;"><span style="font-family:\'Gill Sans Condensed\',\'Gill Sans MT Condensed\',\'Gill Sans\',\'Gill Sans MT\',Verdana,Helvetica,Arial,sans-serif;">' . $organization_title . '</span></a></span></p>' .
 		'</div>' .
 		'</td>' . $lf .
 		'</tr>' . $lf .

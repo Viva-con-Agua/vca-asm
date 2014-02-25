@@ -34,6 +34,7 @@ class VCA_ASM_Supporter {
 	public $birthday_combined = '';
 	public $email = '';
 	public $gender = '';
+	public $residence = '';
 	public $last_activity = '';
 	public $membership_id = 0;
 	public $membership = '';
@@ -45,7 +46,7 @@ class VCA_ASM_Supporter {
 	public $city_id = '';
 	public $nation = '';
 	public $nation_id = '';
-	
+
 	public $registration_date = '';
 	public $role_slug = '';
 	public $role = '';
@@ -81,7 +82,7 @@ class VCA_ASM_Supporter {
 	public function gather_meta( $supporter_id ) {
 		global $wpdb, $wp_roles, $vca_asm_geography, $vca_asm_utilities;
 
-		$supp_region = get_user_meta( $supporter_id, 'region', true );
+		$supp_region = get_user_meta( $supporter_id, 'city', true );
 		$supp_nation = get_user_meta( $supporter_id, 'nation', true );
 		$supp_bday = get_user_meta( $supporter_id, 'birthday', true );
 		$supp_age = ! empty( $supp_bday ) ? $vca_asm_utilities->date_diff( time(), intval( $supp_bday ) ) : array( 'year' => __( 'not set', 'vca-asm' ) );
@@ -118,6 +119,7 @@ class VCA_ASM_Supporter {
 							get_user_meta( $supporter_id, 'mobile', true ),
 							array( 'nice' => true, 'nat_id' => $supp_nation ? $supp_nation : 0 )
 						);
+		$this->residence = get_user_meta( $supporter_id, 'residence', true );
 		$this->region = ! empty( $supp_region ) ? $vca_asm_geography->get_name( $supp_region ) : __( 'not set', 'vca-asm' );
 		$this->region_id = intval( $supp_region );
 		$this->city = $this->region;

@@ -140,7 +140,9 @@ class VCA_ASM_Mailer {
 	 * @access public
 	 */
 	public function send( $receipient, $subject, $message, $from_name = NULL, $from_email = NULL, $content_type = NULL, $save = false, $membership = 0, $receipient_group = 'all', $receipient_id = 0, $type = 'manual' ) {
-		global $wpdb;
+
+		global $current_user, $wpdb, $vca_asm_geography;
+
 		$save_message = trim ( $message );
 		$message = wordwrap( $save_message, 70 );
 
@@ -216,11 +218,15 @@ class VCA_ASM_Mailer {
 				"Content-Transfer-Encoding: 8bit" . $lf . $lf;
 
 			if ( $type === 'auto' ) {
+				$mail_nation = $vca_asm_geography->get_alpha_code( get_user_meta( email_exists( $to ), 'nation', true ) );
 				require( VCA_ASM_ABSPATH . '/templates/notifications.php' );
-			} elseif ( $type === 'imageless' ) {
-				require( VCA_ASM_ABSPATH . '/templates/newsletter.php' );
 			} else {
-				require( VCA_ASM_ABSPATH . '/templates/newsletter-with-images.php' );
+				$mail_nation = $vca_asm_geography->get_alpha_code( get_user_meta( $current_user->ID, 'nation', true ) );
+				if ( $type === 'imageless' ) {
+					require( VCA_ASM_ABSPATH . '/templates/newsletter.php' );
+				} else {
+					require( VCA_ASM_ABSPATH . '/templates/newsletter-with-images.php' );
+				}
 			}
 
 			$mpart_message .= $lf . $lf ."--" . $mime_boundary_alt . "--" . $lf . $lf . $lf .
@@ -238,7 +244,7 @@ class VCA_ASM_Mailer {
 			$hs .= $header . $eol;
 		}
 		$headers = $hs . $eol. $eol . $eol;
-		global $current_user;
+
 		ini_set( 'sendmail_from', $from_email );
 
 		$total_count = 0;
@@ -248,6 +254,7 @@ class VCA_ASM_Mailer {
 			if( ! empty( $to ) ) {
 				$user_id = email_exists( $to );
 				if( $user_id ) {
+					$user_obj = new WP_User( $user_id );
 					$first_name = get_user_meta( $user_id, 'first_name', true );
 					$last_name = get_user_meta( $user_id, 'last_name', true );
 					if( ! empty( $first_name ) && ! empty( $last_name ) ) {
@@ -257,20 +264,22 @@ class VCA_ASM_Mailer {
 					} elseif( ! empty( $last_name ) ) {
 						$to = $last_name . " <" . $to . ">";
 					}
-				}
-				if ( 1 !== $current_user->ID && 479 !== $current_user->ID ) {
-					$mail_bool = mail( $to, $subject, $message, $headers );
-				} else {
-					//print_r( '<p>To: |' . str_replace('<','&lt;',str_replace('>','&gt;',$to)) . '|<br />Headers: |' . str_replace('<','&lt;',//str_replace('>','&gt;',preg_replace("/\r|\n/","|EOL|",$headers))) . '|<br /></p>' );
-					//$mail_bool = mail( $to, $subject, $message, $headers );
-					$mail_bool = true;
-				}
-				$total_count++;
-				if( $mail_bool ) {
-					$success_count++;
+					if ( 1 !== $current_user->ID ) {
+						$mail_bool = mail( $to, $subject, $message, $headers );
+					} else {
+						print_r( '<p>To: |' . str_replace('<','&lt;',str_replace('>','&gt;',$to)) . '|<br />Headers: |' . str_replace('<','&lt;',str_replace('>','&gt;',preg_replace("/\r|\n/","|EOL|",$headers))) . '|<br /></p>' );
+						//$mail_bool = mail( $to, $subject, $message, $headers );
+						$mail_bool = true;
+					}
+					if( $mail_bool ) {
+						$success_count++;
+					} else {
+						$fail_count++;
+					}
 				} else {
 					$fail_count++;
 				}
+				$total_count++;
 			}
 		}
 		ini_restore( 'sendmail_from' );
@@ -296,7 +305,7 @@ class VCA_ASM_Mailer {
 			}
 		}
 
-		return array( $total_count, $success_count, $fail_count );
+		return array( $total_count, $success_count, $fail_count,  $wpdb->insert_id );
 	}
 } // class
 

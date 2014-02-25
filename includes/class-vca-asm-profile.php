@@ -23,74 +23,84 @@ class VCA_ASM_Profile {
 		get_currentuserinfo();
 
 		if ( ( is_array( $current_user->roles ) && ( in_array( 'head_of', $current_user->roles ) ) || in_array( 'city', $current_user->roles ) ) ) {
+			$is_city = true;
 			$disable_field = true;
 		} else {
+			$is_city = false;
 			$disable_field = false;
 		}
 
 		list( $nation_field, $city_field, $membership_field ) = $this->region_options();
 
-		$fields = array(
-			array(
-				'label' => _x( 'Mobile Phone', 'User Profile', 'vca-asm' ),
-				'id' => 'mobile',
-				'type' => 'tel'
-			),
-			array(
-				'label' => _x( 'About you', 'User Profile', 'vca-asm' ),
-				'type' => 'section'
-			),
-			array(
-				'label' => _x( 'Residence', 'User Profile', 'vca-asm' ),
-				'id' => 'residence',
-				'type' => 'text',
-				'disabled' => $disable_field
-			),
-			array(
-				'label' => _x( 'Birthday', 'User Profile', 'vca-asm' ),
-				'id' => 'birthday',
-				'type' => 'date',
-				'row-class' => 'multi-selects',
-				'disabled' => $disable_field
-			),
-			array(
-				'label' => _x( 'Gender', 'User Profile', 'vca-asm' ),
-				'id' => 'gender',
-				'type' => 'select',
-				'disabled' => $disable_field,
-				'options' => array(
-					array(
-						'label' => __( 'female', 'vca-asm' ),
-						'value' => 'female'
-					),
-					array(
-						'label' => __( 'male', 'vca-asm' ),
-						'value' => 'male'
+		if ( $is_city ) {
+			$fields = array();
+		} else {
+			$fields = array(
+				array(
+					'label' => _x( 'Mobile Phone', 'User Profile', 'vca-asm' ),
+					'id' => 'mobile',
+					'type' => 'tel'
+				),
+				array(
+					'label' => _x( 'About you', 'User Profile', 'vca-asm' ),
+					'type' => 'section'
+				),
+				array(
+					'label' => _x( 'Residence', 'User Profile', 'vca-asm' ),
+					'id' => 'residence',
+					'type' => 'text',
+					'disabled' => $disable_field
+				),
+				array(
+					'label' => _x( 'Birthday', 'User Profile', 'vca-asm' ),
+					'id' => 'birthday',
+					'type' => 'date',
+					'row-class' => 'multi-selects',
+					'disabled' => $disable_field
+				),
+				array(
+					'label' => _x( 'Gender', 'User Profile', 'vca-asm' ),
+					'id' => 'gender',
+					'type' => 'select',
+					'disabled' => $disable_field,
+					'options' => array(
+						array(
+							'label' => __( 'female', 'vca-asm' ),
+							'value' => 'female'
+						),
+						array(
+							'label' => __( 'male', 'vca-asm' ),
+							'value' => 'male'
+						)
 					)
 				)
-			),
-			array(
-				'label' => _x( 'Avatar', 'User Profile', 'vca-asm' ),
-				'type' => 'section',
-				'admin_hide' => true
-			),
-			array(
-				'type' => 'avatar',
-				'id' => 'simple-local-avatar',
-				'admin_hide' => true
-			),
-			array(
+			);
+		}
+
+		$fields[] =	array(
+			'label' => _x( 'Avatar', 'User Profile', 'vca-asm' ),
+			'type' => 'section',
+			'admin_hide' => true
+		);
+		$fields[] =	array(
+			'type' => 'avatar',
+			'id' => 'simple-local-avatar',
+			'admin_hide' => true
+		);
+
+		if ( ! $is_city ) {
+			$fields[] =	array(
 				'label' => _x( 'Geography', 'User Profile', 'vca-asm' ),
 				'type' => 'section'
-			),
-			$nation_field,
-			$city_field,
-			$membership_field,
-			array(
+			);
+			$fields[] =	$nation_field;
+			$fields[] =	$city_field;
+			$fields[] =	$membership_field;
+			$fields[] =	array(
 				'label' => _x( 'Newsletter', 'User Profile', 'vca-asm' ),
 				'type' => 'section'
-			),
-			array(
+			);
+			$fields[] =	array(
 				'label' => _x( 'News Options', 'User Profile', 'vca-asm' ),
 				'id' => 'mail_switch',
 				'type' => 'select',
@@ -114,32 +124,37 @@ class VCA_ASM_Profile {
 					)
 				),
 				'desc' => __( 'Choose in what case to receive emails. News from your region, global news, both or none.', 'vca-asm' )
-			),
-			array(
-				'label' => 'Language',
-				'type' => 'section'
-			),
-			array(
-				'label' => 'Preferred Language of the Pool',
-				'id' => 'pool_lang',
-				'type' => 'select',
-				'options' => array(
-					array(
-						'label' => 'Deutsch',
-						'value' => 'de'
-					),
-					array(
-						'label' => 'English',
-						'value' => 'en'
-					)
-				),
-				'desc' => 'Choose in what language you&apos;d like to use the Pool'
-			)
+			);
+		}
+		$fields[] =	array(
+			'label' => 'Language',
+			'type' => 'section'
 		);
-		if( 'custom' === $part ) {
+		$fields[] =	array(
+			'label' => 'Preferred Language of the Pool',
+			'id' => 'pool_lang',
+			'type' => 'select',
+			'options' => array(
+				array(
+					'label' => 'Deutsch',
+					'value' => 'de'
+				),
+				array(
+					'label' => 'English',
+					'value' => 'en'
+				)
+			),
+			'desc' => 'Choose in what language you&apos;d like to use the Pool'
+		);
+
+		if ( 'custom' === $part && ! $is_city ) {
 			$fields = array_slice( $fields, 0, 11 );
-		} elseif( 'settings' === $part ) {
+		} elseif ( 'custom' === $part ) {
+			$fields = array_slice( $fields, 0, 2 );
+		} elseif ( 'settings' === $part && ! $is_city ) {
 			$fields = array_slice( $fields, 11 );
+		} elseif ( 'settings' === $part ) {
+			$fields = array_slice( $fields, 2 );
 		}
 		return $fields;
 	}
@@ -160,6 +175,7 @@ class VCA_ASM_Profile {
 	private function region_options() {
 		global $vca_asm_geography, $vca_asm_utilities;
 
+		$disable_field = false;
 		if( is_admin() ) {
 			global $user_id;
 			$edited_user = new WP_User( $user_id );
@@ -172,6 +188,9 @@ class VCA_ASM_Profile {
 			$mem = get_user_meta( $current_user->ID, 'membership', true );
 			$user_city = get_user_meta( $current_user->ID, 'city', true );
 			$user_nation = get_user_meta( $current_user->ID, 'nation', true );
+			if ( ( is_array( $current_user->roles ) && ( in_array( 'head_of', $current_user->roles ) ) || in_array( 'city', $current_user->roles ) ) ) {
+				$disable_field = true;
+			}
 		}
 
 		$geo_desc = _x( 'Choose your city (Cell or Local Crew), if applicable. Should you not be able to find yours, please send an email to <a title="Send Mail" href="mailto:zellen@vivaconagua.org">zellen@vivaconagua.org</a>', 'User Profile', 'vca-asm' );
@@ -188,8 +207,9 @@ class VCA_ASM_Profile {
 					'id' => 'nation',
 					'type' => 'select',
 					'options' => $vca_asm_geography->options_array( array(
-						'global_option' => __( 'not chosen...', 'vca-asm' ),
-						'please_select' => false,
+						'global_option_last' => __( 'other, non-listed country', 'vca-asm' ),
+						'please_select' => true,
+						'please_select_value' => NULL,
 						'type' => 'nation'
 					)),
 					'desc' => _x( "You currently are a confirmed member of this Cell or Local Crew. You can change your regional affiliation again only if you choose to cancel your membership. You will have to apply for membership of the new region's Cell or Local Crew again.", 'User Profile', 'vca-asm' ),
@@ -210,15 +230,6 @@ class VCA_ASM_Profile {
 					)),
 					'disabled' => true
 				);
-				if ( ! is_admin() &&
-					isset( $current_user ) &&
-					is_array( $current_user->roles ) &&
-					( in_array( 'city', $current_user->roles ) || in_array( 'head_of', $current_user->roles ) )
-				) {
-					$disable_field = true;
-				} else {
-					$disable_field = false;
-				}
 				$membership_field = array(
 					'row-class' => 'membership-selector',
 					'label' => _x( 'I am an active member of my region', 'User Profile', 'vca-asm' ),
@@ -236,8 +247,9 @@ class VCA_ASM_Profile {
 					'id' => 'nation',
 					'type' => 'select',
 					'options' => $vca_asm_geography->options_array( array(
-						'global_option' => __( 'not chosen...', 'vca-asm' ),
-						'please_select' => false,
+						'global_option_last' => __( 'other, non-listed country', 'vca-asm' ),
+						'please_select' => true,
+						'please_select_value' => NULL,
 						'type' => 'nation'
 					)),
 					'desc' => _x( 'You have applied for membership status in the selected region. You can change your regional affiliation again only if you choose to withdraw your membership application.', 'User Profile', 'vca-asm' ),
@@ -263,7 +275,8 @@ class VCA_ASM_Profile {
 					'label' => _x( 'I am an active member of my region', 'User Profile', 'vca-asm' ),
 					'id' => 'membership',
 					'type' => 'membership',
-					'desc' => _x( "You have applied for membership of this region's Cell or Local Crew. To withdraw your application, simply uncheck the box.", 'User Profile', 'vca-asm' )
+					'desc' => _x( "You have applied for membership of this region's Cell or Local Crew. To withdraw your application, simply uncheck the box.", 'User Profile', 'vca-asm' ),
+					'disabled' => $disable_field
 				);
 			break;
 
@@ -275,11 +288,13 @@ class VCA_ASM_Profile {
 					'id' => 'nation',
 					'type' => 'select',
 					'options' => $vca_asm_geography->options_array( array(
-						'global_option' => __( 'not chosen...', 'vca-asm' ),
-						'please_select' => false,
+						'global_option_last' => __( 'other, non-listed country', 'vca-asm' ),
+						'please_select' => true,
+						'please_select_value' => NULL,
 						'type' => 'nation'
 					)),
-					'desc' => $geo_desc
+					'desc' => $geo_desc,
+					'disabled' => $disable_field
 				);
 				$city_field = array(
 					'row-class' => 'city-selector',
@@ -293,14 +308,16 @@ class VCA_ASM_Profile {
 						'grouped' => false,
 						'descendants_of' => ( isset( $user_nation ) && ! empty( $user_nation ) && is_numeric( $user_nation ) ) ?
 							$user_nation : 40
-					))
+					)),
+					'disabled' => $disable_field
 				);
 				$membership_field = array(
 					'row-class' => 'membership-selector',
 					'label' => _x( 'I am an active member of my region', 'User Profile', 'vca-asm' ),
 					'id' => 'membership',
 					'type' => 'membership',
-					'desc' => _x( '<strong>Important:</strong> If you are an active member of this Cell or Local Crew, set this checkmark to apply for member status.', 'User Profile', 'vca-asm' )
+					'desc' => _x( '<strong>Important:</strong> If you are an active member of this Cell or Local Crew, set this checkmark to apply for member status.', 'User Profile', 'vca-asm' ),
+					'disabled' => $disable_field
 				);
 			break;
 		}
@@ -407,18 +424,15 @@ class VCA_ASM_Profile {
 						}
 					break;
 
-					case 'city':
-						if( ! isset( $field['disabled'] ) || $field['disabled'] !== true ) {
-							$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : '';
-							update_user_meta( $user_id, $field['id'], $new );
-							update_user_meta( $user_id, 'region', $new ); // compatibility w/ old version
-						}
-					break;
-
 					default:
 						if( isset( $field['id'] ) && ( ! isset( $field['disabled'] ) || $field['disabled'] !== true ) ) {
 							$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : '';
 							update_user_meta( $user_id, $field['id'], $new );
+							if ( 'city' === $field['id'] ) {
+								update_user_meta( $user_id, 'region', $new );
+							} else if ( 'region' === $field['id'] ) {
+								update_user_meta( $user_id, 'city', $new );
+							}
 						}
 					break;
 				}
@@ -448,9 +462,9 @@ class VCA_ASM_Profile {
 	public function save_on_registration( $user_id ) {
 		update_user_meta( $user_id, 'mail_switch', 'all' );
 		update_user_meta( $user_id, 'membership', 0 );
+		update_user_meta( $user_id, 'nation', NULL );
 		update_user_meta( $user_id, 'region', 0 );
 		update_user_meta( $user_id, 'city', 0 );
-		update_user_meta( $user_id, 'nation', 0 );
 		update_user_meta( $user_id, 'terms_and_conditions', 'agreed' );
 	}
 

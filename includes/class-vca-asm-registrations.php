@@ -104,7 +104,7 @@ class VcA_ASM_Registrations {
 				"WHERE activity=" . $activity . " AND state = 0", ARRAY_A
 			);
 			foreach( $applications as $supporter ) {
-				$supp_region = get_user_meta( $supporter['supporter'], 'region', true );
+				$supp_region = get_user_meta( $supporter['supporter'], 'city', true );
 				$supp_mem_status = get_user_meta( $supporter['supporter'], 'membership', true );
 				if( $supp_region == $city && $supp_mem_status == 2 ) {
 					$count++;
@@ -160,7 +160,7 @@ class VcA_ASM_Registrations {
 				"WHERE activity=" . $activity . " AND state = 1", ARRAY_A
 			);
 			foreach( $waiting as $supporter ) {
-				$supp_region = get_user_meta( $supporter['supporter'], 'region', true );
+				$supp_region = get_user_meta( $supporter['supporter'], 'city', true );
 				$supp_mem_status = get_user_meta( $supporter['supporter'], 'membership', true );
 				if( $supp_region == $city && $supp_mem_status == 2 ) {
 					$count++;

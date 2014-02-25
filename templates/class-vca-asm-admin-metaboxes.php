@@ -48,7 +48,7 @@ class VCA_ASM_Admin_Metaboxes {
 	public function __construct( $args = array() ) {
 		$this->args = wp_parse_args( $args, $this->default_args );
 		if ( true === $this->args['js'] ) {
-			add_action( 'admin_enqueue_scripts', wp_enqueue_script( 'postbox' ) );
+			wp_enqueue_script( 'postbox' );
 			add_action( 'admin_footer', array( $this, 'print_script' ) );
 		}
 	}

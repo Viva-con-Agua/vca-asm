@@ -107,7 +107,7 @@ class VCA_ASM_Security {
 			if( in_array( 'head_of', $user_obj->roles ) || in_array( 'city', $user_obj->roles ) ) {
 				global $wpdb;
 				$wpdb->update(
-					$wpdb->prefix.'vca_asm_regions',
+					$wpdb->prefix.'vca_asm_geography',
 					array( 'pass' => base64_encode( mcrypt_encrypt( MCRYPT_RIJNDAEL_256, md5(REGION_KEY), $_POST['pass1'], MCRYPT_MODE_CBC, md5(md5(REGION_KEY)) ) ) ),
 					array( 'user_id' => $user_obj->ID ),
 					array( '%s' ),
@@ -421,7 +421,6 @@ class VCA_ASM_Security {
 	 */
 	public function __construct() {
 		$this->init();
-		add_action( 'init', array( &$this, 'force_ssl' ) );
 		add_action( 'user_profile_update_errors', array( &$this, 'enforce_pass_strength' ), 0, 3 );
 		add_action( 'wp_login', array( &$this, 'on_login' ), 1, 2 );
 		add_filter( 'login_redirect', array( &$this, 'pass_reset_redirect' ), 10, 3 );

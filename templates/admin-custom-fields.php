@@ -10,9 +10,14 @@
 global $post, $wpdb, $current_user, $vca_asm_activities, $vca_asm_geography, $vca_asm_registrations, $vca_asm_admin_supporters;
 get_currentuserinfo();
 
-$admin_city = get_user_meta( $current_user->ID, 'region', true );
+$admin_city = get_user_meta( $current_user->ID, 'city', true );
 $admin_region = $admin_city;
 $admin_nation = $vca_asm_geography->has_nation( $admin_city );
+
+$post_city = get_post_meta( $post->ID, 'city', true );
+$post_nation = get_post_meta( $post->ID, 'nation', true );
+$post_delegation = get_post_meta( $post->ID, 'delegate', true );
+$post_delegation = 'delegate' === $post_delegation ? true : false;
 
 if ( isset( $this->the_activity ) && true === $this->the_activity->is_activity ) {
 	$the_activity = $this->the_activity;
@@ -42,6 +47,7 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 
 		switch( $field['type'] ) {
 			case 'contact':
+			case 'hidden':
 				$output .= '';
 			break;
 
@@ -71,6 +77,15 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 					'" id="' . $field['id'] .
 					'" class="input' .
 					'" value="' . $field['value'] . '" />';
+			break;
+
+			case 'hidden-with-text':
+				$output .= '<input type="hidden" ' .
+					'name="' . $field['id'] .
+					'" id="' . $field['id'] .
+					'" class="input' .
+					'" value="' . $field['value'] . '" />' .
+					'<em>' . $field['text'] . '</em>';
 			break;
 
 			case 'textarea':
@@ -533,7 +548,15 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 				if (
 					$current_user->has_cap( 'vca_asm_manage_' . $department . '_global' ) ||
 					(
-						false //delegation check
+						$current_user->has_cap( 'vca_asm_manage_' . $department . '_nation' ) &&
+						$admin_nation &&
+						$admin_nation === $post_nation
+					) ||
+					(
+						$current_user->has_cap( 'vca_asm_manage_' . $department ) &&
+						$post_delegation &&
+						$admin_city &&
+						$admin_city === $post_city
 					)
 				) {
 					if ( 0 < $the_activity->{$field['type'].'_count'} ) {
@@ -550,7 +573,8 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 						$supporters = $the_activity->{$field['type'].'_by_quota'}[$admin_nation];
 					}
 				} elseif (
-					$current_user->has_cap( 'vca_asm_manage_' . $department )
+					$current_user->has_cap( 'vca_asm_manage_' . $department ) &&
+					$admin_city
 				) {
 					if (
 						array_key_exists( $admin_city, $the_activity->{$field['type'].'_count_by_slots'} ) &&

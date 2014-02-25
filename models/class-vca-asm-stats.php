@@ -61,14 +61,14 @@ class VCA_ASM_Stats {
 		global $current_user, $wpdb, $vca_asm_activities, $vca_asm_geography;
 		get_currentuserinfo();
 
-		$admin_region = get_user_meta( $current_user->ID, 'region', true );
+		$admin_region = get_user_meta( $current_user->ID, 'city', true );
 		$user_count = count_users();
 		$this->supporters_total_total = $user_count['avail_roles']['supporter'];
 		$this->supporters_total_city = count( get_users( array(
 			'role' => 'supporter',
 			'meta_query' => array(
 				array(
-					'key' => 'region',
+					'key' => 'city',
 					'value' => $admin_region,
 					'compare' => '=',
 					'type' => 'numeric'
@@ -79,17 +79,18 @@ class VCA_ASM_Stats {
 		$users_city = count( get_users( array(
 				'meta_query' => array(
 				array(
-					'key' => 'region',
+					'key' => 'city',
 					'value' => $admin_region,
 					'compare' => '=',
 					'type' => 'numeric'
 				)
 			)
-		) ) );$city_users_city = count( get_users( array(
+		) ) );
+		$city_users_city = count( get_users( array(
 			'role' => 'city',
 			'meta_query' => array(
 				array(
-					'key' => 'region',
+					'key' => 'city',
 					'value' => $admin_region,
 					'compare' => '=',
 					'type' => 'numeric'
@@ -120,7 +121,7 @@ class VCA_ASM_Stats {
 					'type' => 'numeric'
 				),
 				array(
-					'key' => 'region',
+					'key' => 'city',
 					'value' => $admin_region,
 					'compare' => '=',
 					'type' => 'numeric'
@@ -149,7 +150,7 @@ class VCA_ASM_Stats {
 					'type' => 'numeric'
 				),
 				array(
-					'key' => 'region',
+					'key' => 'city',
 					'value' => $admin_region,
 					'compare' => '=',
 					'type' => 'numeric'
@@ -162,7 +163,7 @@ class VCA_ASM_Stats {
 			$mem = get_user_meta( $supporter->ID, 'membership', true );
 			if( empty( $mem ) ) {
 				$this->supporters_inactive_total++;
-				if( $admin_region === get_user_meta( $supporter->ID, 'region', true ) ) {
+				if( $admin_region === get_user_meta( $supporter->ID, 'city', true ) ) {
 					$this->supporters_inactive_city++;
 				}
 			}
@@ -170,7 +171,7 @@ class VCA_ASM_Stats {
 			$supp_lname = get_user_meta( $supporter->ID, 'last_name', true );
 			if( empty( $supp_fname ) || empty( $supp_lname ) ) {
 				$this->supporters_incomplete_total++;
-				if( $admin_region === get_user_meta( $supporter->ID, 'region', true ) ) {
+				if( $admin_region === get_user_meta( $supporter->ID, 'city', true ) ) {
 					$this->supporters_incomplete_city++;
 				}
 			}

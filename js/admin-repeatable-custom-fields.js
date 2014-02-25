@@ -25,7 +25,7 @@ $('.repeatable-cf-remove').click(function(){
 	return false;
 });
 
-$('.repeatable-cf').sortable({
+jQuery('.repeatable-cf').sortable({
 	opacity: 0.6,
 	revert: true,
 	cursor: 'move',

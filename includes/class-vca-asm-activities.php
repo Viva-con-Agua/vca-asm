@@ -51,6 +51,15 @@ class VCA_ASM_Activities {
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
 		$department = ! empty( $this->departments_by_activity[$post_type] ) ? $this->departments_by_activity[$post_type] : 'actions';
 
+		$admin_level = 'global';
+		if ( ! $current_user->has_cap( 'vca_asm_manage_' . $department . '_global' ) ) {
+			$admin_level = 'nation';
+			if ( ! $current_user->has_cap( 'vca_asm_manage_' . $department . '_nation' ) ) {
+				$admin_level = 'city';
+			}
+		}
+
+
 		$custom_fields = array(
 			'tools' => array (
 				array (
@@ -125,16 +134,16 @@ class VCA_ASM_Activities {
 				)
 			),
 			'geo' => array (
-				array(
+				'nation' => array(
 					'label'	=> __( 'Country', 'vca-asm' ),
 					'desc'	=> _x( 'Associate the activity with a country.', 'Geo Meta Box', 'vca-asm' ) . ' ' . _x( 'This is irrelevant to slots &amp; participants and only matters for categorization and sorting.', 'Geo Meta Box', 'vca-asm' ),
 					'id'	=> 'nation',
 					'type'	=> 'select',
 					'options' => $vca_asm_geography->options_array( array( 'type' => 'nation' ) ),
 					'default' => ! empty( $admin_nation ) ? $admin_nation : 0,
-					'disabled' => $current_user->has_cap( 'vca_asm_manage_' . $department . '_global' ) ? false : true
+					'disabled' => 'global' === $admin_level ? false : true
 				),
-				array(
+				'city' => array(
 					'label'	=> _x( 'City', 'Geo Meta Box', 'vca-asm' ),
 					'desc'	=> _x( 'Associate the activity with a city.', 'Geo Meta Box', 'vca-asm' ) . ' ' . _x( 'This is irrelevant to slots &amp; participants and only matters for categorization and sorting.', 'Geo Meta Box', 'vca-asm' ),
 					'id'	=> 'city',
@@ -146,15 +155,16 @@ class VCA_ASM_Activities {
 							$this->the_activity->nation : ( ! empty( $admin_nation ) ? $admin_nation : 40 )
 					)),
 					'default' => ! empty( $admin_city ) ? $admin_city : 0,
-					'disabled' => ( $current_user->has_cap( 'vca_asm_manage_' . $department . '_global' ) || $current_user->has_cap( 'vca_asm_manage_' . $department . '_nation' ) ) ? false : true
+					'disabled' => ( in_array( $admin_level, array( 'global', 'nation' ) ) ) ? false : true
 				),
-				array(
+				'delegation' => array(
 					'label'	=> _x( 'Delegation', 'Region Meta Box', 'vca-asm' ),
 					'desc'	=> _x( 'Delegate to the selected city\'s SPOCs (Single Person(s) of Contact). If you choose to do so, the city\'s administrative user can edit the activity, as well as accept and deny applications globally. If the selected city does not have an administrative user assigned, this option will be ignored.', 'Region Meta Box', 'vca-asm' ),
 					'id'	=> 'delegate',
 					'type'	=> 'checkbox',
 					'option' => _x( 'Yes, delegate', 'Region Meta Box', 'vca-asm' ),
-					'value' => 'delegate'
+					'value' => 'delegate',
+					'disabled' => ( in_array( $admin_level, array( 'global', 'nation' ) ) ) ? false : true
 				)
 			),
 			'meta' => array (
@@ -318,6 +328,24 @@ class VCA_ASM_Activities {
 					'desc' => __( 'Supporters that participated in this activity', 'vca-asm' )
 				)
 			);
+		}
+
+		if ( 'global' !== $admin_level ) {
+			$custom_fields['geo']['nation']['type'] = 'hidden-with-text';
+			$custom_fields['geo']['nation']['value'] = $custom_fields['geo']['nation']['default'];
+			$custom_fields['geo']['nation']['text'] = $vca_asm_geography->get_name( $custom_fields['geo']['nation']['default'] );
+			$custom_fields['geo']['nation']['disabled'] = false;
+
+			if ( 'nation' !== $admin_level ) {
+				$custom_fields['geo']['city']['type'] = 'hidden-with-text';
+				$custom_fields['geo']['city']['value'] = $custom_fields['geo']['city']['default'];
+				$custom_fields['geo']['city']['text'] = $vca_asm_geography->get_name( $custom_fields['geo']['city']['default'] );
+				$custom_fields['geo']['city']['disabled'] = false;
+
+				$custom_fields['geo']['delegation']['type'] = 'hidden-with-text';
+				$custom_fields['geo']['delegation']['text'] = _x( 'Yes, delegate', 'Region Meta Box', 'vca-asm' );
+				$custom_fields['geo']['delegation']['disabled'] = false;
+			}
 		}
 
 		if( 'all' === $group ) {
@@ -942,16 +970,14 @@ class VCA_ASM_Activities {
 				'normal',
 				'high'
 			);
-			if( ! in_array( $role, array( 'city', 'head_of' ) ) ) {
-				add_meta_box(
-					'vca-asm-geo',
-					_x( 'Association with Network Geography', 'meta box title, festival', 'vca-asm' ),
-					array( &$this, 'box_geo' ),
-					$activity_type,
-					'normal',
-					'low'
-				);
-			}
+			add_meta_box(
+				'vca-asm-geo',
+				_x( 'Association with Network Geography', 'meta box title, festival', 'vca-asm' ),
+				array( &$this, 'box_geo' ),
+				$activity_type,
+				'normal',
+				'low'
+			);
 			add_meta_box(
 				'vca-asm-contact-person',
 				_x( 'Contact Person', 'meta box title, festival', 'vca-asm' ),
@@ -1016,34 +1042,7 @@ class VCA_ASM_Activities {
 	 * @access public
 	 */
 	public function box_tools() {
-		global $current_user;
-		get_currentuserinfo();
-
 		$fields = $this->custom_fields('tools');
-		$city = intval( get_user_meta( $current_user->ID, 'city', true ) );
-		$nation = intval( get_user_meta( $current_user->ID, 'nation', true ) );
-		$roles = $current_user->roles;
-		$role =  array_shift( $roles );
-
-		/* Region + Head Of Hack, dirty, to be moved */
-		if ( 'city' === $role ) {
-			$fields[] = array(
-				'id'	=> 'nation',
-				'type'	=> 'hidden',
-				'value' => $nation
-			);
-			$fields[] = array(
-				'id'	=> 'city',
-				'type'	=> 'hidden',
-				'value' => $city
-			);
-			$fields[] = array(
-				'id'	=> 'delegate',
-				'type'	=> 'hidden',
-				'value' => 'delegate'
-			);
-		}
-
 		require( VCA_ASM_ABSPATH . '/templates/admin-custom-fields.php' );
 		echo $output;
 	}
@@ -1191,7 +1190,7 @@ class VCA_ASM_Activities {
 			! in_array( $post_type, $this->activity_types ) ||
 			! isset( $post->post_status ) ||
 			! in_array( $post->post_status, array( 'publish', 'pending', 'draft', 'private', 'future' ) ) ||
-			! isset(  $_POST['start_app'] ) // hacky fix of problem when moving activity to trash
+			! isset(  $_POST['start_app'] ) // hacky fix for problem when moving activity to trash
 		) {
 			return isset( $post->ID ) ? $post->ID : false;
 		}
@@ -1292,6 +1291,7 @@ class VCA_ASM_Activities {
 					} elseif ( empty( $new ) && 0 !== $new && '0' !== $new && $old ) {
 						delete_post_meta( $post->ID, $field['id'], $old );
 					}
+
 					if( isset( $new_switch ) ) {
 						$old_switch =  get_post_meta( $post->ID, 'ctr_cty_switch', true );
 						if( ! empty( $new_switch ) && $new_switch != $old_switch ) {
@@ -1324,7 +1324,11 @@ class VCA_ASM_Activities {
 								$activity_data['ID'] = $post->ID;
 								$activity_data['post_author'] = $region_user_id;
 								if( $post->post_author != $region_user_id ) {
+									// unhook this method so it doesn't loop infinitely
+									remove_action( 'save_post', array( &$this, 'save_meta' ) );
 									wp_update_post( $activity_data );
+									// re-hook this method
+									add_action( 'save_post', array( &$this, 'save_meta' ) );
 								}
 							}
 						} elseif ( empty( $new ) && $old ) {
@@ -1332,7 +1336,11 @@ class VCA_ASM_Activities {
 							$activity_data['ID'] = $post->ID;
 							$activity_data['post_author'] = $current_user->ID;
 							if( $post->post_author != $current_user->ID ) {
-								wp_update_post( $activity_data );
+									// unhook this method so it doesn't loop infinitely
+									remove_action( 'save_post', array( &$this, 'save_meta' ) );
+									wp_update_post( $activity_data );
+									// re-hook this method
+									add_action( 'save_post', array( &$this, 'save_meta' ) );
 							}
 						}
 					}
@@ -1353,12 +1361,20 @@ class VCA_ASM_Activities {
 								if( ! empty( $geo_user_id ) ) {
 									$activity_data['post_author'] = $geo_user_id;
 									if( $post->post_author != $geo_user_id ) {
+										// unhook this method so it doesn't loop infinitely
+										remove_action( 'save_post', array( &$this, 'save_meta' ) );
 										wp_update_post( $activity_data );
+										// re-hook this method
+										add_action( 'save_post', array( &$this, 'save_meta' ) );
 									}
 								} else {
 									$activity_data['post_author'] = $current_user->ID;
 									if( $post->post_author != $current_user->ID ) {
+										// unhook this method so it doesn't loop infinitely
+										remove_action( 'save_post', array( &$this, 'save_meta' ) );
 										wp_update_post( $activity_data );
+										// re-hook this method
+										add_action( 'save_post', array( &$this, 'save_meta' ) );
 									}
 								}
 							}

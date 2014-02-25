@@ -212,7 +212,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 										get_post_meta( $activity->ID, 'city', true ) === $admin_city &&
 										'delegate' === get_post_meta( $activity->ID, 'delegate', true )
 									) || (
-										in_array( $admin_city, get_post_meta( $activity->ID, 'cty_slots', true ) )
+										array_key_exists( $admin_city, get_post_meta( $activity->ID, 'cty_slots', true ) )
 									)
 								)
 							)
@@ -222,6 +222,8 @@ class VCA_ASM_Admin_Slot_Allocation {
 					}
 					$activities = $relevant_activities;
 				}
+
+				//var_dump( get_post_meta( 1058, 'cty_slots', true ) );
 
 				$activities_ordered = array();
 				$i = 0;
@@ -1080,7 +1082,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 
 		for ( $i = 0; $i < $soq_count; $i++ ) {
 			$supp_id = intval( $supps_of_quota[$i] );
-			$supp_region = get_user_meta( $supp_id, 'region', true );
+			$supp_region = get_user_meta( $supp_id, 'city', true );
 			$supp_nation = get_user_meta( $supp_id, 'nation', true );
 			$supp_bday = get_user_meta( $supp_id, 'birthday', true );
 			$supp_age = ! empty( $supp_bday ) ? $vca_asm_utilities->date_diff( time(), intval( $supp_bday ) ) : array( 'year' => __( 'not set', 'vca-asm' ) );
@@ -1118,7 +1120,8 @@ class VCA_ASM_Admin_Slot_Allocation {
 				$rows[$i]['city'] .= ' (' . $stati_conv[$supp_region] . ')';
 			}
 			$rows[$i]['note'] = $note_indicator;
-			$rows[$i]['membership'] = $vca_asm_admin_supporters->get_membership_status( $supp_id, $stati[$supp_region] );
+			$geo_status = isset( $stati[$supp_region] ) ? $stati[$supp_region] : 'city';
+			$rows[$i]['membership'] = $vca_asm_admin_supporters->get_membership_status( $supp_id, $geo_status );
 			$rows[$i]['membership_raw'] = get_user_meta( $supp_id, 'membership', true );
 			$rows[$i]['age'] = $supp_age['year'];
 			$rows[$i]['age-order'] = empty( $supp_bday ) ? 1 : ( doubleval(555555555555) - doubleval( $supp_bday ) );

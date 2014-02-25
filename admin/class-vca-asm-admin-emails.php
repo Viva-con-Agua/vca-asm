@@ -32,9 +32,9 @@ class VCA_ASM_Admin_Emails {
 	 * @access public
 	 */
 	public function sent_control() {
-		global $current_user, $wpdb, $vca_asm_regions;
+		global $current_user, $wpdb, $vca_asm_geography;
 		get_currentuserinfo();
-		$admin_region = get_user_meta( $current_user->ID, 'region', true );
+		$admin_region = get_user_meta( $current_user->ID, 'city', true );
 
 		if( isset( $_GET['todo'] ) && $_GET['todo'] == 'send' ) {
 			/* send it! */
@@ -117,7 +117,7 @@ class VCA_ASM_Admin_Emails {
 			$emails[$i] = $emails_raw[$key];
 			$user = new WP_User( $mail['sent_by'] );
 			if( 'Head' === mb_substr( $user->first_name, 0, 4 ) ) {
-				$by =  $vca_asm_regions->get_status( get_user_meta( $user->ID, 'region', true ) ) . ' ' . $user->last_name;
+				$by =  $vca_asm_geography->get_status( get_user_meta( $user->ID, 'city', true ) ) . ' ' . $user->last_name;
 			} else {
 				$by = trim( $user->first_name . ' ' .$user->last_name );
 			}
@@ -128,7 +128,7 @@ class VCA_ASM_Admin_Emails {
 				$mem = __( 'all', 'vca-asm' );
 			}
 			if( $emails[$i]['receipient_group'] == 'region' ) {
-				$receipient = $vca_asm_regions->get_name( $emails[$i]['receipient_id'] );
+				$receipient = $vca_asm_geography->get_name( $emails[$i]['receipient_id'] );
 				$emails[$i]['to'] = $receipient . ' (' . $mem . ')';
 			} elseif( $emails[$i]['receipient_group'] == 'all' ) {
 				$receipient = __( 'All Supporters', 'vca-asm' );
@@ -363,10 +363,10 @@ class VCA_ASM_Admin_Emails {
 	 * @access public
 	 */
 	public function compose_control() {
-
-		global $wpdb, $current_user, $vca_asm_regions;
+		global $wpdb, $current_user, $vca_asm_geography;
 		get_currentuserinfo();
-		$admin_region = get_user_meta( $current_user->ID, 'region', true );
+
+		$admin_region = get_user_meta( $current_user->ID, 'city', true );
 
 		wp_enqueue_script( 'vca-asm-admin-email-preview' );
 		$params = array(
@@ -443,7 +443,8 @@ class VCA_ASM_Admin_Emails {
 			}
 		} else {
 			/* receipients (regions) array for select */
-			$regions = $vca_asm_regions->get_all();
+			$nations = $vca_asm_geography->get_all( 'name', 'ASC', 'nation' );
+			$cities = $vca_asm_geography->get_all( 'name', 'ASC', 'city' );
 			$receipients = array();
 			if( in_array( 'administrator', $current_user->roles ) || 3 === $current_user->ID ) {
 				$receipients[0] = array(
@@ -462,28 +463,34 @@ class VCA_ASM_Admin_Emails {
 					'value' => 'all'
 				);
 				$receipients[2] = array(
-					'label' => __( 'All Head Ofs', 'vca-asm' ),
+					'label' => __( 'All City Users', 'vca-asm' ),
 					'value' => 'ho'
 				);
 				$receipients[3] = array(
-					'label' => __( 'Admin Users (besides Head Ofs)', 'vca-asm' ),
+					'label' => __( 'Admin Users (besides City Users)', 'vca-asm' ),
 					'value' => 'admins'
 				);
 				$receipients[4] = array(
 					'label' => __( 'Supporters with no specific region', 'vca-asm' ),
 					'value' => 0
 				);
-				foreach( $regions as $region ) {
-					switch( $region['status'] ) {
+				foreach( $nations as $region ) {
+					$receipients[] = array(
+						'label' => $region['name'],
+						'value' => 'nat' . $region['id']
+					);
+				}
+				foreach( $cities as $region ) {
+					switch( $region['type'] ) {
 						case 'cell':
 							$receipients[] = array(
-								'label' =>  __( 'Cell', 'vca-asm' ) . ' ' . $region['name'],
+								'label' =>  $region['name'] . ' (' . __( 'Cell', 'vca-asm' ) . ')',
 								'value' => $region['id']
 							);
 						break;
 						case 'lc':
 							$receipients[] = array(
-								'label' => __( 'Local Crew', 'vca-asm' ) . ' ' . $region['name'],
+								'label' => $region['name'] . ' (' . __( 'Local Crew', 'vca-asm' ) . ')',
 								'value' => $region['id']
 							);
 						break;
@@ -497,7 +504,7 @@ class VCA_ASM_Admin_Emails {
 				}
 			} else {
 				$receipients[] = array(
-					'label' => sprintf( __( 'Supporters from %s', 'vca-asm' ), $vca_asm_regions->get_name( $admin_region ) ),
+					'label' => sprintf( __( 'Supporters from %s', 'vca-asm' ), $vca_asm_geography->get_name( $admin_region ) ),
 					'value' => $admin_region
 				);
 			}
@@ -571,7 +578,7 @@ class VCA_ASM_Admin_Emails {
 		}
 
 		$format = 'html';
-		if( ! in_array( 'head_of', $current_user->roles ) ) {
+		if( ! in_array( 'city', $current_user->roles ) ) {
 			$format = ! empty( $this->emails_options['email_format_admin'] ) ? $this->emails_options['email_format_admin'] : 'html';
 		} else {
 			$format = ! empty( $this->emails_options['email_format_ho'] ) ? $this->emails_options['email_format_ho'] : 'plain';
@@ -685,7 +692,7 @@ class VCA_ASM_Admin_Emails {
 	 * @access private
 	 */
 	private function mail_send() {
-		global $current_user, $wpdb, $vca_asm_mailer, $vca_asm_regions;
+		global $current_user, $wpdb, $vca_asm_mailer, $vca_asm_geography;
 		get_currentuserinfo();
 
 		$membership = 0;
@@ -785,7 +792,7 @@ class VCA_ASM_Admin_Emails {
 				$supp_id = $supporter['supporter'];
 				if( $subgroup == 'appg' ) {
 					$slots_arr = get_post_meta( $activity_id, 'slots', true );
-					$user_region = get_user_meta( $supp_id, 'region', true );
+					$user_region = get_user_meta( $supp_id, 'city', true );
 					if( $user_region != 0 && array_key_exists( $user_region, $slots_arr ) ) {
 						continue;
 					}
@@ -803,6 +810,42 @@ class VCA_ASM_Admin_Emails {
 				$receipient_group = 'participants';
 			}
 			$receipient_id = substr( $_POST['receipient'], 7 );
+		} elseif( isset( $_POST['receipient'] ) && substr( $_POST['receipient'], 0, 3 ) === 'nat' ) {
+
+			$metaqueries = array( 'relation' => 'AND' );
+
+			if( ! isset( $_POST['ignore_switch'] ) ) {
+				$metaqueries[] = array(
+					'key' => 'mail_switch',
+					'value' => array( 'all', 'regional' ),
+					'compare' => 'IN'
+				);
+			}
+			if( 2 == $_POST['membership'] ) {
+				$metaqueries[] = array(
+					'key' => 'membership',
+					'value' => 2
+				);
+				$membership = 2;
+			}
+			$metaqueries[] = array(
+				'key' => 'nation',
+				'value' => intval( substr( $_POST['receipient'], 3 ) )
+			);
+			$args = array(
+				'meta_query' => $metaqueries
+			);
+			$supporters = get_users( $args );
+
+			$to = array();
+			foreach( $supporters as $supporter ) {
+				if ( ! in_array( 'city', $supporter->roles ) && ! in_array( 'head_of', $supporter->roles ) ) {
+					$to[] = $supporter->user_email;
+				}
+			}
+			$receipient_group = 'region';
+			$receipient_id = intval( substr( $_POST['receipient'], 3 ) );
+
 		} elseif( isset( $_POST['receipient'] ) ) {
 			$metaqueries = array( 'relation' => 'AND' );
 			if( ! isset( $_POST['ignore_switch'] ) ) {
@@ -820,7 +863,7 @@ class VCA_ASM_Admin_Emails {
 				$membership = 2;
 			}
 			$metaqueries[] = array(
-				'key' => 'region',
+				'key' => 'city',
 				'value' => $_POST['receipient']
 			);
 			$args = array(
@@ -830,25 +873,27 @@ class VCA_ASM_Admin_Emails {
 
 			$to = array();
 			foreach( $supporters as $supporter ) {
-				$to[] = $supporter->user_email;
+				if ( ! in_array( 'city', $supporter->roles ) && ! in_array( 'head_of', $supporter->roles ) ) {
+					$to[] = $supporter->user_email;
+				}
 			}
 			$receipient_group = 'region';
 			$receipient_id = $_POST['receipient'];
 		}
 
 		$format = 'html';
-		if( ! in_array( 'head_of', $current_user->roles ) ) {
+		if( ! in_array( 'head_of', $current_user->roles ) && ! in_array( 'city', $current_user->roles ) ) {
 			$from_name = trim( $current_user->first_name . ' ' . $current_user->last_name );
 			$format = ! empty( $this->emails_options['email_format_admin'] ) ? $this->emails_options['email_format_admin'] : 'html';
 		} else {
-			$region_id = get_user_meta( $current_user->ID, 'region', true );
-			$region_name = $vca_asm_regions->get_name( $region_id );
-			$from_name =  $vca_asm_regions->get_status( $region_id ) . ' ' . $region_name;
+			$region_id = get_user_meta( $current_user->ID, 'city', true );
+			$region_name = $vca_asm_geography->get_name( $region_id );
+			$from_name =  $vca_asm_geography->get_status( $region_id ) . ' ' . $region_name;
 			$format = ! empty( $this->emails_options['email_format_ho'] ) ? $this->emails_options['email_format_ho'] : 'plain';
 		}
 
 		if( isset( $_POST['sender'] ) && $_POST['sender'] === 'own' ) {
-			if( ! in_array( 'head_of', $current_user->roles ) ) {
+			if ( ! in_array( 'head_of', $current_user->roles ) && ! in_array( 'city', $current_user->roles ) ) {
 				$from_email = $current_user->user_email;
 			} else {
 				$from_email = $current_user->user_email;
@@ -857,17 +902,19 @@ class VCA_ASM_Admin_Emails {
 			$from_email = NULL;
 		}
 
-		if ( 1 !== $current_user->ID && 479 !== $current_user->ID ) {
-			list( $total_count, $success_count, $fail_count ) = $vca_asm_mailer->send( $to, $_POST['subject'], $_POST['message'], $from_name, $from_email, $format, $save, $membership, $receipient_group, $receipient_id );
-		} else {
-			list( $total_count, $success_count, $fail_count ) = $vca_asm_mailer->send( $to, $_POST['subject'], $_POST['message'], $from_name, $from_email, $format, $save, $membership, $receipient_group, $receipient_id );
-		}
+		list( $total_count, $success_count, $fail_count, $insert_id ) = $vca_asm_mailer->send( $to, $_POST['subject'], $_POST['message'], $from_name, $from_email, $format, $save, $membership, $receipient_group, $receipient_id );
 
 		$success = '<div class="message"><p>' .
 			sprintf(
 				_x( 'The Email titled "%1$s" has been successfully sent to %2$s out of %3$s recipients.', 'Admin Email Interface', 'vca-asm' ),
 				$_POST['subject'], $success_count, $total_count
 			) .
+			'</p><p>' .
+				sprintf(
+					_x( 'The Email has been saved to %1$s and you can view it %2$s.', 'Admin Email Interface', 'vca-asm' ),
+					'<a href="admin.php?page=vca-asm-emails" title="' . __( 'View Sent Items', 'vca-asm' ) . '">' . __( 'Sent Items', 'vca-asm' ) . '</a>',
+					'<a href="' . get_site_url() . '/email/?id=' . $insert_id . '" title="' . __( 'Read the E-Mail', 'vca-asm' ) . '">' . __( 'here', 'vca-asm' ) . '</a>'
+				) .
 			'</p><p>' .
 				'<a title="' . _x( 'One more...', 'Admin Email Interface', 'vca-asm' ) . '" ' .
 					'href="' . get_option( 'siteurl' ) . '/wp-admin/admin.php?page=vca-asm-compose">' .

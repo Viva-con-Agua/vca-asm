@@ -214,11 +214,13 @@ class VCA_ASM_Activity {
 			$this->minimum_quotas =& $this->participants_count_by_quota;
 
 			foreach ( $this->waiting as $waiter /* LOL */ ) {
-				$city_id = get_user_meta( $waiter, 'region', true );
-				$nation_id = $vca_asm_geography->has_nation( $city_id );
+				$city_id = get_user_meta( $waiter, 'city', true );
+				$nation_id = get_user_meta( $waiter, 'nation', true );
+				$nation_id = ! empty( $nation_id ) ? $nation_id : ( $vca_asm_geography->has_nation( $city_id ) ? $vca_asm_geography->has_nation( $city_id ) : 'not_existent' );
+				$nation_id = ( is_string( $nation_id ) || is_int( $nation_id ) || is_array( $nation_id ) ) ? $nation_id : 0;
 				$level = 0;
 
-				if ( array_key_exists( $city_id, $this->cty_slots ) ) {
+				if ( $city_id && array_key_exists( $city_id, $this->cty_slots ) ) {
 					$level = $city_id;
 					if ( ! array_key_exists( $city_id, $this->waiting_by_slots ) ) {
 						$this->waiting_by_slots[$city_id] = array();
@@ -238,7 +240,7 @@ class VCA_ASM_Activity {
 					if ( ! array_key_exists( $nation_id, $this->waiting_count_by_quota ) ) {
 						$this->waiting_count_by_quota[$nation_id] = 0;
 					}
-				} elseif ( array_key_exists( $nation_id, $this->ctr_slots ) ) {
+				} elseif ( $nation_id && array_key_exists( $nation_id, $this->ctr_slots ) ) {
 					$level = $nation_id;
 					if ( ! array_key_exists( $nation_id, $this->waiting_by_slots ) ) {
 						$this->waiting_by_slots[$nation_id] = array();
@@ -254,10 +256,10 @@ class VCA_ASM_Activity {
 					}
 				} else {
 					$level = 0;
-					if ( ! array_key_exists( $nation_id, $this->waiting_by_slots ) ) {
+					if ( ! array_key_exists( 0, $this->waiting_by_slots ) ) {
 						$this->waiting_by_slots[0] = array();
 					}
-					if ( ! array_key_exists( $nation_id, $this->waiting_count_by_slots ) ) {
+					if ( ! array_key_exists( 0, $this->waiting_count_by_slots ) ) {
 						$this->waiting_count_by_slots[0] = 0;
 					}
 				}
@@ -278,8 +280,9 @@ class VCA_ASM_Activity {
 			}
 
 			foreach ( $this->applicants as $applicant ) {
-				$city_id = get_user_meta( $applicant, 'region', true );
-				$nation_id = $vca_asm_geography->has_nation( $city_id );
+				$city_id = get_user_meta( $applicant, 'city', true );
+				$nation_id = get_user_meta( $applicant, 'nation', true );
+				$nation_id = ! empty( $nation_id ) ? $nation_id : ( $vca_asm_geography->has_nation( $city_id ) ? $vca_asm_geography->has_nation( $city_id ) : 'not_existent' );
 				$level = 0;
 
 				if ( $city_id && array_key_exists( $city_id, $this->cty_slots ) ) {
@@ -405,8 +408,9 @@ class VCA_ASM_Activity {
 			}
 
 			foreach ( $this->applicants as $applicant ) {
-				$city_id = get_user_meta( $applicant, 'region', true );
-				$nation_id = $vca_asm_geography->has_nation( $city_id );
+				$city_id = get_user_meta( $applicant, 'city', true );
+				$nation_id = get_user_meta( $applicant, 'nation', true );
+				$nation_id = ! empty( $nation_id ) ? $nation_id : ( $vca_asm_geography->has_nation( $city_id ) ? $vca_asm_geography->has_nation( $city_id ) : 'not_existent' );
 				$level = 0;
 
 				if ( array_key_exists( $city_id, $this->cty_slots ) ) {

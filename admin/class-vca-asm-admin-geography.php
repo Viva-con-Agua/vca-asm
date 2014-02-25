@@ -55,7 +55,7 @@ class VCA_ASM_Admin_Geography {
 									(
 										'city' === $type &&
 										is_numeric( $nation ) &&
-										$nation == $vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'region', true ) )
+										$nation == $vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'city', true ) )
 									)
 								)
 							)
@@ -112,7 +112,7 @@ class VCA_ASM_Admin_Geography {
 									(
 										'city' === $type &&
 										is_numeric( $nation ) &&
-										$nation == $vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'region', true ) )
+										$nation == $vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'city', true ) )
 									)
 								)
 							)
@@ -218,7 +218,6 @@ class VCA_ASM_Admin_Geography {
 								update_user_meta( $region_user_id, 'last_name', $_POST['name'] );
 								update_user_meta( $region_user_id, 'nickname', 'VcA ' . $_POST['name'] );
 								update_user_meta( $region_user_id, 'mail_switch', 'none' );
-								update_user_meta( $region_user_id, 'region', $_POST['name'] );
 								update_user_meta( $region_user_id, 'birthday', '1159444800' );
 								$new_pass = base64_encode( mcrypt_encrypt( MCRYPT_RIJNDAEL_256, md5(REGION_KEY), $_POST['pass'], MCRYPT_MODE_CBC, md5(md5(REGION_KEY)) ) );
 								$new_user = $_POST['user'];
@@ -382,6 +381,10 @@ class VCA_ASM_Admin_Geography {
 						/* Set Head Of's region ID */
 						if ( $has_user == 1 ) {
 							update_user_meta( $region_user_id, 'region', $region_id );
+							update_user_meta( $region_user_id, 'city', $region_id );
+							$nat_id = $vca_asm_geography->has_nation( $region_id );
+							$nat_id = $nat_id ? $nat_id : 40;
+							update_user_meta( $region_user_id, 'nation', $nat_id );
 						}
 					}
 
@@ -665,7 +668,7 @@ class VCA_ASM_Admin_Geography {
 			$output .= '</ul><br />';
 		}
 
-		$user_nation = $vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'region', true ) );
+		$user_nation = $vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'city', true ) );
 		if (
 			$current_user->has_cap( 'vca_asm_manage_network_global' ) ||
 			(
@@ -919,7 +922,7 @@ class VCA_ASM_Admin_Geography {
 								)),
 								'desc' => __( 'The country this city is part of', 'vca-asm' ),
 								'disabled' => ( ! $current_user->has_cap( 'vca_asm_manage_network_global' ) ),
-								'value' => $vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'region', true ) )
+								'value' => $vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'city', true ) )
 							),
 							array(
 								'type' => 'groups',
@@ -945,12 +948,12 @@ class VCA_ASM_Admin_Geography {
 								)),
 								'desc' => __( 'The country this city is part of', 'vca-asm' ),
 								'disabled' => ( ! $current_user->has_cap( 'vca_asm_manage_network_global' ) ),
-								'value' => $vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'region', true ) )
+								'value' => $vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'city', true ) )
 							),
 							array(
 								'type' => 'hidden',
 								'id' => 'parent_nation',
-								'value' => $vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'region', true ) )
+								'value' => $vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'city', true ) )
 							),
 							array(
 								'type' => 'groups',

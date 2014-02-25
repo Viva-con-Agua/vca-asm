@@ -348,8 +348,8 @@ class VCA_ASM_Admin_Table {
 								$current_user->has_cap( 'vca_asm_manage_network_global' ) ||
 								(
 									$current_user->has_cap( 'vca_asm_manage_network_nation' ) &&
-									$vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'region', true ) ) &&
-									$vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'region', true ) ) === $vca_asm_geography->has_nation( $row['id'] )
+									$vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'city', true ) ) &&
+									$vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'city', true ) ) === $vca_asm_geography->has_nation( $row['id'] )
 								)
 							)
 						) ||
@@ -359,7 +359,7 @@ class VCA_ASM_Admin_Table {
 								$current_user->has_cap( 'vca_asm_manage_network_global' ) ||
 								(
 									$current_user->has_cap( 'vca_asm_manage_network_nation' ) &&
-									$vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'region', true ) )
+									$vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'city', true ) )
 								)
 							)
 						) ||
@@ -369,8 +369,8 @@ class VCA_ASM_Admin_Table {
 								$current_user->has_cap( 'vca_asm_manage_network_global' ) ||
 								(
 									$current_user->has_cap( 'vca_asm_manage_network_nation' ) &&
-									$vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'region', true ) ) &&
-									$vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'region', true ) ) == $row['id']
+									$vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'city', true ) ) &&
+									$vca_asm_geography->has_nation( get_user_meta( $current_user->ID, 'city', true ) ) == $row['id']
 								)
 							)
 						) ||
@@ -511,13 +511,13 @@ class VCA_ASM_Admin_Table {
 		global $current_user, $vca_asm_geography, $vca_asm_roles;
 		get_currentuserinfo();
 
-		$admin_city = get_user_meta( $current_user->ID, 'region', true );
+		$admin_city = get_user_meta( $current_user->ID, 'city', true );
 		$admin_nation = $vca_asm_geography->has_nation( $admin_city );
 
 		$output = '<br /><div class="row-actions">';
 
-		if( ! empty( $row[$column['id']] ) ) {
-			$name = $row[$column['id']];
+		if( ! empty( $row['first_name'] ) ) {
+			$name = $row['first_name'];
 		} elseif( ! empty( $row['username'] ) ) {
 			$name = __( 'username', 'vca-asm' ) . ' &quot;' . $row['username'] . '&quot;';
 		} else {
@@ -582,14 +582,14 @@ class VCA_ASM_Admin_Table {
 						(
 							$current_user->has_cap( 'vca_asm_promote_supporters_nation' ) &&
 							$admin_nation &&
-							$vca_asm_geography->has_nation( get_user_meta( $row['id'], 'region', true ) ) &&
-							$admin_nation == $vca_asm_geography->has_nation( get_user_meta( $row['id'], 'region', true ) )
+							$vca_asm_geography->has_nation( get_user_meta( $row['id'], 'city', true ) ) &&
+							$admin_nation == $vca_asm_geography->has_nation( get_user_meta( $row['id'], 'city', true ) )
 						) ||
 						(
 							$current_user->has_cap( 'vca_asm_promote_supporters' ) &&
 							$admin_city &&
-							get_user_meta( $row['id'], 'region', true ) &&
-							$admin_city == get_user_meta( $row['id'], 'region', true )
+							get_user_meta( $row['id'], 'city', true ) &&
+							$admin_city == get_user_meta( $row['id'], 'city', true )
 						)
 					)
 				) ||
@@ -600,14 +600,14 @@ class VCA_ASM_Admin_Table {
 						(
 							$current_user->has_cap( 'vca_asm_delete_supporters_nation' ) &&
 							$admin_nation &&
-							$vca_asm_geography->has_nation( get_user_meta( $row['id'], 'region', true ) ) &&
-							$admin_nation == $vca_asm_geography->has_nation( get_user_meta( $row['id'], 'region', true ) )
+							$vca_asm_geography->has_nation( get_user_meta( $row['id'], 'city', true ) ) &&
+							$admin_nation == $vca_asm_geography->has_nation( get_user_meta( $row['id'], 'city', true ) )
 						) ||
 						(
 							$current_user->has_cap( 'vca_asm_delete_supporters' ) &&
 							$admin_city &&
-							get_user_meta( $row['id'], 'region', true ) &&
-							$admin_city == get_user_meta( $row['id'], 'region', true )
+							get_user_meta( $row['id'], 'city', true ) &&
+							$admin_city == get_user_meta( $row['id'], 'city', true )
 						)
 					)
 				) ||
@@ -619,8 +619,8 @@ class VCA_ASM_Admin_Table {
 						in_array( $current_user->roles[0], $vca_asm_roles->global_admin_roles ) ||
 						(
 							$admin_nation &&
-							$vca_asm_geography->has_nation( get_user_meta( $row['id'], 'region', true ) ) &&
-							$admin_nation == $vca_asm_geography->has_nation( get_user_meta( $row['id'], 'region', true ) )
+							$vca_asm_geography->has_nation( get_user_meta( $row['id'], 'city', true ) ) &&
+							$admin_nation == $vca_asm_geography->has_nation( get_user_meta( $row['id'], 'city', true ) )
 						)
 					)
 				) ||
@@ -631,14 +631,14 @@ class VCA_ASM_Admin_Table {
 						(
 							$current_user->has_cap( 'vca_asm_view_supporters_nation' ) &&
 							$admin_nation &&
-							$vca_asm_geography->has_nation( get_user_meta( $row['id'], 'region', true ) ) &&
-							$admin_nation == $vca_asm_geography->has_nation( get_user_meta( $row['id'], 'region', true ) )
+							$vca_asm_geography->has_nation( get_user_meta( $row['id'], 'city', true ) ) &&
+							$admin_nation == $vca_asm_geography->has_nation( get_user_meta( $row['id'], 'city', true ) )
 						) ||
 						(
 							$current_user->has_cap( 'vca_asm_view_supporters' ) &&
 							$admin_city &&
-							get_user_meta( $row['id'], 'region', true ) &&
-							$admin_city == get_user_meta( $row['id'], 'region', true )
+							get_user_meta( $row['id'], 'city', true ) &&
+							$admin_city == get_user_meta( $row['id'], 'city', true )
 						)
 					)
 				) ||

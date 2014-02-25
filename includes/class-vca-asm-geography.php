@@ -39,25 +39,25 @@ class VCA_ASM_Geography {
 	{
 		global $wpdb;
 
-		$region_query = $wpdb->get_results(
+		$geo_query = $wpdb->get_results(
 				"SELECT name FROM " .
 				$wpdb->prefix . "vca_asm_geography " .
 				"WHERE id = " . $id, ARRAY_A
 		);
-		$region = $region_query[0]['name'];
-		if( empty( $region ) ) {
-			$region = sprintf( __( 'Error: Region of ID %s does not exist.', 'vca-asm' ), $id );
+		$geo = $geo_query[0]['name'];
+		if( empty( $geo ) ) {
+			$geo = sprintf( __( 'Error: Geographical unit of ID %s does not exist.', 'vca-asm' ), $id );
 		}
 
-		if ( $region === 'Switzerland' ) {
-			$region = __( 'Switzerland', 'vca-asm' );
-		} elseif ( $region === 'Germany' ) {
-			$region = __( 'Germany', 'vca-asm' );
-		} elseif ( $region === 'Austria' ) {
-			$region = __( 'Austria', 'vca-asm' );
+		if ( $geo === 'Switzerland' ) {
+			$geo = __( 'Switzerland', 'vca-asm' );
+		} elseif ( $geo === 'Germany' ) {
+			$geo = __( 'Germany', 'vca-asm' );
+		} elseif ( $geo === 'Austria' ) {
+			$geo = __( 'Austria', 'vca-asm' );
 		}
 
-		return $region;
+		return $geo;
 	}
 
 	/**
@@ -122,7 +122,7 @@ class VCA_ASM_Geography {
 				$wpdb->prefix . "vca_asm_geography " .
 				"WHERE id = " . $id . " LIMIT 1", ARRAY_A
 		);
-		$alpha = $alpha_query[0]['alpha_code'];
+		$alpha = ( ! empty( $alpha_query ) && isset( $alpha_query[0]['alpha_code'] ) ) ? $alpha_query[0]['alpha_code'] : 'de';
 
 		return $alpha;
 	}
@@ -261,10 +261,6 @@ class VCA_ASM_Geography {
 	 */
 	public function get_ancestors( $id, $args = array() ) {
 		global $wpdb, $vca_asm_utilities;
-
-		//if ( empty( $id ) && 0 !== $id && '0' !== $id ) {
-		//	var_dump( $id );
-		//}
 
 		$default_args = array(
 			'data' => 'name',
@@ -535,15 +531,22 @@ class VCA_ASM_Geography {
 	 * @since 1.0
 	 * @access public
 	 */
-	public function get_ids() {
+	public function get_ids( $type = 'all' ) {
 
-		$raw = $this->get_all();
+		$raw = $this->get_all( 'name', 'ASC', $type );
 		$regions = array();
 
 		foreach( $raw as $region ) {
 			$regions[$region['id']] = $region['name'];
 		}
-		$regions['0'] = _x( 'no specific region', 'Regions', 'vca-asm' );
+		if ( 'city' === $type ) {
+			$regions['0'] = __( 'not chosen...', 'vca-asm' );
+		} elseif ( 'nation' === $type ) {
+			$regions['0'] = __( 'other, non-listed country', 'vca-asm' );
+			$regions['empty'] = __( 'not chosen...', 'vca-asm' );
+		} else {
+			$regions['0'] = _x( 'no regional info', 'Geography', 'vca-asm' );
+		}
 
 		return $regions;
 	}
@@ -729,7 +732,7 @@ class VCA_ASM_Geography {
 				$supporters = $wpdb->get_results(
 						"SELECT user_id FROM " .
 						$wpdb->prefix . "usermeta " .
-						"WHERE meta_key = 'region' AND meta_value = " .
+						"WHERE meta_key = 'city' AND meta_value = " .
 						$region['id'], ARRAY_A
 				);
 				$supp_count = count( $supporters );
@@ -895,9 +898,12 @@ class VCA_ASM_Geography {
 
 		$default_args = array(
 			'global_option' => '',
+			'global_option_last' => '',
 			'orderby' => 'name',
 			'order' => 'ASC',
 			'please_select' => false,
+			'please_select_value' => 'please_select',
+			'please_select_text' => __( 'Please select...', 'vca-asm' ),
 			'type' => 'all',
 			'descendants_of' => false,
 			'not_has_nation' => false,
@@ -930,8 +936,8 @@ class VCA_ASM_Geography {
 		$options_array = array();
 		if( true === $please_select ) {
 			$options_array[0] = array(
-				'label' => __( 'Please select...', 'vca-asm' ),
-				'value' => 'please_select', // js alert if selected on save, @see frontend-profile template
+				'label' => $please_select_text,
+				'value' => $please_select_value,
 				'class' => 'please-select'
 			);
 		}
@@ -946,7 +952,7 @@ class VCA_ASM_Geography {
 
 		foreach( $raw as $geo_unit ) {
 			$options_array[] = array(
-				'label' => $geo_unit['name'],
+				'label' => $vca_asm_utilities->convert_strings( $geo_unit['name'] ),
 				'value' => $geo_unit['id'],
 				'class' => $geo_unit['type']
 			);
@@ -963,6 +969,14 @@ class VCA_ASM_Geography {
 		$options_array = $vca_asm_utilities->sort_by_key( $options_array, 'label' );
 		if ( ! empty( $first ) ) {
 			$options_array = array_merge( $first, $options_array );
+		}
+
+		if( ! empty( $global_option_last ) ) {
+			$options_array[] = array(
+				'label' => $global_option_last,
+				'value' => 0,
+				'class' => 'global'
+			);
 		}
 
 		return $options_array;

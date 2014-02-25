@@ -282,6 +282,11 @@ ul.horiz-list li {
 .noflow {
 	 overflow: hidden;
 }
+.default-button {
+    position: absolute;
+	left: -1000%;
+	top: -1000%;
+}
 
 
 
@@ -396,7 +401,7 @@ div.alignleft h3.table-headline {
 	width: 16px;
 	height: 16px;
 	margin: 0 .6em 0 0;
-	background-size: 576px 32px;
+	background-size: 592px 32px;
 }
 .nav-tab-icon {
 	filter: alpha(opacity=60);
@@ -564,8 +569,7 @@ a:hover .nt-icon-education {
 #icon-star {
 	background-position: -800px 0px;
 }
-#icon-cups,
-.icon32-posts-miscactions {
+#icon-cups {
 	background-position: -832px 0px;
 }
 #icon-padlock-open {
@@ -682,6 +686,9 @@ a:hover .nt-icon-country-groups,
 a:hover .nt-icon-nation-group,
 a:hover .nt-icon-nation-groups {
 	background-position: -560px -16px;
+}
+.icon32-posts-miscactions {
+	background-position: -1152px 0px;
 }
 
 

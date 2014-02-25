@@ -30,7 +30,7 @@ class VCA_ASM_Admin {
 			__( 'Home', 'vca-asm' ),
 			'read',
 			'vca-asm-home',
-			array( &$vca_asm_admin_home, 'home' ),
+			array( $vca_asm_admin_home, 'home' ),
 			VCA_ASM_RELPATH . 'img/icon-home_32.png',
 			101
 		);
@@ -40,7 +40,7 @@ class VCA_ASM_Admin {
 			'',
 			'read',
 			'vca-asm-home',
-			array( &$vca_asm_admin_home, 'home' )
+			array( $vca_asm_admin_home, 'home' )
 		);
 
 		/* Actions Menu */
@@ -49,7 +49,7 @@ class VCA_ASM_Admin {
 			__( 'Actions', 'vca-asm' ),
 			'vca_asm_view_actions',
 			'vca-asm-actions',
-			array( &$vca_asm_admin_actions, 'actions_overview' ),
+			array( $vca_asm_admin_actions, 'actions_overview' ),
 			VCA_ASM_RELPATH . 'img/icon-actions_32.png',
 			102
 		);
@@ -59,9 +59,10 @@ class VCA_ASM_Admin {
 			'',
 			'vca_asm_view_actions',
 			'vca-asm-actions',
-			array( &$vca_asm_admin_actions, 'actions_overview' )
+			array( $vca_asm_admin_actions, 'actions_overview' )
 		);
-		/* + low prio submenus *
+
+		/* + low prio submenus */
 
 		/* Education Menu */
 		add_menu_page(
@@ -69,7 +70,7 @@ class VCA_ASM_Admin {
 			__( 'Education', 'vca-asm' ),
 			'vca_asm_view_education',
 			'vca-asm-education',
-			array( &$vca_asm_admin_education, 'education_overview' ),
+			array( $vca_asm_admin_education, 'education_overview' ),
 			VCA_ASM_RELPATH . 'img/icon-education_32.png',
 			103
 		);
@@ -79,7 +80,7 @@ class VCA_ASM_Admin {
 			'',
 			'vca_asm_view_education',
 			'vca-asm-education',
-			array( &$vca_asm_admin_education, 'education_overview' )
+			array( $vca_asm_admin_education, 'education_overview' )
 		);
 		add_submenu_page(
 			'vca-asm-education',
@@ -87,7 +88,7 @@ class VCA_ASM_Admin {
 			'Free Teacher WS',
 			'vca_asm_view_education',
 			'vca-asm-education-workshops',
-			array( &$vca_asm_admin_education, 'pseudo_workshops' )
+			array( $vca_asm_admin_education, 'pseudo_workshops' )
 		);
 
 		/* Network Menu */
@@ -96,7 +97,7 @@ class VCA_ASM_Admin {
 			__( 'Network', 'vca-asm' ),
 			'vca_asm_view_network',
 			'vca-asm-network',
-			array( &$vca_asm_admin_network, 'network_overview' ),
+			array( $vca_asm_admin_network, 'network_overview' ),
 			VCA_ASM_RELPATH . 'img/icon-network_32.png',
 			104
 		);
@@ -106,15 +107,15 @@ class VCA_ASM_Admin {
 			'',
 			'vca_asm_view_network',
 			'vca-asm-network',
-			array( &$vca_asm_admin_network, 'network_overview' )
+			array( $vca_asm_admin_network, 'network_overview' )
 		);
 		add_submenu_page(
 			'vca-asm-network',
-			__( 'Supporter', 'vca-asm' ),
-			__( 'Supporter', 'vca-asm' ),
+			__( 'Pool User', 'vca-asm' ),
+			__( 'Pool User', 'vca-asm' ),
 			'vca_asm_view_supporters',
 			'vca-asm-supporters',
-			array( &$vca_asm_admin_supporters, 'control' )
+			array( $vca_asm_admin_supporters, 'control' )
 		);
 		add_submenu_page(
 			'vca-asm-network',
@@ -122,7 +123,7 @@ class VCA_ASM_Admin {
 			__( 'Geography', 'vca-asm' ),
 			'vca_asm_view_network',
 			'vca-asm-geography',
-			array( &$vca_asm_admin_geography, 'control' )
+			array( $vca_asm_admin_geography, 'control' )
 		);
 
 		/* Emails Menu */
@@ -131,7 +132,7 @@ class VCA_ASM_Admin {
 			__( 'Emails', 'vca-asm' ),
 			'vca_asm_view_emails',
 			'vca-asm-emails',
-			array( &$vca_asm_admin_emails, 'sent_control' ),
+			array( $vca_asm_admin_emails, 'sent_control' ),
 			VCA_ASM_RELPATH . 'img/icon-mail_32.png',
 			105
 		);
@@ -141,7 +142,7 @@ class VCA_ASM_Admin {
 			__( '', 'vca-asm' ),
 			'vca_asm_view_emails',
 			'vca-asm-emails',
-			array( &$vca_asm_admin_emails, 'sent_control' )
+			array( $vca_asm_admin_emails, 'sent_control' )
 		);
 		add_submenu_page(
 			'vca-asm-emails',
@@ -149,7 +150,7 @@ class VCA_ASM_Admin {
 			__( 'Compose', 'vca-asm' ),
 			'vca_asm_send_emails',
 			'vca-asm-compose',
-			array( &$vca_asm_admin_emails, 'compose_control' )
+			array( $vca_asm_admin_emails, 'compose_control' )
 		);
 		add_submenu_page(
 			'vca-asm-emails',
@@ -157,7 +158,7 @@ class VCA_ASM_Admin {
 			__( 'Sent Items', 'vca-asm' ),
 			'vca_asm_view_emails',
 			'vca-asm-emails',
-			array( &$vca_asm_admin_emails, 'sent_control' )
+			array( $vca_asm_admin_emails, 'sent_control' )
 		);
 
 		/* Finances Menu */
@@ -166,7 +167,7 @@ class VCA_ASM_Admin {
 			__( 'Finances', 'vca-asm' ),
 			'vca_asm_view_finances',
 			'vca-asm-finances',
-			array( &$vca_asm_admin_finances, 'control' ),
+			array( $vca_asm_admin_finances, 'control' ),
 			VCA_ASM_RELPATH . 'img/icon-finances_32.png',
 			106
 		);
@@ -176,7 +177,7 @@ class VCA_ASM_Admin {
 			'',
 			'vca_asm_view_finances',
 			'vca-asm-finances',
-			array( &$vca_asm_admin_finances, 'control' )
+			array( $vca_asm_admin_finances, 'control' )
 		);
 
 		///* Blog Menu */
@@ -196,7 +197,7 @@ class VCA_ASM_Admin {
 			__( 'Settings', 'vca-asm' ),
 			'vca_asm_view_options',
 			'vca-asm-settings',
-			array( &$vca_asm_admin_settings, 'control' ),
+			array( $vca_asm_admin_settings, 'control' ),
 			VCA_ASM_RELPATH . 'img/icon-settings_32.png',
 			108
 		);
@@ -206,7 +207,7 @@ class VCA_ASM_Admin {
 			__( 'Pool', 'vca-asm' ),
 			'vca_asm_view_options',
 			'vca-asm-settings',
-			array( &$vca_asm_admin_settings, 'control' )
+			array( $vca_asm_admin_settings, 'control' )
 		);
 		add_submenu_page(
 			'vca-asm-settings',
@@ -214,7 +215,7 @@ class VCA_ASM_Admin {
 			__( 'Maintenance Mode', 'vca-asm' ),
 			'vca_asm_set_mode',
 			'vca-asm-mode-settings',
-			array( &$vca_asm_admin_settings, 'mode_control' )
+			array( $vca_asm_admin_settings, 'mode_control' )
 		);
 		add_submenu_page(
 			'vca-asm-settings',
@@ -241,7 +242,7 @@ class VCA_ASM_Admin {
 			__( 'Slots &amp; Participants', 'vca-asm' ),
 			'vca_asm_view_actions',
 			'vca-asm-actions-slot-allocation',
-			array( &$vca_asm_admin_slot_allocation, 'control' )
+			array( $vca_asm_admin_slot_allocation, 'control' )
 		);
 		add_submenu_page(
 			'vca-asm-education',
@@ -249,7 +250,7 @@ class VCA_ASM_Admin {
 			__( 'Slots &amp; Participants', 'vca-asm' ),
 			'vca_asm_view_education',
 			'vca-asm-education-slot-allocation',
-			array( &$vca_asm_admin_slot_allocation, 'control' )
+			array( $vca_asm_admin_slot_allocation, 'control' )
 		);
 		add_submenu_page(
 			'vca-asm-network',
@@ -257,7 +258,7 @@ class VCA_ASM_Admin {
 			__( 'Slots &amp; Participants', 'vca-asm' ),
 			'vca_asm_view_network',
 			'vca-asm-network-slot-allocation',
-			array( &$vca_asm_admin_slot_allocation, 'control' )
+			array( $vca_asm_admin_slot_allocation, 'control' )
 		);
 	}
 
@@ -296,8 +297,8 @@ class VCA_ASM_Admin {
 	 * @access public
 	 */
 	public function __construct() {
-		add_action( 'admin_menu', array( &$this, 'high_priority_admin_menu' ), 9 );
-		add_action( 'admin_menu', array( &$this, 'low_priority_admin_menu' ), 11 );
+		add_action( 'admin_menu', array( $this, 'high_priority_admin_menu' ), 9 );
+		add_action( 'admin_menu', array( $this, 'low_priority_admin_menu' ), 11 );
 	}
 
 } // class
