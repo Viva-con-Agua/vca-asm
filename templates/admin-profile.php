@@ -5,15 +5,15 @@ echo '<table class="form-table"><tbody>';
 /* loop through fields */
 if ( isset ( $fields ) && ! empty( $fields ) ) {
 	foreach ( $fields as $field ) {
-		
+
 		$field['value'] = esc_attr( get_user_meta( $user->ID, $field['id'], true ) );
-		
+
 		echo '<tr';
 		if( isset( $field['row-class'] ) && ! empty( $field['row-class'] ) ) {
 			echo ' class="' . $field['row-class'] . '"';
 		}
 		echo '><th>';
-		
+
 		if( isset( $field['label'] ) &&
 		   ! empty( $field['label'] ) &&
 		   ( ! isset( $field['admin_hide'] ) || $field['admin_hide'] !== true ) ) {
@@ -27,14 +27,14 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 			}
 			echo '</label>';
 		}
-		
+
 		echo '</th><td>';
-		
-		switch( $field['type'] ) {	
+
+		switch( $field['type'] ) {
 			case 'section':
 				echo '';
 			break;
-		
+
 			case 'hidden':
 				$output .= '<input type="hidden" ' .
 					'name="' . $field['id'] .
@@ -42,7 +42,33 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 					'" class="input"' .
 					'" value="' . $field['value'] . '" />';
 			break;
-			
+
+			case 'tel':
+				if( ! isset( $field['admin_hide'] ) || $field['admin_hide'] !== true ) {
+					echo '<input type="tel" class="input input-tel"' .
+						'name="' . $field['id'] .
+						'" id="' . $field['id'] .
+						'" value="' . $field['value'] . '" size="30"';
+					if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
+						echo ' disabled="disabled"';
+					}
+					echo ' />';
+				}
+			break;
+
+			case 'email':
+				if( ! isset( $field['admin_hide'] ) || $field['admin_hide'] !== true ) {
+					echo '<input type="email" class="input input-email"' .
+						'name="' . $field['id'] .
+						'" id="' . $field['id'] .
+						'" value="' . $field['value'] . '" size="30"';
+					if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
+						echo ' disabled="disabled"';
+					}
+					echo ' />';
+				}
+			break;
+
 			case 'textarea':
 				echo '<textarea name="' . $field['id'] .
 					'" id="' . $field['id'] .
@@ -52,16 +78,16 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 				}
 				echo '>' .$field['value'] . '</textarea>';
 			break;
-			
-			case 'select':  
+
+			case 'select':
 				echo '<select name="' . $field['id'] .
 				'" id="' . $field['id'] . '"';
 				if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
 					echo ' disabled="disabled"';
 				}
 				echo '>';
-				
-				foreach ($field['options'] as $option) {  
+
+				foreach ($field['options'] as $option) {
 					echo '<option';
 					if( $field['value'] == $option['value'] ) {
 						echo ' selected="selected"';
@@ -69,11 +95,11 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 					if( isset( $option['class'] ) && ! empty( $option['class'] ) ) {
 						echo ' class="' . $option['class'] . '"';
 					}
-					echo ' value="' . $option['value'] . '">' . $option['label'] . '&nbsp;</option>';  
+					echo ' value="' . $option['value'] . '">' . $option['label'] . '&nbsp;</option>';
 				}
 				echo '</select>';
 			break;
-			
+
 			case 'date':
 				echo '<select name="' . $field['id'] . '-day' .
 				'" id="' . $field['id'] . '-day' . '"';
@@ -81,7 +107,7 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 					echo ' disabled="disabled"';
 				}
 				echo '>';
-				for( $i = 1; $i <= 31; $i++ ) {  
+				for( $i = 1; $i <= 31; $i++ ) {
 					echo '<option';
 					if( date( 'd', intval( $field['value'] ) ) == $i ) {
 						echo ' selected="selected"';
@@ -92,17 +118,17 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 					} else {
 						echo $i;
 					}
-					echo '</option>';  
+					echo '</option>';
 				}
 				echo '</select>';
-				
+
 				echo '<select name="' . $field['id'] . '-month' .
 				'" id="' . $field['id'] . '-month' . '"';
 				if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
 					echo ' disabled="disabled"';
 				}
 				echo '>';
-				for( $i = 1; $i <= 12; $i++ ) {  
+				for( $i = 1; $i <= 12; $i++ ) {
 					echo '<option';
 					if( date( 'n', intval( $field['value'] ) ) == $i ) {
 						echo ' selected="selected"';
@@ -113,28 +139,28 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 					} else {
 						echo $i;
 					}
-					echo '</option>';  
+					echo '</option>';
 				}
 				echo '</select>';
-				
+
 				echo '<select name="' . $field['id'] . '-year' .
 				'" id="' . $field['id'] . '-year' . '"';
 				if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
 					echo ' disabled="disabled"';
 				}
 				echo '>';
-				for( $i = 2012; $i >= 1910; $i-- ) {  
+				for( $i = 2012; $i >= 1910; $i-- ) {
 					echo '<option';
 					if( date( 'Y', intval( $field['value'] ) ) == $i ) {
 						echo ' selected="selected"';
 					}
-					echo ' value="' . $i . '">' . $i . '</option>';  
+					echo ' value="' . $i . '">' . $i . '</option>';
 				}
 				echo '</select>';
 			break;
-			
-			case 'membership':  
-			case 'checkbox':  
+
+			case 'membership':
+			case 'checkbox':
 				echo '<input type="checkbox"' .
 					'name="' . $field['id'] .
 					'" id="' . $field['id'] . '" ';
@@ -143,11 +169,11 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 				}
 				if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
 					echo ' disabled="disabled"';
-				}				
+				}
 				echo '/><label for="' . $field['id'] . '">' . $field['option'] . '</label>';
 			break;
-			
-			case 'radio':  
+
+			case 'radio':
 				foreach ( $field['options'] as $option ) {
 					echo '<input type="radio"' .
 						'name="' . $field['id'] .
@@ -158,13 +184,13 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 					}
 					if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
 						echo ' disabled="disabled"';
-					}	
-					echo ' /><label for="' . $option['value'] . '">' . $option['label'] . '</label><br />';  
+					}
+					echo ' /><label for="' . $option['value'] . '">' . $option['label'] . '</label><br />';
 				}
 			break;
-	
-			case 'checkbox_group':  
-				foreach( $field['options'] as $option ) {  
+
+			case 'checkbox_group':
+				foreach( $field['options'] as $option ) {
 					echo '<input type="checkbox"' .
 						'value="' . $option['value'] .
 						'" name="' . $field['id'] .
@@ -178,27 +204,26 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 					}
 					if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
 						echo ' disabled="disabled"';
-					}					
+					}
 					echo ' /><label for="' .$option['value'] . '">' .
 						$option['label'] .
-						'</label><br />';  
+						'</label><br />';
 				}
 			break;
-				
+
 			case 'text':
 			default:
 				if( ! isset( $field['admin_hide'] ) || $field['admin_hide'] !== true ) {
-					echo '<input type="text" class="regular-text"' .
+					echo '<input type="text" class="input regular-text"' .
 						'name="' . $field['id'] .
 						'" id="' . $field['id'] .
-						'" class="input"' .
 						'" value="' . $field['value'] . '" size="30"';
 					if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
 						echo ' disabled="disabled"';
 					}
 					echo ' />';
 				}
-			break;			
+			break;
 		} // type switch
 		if( isset( $field['desc'] ) && ! empty( $field['desc'] ) ) {
 			echo '<br /><span class="description">' . $field['desc'] . '</span>';

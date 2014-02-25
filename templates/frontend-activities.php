@@ -1,20 +1,18 @@
 <?php
-	
+
 	/**
 	 * Template to display activities in the supporter's activities view
 	 *
 	 * This template is not satisfied with a simple array,
 	 * it must be fed $activities, a WP_Query object
 	 **/
-	
+
 	global $current_user, $vca_asm_utilities;
 	get_currentuserinfo();
-	
+
 	$user_region = get_user_meta( $current_user->ID, 'region', true );
 	$user_mem_status = get_user_meta( $current_user->ID, 'membership', true );
-	
-	setlocale ( LC_ALL , 'de_DE' ); 
-	
+
 	if( ! isset( $output ) ) {
 		$output = '';
 	}
@@ -27,30 +25,30 @@
 	if( isset( $split_months ) && $split_months === true ) {
 		$month_cur = 0;
 	}
-	
+
 	/* list & loop through posts (activities) */
 	$output .=  '<ul class="' . $list_class . '">';
-	
+
 	while ( $activities->have_posts() ) : $activities->the_post();
-		
+
 		$slots_arr = get_post_meta( get_the_ID(), 'slots', true );
 		if( ! array_key_exists( 0, $slots_arr ) ) {
 			if( ! array_key_exists( $user_region, $slots_arr ) || $user_mem_status != 2 ) {
 				continue;
 			}
 		}
-		
+
 		if( isset( $split_months ) && $split_months === true ) {
 			$stamp = intval( get_post_meta( get_the_ID(), 'start_date', true ) );
 			$month_num = date( 'n', $stamp );
 			if( $month_num != $month_cur ) {
 				$month_cur = $month_num;
 				$output .= '<li class="activity-month"><h3>' .
-					'Festivals im ' . strftime( '%B', $stamp ) . ':' .
+					_x( 'Activities in', 'in name of month', 'vca-asm' ) . ' ' . strftime( '%B', $stamp ) . ':' .
 					'</h3></li>';
 			}
 		}
-		
+
 		$output .= '<li class="activity toggle-wrapper">' .
 			'<h4>' . get_the_title() . '</h4>' .
 			'<ul class="head-block"><li>' .
@@ -81,7 +79,7 @@
 			$name = substr( $website, 4 );
 		} else {
 			$url = 'http://' . $website;
-			$name = $website;					
+			$name = $website;
 		}
 		$output .= '<a title="' .
 			sprintf( __( 'Visit &quot;%s&quot;', 'vca-asm' ), $name ) .
@@ -145,9 +143,9 @@
 				$i++;
 			}
 		}
-		
+
 		if( isset( $show_app ) && $show_app === true ) {
-			
+
 			$output .= '<h5>' . __( 'Note', 'vca-asm' ) . '</h5>' .
 				'<form method="post" action="">' .
 				'<input type="hidden" name="unique_id" value="[' . md5( uniqid() ) . ']">' .
@@ -166,14 +164,14 @@
 							"\n\n" .
 							_x( "For insatance if you're applying with a friend, cannot reach on time, or the like.", 'Frontend: Application Process', 'vca-asm' ) .
 						'</textarea>' .
-					'</div>' .	
+					'</div>' .
 				'</div><div class="form-row">' .
 					'<input type="submit" id="submit_form" name="submit_form" value="' . __( 'Apply', 'vca-asm' ) . '" />' .
 				'</div></form>';
 		}
-		
+
 		if( isset( $show_rev_app ) && $show_rev_app === true ) {
-			
+
 			$output .= '<form method="post" action="">' .
 				'<input type="hidden" name="todo" id="todo" value="revoke_app" />' .
 				'<input type="hidden" name="activity" id="activity" value="' . get_the_ID() . '" />' .
@@ -181,16 +179,16 @@
 					'<input type="submit" id="submit_form" name="submit_form" value="' . __( 'Revoke Application', 'vca-asm' ) . '" />' .
 				'</div></form>';
 		}
-		
+
 		$output .= '</div></div><div class="toggle-arrows-wrap">' .
 			'<a class="toggle-link toggle-arrows toggle-arrows-more" title="' . __( 'Toggle additional info', 'vca-asm' ) . '" ' . 'href="#">' .
 				'<img alt="' . __( 'More/Less', 'vca-asm' ) . '"src="' .
 					get_bloginfo( 'template_url' ) . '/images/arrows.png" />' .
 			'</a></div>' .
 			'</li>';
-		
+
 	endwhile;
-	
+
 	$output .= '</ul>';
-  
+
 ?>

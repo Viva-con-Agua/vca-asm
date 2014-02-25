@@ -1,11 +1,17 @@
+/*
+This style sheet is responsible for
+
+how activities are displayed in the front-end
+*/
+
 .activities {
-	margin-bottom: 4.2em;	
+	margin-bottom: 4.2em;
 }
 .activity {
 	padding: 2.1em;
 	border-radius: 2.2em;
 	margin: 2.1em 0 0;
-	background: #bba259;
+	background: #ddd0ac;
 }
 .activity ul li {
 	font-size: 1.4em;
@@ -38,10 +44,10 @@
 	margin-top: 1em;
 	color: #584619;
 }
-.no-touch .activity:hover,
+/*.no-touch .activity:hover,
 .activity:active {
 	background: #ccb882;
-}
+}*/
 .activity .form-row {
 	margin: 0;
 }
@@ -79,11 +85,11 @@
     -moz-box-shadow: inset 0 1px 2px #ccb882,
 						0 1px 2px #857043;
     box-shadow: inset 0 1px 2px #ccb882,
-						0 1px 2px #857043;	
+						0 1px 2px #857043;
 }
 .no-touch .activity input[type=submit]:hover  {
     text-shadow: 0 0 3px #ddd0ac;
-	
+
 }
 .activity input[type=submit]:active  {
 	color: #ffffff;
@@ -93,5 +99,5 @@
     -moz-box-shadow: inset 0 1px 2px #584619,
 						0 1px 2px #ddd0ac;
     box-shadow: inset 0 1px 2px #584619,
-						0 1px 2px #ddd0ac;	
+						0 1px 2px #ddd0ac;
 }

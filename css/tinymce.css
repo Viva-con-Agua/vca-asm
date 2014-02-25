@@ -1,0 +1,73 @@
+body {
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-size: 13px;
+	line-height: 21px;
+	color: #0B0B0B;
+	margin: 10px;
+	min-height: 100%;
+}
+
+p {
+	font-size: 14px;
+	line-height: 1.5;
+	margin: 0 0 21px 0;
+}
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	font-family: "Gill Sans Bold Condensed", "Gill Sans Condensed", "Gill Sans Bold", "Gill Sans", "Gill Sans MT", Verdana, Geneva, Arial, Helvetica, sans-serif;
+	font-weight: bold;
+	font-size: 18px;
+	line-height: 1.1666667;
+	margin: 0 0 21px 0;
+}
+h1 {
+	font-size: 28px;
+	line-height: 1.5;
+	margin: 0 0 21px 0;
+}
+h2 {
+	font-size: 18px;
+	line-height: 1.1666667;
+}
+blockquote {
+	font-family: Georgia, "Times New Roman", Times, serif;
+}
+a {
+	text-decoration: none;
+	color: inherit;
+}
+p a {
+	border-bottom: 1px dotted #008fc1;
+}
+p a:hover,
+p a:active,
+p a:focus,
+p a:hover span,
+p a:active span,
+p a:focus span,
+p a:hover span span,
+p a:active span span,
+p a:focus span span {
+	color: #008fc1;
+	text-shadow: 0 0 1px #008fc1;
+	border-bottom: 1px dotted #e2007a;
+}
+ul, ol {
+	padding: 0 0 0 42px;
+	margin: 0 0 21px;
+}
+
+::-moz-selection {
+	background: #c4e3f0;
+	color: #00586c;
+	text-shadow: none;
+}
+::selection {
+	background: #c4e3f0;
+	color: #00586c;
+	text-shadow: none;
+}

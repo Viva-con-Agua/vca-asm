@@ -2,7 +2,7 @@
 
 /**
  * VCA_ASM_Admin class.
- * 
+ *
  * This class contains properties and methods to set up
  * the administration backend.
  *
@@ -32,119 +32,8 @@ class VCA_ASM_Admin {
 	 * @access public
 	 */
 	public function display_admin_menu() {
-		global $wpdb, $current_user, $vca_asm_regions, $vca_asm_registrations, $vca_asm_admin_applications, $vca_asm_admin_emails, $vca_asm_admin_supporters;
-		get_currentuserinfo();
-		
-		if( $current_user->has_cap('vca_asm_promote_all_supporters') ) {
-			$pending =
-				$wpdb->get_var(
-					$wpdb->prepare(
-						"SELECT COUNT(*) FROM $wpdb->usermeta WHERE meta_key='membership' AND meta_value='1'" ) );
-		} elseif( $current_user->has_cap('vca_asm_promote_supporters') ) {
-			$all_pending =
-				$wpdb->get_results(
-					"SELECT user_id FROM $wpdb->usermeta WHERE meta_key='membership' AND meta_value='1'", ARRAY_A );
-			$admin_region = get_user_meta( $current_user->ID, 'region', true );
-			$pending = 0;
-			foreach( $all_pending as $single ) {
-				$supp_region = get_user_meta( $single['user_id'], 'region', true );
-				if( $admin_region === $supp_region ) {
-					$pending++;
-				}
-			}
-		} else {
-			$pending = 0;
-		}
-		$pending = number_format_i18n( $pending );
-		
-		if( $current_user->has_cap('vca_asm_manage_all_applications') ) {
-			$app_count =
-				$wpdb->get_var(
-					$wpdb->prepare(
-						"SELECT COUNT(*) FROM " .
-						$wpdb->prefix . "vca_asm_applications WHERE state = 0" ) );
-			$wait_count =
-				$wpdb->get_var(
-					$wpdb->prepare(
-						"SELECT COUNT(*) FROM " .
-						$wpdb->prefix . "vca_asm_applications WHERE state = 1" ) );
-			$reg_count = 0;
-			$all_regs =
-				$wpdb->get_results(
-					"SELECT supporter, activity FROM " .
-					$wpdb->prefix . "vca_asm_registrations", ARRAY_A );
-			foreach( $all_regs as $single ) {
-				$start_date = intval( get_post_meta( $single['activity'], 'start_date', true ) ) + 82800;
-				$current_time = time();
-				if( $start_date > $current_time ) {
-					$reg_count++;
-				} else {
-					$vca_asm_registrations->move_registration_to_old( intval( $single['activity'] ), intval( $single['supporter'] ) );
-				}
-			}
-		} elseif( $current_user->has_cap('vca_asm_manage_applications') ) {
-			$all_apps =
-				$wpdb->get_results(
-					"SELECT supporter, activity FROM " .
-					$wpdb->prefix . "vca_asm_applications WHERE state = 0", ARRAY_A );
-			$all_wait =
-				$wpdb->get_results(
-					"SELECT supporter, activity FROM " .
-					$wpdb->prefix . "vca_asm_applications WHERE state = 1", ARRAY_A );
-			$all_regs =
-				$wpdb->get_results(
-					"SELECT supporter, activity FROM " .
-					$wpdb->prefix . "vca_asm_registrations", ARRAY_A );
-			$admin_region = get_user_meta( $current_user->ID, 'region', true );
-			
-			$app_count = 0;
-			$wait_count = 0;
-			$reg_count = 0;
-			foreach( $all_apps as $single ) {
-				$supp_region = get_user_meta( $single['supporter'], 'region', true );
-				$supp_mem_status = get_user_meta( $single['supporter'], 'membership', true );
-				$slots_arr = get_post_meta( $single['activity'], 'slots', true );
-				$post_region = get_post_meta( $single['activity'], 'region', true );
-				$delegation = get_post_meta( $single['activity'], 'delegate', true );
-				if( ( $admin_region === $supp_region && $supp_mem_status == 2 && ( is_array( $slots_arr ) && array_key_exists( $supp_region, $slots_arr ) ) ) || ( $delegation == 'delegate' && $post_region == $admin_region ) ) {
-					$app_count++;
-				}
-			}
-			foreach( $all_wait as $single ) {
-				$supp_region = get_user_meta( $single['supporter'], 'region', true );
-				$supp_mem_status = get_user_meta( $single['supporter'], 'membership', true );
-				$slots_arr = get_post_meta( $single['activity'], 'slots', true );
-				$post_region = get_post_meta( $single['activity'], 'region', true );
-				$delegation = get_post_meta( $single['activity'], 'delegate', true );
-				if( ( $admin_region === $supp_region && $supp_mem_status == 2 && ( is_array( $slots_arr ) && array_key_exists( $supp_region, $slots_arr ) ) ) || ( $delegation == 'delegate' && $post_region == $admin_region ) ) {
-					$wait_count++;
-				}
-			}
-			foreach( $all_regs as $single ) {
-				$supp_region = get_user_meta( $single['supporter'], 'region', true );
-				$supp_mem_status = get_user_meta( $single['supporter'], 'membership', true );
-				$slots_arr = get_post_meta( $single['activity'], 'slots', true );
-				$post_region = get_post_meta( $single['activity'], 'region', true );
-				$delegation = get_post_meta( $single['activity'], 'delegate', true );
-				if( ( $admin_region === $supp_region && $supp_mem_status == 2 && ( is_array( $slots_arr ) && array_key_exists( $supp_region, $slots_arr ) ) ) || ( $delegation == 'delegate' && $post_region == $admin_region ) ) {
-					$start_date = intval( get_post_meta( $single['activity'], 'start_date', true ) ) + 82800;
-					$current_time = time();
-					if( $start_date > $current_time ) {
-						$reg_count++;
-					} else {
-						$vca_asm_registrations->move_registration_to_old( intval( $single['activity'] ), intval( $single['supporter'] ) );
-					}
-				}
-			}
-		} else {
-			$app_count = 0;
-			$wait_count = 0;
-			$reg_count = 0;
-		}
-		$app_count = number_format_i18n( $app_count );
-		$wait_count = number_format_i18n( $wait_count );
-		$reg_count = number_format_i18n( $reg_count );
-		
+		global $wpdb, $current_user, $vca_asm_regions, $vca_asm_registrations, $vca_asm_admin_activities, $vca_asm_admin_applications, $vca_asm_admin_emails, $vca_asm_admin_finances, $vca_asm_admin_settings, $vca_asm_admin_supporters;
+
 		/* Home */
 		add_menu_page(
 			__( 'Home', 'vca-asm' ),
@@ -152,7 +41,7 @@ class VCA_ASM_Admin {
 			'read',
 			'vca-asm-home',
 			array( &$this, 'home' ),
-			VCA_ASM_RELPATH . 'admin/home-icon.png',
+			VCA_ASM_RELPATH . 'admin/images/icon-home_32.png',
 			101
 		);
 		add_submenu_page(
@@ -163,61 +52,26 @@ class VCA_ASM_Admin {
 			'vca-asm-home',
 			array( &$this, 'home' )
 		);
-		
+
 		/* Supporter Menu*/
 		add_menu_page(
 			__( 'Supporter', 'vca-asm' ),
 			__( 'Supporter', 'vca-asm' ),
 			'vca_asm_view_supporters',
 			'vca-asm-supporters',
-			array( &$vca_asm_admin_supporters, 'list_supporters' ),
-			VCA_ASM_RELPATH . 'admin/supporters-icon.png',
+			array( &$vca_asm_admin_supporters, 'supporters_control' ),
+			VCA_ASM_RELPATH . 'admin/images/icon-supporters_32.png',
 			102
 		);
 		add_submenu_page(
 			'vca-asm-supporters',
-			__( 'All Supporters', 'vca-asm' ),
-			__( 'All Supporters', 'vca-asm' ),
+			'',
+			'',
 			'vca_asm_view_supporters',
 			'vca-asm-supporters',
-			array( &$vca_asm_admin_supporters, 'list_supporters' )
+			array( &$vca_asm_admin_supporters, 'supporters_control' )
 		);
-		add_submenu_page(
-			'vca-asm-supporters',
-			sprintf( __( 'Membership Status (%s)', 'vca-asm' ), $pending),
-			sprintf( __( 'Membership Status (%s)', 'vca-asm' ), $pending),
-			'vca_asm_promote_supporters',
-			'vca-asm-supporter-memberships',
-			array( &$vca_asm_admin_supporters, 'promotions' )
-		);
-		
-		/* Emails Menu*/
-		add_menu_page(
-			__( 'Emails', 'vca-asm' ),
-			__( 'Emails', 'vca-asm' ),
-			'vca_asm_send_emails',
-			'vca-asm-emails',
-			array( &$vca_asm_admin_emails, 'mail_form' ),
-			VCA_ASM_RELPATH . 'admin/emails-icon.png',
-			103
-		);
-		add_submenu_page(
-			'vca-asm-emails',
-			__( 'Send an E-Mail', 'vca-asm' ),
-			__( 'Send Mail', 'vca-asm' ),
-			'vca_asm_send_emails',
-			'vca-asm-emails',
-			array( &$vca_asm_admin_emails, 'mail_form' )
-		);
-		add_submenu_page(
-			'vca-asm-emails',
-			__( 'Auto Responses', 'vca-asm' ),
-			__( 'Auto Responses', 'vca-asm' ),
-			'vca_asm_edit_autoresponses',
-			'vca-asm-emails-autoresponses',
-			array( &$vca_asm_admin_emails, 'autoresponses_edit' )
-		);
-		
+
 		/* Regions Menu */
 		add_menu_page(
 			__( 'Regions', 'vca-asm' ),
@@ -225,62 +79,130 @@ class VCA_ASM_Admin {
 			'vca_asm_edit_regions',
 			'vca-asm-regions',
 			array( &$vca_asm_regions, 'regions_control' ),
-			VCA_ASM_RELPATH . 'admin/regions-icon.png',
-			104
+			VCA_ASM_RELPATH . 'admin/images/icon-regions_32.png',
+			103
 		);
 		add_submenu_page(
 			'vca-asm-regions',
-			__( 'All Regions', 'vca-asm' ),
-			__( 'All Regions', 'vca-asm' ),
+			'',
+			'',
 			'vca_asm_edit_regions',
 			'vca-asm-regions',
 			array( &$vca_asm_regions, 'regions_control' )
 		);
-		add_submenu_page(
-			'vca-asm-regions',
-			__( 'Add New Region', 'vca-asm' ),
-			__( 'Add new', 'vca-asm' ),
-			'vca_asm_edit_regions',
-			'vca-asm-regions-new',
-			array( &$vca_asm_regions, 'regions_edit' )
-		);
-		
-		/* Applications Menu */
+
+		/* Emails Menu */
 		add_menu_page(
-			sprintf( __( 'Applications (%s)', 'vca-asm' ), $app_count),
-			sprintf( __( 'Applications (%s)', 'vca-asm' ), $app_count),
-			'vca_asm_manage_applications',
-			'vca-asm-applications',
-			array( &$vca_asm_admin_applications, 'applications_control' ),
-			VCA_ASM_RELPATH . 'admin/applications-icon.png',
+			__( 'Emails', 'vca-asm' ),
+			__( 'Emails', 'vca-asm' ),
+			'vca_asm_send_emails',
+			'vca-asm-compose',
+			array( &$vca_asm_admin_emails, 'compose_control' ),
+			VCA_ASM_RELPATH . 'admin/images/icon-mail_32.png',
+			104
+		);
+		add_submenu_page(
+			'vca-asm-compose',
+			__( 'Compose', 'vca-asm' ),
+			__( 'Compose', 'vca-asm' ),
+			'vca_asm_send_emails',
+			'vca-asm-compose',
+			array( &$vca_asm_admin_emails, 'compose_control' )
+		);
+		add_submenu_page(
+			'vca-asm-compose',
+			__( 'Sent Items', 'vca-asm' ),
+			__( 'Sent Items', 'vca-asm' ),
+			'vca_asm_send_emails',
+			'vca-asm-emails',
+			array( &$vca_asm_admin_emails, 'sent_control' )
+		);
+
+		///* Blog Menu */
+		//add_menu_page(
+		//	__( 'Blog', 'vca-asm' ),
+		//	__( 'Blog', 'vca-asm' ),
+		//	'edit_post',
+		//	'edit.php',
+		//	'',
+		//	VCA_ASM_RELPATH . 'admin/images/icon-write_32.png',
+		//	105
+		//);
+
+		/* Activities Menu */
+		add_menu_page(
+			__( 'Activities', 'vca-asm' ),
+			__( 'Activities', 'vca-asm' ),
+			'vca_asm_edit_activities',
+			'vca-asm-activities',
+			array( &$vca_asm_admin_activities, 'control' ),
+			VCA_ASM_RELPATH . 'admin/images/icon-activities_32.png',
 			106
 		);
 		add_submenu_page(
-			'vca-asm-applications',
-			sprintf( __( 'Applications (%s)', 'vca-asm' ), $app_count),
-			sprintf( __( 'Applications (%s)', 'vca-asm' ), $app_count),
-			'vca_asm_manage_applications',
-			'vca-asm-applications',
-			array( &$vca_asm_admin_applications, 'applications_control' )
+			'vca-asm-activities',
+			'',
+			'',
+			'vca_asm_edit_activities',
+			'vca-asm-activities',
+			array( &$vca_asm_admin_activities, 'control' )
 		);
 		add_submenu_page(
-			'vca-asm-applications',
-			sprintf( __( 'Waiting List (%s)', 'vca-asm' ), $wait_count),
-			sprintf( __( 'Waiting List (%s)', 'vca-asm' ), $wait_count),
+			'vca-asm-activities',
+			__( 'Slot Allocation', 'vca-asm' ),
+			__( 'Slot Allocation', 'vca-asm' ),
 			'vca_asm_manage_applications',
-			'vca-asm-waiting-list',
-			array( &$vca_asm_admin_applications, 'waiting_control' )
+			'vca-asm-slot-allocation',
+			array( &$vca_asm_admin_applications, 'slot_allocation_control' )
 		);
 		add_submenu_page(
-			'vca-asm-applications',
-			sprintf( __( 'Accepted Applications (%s)', 'vca-asm' ), $reg_count),
-			sprintf( __( 'Accepted Applications (%s)', 'vca-asm' ), $reg_count),
-			'vca_asm_manage_applications',
-			'vca-asm-registrations',
-			array( &$vca_asm_admin_applications, 'registrations_control' )
+			'vca-asm-activities',
+			'Bildungsworkshops',
+			'Bildungsworkshops',
+			'vca_asm_send_global_emails',
+			'vca-asm-activities-education',
+			array( &$this, 'education_control' )
+		);
+
+		/* Finances Menu */
+		add_menu_page(
+			__( 'Finances', 'vca-asm' ),
+			__( 'Finances', 'vca-asm' ),
+			'vca_asm_edit_finances',
+			'vca-asm-finances',
+			array( &$vca_asm_admin_finances, 'control' ),
+			VCA_ASM_RELPATH . 'admin/images/icon-finances_32.png',
+			107
+		);
+		add_submenu_page(
+			'vca-asm-finances',
+			'',
+			'',
+			'vca_asm_edit_finances',
+			'vca-asm-finances',
+			array( &$vca_asm_admin_finances, 'control' )
+		);
+
+		/* Settings Menu */
+		add_menu_page(
+			__( 'Settings', 'vca-asm' ),
+			__( 'Settings', 'vca-asm' ),
+			'vca_asm_manage_options',
+			'vca-asm-settings',
+			array( &$vca_asm_admin_settings, 'control' ),
+			VCA_ASM_RELPATH . 'admin/images/icon-settings_32.png',
+			108
+		);
+		add_submenu_page(
+			'vca-asm-settings',
+			'',
+			'',
+			'vca_asm_manage_options',
+			'vca-asm-settings',
+			array( &$vca_asm_admin_settings, 'control' )
 		);
 	}
-	
+
 	/**
 	 * Admin Home Page
 	 *
@@ -288,30 +210,185 @@ class VCA_ASM_Admin {
 	 * @access public
 	 */
 	public function home() {
-		global $wpdb;
-		
-		$user_count = count_users();
-		$region_count =  $wpdb->get_var(
-			$wpdb->prepare(
-				"SELECT COUNT(id) FROM " .
-				$wpdb->prefix . "vca_asm_regions"
-			)
-		);
-		
+		global $current_user, $wpdb, $vca_asm_regions;
+		get_currentuserinfo();
+
+		$stats = new VCA_ASM_Stats();
+		$admin_region = get_user_meta( $current_user->ID, 'region', true );
+		$admin_region_name = $vca_asm_regions->get_name( $admin_region );
+		$admin_region_status = $vca_asm_regions->get_status( $admin_region );
+
+		if( in_array( 'region', $current_user->roles ) ) {
+			$headline = 'Viva con Agua | ' . $admin_region_status . ' ' . $admin_region_name;
+		} else {
+			$headline = 'Viva con Agua | Supporter Pool';
+		}
+
 		$output = '<div class="wrap">' .
-				'<h2>Viva con Agua Supporter Pool</h2>' .
-				'<div id="welcome-panel" class="welcome-panel">' .
-				'<p>' . __( 'Regions', 'vca-asm' ) . ': ' . $region_count . '</p>' .
-				'<p>' . __( 'Supporter', 'vca-asm' ) . ': ' . $user_count['avail_roles']['supporter'] . '</p>' .
-				'<p><a class="button" title="' . __( 'Back to the frontend', 'vca-asm' ) . '" href="' . get_bloginfo('url') . '">' .
-				__( 'Back to the front!', 'vca-asm' ) . '</a></p>' .
-				'<p><a class="button-primary" title="' . __( 'Log me out', 'vca-asm' ) .
-					'" href="' . wp_logout_url( get_bloginfo('url') ) . '">' . __( 'Logout', 'vca-asm' ) . '</a></p>' .
-				'</div></div>'; 
-		
+			'<div id="icon-home" class="icon32-pa"></div><h2>' . $headline . '</h2><br />' .
+				'<p><a class="button" title="' . __( '&larr; Back to the frontend', 'vca-asm' ) . '" href="' . get_bloginfo('url') . '">' .
+				__( '&larr; Back to the frontend', 'vca-asm' ) . '</a>' . '&nbsp;&nbsp;&nbsp;' .
+					'<a class="button-primary" title="' . __( 'Log me out', 'vca-asm' ) .
+					'" href="' . wp_logout_url( get_bloginfo('url') ) . '">' . __( 'Logout', 'vca-asm' ) . '</a>' .
+				'</p>';
+
+		if( in_array( 'content_admin', $current_user->roles ) || in_array( 'administrator', $current_user->roles ) ) {
+			$output .= '<h3 class="title title-top-pa">Entwicklungsfortschritt, Pool v1.2</h3>' .
+				'<p>' .
+					'aktuell aufgespielte Version: 1.2-rc1 (26.11.2012)<br />' .
+					'<a title="aktueller Stand" href="http://pool.vivaconagua.org/fortschritt/">' .
+						'Entwicklungsfortschritt einsehen' .
+					'</a>' .
+					'<br />(Head-Of-Benutzer und Abteilungsassistenzen sehen diese Nachricht nicht)' .
+				'</p>';
+		}
+
+		$output .= '<h3 class="title title-top-pa">' . __( 'Supporters', 'vca-asm' ) . '</h3>' .
+				'<p>' .
+					sprintf( _x( '%1$s registered supporters, %2$s of which are from your %3$s', 'Statistics', 'vca-asm' ),
+						'<strong>' . $stats->supporters_total_total . '</strong>',
+						'<strong>' . $stats->supporters_total_region . '</strong>',
+						$admin_region_status
+					) . '<br />' .
+					sprintf( _x( '&quot;Active Members&quot;: %1$s (your %3$s: %2$s)', 'Statistics', 'vca-asm' ),
+						'<strong>' . $stats->supporters_active_total . '</strong>',
+						'<strong>' . $stats->supporters_active_region . '</strong>',
+						$admin_region_status
+					) . '<br />' .
+					sprintf( _x( 'Current pending membership applications: %1$s (your %3$s: %2$s)', 'Statistics', 'vca-asm' ),
+						'<strong>' . $stats->supporters_applied_total . '</strong>',
+						'<strong>' . $stats->supporters_applied_region . '</strong>',
+						$admin_region_status
+					) . '<br />' .
+					sprintf( _x( 'The remaining %1$s (your %3$s: %2$s) have not applied for active membership.', 'Statistics', 'vca-asm' ),
+						'<strong>' . $stats->supporters_inactive_total . '</strong>',
+						'<strong>' . $stats->supporters_inactive_region . '</strong>',
+						$admin_region_status
+					) . '<br />' .
+					sprintf( _x( '%1$s of those (your %3$s: %2$s) only have very incomplete (not even a name submitted) profiles.', 'Statistics', 'vca-asm' ),
+						'<strong>' . $stats->supporters_incomplete_total . '</strong>',
+						'<strong>' . $stats->supporters_incomplete_region . '</strong>',
+						$admin_region_status
+					) .
+				'</p>' .
+				'<h3 class="title title-top-pa">' . __( 'Regions', 'vca-asm' ) . '</h3>' .
+				'<p>' .
+					sprintf( _x( '%s Regions', 'Statistics', 'vca-asm' ),
+							'<strong>' . $stats->regions_total . '</strong>' ) . '<br />' .
+					sprintf( _x( '%1$s of those are Cells', 'Statistics', 'vca-asm' ),
+							'<strong>' . $stats->regions_cells . '</strong>' ) . '<br />' .
+					sprintf( _x( '%1$s of those are Local Crews', 'Statistics', 'vca-asm' ),
+							'<strong>' . $stats->regions_crews . '</strong>' ) .
+				'</p>' .
+				'<h3 class="title title-top-pa">' . __( 'Activities', 'vca-asm' ) . '</h3>' .
+				'<p>' .
+					sprintf( _x( '%1$s Festivals in total, of which %2$s are in the future (applications for %3$s of those are still open)', 'Statistics', 'vca-asm' ),
+						'<strong>' . $stats->activities_festivals_total . '</strong>',
+						'<strong>' . $stats->activities_festivals_upcoming . '</strong>',
+						'<strong>' . $stats->activities_festivals_appphase . '</strong>'
+					);
+				//if( 0 < $stats->activities_festivals_current ) {
+				//	$output .= sprintf( _x( ', %1$s lie in the past and %2$s are currently happening!', 'Statistics', 'vca-asm' ),
+				//		'<strong>' . $stats->activities_festivals_past . '</strong>',
+				//		'<strong>' . $stats->activities_festivals_current . '</strong>'
+				//	);
+				//} else {
+				//	$output .= sprintf( _x( ' and %s lie in the past.', 'Statistics', 'vca-asm' ),
+				//		'<strong>' . $stats->activities_festivals_past . '</strong>'
+				//	);
+				//}
+				$output .= '.</p>';
+
+
+
+		//if( 1 === $current_user->ID ) {
+		//
+		//		$oldregs = $wpdb->get_results(
+		//			"SELECT * FROM " . $wpdb->prefix."vca_asm_registrations_old_2", ARRAY_A
+		//		);
+		//
+		//		$supps = array();
+		//		foreach( $oldregs as $onereg ) {
+		//			if( ! in_array( $onereg['supporter'], $supps ) ) {
+		//				$end_date = intval( get_post_meta( $onereg['activity'], 'end_date', true ) );
+		//				$thetitle = get_the_title( $onereg['activity'] );
+		//				if( 1349049600 > $end_date && 'konz' !== strtolower(substr($thetitle,0,4)) ) {
+		//					$supps[] = $onereg['supporter'];
+		//				}
+		//			}
+		//		}
+		//
+		//		foreach( $supps as $supp ) {
+		//			$userobj = new WP_User( $supp );
+		//			$output .= $userobj->user_email . '<br />';
+		//		}
+		//}
+
+
+			$output .= '</div>';
+
 		echo $output;
 	}
-	
+
+	/**
+	 * Temporary Pseudo Menus
+	 *
+	 * @since 1.2
+	 * @access public
+	 */
+	public function education_control() {
+
+		$output = '<div class="wrap">' .
+			'<div id="icon-education" class="icon32-pa"></div><h2>Bildungsworkshops</h2><br /><br />' .
+				'<p><dfn>Verfügbar ab Version 1.3</dfn></p>' .
+			'</div>';
+
+		echo $output;
+	}
+	public function network_meeting_control() {
+		global $current_user;
+
+		$output = '<div class="wrap">' .
+			'<div id="icon-network" class="icon32-pa"></div><h2>Netzwerktreffen</h2><br /><br />' .
+				'<p><dfn>Verfügbar ab Version 1.3</dfn></p>' .
+				'<p><em>Das aktuelle Netzwerktreffen ist noch als Pseudo-Festival eingepflegt.<br />';
+
+		if( $current_user->has_cap( 'vca_asm_edit_others_activities' ) ) {
+			$output .= '<a title="Netzwerktreffen editieren" href="' . get_site_option('url') . '/wp-admin/post.php?post=318&action=edit">Das aktuelle Netzwerktreffen bearbeiten</a><br />';
+		}
+		$output .= '<a title="Bewerbungen bearbeiten" href="' . get_site_option('url') . '/wp-admin/post.php?post=318&action=edit">Platzvergabe</a></em></p></div>';
+
+		echo $output;
+	}
+	public function display_temp_menu() {
+		add_submenu_page(
+			'vca-asm-activities',
+			'Netzwerkreffen',
+			'Netzwerkreffen',
+			'vca_asm_edit_activities',
+			'vca-asm-activities-network-meeting',
+			array( &$this, 'network_meeting_control' )
+		);
+	}
+
+	/**
+	 * Converts message arrays into html output
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
+	public function convert_messages( $messages = array() ) {
+		$output = '';
+
+		foreach( $messages as $message ) {
+			$output .= '<div class="' . $message['type'] . '"><p>' .
+					$message['message'] .
+				'</p></div>';
+		}
+
+		return $output;
+	}
+
 	/**
 	 * PHP4 style constructor
 	 *
@@ -329,9 +406,10 @@ class VCA_ASM_Admin {
 	 * @access public
 	 */
 	public function __construct() {
-		add_action( 'admin_menu', array( &$this, 'display_admin_menu' ) );
+		add_action( 'admin_menu', array( &$this, 'display_admin_menu' ), 9 );
+		add_action( 'admin_menu', array( &$this, 'display_temp_menu' ), 11 );
 	}
-	
+
 } // class
 
 endif; // class exists

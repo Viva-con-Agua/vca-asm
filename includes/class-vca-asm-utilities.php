@@ -2,7 +2,7 @@
 
 /**
  * VcA_ASM_Utilities class.
- * 
+ *
  * This class contains utility methods used here and there.
  *
  * @package VcA Activity & Supporter Management
@@ -12,7 +12,7 @@
 if ( ! class_exists( 'VcA_ASM_Utilities' ) ) :
 
 class VcA_ASM_Utilities {
-		
+
 	/**
 	 * Calculates age,
 	 * i.e. the difference between two Unix Timestamps
@@ -67,9 +67,9 @@ class VcA_ASM_Utilities {
 		}
 		//years
 		$diff['year'] = $d1['year'] - $d2['year'];
-		return $diff;   
+		return $diff;
 	}
-	
+
 	/**
 	 * Replaces in-text URLs with working Links
 	 *
@@ -81,10 +81,61 @@ class VcA_ASM_Utilities {
 		$string = preg_replace( "/([^\w\/])(www\.[a-z0-9\-]+\.[a-z0-9\-]+)/i", "$1http://$2", $string );
 		/* create links */
 		$string = preg_replace( "/([\w]+:\/\/[\w-?&;#~=\.\/\@]+[\w\/])/i", "<a target=\"_blank\" title=\"" . __( 'Visit Site', 'vca-asm' ) . "\" href=\"$1\">$1</A>",$string);
-		
-		return $string;   
+
+		return $string;
 	}
-	
+
+	/**
+	 * Converts DB gender strings into translatable strings
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
+	public function convert_strings( $string ) {
+		if( $string === 'male' ) {
+			$string = __( 'male', 'vca-asm' );
+		} elseif( $string === 'female' ) {
+			$string = __( 'female', 'vca-asm' );
+		} elseif( $string === 0 || $string === '0' ) {
+			$string = __( 'No', 'vca-asm' );
+		} elseif( $string == 1 ) {
+			$string = __( 'has applied...', 'vca-asm' );
+		} elseif( $string == 2 ) {
+			$string = __( 'Active Member', 'vca-asm' );
+		} elseif( empty( $string ) ) {
+			$string = __( 'not set', 'vca-asm' );
+		}
+
+		return $string;
+	}
+
+	/**
+	 * Returns a phone number without whitespaces, zeroes or a plus sign
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
+	public function normalize_phone_number( $number, $nice = false ) {
+
+		$number = preg_replace( "/[^0-9]/", "", $number );
+
+		if( ! empty( $number ) ) {
+
+			if( mb_substr( $number, 0, 2 ) == '00' ) {
+				$number = mb_substr( $number, 2 );
+			} elseif( mb_substr( $number, 0, 1 ) == '0' ) {
+				$number = '49' . mb_substr( $number, 1 );
+			}
+
+			if( $nice === true ) {
+				$number = '+' . mb_substr( $number, 0, 2 ) . ' ' . mb_substr( $number, 2, 3 ) . ' ' . mb_substr( $number, 5, 3 ) . ' ' . mb_substr( $number, 8, 3 ) . ' ' . mb_substr( $number, 11, 3 ) . ' ' . mb_substr( $number, 14 );
+			}
+		} else {
+			$number = __( 'not set', 'vca-asm' );
+		}
+		return $number;
+	}
+
 } // class
 
 endif; // class exists

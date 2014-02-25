@@ -2,10 +2,10 @@
 
 /**
  * VCA_ASM_Regions class.
- * 
+ *
  * This class contains properties and methods for
  * the addition, editing and deletion of regions.
- * 
+ *
  * Further it provides a method that returns
  * an array of regions for use in other classes.
  *
@@ -16,7 +16,7 @@
 if ( ! class_exists( 'VCA_ASM_Regions' ) ) :
 
 class VCA_ASM_Regions {
-	
+
 	/**
 	 * Returns the name of a region if fed its ID
 	 *
@@ -25,20 +25,20 @@ class VCA_ASM_Regions {
 	 */
 	public function get_name( $id ) {
 		global $wpdb;
-		
+
 		$region_query = $wpdb->get_results(
 				"SELECT name FROM " .
 				$wpdb->prefix . "vca_asm_regions " .
 				"WHERE id =" . $id, ARRAY_A
 		);
 		$region = $region_query[0]['name'];
-		if( empty( $region) ) {
+		if( empty( $region ) ) {
 			$region = __( 'no region', 'vca-asm' );
 		}
-		
+
 		return $region;
 	}
-	
+
 	/**
 	 * Returns an array of raw region data
 	 *
@@ -47,17 +47,17 @@ class VCA_ASM_Regions {
 	 */
 	public function get_all( $orderby = 'name', $order = 'ASC' ) {
 		global $wpdb;
-		
+
 		$regions = $wpdb->get_results(
 				"SELECT * FROM " .
 				$wpdb->prefix . "vca_asm_regions " .
 				"ORDER BY " .
 				$orderby . " " . $order, ARRAY_A
 		);
-		
+
 		return $regions;
 	}
-	
+
 	/**
 	 * Converts status string to proper name
 	 *
@@ -72,12 +72,13 @@ class VCA_ASM_Regions {
 			case 'lc':
 				return __( 'Local Crew', 'vca-asm' );
 			break;
+			default:
 			case 'region':
-				return __( 'geographical only', 'vca-asm' );
+				return __( 'region', 'vca-asm' );
 			break;
 		}
 	}
-	
+
 	/**
 	 * Returns an array of regions with id as key and name as value
 	 *
@@ -85,18 +86,40 @@ class VCA_ASM_Regions {
 	 * @access public
 	 */
 	public function get_ids() {
-		
+
 		$raw = $this->get_all();
 		$regions = array();
-		
+
 		foreach( $raw as $region ) {
 			$regions[$region['id']] = $region['name'];
 		}
 		$regions['0'] = _x( 'no specific region', 'Regions', 'vca-asm' );
-		
+
 		return $regions;
 	}
-	
+
+	/**
+	 * Returns the status of a region by ID
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
+	public function get_status( $id ) {
+		global $wpdb;
+
+		$status_query = $wpdb->get_results(
+			"SELECT status FROM " .
+			$wpdb->prefix . "vca_asm_regions " .
+			"WHERE id =" . $id, ARRAY_A
+		);
+		$status = $status_query[0]['status'];
+		if( empty( $status ) ) {
+			$status = __( 'no region', 'vca-asm' );
+		}
+
+		return $this->convert_stati( $status );
+	}
+
 	/**
 	 * Returns an array of regions with id as key and human readable status as value
 	 *
@@ -104,17 +127,17 @@ class VCA_ASM_Regions {
 	 * @access public
 	 */
 	public function get_stati() {
-		
+
 		$raw = $this->get_all();
 		$regions = array();
-		
+
 		foreach( $raw as $region ) {
 			$regions[$region['id']] = $region['status'];
 		}
-		
+
 		return $regions;
 	}
-	
+
 	/**
 	 * Returns an array of regions with id as key and human readable status as value
 	 *
@@ -122,17 +145,17 @@ class VCA_ASM_Regions {
 	 * @access public
 	 */
 	public function get_stati_conv() {
-		
+
 		$raw = $this->get_all();
 		$regions = array();
-		
+
 		foreach( $raw as $region ) {
 			$regions[$region['id']] = $this->convert_stati( $region['status'] );
 		}
-		
+
 		return $regions;
 	}
-	
+
 	/**
 	 * Updates the supporter and member count in the regions table
 	 *
@@ -143,9 +166,9 @@ class VCA_ASM_Regions {
 	 */
 	public function update_member_count() {
 		global $wpdb;
-		
+
 		$raw = $this->get_all();
-		
+
 		foreach( $raw as $region ) {
 			$supporters = $wpdb->get_results(
 					"SELECT user_id FROM " .
@@ -161,7 +184,7 @@ class VCA_ASM_Regions {
 					$mem_count++;
 				}
 			}
-			
+
 			$wpdb->update(
 				$wpdb->prefix.'vca_asm_regions',
 				array(
@@ -174,7 +197,7 @@ class VCA_ASM_Regions {
 			);
 		}
 	}
-	
+
 	/**
 	 * Returns an array of region data to be used in a dropdown menu
 	 *
@@ -182,7 +205,7 @@ class VCA_ASM_Regions {
 	 * @access public
 	 */
 	public function select_options( $global_option = '', $orderby = 'name', $order = 'ASC', $please_select = false ) {
-		
+
 		$raw = $this->get_all( $orderby, $order );
 		$regions = array();
 		if( $please_select === true ) {
@@ -192,7 +215,7 @@ class VCA_ASM_Regions {
 				'class' => 'please-select'
 			);
 		}
-		
+
 		if( ! empty( $global_option ) ) {
 			$regions[] = array(
 				'label' => $global_option,
@@ -200,7 +223,7 @@ class VCA_ASM_Regions {
 				'class' => 'global'
 			);
 		}
-		
+
 		foreach( $raw as $region ) {
 			$regions[] = array(
 				'label' => $region['name'],
@@ -208,10 +231,10 @@ class VCA_ASM_Regions {
 				'class' => $region['status']
 			);
 		}
-		
+
 		return $regions;
 	}
-	
+
 	/**
 	 * Returns an array of fields for a region
 	 *
@@ -232,7 +255,7 @@ class VCA_ASM_Regions {
 				'id' => 'status',
 				'options' => array(
 					array(
-						'label' => __( 'Geographical region only', 'vca-asm' ),
+						'label' => __( 'Region', 'vca-asm' ),
 						'value' => 'region'
 					),
 					array(
@@ -273,7 +296,7 @@ class VCA_ASM_Regions {
 		);
 		return $fields;
 	}
-	
+
 	/**
 	 * Region administration menu
 	 *
@@ -282,7 +305,7 @@ class VCA_ASM_Regions {
 	 */
 	public function regions_control() {
 		global $wpdb;
-		
+
 		if ($_GET['id']) {
 			$region_user_query = $wpdb->get_results(
 				"SELECT has_user, user_id, pass, user FROM " .
@@ -291,9 +314,9 @@ class VCA_ASM_Regions {
 			);
 			$region_user = $region_user_query[0];
 		}
-			
+
 		switch ($_GET['todo']) {
-			
+
 			case "delete":
 				if ($_GET['id']) {
 					$wpdb->query(
@@ -311,7 +334,7 @@ class VCA_ASM_Regions {
 				unset($_GET['todo'], $_GET['id']);
 				$this->regions_list();
 			break;
-	
+
 			case "save":
 				if( isset( $_POST['has_user'] ) ) {
 					$has_user = 1;
@@ -328,24 +351,45 @@ class VCA_ASM_Regions {
 						$this->regions_edit( $_GET['id'] );
 						return;
 					} elseif( $region_user['has_user'] == 1 ) {
-						$old_pass = $region_user['pass'];
-						if( $old_pass != $_POST['pass'] ) {
-							wp_update_user(
-								array(
-									'ID' => $region_user['user_id'],
-									'user_pass' => $_POST['pass'],
-									'user_email' => $_POST['email']
-								)
-							);
+						if( ! empty( $region_user['pass'] ) ) {
+							$old_pass = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5(REGION_KEY), base64_decode($region_user['pass']), MCRYPT_MODE_CBC, md5(md5(REGION_KEY))), "\0");
+							if( $old_pass != $_POST['pass'] ) {
+								wp_update_user(
+									array(
+										'ID' => $region_user['user_id'],
+										'user_pass' => $_POST['pass'],
+										'user_email' => $_POST['email']
+									)
+								);
+							} else {
+								wp_update_user(
+									array(
+										'ID' => $region_user['user_id'],
+										'user_email' => $_POST['email']
+									)
+								);
+							}
+							$new_pass = base64_encode( mcrypt_encrypt( MCRYPT_RIJNDAEL_256, md5(REGION_KEY), $_POST['pass'], MCRYPT_MODE_CBC, md5(md5(REGION_KEY)) ) );
 						} else {
-							wp_update_user(
-								array(
-									'ID' => $region_user['user_id'],
-									'user_email' => $_POST['email']
-								)
-							);
+							if( 'unbekannt...' != $_POST['pass'] ) {
+								wp_update_user(
+									array(
+										'ID' => $region_user['user_id'],
+										'user_pass' => $_POST['pass'],
+										'user_email' => $_POST['email']
+									)
+								);
+								$new_pass = base64_encode( mcrypt_encrypt( MCRYPT_RIJNDAEL_256, md5(REGION_KEY), $_POST['pass'], MCRYPT_MODE_CBC, md5(md5(REGION_KEY)) ) );
+							} else {
+								wp_update_user(
+									array(
+										'ID' => $region_user['user_id'],
+										'user_email' => $_POST['email']
+									)
+								);
+								$new_pass = '';
+							}
 						}
-						$new_pass = $_POST['pass'];
 						$new_user = $region_user['user'];
 						$region_user_id = $region_user['user_id'];
 					} elseif( $region_user['has_user'] != 1 ) {
@@ -365,7 +409,7 @@ class VCA_ASM_Regions {
 						update_user_meta( $region_user_id, 'last_name', $_POST['name'] );
 						update_user_meta( $region_user_id, 'city', $_POST['name'] );
 						update_user_meta( $region_user_id, 'birthday', '1159444800' );
-						$new_pass = $_POST['pass'];
+						$new_pass = base64_encode( mcrypt_encrypt( MCRYPT_RIJNDAEL_256, md5(REGION_KEY), $_POST['pass'], MCRYPT_MODE_CBC, md5(md5(REGION_KEY)) ) );
 						$new_user = $_POST['user'];
 					}
 				} elseif( ! isset( $_POST['has_user'] ) && $region_user['has_user'] == 1 ) {
@@ -378,7 +422,7 @@ class VCA_ASM_Regions {
 					$has_user = 0;
 					$region_user_id = 0;
 					$new_pass = '';
-					$new_user = 'bla';
+					$new_user = '';
 				}
 				if( isset( $_GET['id'] ) && $_GET['id'] != NULL ) {
 					$wpdb->update(
@@ -399,7 +443,7 @@ class VCA_ASM_Regions {
 					echo '<div class="updated"><p><strong>' .
 						__( 'Region successfully updated!', 'vca-asm' ) .
 						'</strong></p></div>';
-				} else {			
+				} else {
 					$wpdb->insert(
 						$wpdb->prefix.'vca_asm_regions',
 						array(
@@ -408,7 +452,7 @@ class VCA_ASM_Regions {
 							'has_user' => $has_user,
 							'user_id' => $region_user_id,
 							'user' => $_POST['user'],
-							'pass' => $_POST['pass'],
+							'pass' => base64_encode( mcrypt_encrypt( MCRYPT_RIJNDAEL_256, md5(REGION_KEY), $_POST['pass'], MCRYPT_MODE_CBC, md5(md5(REGION_KEY)) ) ),
 							'supporters' => 0,
 							'members' => 0),
 						array( '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%d' )
@@ -422,19 +466,23 @@ class VCA_ASM_Regions {
 				if( $has_user == 1 ) {
 					update_user_meta( $region_user_id, 'region', $region_id );
 				}
-				
+
 				$this->regions_list();
 			break;
-	
+
 			case "edit":
 				$this->regions_edit( $_GET['id'] );
 			break;
-		
+
+			case "new":
+				$this->regions_edit();
+			break;
+
 			default:
 				$this->regions_list();
 		}
 	}
-	
+
 	/**
 	 * List all regions
 	 *
@@ -442,11 +490,11 @@ class VCA_ASM_Regions {
 	 * @access private
 	 */
 	private function regions_list() {
-		
+
 		$this->update_member_count();
-		
+
 		$url = "admin.php?page=vca-asm-regions";
-		
+
 		if( isset( $_GET['orderby'] ) ) {
 			$orderby = $_GET['orderby'];
 		} else {
@@ -457,14 +505,14 @@ class VCA_ASM_Regions {
 			if( $order == 'ASC') {
 				$toggle_order = 'DESC';
 			} else {
-				$toggle_order = 'ASC';	
-			} 
+				$toggle_order = 'ASC';
+			}
 		} else {
 			$order = 'ASC';
 			$toggle_order = 'DESC';
-		}	
+		}
 		$rows = $this->get_all( $orderby, $order );
-		
+
 		$columns = array(
 			array(
 				'id' => 'name',
@@ -490,12 +538,16 @@ class VCA_ASM_Regions {
 				'sortable' => true
 			)
 		);
-		
-		$headline = __( 'Regions: Cells &amp; Local Crews', 'vca-asm' );
-		
+
+		$icon = '<div id="icon-regions" class="icon32-pa"></div>';
+		$headline = __( 'Regions: Cells &amp; Local Crews', 'vca-asm' ) .
+			' <a href="admin.php?page=vca-asm-regions&amp;todo=new" class="add-new-h2">' .
+				__( 'Add New', 'vca-asm' ) .
+			'</a>';
+
 		require( VCA_ASM_ABSPATH . '/templates/admin-table.php' );
 	}
-	
+
 	/**
 	 * Populates region fields with values
 	 *
@@ -504,9 +556,9 @@ class VCA_ASM_Regions {
 	 */
 	private function populate_fields( $id ) {
 		global $wpdb;
-		
+
 		$fields = $this->create_fields();
-		
+
 		/* fill fields with existing data */
 		$fcount = count($fields);
 		$name = '';
@@ -541,7 +593,7 @@ class VCA_ASM_Regions {
 		} else {
 			$has_head_of = false;
 		}
-		
+
 		for ( $i = 0; $i < $fcount; $i++ ) {
 			if ( empty( $_POST['submitted'] ) ) {
 				$name = $data['name'];
@@ -556,17 +608,23 @@ class VCA_ASM_Regions {
 						$fields[$i]['desc'] = '<strong>' . __( 'Attention', 'vca-asm' ) . ':</strong> ' .
 							__( 'This region is assigned a head of user. Unchecking this box and saving the region results in the permanent deletion of the user!', 'vca-asm' );
 					break;
-					
+
 					case 'user':
 						$fields[$i]['desc'] = __( 'The username (login) of the head of user. It cannot be changed (other than through deletion and creation of a new user).', 'vca-asm' );
 						$fields[$i]['disabled'] = true;
 					break;
-					
+
 					case 'pass':
-						$fields[$i]['desc'] = __( 'This is the first password you gave to the user. It might not even be correct anymore, since it can be changed by Head Of\'s by logging in with the head of account and using the regular user profile. For security reasons, user passwords are encrypted and cannot be resolved once set. You may however overwrite the Head Of user\'s current password by entering a new one here. If you leave this field unchanged, the password will not be updated.', 'vca-asm' );
+						$fields[$i]['desc'] = __( 'This is the current password of the region-user. If you change this and save the region, it will be updated as well.', 'vca-asm' );
 						$fields[$i]['disabled'] = false;
+						if( ! empty( $fields[$i]['value'] ) ) {
+							$fields[$i]['value'] = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5(REGION_KEY), base64_decode($fields[$i]['value']), MCRYPT_MODE_CBC, md5(md5(REGION_KEY))), "\0");
+						} else {
+							$fields[$i]['value'] = 'unbekannt...';
+						}
+;
 					break;
-					
+
 					case 'email':
 						$fields[$i]['value'] = $head_of_obj->user_email;
 						$fields[$i]['desc'] = __( 'This is the current email address assigned to the Head Of User.', 'vca-asm' );
@@ -575,10 +633,10 @@ class VCA_ASM_Regions {
 				}
 			}
 		}
-		
+
 		return array( $fields, $name );
 	}
-	
+
 	/**
 	 * Edit a region
 	 *
@@ -586,7 +644,7 @@ class VCA_ASM_Regions {
 	 * @access public
 	 */
 	public function regions_edit( $id = NULL ) {
-		
+
 		$url = "admin.php?page=vca-asm-regions";
 		$form_action = $url . "&amp;todo=save&amp;id=" . $id;
 
@@ -599,7 +657,8 @@ class VCA_ASM_Regions {
 		}
 
 		$output = '<div class="wrap">' .
-				'<h2>' . $title . '</h2>' .
+				'<div id="icon-regions" class="icon32-pa"></div>' .
+				'<h2>' . $title . '</h2><br />' .
 				'<form name="vca_asm_region_edit_form" method="post" action="' . $form_action . '">' .
 					'<input type="hidden" name="submitted" value="y"/>' .
 					'<input type="hidden" name="edit_val" value="' . $id . '"/>' ;
@@ -609,10 +668,10 @@ class VCA_ASM_Regions {
 					__( 'Save Region', 'vca-asm' ) .
 					'"></p></form>' .
 			'</div>';
-			
+
 		echo $output;
 	}
-	
+
 } // class
 
 endif; // class exists

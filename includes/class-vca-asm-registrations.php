@@ -3,7 +3,7 @@
 /**
  * VcA_ASM_Registrations class.
  * This class contains properties and methods to allocate supporters to events/activities.
- * 
+ *
  * @package VcA Activity & Supporter Management
  * @since 1.0
  *
@@ -23,13 +23,13 @@ class VcA_ASM_Registrations {
 	 */
 	public function get_free_slots( $activity, $region ) {
 		global $wpdb;
-		
+
 		$slots_arr = get_post_meta( $activity, 'slots', true );
-		
+
 		if( ! array_key_exists( $region, $slots_arr ) ) {
 			$region = 0;
 		}
-		
+
 		$registrations = $wpdb->get_results(
 			"SELECT contingent FROM " .
 			$wpdb->prefix . "vca_asm_registrations " .
@@ -53,7 +53,7 @@ class VcA_ASM_Registrations {
 	 */
 	public function get_activity_applications( $activity ) {
 		global $wpdb;
-			
+
 		$applications = $wpdb->get_results(
 			"SELECT supporter FROM " .
 			$wpdb->prefix . "vca_asm_applications " .
@@ -63,7 +63,7 @@ class VcA_ASM_Registrations {
 		foreach( $applications as $application ) {
 			$supporters[] = $application['supporter'];
 		}
-		
+
 		return $supporters;
 	}
 
@@ -75,7 +75,7 @@ class VcA_ASM_Registrations {
 	 */
 	public function get_activity_application_count( $activity, $region = 'all' ) {
 		global $wpdb;
-		
+
 		if( $region === 'all' ) {
 			$count = $wpdb->get_var( $wpdb->prepare(
 				"SELECT COUNT(*) FROM " .
@@ -97,7 +97,7 @@ class VcA_ASM_Registrations {
 				}
 			}
 		}
-		
+
 		return $count;
 	}
 
@@ -109,7 +109,7 @@ class VcA_ASM_Registrations {
 	 */
 	public function get_activity_waiting( $activity ) {
 		global $wpdb;
-			
+
 		$applications = $wpdb->get_results(
 			"SELECT supporter FROM " .
 			$wpdb->prefix . "vca_asm_applications " .
@@ -119,7 +119,7 @@ class VcA_ASM_Registrations {
 		foreach( $applications as $application ) {
 			$supporters[] = $application[0];
 		}
-		
+
 		return $supporters;
 	}
 
@@ -131,7 +131,7 @@ class VcA_ASM_Registrations {
 	 */
 	public function get_activity_waiting_count( $activity, $region = 'all' ) {
 		global $wpdb;
-		
+
 		if( $region === 'all' ) {
 			$count = $wpdb->get_var( $wpdb->prepare(
 				"SELECT COUNT(*) FROM " .
@@ -153,7 +153,7 @@ class VcA_ASM_Registrations {
 				}
 			}
 		}
-		
+
 		return $count;
 	}
 
@@ -165,7 +165,7 @@ class VcA_ASM_Registrations {
 	 */
 	public function get_activity_registrations( $activity ) {
 		global $wpdb;
-		
+
 		$registrations = $wpdb->get_results(
 			"SELECT supporter FROM " .
 			$wpdb->prefix . "vca_asm_registrations " .
@@ -175,7 +175,7 @@ class VcA_ASM_Registrations {
 		foreach( $registrations as $registration ) {
 			$supporters[] = $registration['supporter'];
 		}
-		
+
 		return $supporters;
 	}
 
@@ -187,13 +187,18 @@ class VcA_ASM_Registrations {
 	 */
 	public function get_activity_registration_count( $activity, $region = 'all' ) {
 		global $wpdb;
-		
+
 		if( $region === 'all' ) {
 			$count = $wpdb->get_var( $wpdb->prepare(
 				"SELECT COUNT(*) FROM " .
 				$wpdb->prefix . "vca_asm_registrations " .
 				"WHERE activity=" . $activity
 			) );
+			$end_date = intval( get_post_meta( $activity, 'end_date', true ) );
+			$today = time();
+			if( $today < $end_date ) {
+
+			}
 		} else {
 			$count = 0;
 			$registrations = $wpdb->get_results(
@@ -207,10 +212,10 @@ class VcA_ASM_Registrations {
 				}
 			}
 		}
-		
+
 		return $count;
 	}
-	
+
 	/**
 	 * Returns an array containing a all of a supporter's non-past events
 	 *
@@ -219,14 +224,14 @@ class VcA_ASM_Registrations {
 	 */
 	public function get_supporter_all( $supporter = NULL ) {
 		global $wpdb;
-		
+
 		/* default action (if called from frontend) */
 		if( $supporter === NULL ) {
 			global $current_user;
 			get_currentuserinfo();
 			$supporter = $current_user->ID;
 		}
-		
+
 		$applications = $wpdb->get_results(
 			"SELECT activity FROM " .
 			$wpdb->prefix . "vca_asm_applications " .
@@ -244,7 +249,7 @@ class VcA_ASM_Registrations {
 		foreach( $registrations as $registration ) {
 			$events[] = $registration[0];
 		}
-		
+
 		return $events;
 	}
 
@@ -256,14 +261,14 @@ class VcA_ASM_Registrations {
 	 */
 	public function get_supporter_applications( $supporter = NULL ) {
 		global $wpdb;
-		
+
 		/* default action (if called from frontend) */
 		if( $supporter === NULL ) {
 			global $current_user;
 			get_currentuserinfo();
 			$supporter = $current_user->ID;
 		}
-			
+
 		$applications = $wpdb->get_results(
 			"SELECT activity FROM " .
 			$wpdb->prefix . "vca_asm_applications " .
@@ -280,7 +285,7 @@ class VcA_ASM_Registrations {
 				$this->move_application_to_old( $activity, $supporter );
 			}
 		}
-		
+
 		return $events;
 	}
 
@@ -292,14 +297,14 @@ class VcA_ASM_Registrations {
 	 */
 	public function get_supporter_waiting( $supporter = NULL ) {
 		global $wpdb;
-		
+
 		/* default action (if called from frontend) */
 		if( $supporter === NULL ) {
 			global $current_user;
 			get_currentuserinfo();
 			$supporter = $current_user->ID;
 		}
-			
+
 		$waiting = $wpdb->get_results(
 			"SELECT activity FROM " .
 			$wpdb->prefix . "vca_asm_applications " .
@@ -316,7 +321,7 @@ class VcA_ASM_Registrations {
 				$this->move_application_to_old( $activity, $supporter );
 			}
 		}
-		
+
 		return $events;
 	}
 
@@ -332,14 +337,14 @@ class VcA_ASM_Registrations {
 	 */
 	public function get_supporter_registrations( $supporter = NULL ) {
 		global $wpdb;
-		
+
 		/* default action (if called from frontend) */
 		if( $supporter === NULL ) {
 			global $current_user;
 			get_currentuserinfo();
 			$supporter = $current_user->ID;
 		}
-			
+
 		$registrations = $wpdb->get_results(
 			"SELECT activity FROM " .
 			$wpdb->prefix . "vca_asm_registrations " .
@@ -356,7 +361,7 @@ class VcA_ASM_Registrations {
 				$this->move_registration_to_old( $activity, $supporter );
 			}
 		}
-		
+
 		return $events;
 	}
 
@@ -368,29 +373,28 @@ class VcA_ASM_Registrations {
 	 */
 	public function get_supporter_registrations_old( $supporter = NULL ) {
 		global $wpdb;
-		
+
 		/* default action (if called from frontend) */
 		if( $supporter === NULL ) {
 			global $current_user;
 			get_currentuserinfo();
 			$supporter = $current_user->ID;
 		}
-			
+
 		$registrations = $wpdb->get_results(
 			"SELECT activities FROM " .
 			$wpdb->prefix . "vca_asm_registrations_old " .
 			"WHERE supporter = " . $supporter .
 			" LIMIT 1", ARRAY_A
 		);
-		
-		$registrations = $registrations[0]['activities'];
-		
+
 		if( empty( $registrations ) ) {
 			$registrations = array();
 		} else {
+			$registrations = $registrations[0]['activities'];
 			$registrations = unserialize( $registrations );
 		}
-		
+
 		return $registrations;
 	}
 
@@ -402,29 +406,29 @@ class VcA_ASM_Registrations {
 	 */
 	public function get_supporter_applications_old( $supporter = NULL ) {
 		global $wpdb;
-		
+
 		/* default action (if called from frontend) */
 		if( $supporter === NULL ) {
 			global $current_user;
 			get_currentuserinfo();
 			$supporter = $current_user->ID;
 		}
-			
+
 		$applications = $wpdb->get_results(
 			"SELECT activities FROM " .
 			$wpdb->prefix . "vca_asm_applications_old " .
 			"WHERE supporter = " . $supporter .
 			" LIMIT 1", ARRAY_A
 		);
-		
+
 		$applications = $applications[0]['activities'];
-		
+
 		if( empty( $applications ) ) {
 			$applications = array();
 		} else {
 			$applications = unserialize( $applications );
 		}
-		
+
 		return $applications;
 	}
 
@@ -436,33 +440,33 @@ class VcA_ASM_Registrations {
 	 */
 	public function set_application( $activity, $notes = NULL, $supporter = NULL ) {
 		global $wpdb, $vca_asm_mailer;
-		
+
 		/* default action (if called from frontend) */
 		if( $supporter === NULL ) {
 			global $current_user;
 			get_currentuserinfo();
 			$supporter = $current_user->ID;
 		}
-		
-		$wpdb->insert( 
+
+		$success = $wpdb->insert(
 			$wpdb->prefix . 'vca_asm_applications',
 			array(
 				'activity' 		=> $activity,
 				'supporter' 	=> $supporter,
 				'notes'			=> $notes,
 				'state'			=> 0
-			), 
-			array( 
-				'%d', 
+			),
+			array(
+				'%d',
 				'%d',
 				'%s',
-				'%d' 
+				'%d'
 			)
 		);
-		
+
 		$vca_asm_mailer->auto_response( $supporter, 'applied', get_the_title($activity) );
-	
-		return true;
+
+		return $success;
 	}
 
 	/**
@@ -476,8 +480,8 @@ class VcA_ASM_Registrations {
 	 */
 	public function deny_application( $activity, $supporter ) {
 		global $wpdb, $vca_asm_mailer;
-		
-		$wpdb->update( 
+
+		$success = $wpdb->update(
 			$wpdb->prefix . 'vca_asm_applications',
 			array(
 				'state'			=> 1
@@ -486,18 +490,18 @@ class VcA_ASM_Registrations {
 				'activity' 		=> $activity,
 				'supporter'		=> $supporter
 			),
-			array( 
+			array(
 				'%d'
 			),
-			array( 
-				'%d', 
+			array(
+				'%d',
 				'%d'
 			)
 		);
-		
+
 		$vca_asm_mailer->auto_response( $supporter, 'denied', get_the_title($activity) );
-		
-		return true;
+
+		return $success;
 	}
 
 	/**
@@ -510,56 +514,56 @@ class VcA_ASM_Registrations {
 	 */
 	public function accept_application( $activity, $supporter ) {
 		global $wpdb, $vca_asm_mailer;
-		
+
 		$note = $wpdb->get_results(
 			"SELECT notes FROM " .
 			$wpdb->prefix . "vca_asm_applications " .
 			"WHERE activity=" . $activity . " AND supporter=" . $supporter . ' LIMIT 1', ARRAY_A
 		);
 		$note = $note[0]['notes'];
-		
+
 		$wpdb->query(
 			'DELETE FROM ' . $wpdb->prefix . 'vca_asm_applications ' .
 			'WHERE activity = ' . $activity . ' AND supporter = ' . $supporter . ' LIMIT 1'
 		);
-		
+
 		$avoid_dupes = $wpdb->get_results(
 			"SELECT id FROM " .
 			$wpdb->prefix . "vca_asm_registrations " .
 			"WHERE activity=" . $activity . " AND supporter=" . $supporter . ' LIMIT 1', ARRAY_A
 		);
-		
+
+		$success = false;
 		if( empty( $avoid_dupes[0]['id'] ) ) {
 			$slots_arr = get_post_meta( $activity, 'slots', true );
 			$supp_region = get_user_meta( $supporter, 'region', true );
 			$supp_mem_status = get_user_meta( $supporter, 'membership', true );
-			
+
 			if( $supp_mem_status == 2 && array_key_exists( $supp_region, $slots_arr ) ) {
 				$contingent = intval( $supp_region );
 			} else {
 				$contingent = 0;
 			}
-			
-			$wpdb->insert( 
+
+			$success = $wpdb->insert(
 				$wpdb->prefix . 'vca_asm_registrations',
 				array(
 					'activity' 		=> $activity,
 					'supporter' 	=> $supporter,
 					'contingent'	=> $contingent,
 					'notes' 		=> $note
-				), 
-				array( 
-					'%d', 
-					'%d', 
+				),
+				array(
+					'%d',
+					'%d',
 					'%d',
 					'%s'
 				)
 			);
 			$vca_asm_mailer->auto_response( $supporter, 'accepted', get_the_title($activity) );
-			return true;
 		}
-		
-		return false;
+
+		return $success;
 	}
 
 	/**
@@ -573,19 +577,19 @@ class VcA_ASM_Registrations {
 	 */
 	public function move_registration_to_old( $activity, $supporter ) {
 		global $wpdb;
-		
+
 		$wpdb->query(
 			'DELETE FROM ' . $wpdb->prefix . 'vca_asm_registrations ' .
 			'WHERE activity = ' . $activity . ' AND supporter = ' . $supporter . ' LIMIT 1'
 		);
-		
+
 		$registrations_old_before = $this->get_supporter_registrations_old( $supporter );
 		$registrations = $registrations_old_before;
 		array_unshift( $registrations, $activity );
 		$serialized_regs = serialize( $registrations );
-		
+
 		if( ! empty( $registrations_old_before ) ) {
-			$wpdb->update( 
+			$wpdb->update(
 				$wpdb->prefix . 'vca_asm_registrations_old',
 				array(
 					'activities'	=> $serialized_regs
@@ -593,27 +597,27 @@ class VcA_ASM_Registrations {
 				array(
 					'supporter'		=> $supporter
 				),
-				array( 
+				array(
 					'%s'
 				),
-				array( 
+				array(
 					'%d'
 				)
 			);
 		} else {
-			$wpdb->insert( 
+			$wpdb->insert(
 				$wpdb->prefix . 'vca_asm_registrations_old',
 				array(
 					'supporter'		=> $supporter,
 					'activities'	=> $serialized_regs
 				),
-				array( 
+				array(
 					'%d',
 					'%s'
 				)
 			);
 		}
-		
+
 		return true;
 	}
 
@@ -628,19 +632,19 @@ class VcA_ASM_Registrations {
 	 */
 	public function move_application_to_old( $activity, $supporter ) {
 		global $wpdb;
-		
+
 		$wpdb->query(
 			'DELETE FROM ' . $wpdb->prefix . 'vca_asm_applications ' .
 			'WHERE activity = ' . $activity . ' AND supporter = ' . $supporter . ' LIMIT 1'
 		);
-		
+
 		$applications_old_before = $this->get_supporter_applications_old( $supporter );
 		$applications = $applications_old_before;
 		array_unshift( $applications, $activity );
 		$serialized_apps = serialize( $applications );
-		
+
 		if( ! empty( $applications_old_before ) ) {
-			$wpdb->update( 
+			$wpdb->update(
 				$wpdb->prefix . 'vca_asm_applications_old',
 				array(
 					'activities'	=> $serialized_apps
@@ -648,27 +652,27 @@ class VcA_ASM_Registrations {
 				array(
 					'supporter'		=> $supporter
 				),
-				array( 
+				array(
 					'%s'
 				),
-				array( 
+				array(
 					'%d'
 				)
 			);
 		} else {
-			$wpdb->insert( 
+			$wpdb->insert(
 				$wpdb->prefix . 'vca_asm_applications_old',
 				array(
 					'supporter'		=> $supporter,
 					'activities'	=> $serialized_apps
 				),
-				array( 
+				array(
 					'%d',
 					'%s'
 				)
 			);
 		}
-		
+
 		return true;
 	}
 
@@ -685,20 +689,20 @@ class VcA_ASM_Registrations {
 	 */
 	public function revoke_application( $activity, $supporter = NULL ) {
 		global $wpdb;
-		
+
 		/* default action (if called from frontend) */
 		if( $supporter === NULL ) {
 			global $current_user;
 			get_currentuserinfo();
 			$supporter = $current_user->ID;
 		}
-		
-		$wpdb->query(
+
+		$success = $wpdb->query(
 			'DELETE FROM ' . $wpdb->prefix . 'vca_asm_applications ' .
 			'WHERE activity = ' . $activity . ' AND supporter = ' . $supporter . ' LIMIT 1'
 		);
-		
-		return true;
+
+		return $success;
 	}
 
 	/**
@@ -713,17 +717,17 @@ class VcA_ASM_Registrations {
 	 */
 	public function revoke_registration( $activity, $supporter ) {
 		global $wpdb, $vca_asm_mailer;
-		
-		$wpdb->query(
+
+		$success = $wpdb->query(
 			'DELETE FROM ' . $wpdb->prefix . 'vca_asm_registrations ' .
 			'WHERE activity = ' . $activity . ' AND supporter = ' . $supporter . ' LIMIT 1'
 		);
-		
+
 		$vca_asm_mailer->auto_response( $supporter, 'reg_revoked', get_the_title($activity) );
-		
-		return true;
+
+		return $success;
 	}
-	
+
 } // class
 
 endif; // class exists
