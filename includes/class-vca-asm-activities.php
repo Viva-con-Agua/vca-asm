@@ -44,7 +44,12 @@ class VCA_ASM_Activities {
 	 * @access private
 	 */
 	private function custom_fields( $group = 'all' ) {
-		global $post_type, $vca_asm_geography;
+		global $current_user, $post_type, $vca_asm_geography;
+		get_currentuserinfo();
+
+		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
+		$admin_city = get_user_meta( $current_user->ID, 'city', true );
+		$department = ! empty( $this->departments_by_activity[$post_type] ) ? $this->departments_by_activity[$post_type] : 'actions';
 
 		$custom_fields = array(
 			'tools' => array (
@@ -125,7 +130,9 @@ class VCA_ASM_Activities {
 					'desc'	=> _x( 'Associate the activity with a country.', 'Geo Meta Box', 'vca-asm' ) . ' ' . _x( 'This is irrelevant to slots &amp; participants and only matters for categorization and sorting.', 'Geo Meta Box', 'vca-asm' ),
 					'id'	=> 'nation',
 					'type'	=> 'select',
-					'options' => $vca_asm_geography->options_array( array( 'type' => 'nation' ) )
+					'options' => $vca_asm_geography->options_array( array( 'type' => 'nation' ) ),
+					'default' => ! empty( $admin_nation ) ? $admin_nation : 0,
+					'disabled' => $current_user->has_cap( 'vca_asm_manage_' . $department . '_global' ) ? false : true
 				),
 				array(
 					'label'	=> _x( 'City', 'Geo Meta Box', 'vca-asm' ),
@@ -136,8 +143,10 @@ class VCA_ASM_Activities {
 						'global_option' => _x( 'no specific city', 'Regions', 'vca-asm' ),
 						'type' => 'city',
 						'descendants_of' => ( is_object( $this->the_activity ) && ! empty( $this->the_activity->nation ) ) ?
-							$this->the_activity->nation : 40
-					))
+							$this->the_activity->nation : ( ! empty( $admin_nation ) ? $admin_nation : 40 )
+					)),
+					'default' => ! empty( $admin_city ) ? $admin_city : 0,
+					'disabled' => ( $current_user->has_cap( 'vca_asm_manage_' . $department . '_global' ) || $current_user->has_cap( 'vca_asm_manage_' . $department . '_nation' ) ) ? false : true
 				),
 				array(
 					'label'	=> _x( 'Delegation', 'Region Meta Box', 'vca-asm' ),
@@ -1331,7 +1340,7 @@ class VCA_ASM_Activities {
 					if( $field['id'] == 'city' ) {
 						if( $new && $new != $old ) {
 							$old_delegation = get_post_meta( $post->ID, 'delegate', true );
-							$new_delegation = $_POST['delegate'];
+							$new_delegation = isset( $_POST['delegate'] ) ? $_POST['delegate'] : '';
 							if( $old_delegation == $new_delegation && $new_delegation == 'delegate' ) {
 								$geo_user_id = $wpdb->get_results(
 									"SELECT user_id FROM " .

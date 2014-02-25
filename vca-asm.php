@@ -92,21 +92,21 @@ function vca_asm_enqueue() {
 	);
 
 	if( is_admin() ) {
-		wp_register_script( 'vca-asm-admin-email-preview', VCA_ASM_RELPATH . 'js/admin-email-preview.js', false, '1.3', true );
-		wp_register_script( 'vca-asm-admin-generic', VCA_ASM_RELPATH . 'js/admin-generic.js', false, '1.3', true );
+		wp_register_script( 'vca-asm-admin-email-preview', VCA_ASM_RELPATH . 'js/admin-email-preview.js', false, '1.3.2', true );
+		wp_register_script( 'vca-asm-admin-generic', VCA_ASM_RELPATH . 'js/admin-generic.js', false, '1.3.2', true );
 		wp_register_script( 'vca-asm-admin-repeatable-custom-fields', VCA_ASM_RELPATH . 'js/admin-repeatable-custom-fields.js',
-			array( 'jquery-ui-slider', 'jquery-ui-datepicker' ), '1.3', true );
+			array( 'jquery-ui-slider', 'jquery-ui-datepicker' ), '1.3.2', true );
 		wp_register_script( 'vca-asm-admin-jquery-ui-integration', VCA_ASM_RELPATH . 'js/admin-jquery-ui-integration.js',
-			array( 'jquery-ui-slider', 'jquery-ui-datepicker' ), '1.3', true );
-		wp_register_script( 'vca-asm-admin-profile', VCA_ASM_RELPATH . 'js/admin-profile.js', false, '1.3', true );
+			array( 'jquery-ui-slider', 'jquery-ui-datepicker' ), '1.3.2', true );
+		wp_register_script( 'vca-asm-admin-profile', VCA_ASM_RELPATH . 'js/admin-profile.js', false, '1.3.2', true );
 		wp_register_script( 'vca-asm-admin-quotas', VCA_ASM_RELPATH . 'js/admin-quotas.js',
-			array( 'jquery-ui-slider' ), '1.3', true );
-		wp_register_script( 'vca-asm-admin-settings', VCA_ASM_RELPATH . 'js/admin-settings.js', false, '1.3', true );
-		wp_register_script( 'vca-asm-admin-supporter-filter', VCA_ASM_RELPATH . 'js/admin-supporter-filter.js', false, '1.3', true );
-		wp_register_script( 'vca-asm-admin-validation', VCA_ASM_RELPATH . 'js/admin-validation.js', false, '1.3', true );
-		wp_register_script( 'vca-asm-excel-export', VCA_ASM_RELPATH . 'js/excel-export.js', false, '1.3', true );
-		wp_register_script( 'vca-asm-tooltip', VCA_ASM_RELPATH . 'js/tooltip.js', false, '1.3', true );
-		wp_register_script( 'vca-asm-ctr-to-cty', VCA_ASM_RELPATH . 'js/ctr-to-cty.js', false, '1.3', true );
+			array( 'jquery-ui-slider' ), '1.3.2', true );
+		wp_register_script( 'vca-asm-admin-settings', VCA_ASM_RELPATH . 'js/admin-settings.js', false, '1.3.2', true );
+		wp_register_script( 'vca-asm-admin-supporter-filter', VCA_ASM_RELPATH . 'js/admin-supporter-filter.js', false, '1.3.2', true );
+		wp_register_script( 'vca-asm-admin-validation', VCA_ASM_RELPATH . 'js/admin-validation.js', false, '1.3.2', true );
+		wp_register_script( 'vca-asm-excel-export', VCA_ASM_RELPATH . 'js/excel-export.js', false, '1.3.2', true );
+		wp_register_script( 'vca-asm-tooltip', VCA_ASM_RELPATH . 'js/tooltip.js', false, '1.3.2', true );
+		wp_register_script( 'vca-asm-ctr-to-cty', VCA_ASM_RELPATH . 'js/ctr-to-cty.js', false, '1.3.2', true );
 
 		/* used throughout the backend, enqueued everywhere */
 		wp_enqueue_script( 'jquery-ui-slider' );
@@ -133,15 +133,15 @@ function vca_asm_enqueue() {
 
 		wp_enqueue_style( 'jquery-ui-framework', VCA_ASM_RELPATH . 'css/jquery-ui-framework.css' );
 		wp_enqueue_style( 'jquery-ui-custom', VCA_ASM_RELPATH . 'css/jquery-ui-custom.css' );
-		wp_enqueue_style( 'vca-asm-admin-generic-style', VCA_ASM_RELPATH . 'css/admin-generic.css', false, '1.3' );
-		wp_enqueue_style( 'vca-asm-tooltips', VCA_ASM_RELPATH . 'css/admin-tooltips.css', false, '1.3' );
+		wp_enqueue_style( 'vca-asm-admin-generic-style', VCA_ASM_RELPATH . 'css/admin-generic.css', false, '1.3.2' );
+		wp_enqueue_style( 'vca-asm-tooltips', VCA_ASM_RELPATH . 'css/admin-tooltips.css', false, '1.3.2' );
 	} else {
-		wp_register_script( 'vca-asm-profile', VCA_ASM_RELPATH . 'js/profile.js', false, '1.3', true );
-		wp_register_script( 'vca-asm-strength-meter-init', VCA_ASM_RELPATH . 'js/strength-meter-init.js', false, '1.3', true );
+		wp_register_script( 'vca-asm-profile', VCA_ASM_RELPATH . 'js/profile.js', false, '1.3.2', true );
+		wp_register_script( 'vca-asm-strength-meter-init', VCA_ASM_RELPATH . 'js/strength-meter-init.js', false, '1.3.2', true );
 
 		wp_enqueue_script( 'vca-asm-profile' );
 
-		wp_enqueue_style( 'vca-asm-activities', VCA_ASM_RELPATH . 'css/activities.css', false, '1.3.0.2' );
+		wp_enqueue_style( 'vca-asm-activities', VCA_ASM_RELPATH . 'css/activities.css', false, '1.3.2' );
 	}
 }
 add_action( 'wp_loaded', 'vca_asm_enqueue' );

@@ -34,7 +34,10 @@ class VCA_ASM_Admin_Slot_Allocation {
 	 * @access public
 	 */
 	public function control() {
-		global $vca_asm_activities, $vca_asm_utilities;
+		global $current_user, $vca_asm_activities, $vca_asm_utilities;
+
+		$admin_city = get_user_meta( $current_user->ID, 'city', true );
+		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
 
 		if ( isset( $_GET['page'] ) ) {
 			$dep = split( '-', $_GET['page'] );
@@ -194,6 +197,31 @@ class VCA_ASM_Admin_Slot_Allocation {
 			if ( empty( $activities ) ) {
 				$rows = array();
 			} else {
+
+				if ( ! $current_user->has_cap( 'vca_asm_manage_' . $this->department . '_global' ) ) {
+					$relevant_activities = array();
+					foreach ( $activities as $activity ) {
+						if (
+							(
+								$current_user->has_cap( 'vca_asm_manage_' . $this->department . '_nation' ) &&
+								get_post_meta( $activity->ID, 'nation', true ) === $admin_nation
+							) || (
+								$current_user->has_cap( 'vca_asm_manage_' . $this->department ) &&
+								(
+									(
+										get_post_meta( $activity->ID, 'city', true ) === $admin_city &&
+										'delegate' === get_post_meta( $activity->ID, 'delegate', true )
+									) || (
+										in_array( $admin_city, get_post_meta( $activity->ID, 'cty_slots', true ) )
+									)
+								)
+							)
+						) {
+							$relevant_activities[] = $activity;
+						}
+					}
+					$activities = $relevant_activities;
+				}
 
 				$activities_ordered = array();
 				$i = 0;
@@ -558,8 +586,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 
 				case "accept":
 					if( isset( $_GET['id'] ) ) {
-						$region = intval( get_user_meta( intval( $_GET['id'] ), 'region', true ) );
-						$free = $vca_asm_registrations->get_free_slots( intval( $activity_id ), $region );
+						$free = $vca_asm_registrations->get_free_slots( intval( $activity_id ), intval( $_GET['id'] ) );
 						if( $free > 0 ) {
 							$success = $vca_asm_registrations->accept_application( intval( $activity_id ), intval( $_GET['id'] ) );
 						} else {
@@ -567,8 +594,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 						}
 					} elseif( isset( $_GET['supporters'] ) ) {
 						foreach( $_GET['supporters'] as $supporter ) {
-							$region = intval( get_user_meta( intval( $supporter ), 'region', true ) );
-							$free = $vca_asm_registrations->get_free_slots( intval( $activity_id ), $region );
+							$free = $vca_asm_registrations->get_free_slots( intval( $activity_id ), intval( $supporter ) );
 							if( $free > 0 ) {
 								$partial_success = $vca_asm_registrations->accept_application( intval( $activity_id ), intval( $supporter ) );
 								$success = $success + intval( $partial_success );
@@ -760,8 +786,9 @@ class VCA_ASM_Admin_Slot_Allocation {
 		global $current_user, $wpdb, $vca_asm_admin_supporters, $vca_asm_geography, $vca_asm_registrations, $vca_asm_utilities;
 		get_currentuserinfo();
 
-		$admin_city = get_user_meta( $current_user->ID, 'region', true );
+		$admin_city = get_user_meta( $current_user->ID, 'city', true );
 		$admin_city_status = $vca_asm_geography->get_status( $admin_city );
+		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
 
 		$columns = array(
 			array(
@@ -807,23 +834,18 @@ class VCA_ASM_Admin_Slot_Allocation {
 			break;
 		}
 
-		if(
-		   $current_user->has_cap( 'vca_asm_view_supporters_nation' ) &&
-		   $current_user->has_cap( 'vca_asm_view_supporters_global' )
-		) {
-			$columns[] = array(
-				'id' => 'city',
-				'title' => __( 'City', 'vca-asm' ),
-				'sortable' => true,
-				'legacy-mobile' => false
-			);
-		}
-
+		$columns[] = array(
+			'id' => 'city',
+			'title' => __( 'City', 'vca-asm' ),
+			'sortable' => true,
+			'legacy-mobile' => false
+		);
 		$columns[] = array(
 			'id' => 'membership',
 			'title' => __( 'Membership Status', 'vca-asm' ),
 			'sortable' => true,
-			'conversion' => 'membership'
+			'conversion' => 'membership',
+			'legacy-screen' => false
 		);
 		$columns[] = array(
 			'id' => 'user_email',
@@ -834,8 +856,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 		$columns[] = array(
 			'id' => 'mobile',
 			'title' => __( 'Mobile Phone', 'vca-asm' ),
-			'sortable' => true,
-			'legacy-screen' => false
+			'sortable' => true
 		);
 		$columns[] = array(
 			'id' => 'age',
@@ -952,8 +973,14 @@ class VCA_ASM_Admin_Slot_Allocation {
 
 		$tables = array();
 		if (
-			current_user_can( 'vca_asm_manage_' . $this->department . '_global' ) ||
-			$the_activity->delegation === 'delegate' && $the_activity->city === $admin_city
+			$current_user->has_cap(  'vca_asm_manage_' . $this->department . '_global' )
+			|| (
+				$current_user->has_cap(  'vca_asm_manage_' . $this->department . '_nation' ) &&
+				$the_activity->nation === $admin_nation
+			) || (
+				$the_activity->delegation === 'delegate' &&
+				$the_activity->city === $admin_city
+			)
 		) {
 			if ( 0 < $the_activity->global_slots || ! empty( $supporters_by_quota[1410065407] ) ) {
 				$tables[0] = array(

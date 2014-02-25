@@ -15,26 +15,33 @@ if ( ! class_exists( 'VcA_ASM_Registrations' ) ) :
 class VcA_ASM_Registrations {
 
 	/**
-	 * Returns an activities free slots for a region
+	 * Returns an activities free slots for a certain user
 	 * defaults to global slots if no regional slots are assigned
+	 *
+	 * @param int $activity_id
+	 * @param int $user_id
+	 *
+	 * @return in $free
 	 *
 	 * @since 1.0
 	 * @access public
 	 */
-	public function get_free_slots( $activity_id, $region ) {
+	public function get_free_slots( $activity_id, $user_id ) {
 		global $wpdb, $vca_asm_geography;
 
 		$the_activity = new VcA_ASM_Activity( $activity_id );
 
-		if ( array_key_exists( $region, $the_activity->cty_slots ) ) {
-			$quota = $region;
-			$participants = isset( $the_activity->participants_count_by_slots[$region] ) ?
-				$the_activity->participants_count_by_slots[$region] :
+		$city = intval( get_user_meta( $user_id, 'city', true ) );
+		$nation = intval( get_user_meta( $user_id, 'nation', true ) );
+
+		if ( ! empty( $city ) && array_key_exists( $city, $the_activity->cty_slots ) ) {
+			$quota = $city;
+			$participants = isset( $the_activity->participants_count_by_slots[$city] ) ?
+				$the_activity->participants_count_by_slots[$city] :
 				0;
-			$free = $the_activity->cty_slots[$region] - $participants;
+			$free = $the_activity->cty_slots[$city] - $participants;
 		} else {
-			$nation = $vca_asm_geography->has_nation( $region );
-			if ( $nation && array_key_exists( $nation, $the_activity->ctr_slots ) ) {
+			if ( ! empty( $nation ) && array_key_exists( $nation, $the_activity->ctr_slots ) ) {
 				$quota = $nation;
 				$participants = isset( $the_activity->participants_count_by_slots[$nation] ) ?
 					$the_activity->participants_count_by_slots[$nation] :
@@ -80,10 +87,10 @@ class VcA_ASM_Registrations {
 	 * @since 1.1
 	 * @access public
 	 */
-	public function get_activity_application_count( $activity, $region = 'all' ) {
+	public function get_activity_application_count( $activity, $city = 'all' ) {
 		global $wpdb;
 
-		if( $region === 'all' ) {
+		if( $city === 'all' ) {
 			$count = $wpdb->get_var( $wpdb->prepare(
 				"SELECT COUNT(*) FROM " .
 				$wpdb->prefix . "vca_asm_applications " .
@@ -99,7 +106,7 @@ class VcA_ASM_Registrations {
 			foreach( $applications as $supporter ) {
 				$supp_region = get_user_meta( $supporter['supporter'], 'region', true );
 				$supp_mem_status = get_user_meta( $supporter['supporter'], 'membership', true );
-				if( $supp_region == $region && $supp_mem_status == 2 ) {
+				if( $supp_region == $city && $supp_mem_status == 2 ) {
 					$count++;
 				}
 			}
@@ -136,10 +143,10 @@ class VcA_ASM_Registrations {
 	 * @since 1.1
 	 * @access public
 	 */
-	public function get_activity_waiting_count( $activity, $region = 'all' ) {
+	public function get_activity_waiting_count( $activity, $city = 'all' ) {
 		global $wpdb;
 
-		if( $region === 'all' ) {
+		if( $city === 'all' ) {
 			$count = $wpdb->get_var( $wpdb->prepare(
 				"SELECT COUNT(*) FROM " .
 				$wpdb->prefix . "vca_asm_applications " .
@@ -155,7 +162,7 @@ class VcA_ASM_Registrations {
 			foreach( $waiting as $supporter ) {
 				$supp_region = get_user_meta( $supporter['supporter'], 'region', true );
 				$supp_mem_status = get_user_meta( $supporter['supporter'], 'membership', true );
-				if( $supp_region == $region && $supp_mem_status == 2 ) {
+				if( $supp_region == $city && $supp_mem_status == 2 ) {
 					$count++;
 				}
 			}
@@ -264,7 +271,7 @@ class VcA_ASM_Registrations {
 	 * @since 1.1
 	 * @access public
 	 */
-	public function get_activity_registration_count( $activity, $region = 'all' ) {
+	public function get_activity_registration_count( $activity, $city = 'all' ) {
 		global $wpdb, $vca_asm_activities;
 
 		if ( time() > get_post_meta( $activity, 'end_act', true ) ) {
@@ -275,7 +282,7 @@ class VcA_ASM_Registrations {
 			$quota_str = 'contingent';
 		}
 
-		if( $region === 'all' ) {
+		if( $city === 'all' ) {
 			$count = $wpdb->get_var( $wpdb->prepare(
 				"SELECT COUNT(*) FROM " .
 				$wpdb->prefix . $tbl_name . " " .
@@ -294,7 +301,7 @@ class VcA_ASM_Registrations {
 				"WHERE activity=" . $activity, ARRAY_A
 			);
 			foreach( $registrations as $supporter ) {
-				if( $region == $supporter['contingent'] ) {
+				if( $city == $supporter['contingent'] ) {
 					$count++;
 				}
 			}

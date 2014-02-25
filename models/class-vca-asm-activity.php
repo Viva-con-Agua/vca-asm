@@ -512,31 +512,20 @@ class VCA_ASM_Activity {
 		global $vca_asm_geography;
 
 		$membership_status = get_user_meta( $supporter_id, 'membership', true );
+		$city = get_user_meta( $supporter_id, 'city', true );
+		$nation = get_user_meta( $supporter_id, 'nation', true );
 
 		if (
 			! $this->membership_required ||
 			2 == $membership_status
 		) {
-			$geo_id = get_user_meta( $supporter_id, 'region', true );
-			$geo_id = is_numeric( $geo_id ) ? $geo_id : 0;
-			if ( array_key_exists( $geo_id, $this->cty_slots ) && 0 < intval( $this->cty_slots[$geo_id] ) ) {
-				return $geo_id;
-			} else {
-				$nation_query = $vca_asm_geography->get_ancestors( $geo_id, array(
-					'data' => 'id',
-					'format' => 'array',
-					'type' => 'nation'
-				));
-				$ctr_id = isset( $nation_query[0] ) ? $nation_query[0] : 0;
-				if ( array_key_exists( $ctr_id, $this->ctr_slots ) && 0 < intval( $this->ctr_slots[$ctr_id] ) ) {
-					return $ctr_id;
-				} else {
-					if ( 0 < $this->global_slots ) {
-						return 0;
-					}
-				}
+			if ( array_key_exists( $city, $this->cty_slots ) && 0 < intval( $this->cty_slots[$city] ) ) {
+				return $city;
+			} elseif ( array_key_exists( $nation, $this->ctr_slots ) && 0 < intval( $this->ctr_slots[$nation] ) ) {
+				return $nation;
+			} elseif ( 0 < $this->global_slots ) {
+				return 0;
 			}
-			return false;
 		}
 		return false;
 	}

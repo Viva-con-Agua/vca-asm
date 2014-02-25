@@ -174,10 +174,10 @@ class VCA_ASM_Profile {
 			$user_nation = get_user_meta( $current_user->ID, 'nation', true );
 		}
 
-		$geo_desc = _x( 'Choose your city (Cell or Local Crew), if applicable. Should you not be able to find yours, please send an email to <a title="Send Mail" href="mailto:Zellen@vivaconagua.org">Zellen@vivaconagua.org</a>', 'User Profile', 'vca-asm' );
+		$geo_desc = _x( 'Choose your city (Cell or Local Crew), if applicable. Should you not be able to find yours, please send an email to <a title="Send Mail" href="mailto:zellen@vivaconagua.org">zellen@vivaconagua.org</a>', 'User Profile', 'vca-asm' );
 
 		if ( 'ch' === $vca_asm_utilities->current_country() ) {
-			$geo_desc = _x( 'Choose your city (Cell or Local Crew), if applicable. Should you not be able to find yours, please send an email to <a title="Send Mail" href="mailto:Zellen@vivaconagua.ch">Zellen@vivaconagua.ch</a>', 'User Profile', 'vca-asm' );
+			$geo_desc = _x( 'Choose your city (Cell or Local Crew), if applicable. Should you not be able to find yours, please send an email to <a title="Send Mail" href="mailto:zellen@vivaconagua.ch">zellen@vivaconagua.ch</a>', 'User Profile', 'vca-asm' );
 		}
 
 		switch( $mem ) {
@@ -389,7 +389,7 @@ class VCA_ASM_Profile {
 							update_user_meta( $user_id, $field['id'], '2' );
 						} else {
 							$regions = $vca_asm_geography->get_ids();
-							$region_name = $regions[ $_POST['region'] ];
+							$region_name = $regions[$_POST['city']];
 							$old = get_user_meta( $user_id, $field['id'], true );
 							if( isset( $_POST[ $field['id'] ] ) ) {
 								if( ( ( is_array( $this_user->roles ) && ! in_array( 'supporter', $this_user->roles ) ) || ( ! is_array( $this_user->roles ) && 'supporter' != $this_user->roles ) ) && $old != '2' ) {
@@ -409,14 +409,16 @@ class VCA_ASM_Profile {
 
 					case 'city':
 						if( ! isset( $field['disabled'] ) || $field['disabled'] !== true ) {
-							update_user_meta( $user_id, $field['id'], $_POST[$field['id']] );
-							update_user_meta( $user_id, 'region', $_POST[$field['id']] ); // compatibility w/ old version
+							$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : '';
+							update_user_meta( $user_id, $field['id'], $new );
+							update_user_meta( $user_id, 'region', $new ); // compatibility w/ old version
 						}
 					break;
 
 					default:
 						if( isset( $field['id'] ) && ( ! isset( $field['disabled'] ) || $field['disabled'] !== true ) ) {
-							update_user_meta( $user_id, $field['id'], $_POST[$field['id']] );
+							$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : '';
+							update_user_meta( $user_id, $field['id'], $new );
 						}
 					break;
 				}
@@ -464,66 +466,46 @@ class VCA_ASM_Profile {
 		$supporter = new VCA_ASM_Supporter( $current_user->ID );
 
 		$output = '<div class="island vcard" style="overflow:hidden;">' .
-				'<table><tr><td>' .
-					'<h3>' . $supporter->nice_name . '</h3>' .
-					'<table class="profile-data">' .
-					'<tr><td class="category-cell">' .
-						_x( 'City', 'Admin Supporters', 'vca-asm' ) .
-					'</td><td>' .
-						$supporter->city .
-					'</td></tr>' .
-					'<tr><td class="category-cell">' .
-						_x( 'Membership', 'Admin Supporters', 'vca-asm' ) .
-					'</td><td>' .
-						$vca_asm_utilities->convert_strings( $supporter->membership ) .
-					'</td></tr>' .
-					'<tr><td class="category-cell">&nbsp;</td><td></td></tr>' .
-					'<tr><td class="category-cell">' .
-						_x( 'Email Address', 'Admin Supporters', 'vca-asm' ) .
-					'</td><td>' .
-						$supporter->email .
-					'</td></tr>' .
-					'<tr><td class="category-cell">' .
-						_x( 'Mobile Phone', 'Admin Supporters', 'vca-asm' ) .
-					'</td><td>' .
-						$supporter->mobile .
-					'</td></tr>' .
-					'<tr><td class="category-cell">&nbsp;</td><td></td></tr>' .
-					//'<tr><td class="category-cell">' .
-					//	_x( 'Birthday', 'Admin Supporters', 'vca-asm' ) .
-					//'</td><td class="category-cell">' .
-					//	$supporter->birthday_combined .
-					//'</td></tr>' .
-					//'<tr><td class="category-cell">' .
-					//	_x( 'Gender', 'Admin Supporters', 'vca-asm' ) .
-					//'</td><td>' .
-					//	$supporter->gender .
-					//'</td></tr>' .
-					//'<tr><td class="category-cell">' .
-					//	_x( 'Residence', 'Admin Supporters', 'vca-asm' ) .
-					//'</td><td>' .
-					//	$supporter->residence .
-					//'</td></tr>' .
-					//'<tr><td class="category-cell">&nbsp;</td><td></td></tr>' .
-					'<tr><td class="category-cell">' .
-						_x( 'Registered since', 'Admin Supporters', 'vca-asm' ) .
-					'</td><td>' .
-						$supporter->registration_date .
-					'</td></tr>' .
-					'<tr><td class="category-cell">' .
-						_x( 'Last Login', 'Admin Supporters', 'vca-asm' ) .
-					'</td><td>' .
-						$supporter->last_activity .
-					'</td></tr>' .
-					'</table>' .
-				'</td><td class="avatar-cell">' .
-					$supporter->avatar .
-				'</td></tr></table>' .
+				'<table class="meta-table">' .
+
+					'<tr>' .
+						'<td><h3>' . $supporter->nice_name . '</h3></td>' .
+						'<td class="avatar-cell" rowspan="2">' . $supporter->avatar . '</td>' .
+					'</tr>' .
+
+					'<tr><td><table class="meta-table">' .
+
+						'<tr>' .
+							'<td><p class="label">' . _x( 'Country', 'Admin Supporters', 'vca-asm' ) . '</p>' .
+							'<p class="metadata">' . $supporter->nation . '</p></td>' .
+
+							'<td><p class="label">' . _x( 'Registered since', 'Admin Supporters', 'vca-asm' ) . '</p>' .
+							'<p class="metadata">' . $supporter->registration_date . '</p></td>' .
+						'</tr>' .
+						'<tr>' .
+							'<td><p class="label">' . _x( 'City', 'Admin Supporters', 'vca-asm' ) . '</p>' .
+							'<p class="metadata">' . $supporter->city . '</p></td>' .
+
+							'<td><p class="label">' . _x( 'Last Login', 'Admin Supporters', 'vca-asm' ) . '</p>' .
+							'<p class="metadata">' . $supporter->last_activity . '</p></td>' .
+						'</tr>' .
+						'<tr>' .
+							'<td><p class="label">' . _x( 'Membership', 'Admin Supporters', 'vca-asm' ) . '</p>' .
+							'<p class="metadata">' . $vca_asm_utilities->convert_strings( $supporter->membership ) . '</p></td>' .
+
+							'<td></td>' .
+						'</tr>' .
+
+					'</table></td></tr>' .
+
+				'</table>' .
+
 				'<p style="text-align:right;font-size:1.2em;line-height:1.75;margin:-1.75em 0 0;">' .
 					'<a href="' . get_bloginfo( 'url' ) . '/profil/" title="' .
 						_x( 'Edit your Profile &amp; Settings', 'Admin Supporters', 'vca-asm' ) . '">'.
 							'&uarr; ' . _x( 'Edit Profile', 'Admin Supporters', 'vca-asm' ) .
 				'</a></p>' .
+
 			'</div>';
 
 		return $output;

@@ -239,7 +239,6 @@ class VcA_ASM_Utilities {
 		}
 	}
 
-
 	/**
 	 * Returns a country-alpha-code (ISO 3166-1-alpha-2),
 	 * depending on the URL/Domain used to reach the site

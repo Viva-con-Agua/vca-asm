@@ -38,6 +38,7 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 
 		/* get value of this field if it exists for this post */
 		$meta = get_post_meta( $post->ID, $field['id'], true );
+		$meta = ( ! empty( $meta ) || '0' === $meta || 0 === $meta ) ? $meta : ( ! empty( $field['default'] ) ? $field['default'] : $meta );
 
 		switch( $field['type'] ) {
 			case 'contact':

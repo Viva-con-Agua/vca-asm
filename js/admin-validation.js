@@ -90,6 +90,8 @@ function dateComp(el) {
 			if ( 0 <= $.inArray( $this.attr('id'), relevantDates ) ) {
 				if ( ! $this.hasClass('required') || 0 < $this.val().length ) {
 					$this.removeClass('warning');
+					$this.siblings('select.hour').removeClass('warning');
+					$this.siblings('select.minutes').removeClass('warning');
 				}
 			}
 			if ( 'start_app' === $this.attr('id') ) {
@@ -151,6 +153,8 @@ $('input.phone-number').bind( 'cut', function() { phoneNumber( $(this), true ) }
 $('input.date').change( function() { dateComp($(this)) } );
 $('input.date').bind( 'paste', function() { dateComp($(this)) } );
 $('input.date').bind( 'cut', function() { dateComp($(this)) } );
+$('select.hour').change( function() { dateComp($(this).prev('input.date')) } );
+$('select.minutes').change( function() { dateComp($(this).prev('input.date')) } );
 
 function validate() {
 	$('input.required').each( function() {

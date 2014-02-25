@@ -35,6 +35,8 @@ class VCA_ASM_Admin_Supporters {
 		$admin_city = get_user_meta( $current_user->ID, 'region', true );
 		$admin_nation = $vca_asm_geography->has_nation( $admin_city );
 
+		$cities = $vca_asm_geography->get_ids();
+
 		$messages = array();
 
 		if( isset( $_GET['profile'] ) ) {
@@ -120,7 +122,7 @@ class VCA_ASM_Admin_Supporters {
 					   )
 					) {
 						update_user_meta( $_GET['id'], 'membership', '0' );
-						$region_name = $regions[ get_user_meta( $_GET['id'], 'region', true ) ];
+						$region_name = $cities[ get_user_meta( $_GET['id'], 'city', true ) ];
 						$vca_asm_mailer->auto_response( $_GET['id'], 'mem_denied', $region_name );
 						$success++;
 					}
@@ -141,7 +143,7 @@ class VCA_ASM_Admin_Supporters {
 							if( 0 != $user_city ) {
 								$success++;
 								update_user_meta( intval( $supporter ), 'membership', '0' );
-								$region_name = $regions[ get_user_meta( intval( $supporter ), 'region', true ) ];
+								$region_name = $cities[ get_user_meta( intval( $supporter ), 'city', true ) ];
 								$vca_asm_mailer->auto_response( intval( $supporter ), 'mem_denied', $region_name );
 								$tmp_name = get_user_meta( intval( $supporter ), 'first_name', true );
 								$name_arr[] = ! empty( $tmp_name ) ? $tmp_name : __( 'unknown Supporter', 'vca-asm' );
@@ -199,7 +201,7 @@ class VCA_ASM_Admin_Supporters {
 					   )
 					) {
 						update_user_meta( $_GET['id'], 'membership', '2' );
-						$region_name = $regions[ get_user_meta( $_GET['id'], 'region', true ) ];
+						$region_name = $cities[ get_user_meta( $_GET['id'], 'region', true ) ];
 						$vca_asm_mailer->auto_response( $_GET['id'], 'mem_accepted', $region_name );
 						$name = get_user_meta( intval( $_GET['id'] ), 'first_name', true );
 						$success = empty( $name ) ? 1 : $name;
@@ -221,7 +223,7 @@ class VCA_ASM_Admin_Supporters {
 							if ( 2 != $user_city ) {
 								$success++;
 								update_user_meta( intval( $supporter ), 'membership', '2' );
-								$region_name = $regions[ get_user_meta( intval( $supporter ), 'region', true ) ];
+								$region_name = $cities[ get_user_meta( intval( $supporter ), 'region', true ) ];
 								$vca_asm_mailer->auto_response( intval( $supporter ), 'mem_accepted', $region_name );
 								$tmp_name = get_user_meta( intval( $supporter ), 'first_name', true );
 								$name_arr[] = ! empty( $tmp_name ) ? $tmp_name : __( 'unknown Supporter', 'vca-asm' );
@@ -699,43 +701,31 @@ class VCA_ASM_Admin_Supporters {
 				if( isset( $_POST['geo-filter-'.$geo_filter_by] ) && is_array( $_POST['geo-filter-'.$geo_filter_by] ) ||
 				    isset( $_GET['gf'] )
 				) {
-					$cities = isset( $_POST['geo-filter-'.$geo_filter_by] ) ? $_POST['geo-filter-'.$geo_filter_by] : unserialize( htmlspecialchars_decode( $_GET['gf'] ) );
-					$units = $cities;
-					if ( 'city' !== $geo_filter_by ) {
+					$units = isset( $_POST['geo-filter-'.$geo_filter_by] ) ? $_POST['geo-filter-'.$geo_filter_by] : unserialize( htmlspecialchars_decode( $_GET['gf'] ) );
+					$query_units = $units;
+					if ( ! in_array( $geo_filter_by, array( 'city', 'nation' ) ) ) {
 						switch ( $geo_filter_by ) {
 							case 'cg':
-								$cities = array();
+								$query_units = array();
 								foreach ( $units as $cg ) {
 									if ( 0 == $cg ) {
 										$cg_cities = $vca_asm_geography->get_cities_without( 'cg' );
 									} else {
 										$cg_cities = $vca_asm_geography->get_descendants( $cg, 'type=city&data=id' );
 									}
-									$cities = array_merge( $cities, $cg_cities );
-								}
-							break;
-
-							case 'nation':
-								$cities = array();
-								foreach ( $units as $nation ) {
-									if ( 0 == $nation ) {
-										$nation_cities = $vca_asm_geography->get_cities_without( 'nation' );
-									} else {
-										$nation_cities = $vca_asm_geography->get_descendants( $nation, 'type=city&data=id' );
-									}
-									$cities = array_merge( $cities, $nation_cities );
+									$query_units = array_merge( $query_units, $cg_cities );
 								}
 							break;
 
 							case 'ng':
-								$cities = array();
+								$query_units = array();
 								foreach ( $units as $ng ) {
 									if ( 0 == $ng ) {
-										$ng_cities = $vca_asm_geography->get_cities_without( 'ng' );
+										$ng_nations = $vca_asm_geography->get_nations_without( 'ng' );
 									} else {
-										$ng_cities = $vca_asm_geography->get_descendants( $ng, 'type=city&data=id' );
+										$ng_nations = $vca_asm_geography->get_descendants( $ng, 'type=nation&data=id' );
 									}
-									$cities = array_merge( $cities, $ng_cities );
+									$query_units = array_merge( $query_units, $ng_nations );
 								}
 							break;
 						}
@@ -743,11 +733,20 @@ class VCA_ASM_Admin_Supporters {
 
 					$gf_serialized = htmlspecialchars( serialize( $units ) );
 					$sort_url .= '&gf=' . $gf_serialized .'&gfb=' . $geo_filter_by;
-					$metaqueries[] = array(
-						'key' => 'region',
-						'value' => $cities,
-						'compare' => 'IN'
-					);
+
+					if ( in_array( $geo_filter_by, array( 'nation', 'ng' ) ) ) {
+						$metaqueries[] = array(
+							'key' => 'city',
+							'value' => $query_units,
+							'compare' => 'IN'
+						);
+					} else {
+						$metaqueries[] = array(
+							'key' => 'nation',
+							'value' => $query_units,
+							'compare' => 'IN'
+						);
+					}
 				}
 			} else {
 				$table_headline =
@@ -831,7 +830,7 @@ class VCA_ASM_Admin_Supporters {
 
 		$profile_url = $sort_url . '&orderby=' . $orderby . '&order=' . $order;
 
-		$regions = $vca_asm_geography->get_ids();
+		$cities = $vca_asm_geography->get_ids();
 		$stati = $vca_asm_geography->get_stati();
 		$stati_conv = $vca_asm_geography->get_stati_conv();
 
@@ -854,8 +853,8 @@ class VCA_ASM_Admin_Supporters {
 					continue;
 				}
 				if ( $orderby === 'city' ||  $orderby === 'membership' ) {
-					$supp_city = get_user_meta( $supporter->ID, 'region', true );
-					$supporters_ordered[$i]['city'] = mb_substr( $regions[$supp_city], 0, 3 );
+					$supp_city = get_user_meta( $supporter->ID, 'city', true );
+					$supporters_ordered[$i]['city'] = mb_substr( $cities[$supp_city], 0, 3 );
 					if( $orderby === 'membership' ) {
 						$supporters_ordered[$i]['membership'] = ( isset( $supp_city ) && $supp_city != 0 ) ? $this->get_membership_status( $supporter->ID, $stati[$supp_city] ) : __( 'No', 'vca-asm' );
 					}
@@ -942,7 +941,7 @@ class VCA_ASM_Admin_Supporters {
 											'nat_id' => $supp_nation ? $supp_nation : 0
 										)
 									);
-			$rows[$i]['region'] = $regions[$supp_city];
+			$rows[$i]['region'] = $cities[$supp_city];
 			if ( $supp_city != 0 ) {
 				$rows[$i]['region'] .= ' (' . $stati_conv[$supp_city] . ')';
 			}
@@ -1009,14 +1008,13 @@ class VCA_ASM_Admin_Supporters {
 		$columns[] = array(
 			'id' => 'mobile',
 			'title' => __( 'Mobile Phone', 'vca-asm' ),
-			'sortable' => true,
-			'legacy-screen' => false
+			'sortable' => true
 		);
 		$columns[] = array(
 			'id' => 'age',
 			'title' => __( 'Age', 'vca-asm' ),
 			'sortable' => true,
-			'tablet' => false
+			'legacy-screen' => false
 		);
 		$columns[] = array(
 			'id' => 'gender',

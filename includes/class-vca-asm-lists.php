@@ -112,7 +112,7 @@ class VCA_ASM_Lists {
 			$output .= $template->output();
 
 		} else {
-			$output = '<p class="message">' .
+			$output = '<p>' .
 				__( 'Currently there are no activities in the registration phase.', 'vca-asm' ) .
 				'</p>';
 		}
@@ -138,12 +138,14 @@ class VCA_ASM_Lists {
 		$waiting = $vca_asm_registrations->get_supporter_waiting();
 		$registrations_old = $vca_asm_registrations->get_supporter_registrations_old();
 
-		$output = '';
+		$output = '<section id="section_regs"><p class="pointer">&#9654;</p><h5><a href="#section_regs">' .
+				__( 'Activities you are participating in', 'vca-asm' ) . ' <span class="thin">(' . count( $registrations ) . ')</span>' .
+			'</a></h5><div class="acc-body"><div class="measuring-wrapper">';
 
 		if( ! empty( $registrations ) ) {
 
-			$output .= '<p class="message">' .
-				__( 'These are the future activities you are participating in:', 'vca-asm' ) .
+			$output .= '<p>' .
+					__( 'These are the future activities you are participating in.', 'vca-asm' ) .
 				'</p>';
 
 			$args = array(
@@ -158,23 +160,34 @@ class VCA_ASM_Lists {
 			);
 
 			$activities = new WP_Query( $args );
-			$list_class = 'activities activities-registrations';
 
-			require( VCA_ASM_ABSPATH . '/templates/frontend-activities.php' );
+			$template = new VCA_ASM_Frontend_Activities(
+				$activities,
+				array(
+					'list_class' => 'activities-registrations',
+					'minimalistic' => true
+				)
+			);
+
+			$output .= $template->output();
 
 		} else {
 
-			$output .= '<p class="message">' .
+			$output .= '<p>' .
 				__( 'You are currently not registered for future activities.', 'vca-asm' ) .
 				'</p>';
 
 		}
 
+		$output .= '</div></div></section>' .
+			'<section id="section_apps"><p class="pointer">&#9654;</p><h5><a href="#section_apps">' .
+					__( 'Current Applications', 'vca-asm' ) . ' <span class="thin">(' . count( $applications ) . ')</span>' .
+				'</a></h5><div class="acc-body"><div class="measuring-wrapper">';
+
 		if( ! empty( $applications ) ) {
 
-			$output .= '<h2 class="h2-margin">' . __( 'Current Applications', 'vca-asm' ) . '</h2>' .
-				'<p class="message">' .
-				__( 'You have applied to participate in the following activities. You will get an answer at the latest one day after the application deadline has passed.', 'vca-asm' ) .
+			$output .= '<p>' .
+					__( 'You have applied to participate in the following activities. You will get an answer at the latest one day after the application deadline has passed.', 'vca-asm' ) .
 				'</p>';
 
 			$args = array(
@@ -194,18 +207,29 @@ class VCA_ASM_Lists {
 				$activities,
 				array(
 					'action' => 'rev_app',
-					'list_class' => 'activities-applications'
+					'list_class' => 'activities-applications',
+					'minimalistic' => true
 				)
 			);
 
 			$output .= $template->output();
+		} else {
+
+			$output .= '<p>' .
+				__( 'You currently have not applied to any future activities.', 'vca-asm' ) .
+				'</p>';
+
 		}
+
+		$output .= '</div></div></section>' .
+			'<section id="section_waiting"><p class="pointer">&#9654;</p><h5><a href="#section_waiting">' .
+					__( 'Waiting List', 'vca-asm' ) . ' <span class="thin">(' . count( $waiting ) . ')</span>' .
+				'</a></h5><div class="acc-body"><div class="measuring-wrapper">';
 
 		if( ! empty( $waiting ) ) {
 
-			$output .= '<h2 class="h2-margin">' . __( 'Waiting List', 'vca-asm' ) . '</h2>' .
-				'<p class="message">' .
-				__( 'Your application to these activites was denied. You are now on the waiting list and will be contacted, if slots open up again.', 'vca-asm' ) .
+			$output .= '<p>' .
+					__( 'Your application to these activites was denied. You are now on the waiting list and will be contacted, if slots open up again.', 'vca-asm' ) .
 				'</p>';
 
 			$args = array(
@@ -224,19 +248,30 @@ class VCA_ASM_Lists {
 			$template = new VCA_ASM_Frontend_Activities(
 				$activities,
 				array(
-					'list_class' => 'activities-waiting'
+					'list_class' => 'activities-waiting',
+					'minimalistic' => true
 				)
 			);
 
 			$output .= $template->output();
 
+		} else {
+
+			$output .= '<p>' .
+				__( 'You currently are not on any waiting lists.', 'vca-asm' ) .
+				'</p>';
+
 		}
+
+		$output .= '</div></div></section>' .
+			'<section id="section_past"><p class="pointer">&#9654;</p><h5><a href="#section_past">' .
+					__( 'Past Activities', 'vca-asm' ) . ' <span class="thin">(' . count( $registrations_old ) . ')</span>' .
+				'</a></h5><div class="acc-body"><div class="measuring-wrapper">';
 
 		if( ! empty( $registrations_old ) ) {
 
-			$output .= '<h2 class="h2-margin">' . __( 'Past Activities', 'vca-asm' ) . '</h2>' .
-				'<p class="message">' .
-				__( 'These are the activities you have participated in in the past.', 'vca-asm' ) .
+			$output .= '<p>' .
+					__( 'These are the activities you have participated in in the past.', 'vca-asm' ) .
 				'</p>';
 
 			$args = array(
@@ -251,10 +286,29 @@ class VCA_ASM_Lists {
 			);
 
 			$activities = new WP_Query( $args );
-			$list_class = 'activities activities-registrations-old';
 
-			require( VCA_ASM_ABSPATH . '/templates/frontend-activities-past.php' );
+			$template = new VCA_ASM_Frontend_Activities(
+				$activities,
+				array(
+					'list_class' => 'activities-registrations-old',
+					'minimalistic' => true
+				)
+			);
 
+			$output .= $template->output();
+
+		} else {
+
+			$output .= '<p>' .
+				__( 'So far, you have not participated in any activities.', 'vca-asm' ) .
+				'</p>';
+
+		}
+
+		$output .= '</div></div></section>';
+
+		if ( ! empty( $output ) ) {
+			$output = '<div class="accordion activity-accordion">' . $output . '</div>';
 		}
 
 		return $output;

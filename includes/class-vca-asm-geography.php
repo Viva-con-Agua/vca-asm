@@ -222,6 +222,34 @@ class VCA_ASM_Geography {
 	}
 
 	/**
+	 * Returns an array of raw region data
+	 *
+	 * @param string $without
+	 * @return array $nations
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function get_nations_without( $without = 'ng' ) {
+		global $wpdb;
+
+		$all_nations = $wpdb->get_results(
+			"SELECT id FROM " .
+			$wpdb->prefix . "vca_asm_geography " .
+			"WHERE type = 'nation'", ARRAY_A
+		);
+
+		$nations = array( 0 );
+		foreach ( $all_nations as $nation ) {
+			if ( 'ng' === $without && ! $this->has_ng( $nation['id'] ) ) {
+				$nations[] = $nation['id'];
+			}
+		}
+
+		return $nations;
+	}
+
+	/**
 	 * Returns a regions ancestors (if any)
 	 *
 	 * @param array $args
