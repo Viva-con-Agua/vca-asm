@@ -12,7 +12,7 @@ get_currentuserinfo();
 
 $admin_city = get_user_meta( $current_user->ID, 'city', true );
 $admin_region = $admin_city;
-$admin_nation = $vca_asm_geography->has_nation( $admin_city );
+$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
 
 $post_city = get_post_meta( $post->ID, 'city', true );
 $post_nation = get_post_meta( $post->ID, 'nation', true );
@@ -55,7 +55,7 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 			case 'cty_quotas':
 			case 'cty_slots':
 			case 'quotas':
-				$output .= '<tr id="' . $field['type'] . '-wrap" class="quotas-wrap" style="display:none"><th>' .
+				$output .= '<tr id="' . $field['type'] . '-wrap" class="quotas-wrap"><th>' .
 						'<label for="'.$field['id'].'">'.$field['label'].'</label>' .
 					'</th><td>';
 			break;
@@ -501,11 +501,15 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 			break;
 
 			case 'ctr_quotas_switch':
-				if ( $is_activity && isset( $the_activity->participants_count_by_quota[0] ) && isset( $the_activity->participants_count_by_slots[0] ) && $the_activity->participants_count_by_quota[0] > $the_activity->participants_count_by_slots[0] ) {
+				if ( $is_activity && $the_activity->non_global_participants ) {
+					$non_global_participants_count = $the_activity->participants_count_by_quota[0];
+					if ( isset( $the_activity->participants_count_by_slots[0] ) ) {
+						$non_global_participants_count = $non_global_participants_count - $the_activity->participants_count_by_slots[0];
+					}
 					$output .= _x( 'Quotas have been enabled.', 'Slots Settings', 'vca-asm' ) . '<br />' .
 					sprintf(
 						_x( 'Currently, %d participants are already registered by country and/or city quotas.', 'Slots Settings', 'vca-asm' ),
-						$the_activity->participants_count_by_quota[0] - $the_activity->participants_count_by_slots[0]
+						$non_global_participants_count
 					) . ' ' .
 					_x( 'Quotas cannot be disabled anymore, unless those participants are removed again...', 'Slots Settings', 'vca-asm' ) .
 					'<input name="' . $field['id'] . '" id="' . $field['id'] . '" type="hidden" value="yay"/>';
@@ -532,11 +536,24 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 			break;
 
 			case 'ctr_quotas':
+				$output .= '<div class="no-js-fallback-vals">';
+				$output .= '</div>';
+			break;
+
 			case 'cty_slots':
-				$output .= '';
+				$output .= '<div class="no-js-fallback-vals">';
+				$output .= '</div>';
 			break;
 
 			/* END: Slots */
+
+			case 'data-links':
+					$data_string = __( 'Send an email or print a list', 'vca-asm' );
+					$output .= '<a ' .
+						'href="admin.php?page=vca-asm-' . $department . '-slot-allocation&activity=' . $the_activity->ID . '&tab=data' . '" ' .
+						'title"' . $data_string . '"' .
+					'>' . $data_string . '</a>';
+			break;
 
 			case 'applicants':
 			case 'waiting':
@@ -652,18 +669,12 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 					if ( 'waiting' === $field['type'] ) {
 						$mng_string = __( 'Manage this activities&apos; Waiting List', 'vca-asm' );
 						$active_tab = 'waiting';
-						$group_qry_string = 'waiting';
-						$group_string = __( 'Send an email to all supporters currently on the waiting list', 'vca-asm' );
 					} elseif ( 'participants' === $field['type'] ) {
 						$mng_string = __( 'Manage this activities&apos; participants', 'vca-asm' );
 						$active_tab = 'accepted';
-						$group_qry_string = 'participants';
-						$group_string = __( 'Send an email to all accepted applicants', 'vca-asm' );
 					} else {
 						$mng_string = __( 'Manage this activities&apos; applications', 'vca-asm' );
 						$active_tab = 'apps';
-						$group_qry_string = 'applicants';
-						$group_string = __( 'Send an email to all current applicants', 'vca-asm' );
 					}
 
 					$output .= '<tr><td colspan="3"><a ' .
@@ -671,26 +682,23 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 						'title="' . $mng_string  . '"' .
 					'>' .
 						$mng_string .
-					'</a></td></tr>' .
-					'<tr><td colspan="3"><a href="' .
-						get_bloginfo('url') . '/wp-admin/admin.php?page=vca-asm-compose&activity=' . $post->ID . '&group=' . $group_qry_string .
-					'">' . $group_string . '</a></td></tr>';
+					'</a></td></tr>';
 
-					if ( 'participants' === $field['type'] ) {
-						$output .= '<tr><td colspan="3">' .
-							'<a id="excel-download" href="#spreadsheet-full" onclick="p1exportExcel();">' .
-								__( 'Download participant data as an MS Excel spreadsheet', 'vca-asm' ) .
-								' (' . _x( 'including sensitive data, never (!) forward', 'non-sensitive data', 'vca-asm' ) . ')' .
-							'</a>' .
-						'</td></tr>' .
-						'<tr><td colspan="3">' .
-							'<a id="excel-download-minimal" href="#spreadsheet-minimal" onclick="p1exportExcelMin();">' .
-								__( 'Download participant data as an MS Excel spreadsheet', 'vca-asm' ) .
-								' (' . _x( 'safe to forward', 'non-sensitive data', 'vca-asm' ) . ')' .
-							'</a>' .
-							'<iframe id="excel-frame" src="" style="display:none; visibility:hidden;"></iframe>' .
-						'</td></tr>';
-					}
+					//if ( 'participants' === $field['type'] ) {
+					//	$output .= '<tr><td colspan="3">' .
+					//		'<a id="excel-download" href="#spreadsheet-full" onclick="p1exportExcel();">' .
+					//			__( 'Download participant data as an MS Excel spreadsheet', 'vca-asm' ) .
+					//			' (' . _x( 'including sensitive data, never (!) forward', 'non-sensitive data', 'vca-asm' ) . ')' .
+					//		'</a>' .
+					//	'</td></tr>' .
+					//	'<tr><td colspan="3">' .
+					//		'<a id="excel-download-minimal" href="#spreadsheet-minimal" onclick="p1exportExcelMin();">' .
+					//			__( 'Download participant data as an MS Excel spreadsheet', 'vca-asm' ) .
+					//			' (' . _x( 'safe to forward', 'non-sensitive data', 'vca-asm' ) . ')' .
+					//		'</a>' .
+					//		'<iframe id="excel-frame" src="" style="display:none; visibility:hidden;"></iframe>' .
+					//	'</td></tr>';
+					//}
 
 					$output .= '</table>';
 				}
@@ -720,8 +728,8 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 			if ( 'ctr_quotas_switch' !== $field['type'] ) {
 				$output .= '<span class="description">' . $field['desc'] . '</span>';
 			} else {
-				$output .= '<br class="no-js-hide" /><span class="description no-js-hide">' . $field['desc'] . '</span>' .
-					'<span class="description js-hide">' . __( 'For this feature of the Pool to work properly, you need to have javascript enabled or have a javascript-capable browser, respectively. Unfortunately you cannot set further options here.', 'vca-asm' ) . '<br />' . __( 'Setting / Editing the slots without javascript can be done via the current department\'s &quot;Slots &amp; Participants&quot; menu.', 'vca-asm' ) . '</span>';
+				$output .= '<br /><span class="description no-js-hide">' . $field['desc'] . '</span>' .
+					'<span class="description js-hide">' . __( 'For this feature of the Pool to work properly, you need to have javascript enabled or have a javascript-capable browser, respectively. Unfortunately you cannot set further options here.', 'vca-asm' ) . '<br />' . __( 'Setting / Editing the slots without javascript will soon be possible via the current department\'s &quot;Slots &amp; Participants&quot; menu.', 'vca-asm' ) . '</span>';
 			}
 		}
 

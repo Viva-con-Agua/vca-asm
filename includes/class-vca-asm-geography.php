@@ -15,7 +15,8 @@
 
 if ( ! class_exists( 'VCA_ASM_Geography' ) ) :
 
-class VCA_ASM_Geography {
+class VCA_ASM_Geography
+{
 
 	/**
 	 * Class Properties
@@ -37,25 +38,20 @@ class VCA_ASM_Geography {
 	 */
 	public function get_name( $id )
 	{
-		global $wpdb;
+		global $wpdb,
+			$vca_asm_utilities;
 
 		$geo_query = $wpdb->get_results(
-				"SELECT name FROM " .
-				$wpdb->prefix . "vca_asm_geography " .
-				"WHERE id = " . $id, ARRAY_A
+			"SELECT name FROM " .
+			$wpdb->prefix . "vca_asm_geography " .
+			"WHERE id = " . $id, ARRAY_A
 		);
-		$geo = $geo_query[0]['name'];
+		$geo = isset( $geo_query[0] ) ? $geo_query[0]['name'] : '';
 		if( empty( $geo ) ) {
 			$geo = sprintf( __( 'Error: Geographical unit of ID %s does not exist.', 'vca-asm' ), $id );
 		}
 
-		if ( $geo === 'Switzerland' ) {
-			$geo = __( 'Switzerland', 'vca-asm' );
-		} elseif ( $geo === 'Germany' ) {
-			$geo = __( 'Germany', 'vca-asm' );
-		} elseif ( $geo === 'Austria' ) {
-			$geo = __( 'Austria', 'vca-asm' );
-		}
+		$geo = $vca_asm_utilities->convert_strings( $geo );
 
 		return $geo;
 	}
@@ -70,7 +66,8 @@ class VCA_ASM_Geography {
 	 * @since 1.3
 	 * @access public
 	 */
-	public function get_currency( $id, $type = 'name' ) {
+	public function get_currency( $id, $type = 'name' )
+	{
 		global $wpdb;
 
 		if ( ! in_array( $type, array( 'name', 'code' ) ) ) {
@@ -250,10 +247,10 @@ class VCA_ASM_Geography {
 	}
 
 	/**
-	 * Returns a regions ancestors (if any)
+	 * Returns a region's ancestors (if any)
 	 *
+	 * @param int $id
 	 * @param array $args
-	 * @see $default_args
 	 * @return mixed $ancestors
 	 *
 	 * @since 1.3
@@ -358,6 +355,33 @@ class VCA_ASM_Geography {
 	}
 
 	/**
+	 * Returns a city's first found city group
+	 * (group to city relationships are not unique,
+	 * a city may be part of several groups)
+	 *
+	 * @param int $city
+	 * @return int $group
+	 *
+	 * @since 1.4
+	 * @access public
+	 */
+	public function get_city_group( $city ) {
+		$result = $this->get_ancestors( $city, array(
+			'data' => 'both',
+			'format' => 'array',
+			'type' => 'cg'
+		));
+
+		if ( empty( $result ) ) {
+			return false;
+		} else {
+			$group = key($result);
+		}
+
+		return $group;
+	}
+
+	/**
 	 * Returns false if the unit has no parent nation
 	 * parent nation's id if so
 	 *
@@ -434,7 +458,8 @@ class VCA_ASM_Geography {
 			'format' => 'array',
 			'concat' => ', ',
 			'type' => 'all',
-			'grouped' => true
+			'grouped' => true,
+			'sorted'=> false
 		);
 		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
 
@@ -461,6 +486,7 @@ class VCA_ASM_Geography {
 		}
 
 		$descendants_arr = array();
+		$names = array();
 		foreach ( $descendants_raw as $descendant ) {
 			if (
 				'all' === $type ||
@@ -469,15 +495,23 @@ class VCA_ASM_Geography {
 				if ( 'name' === $data ) {
 					$descendants_arr[] = $this->get_name( $descendant['descendant'] );
 				} elseif ( 'all' === $data ) {
+					$name = $this->get_name( $descendant['descendant'] );
+					$names[] = $name;
 					$descendants_arr[] = array(
 						'id' => $descendant['descendant'],
-						'name' => $this->get_name( $descendant['descendant'] ),
+						'name' => $name,
 						'type' => $this->get_type( $descendant['descendant'], false, $grouped )
 					);
 				} else {
 					$descendants_arr[] = $descendant['descendant'];
 				}
 			}
+		}
+
+		if ( true === $sorted && 'name' === $data ) {
+			sort( $descendants_arr );
+		} elseif ( true === $sorted && 'all' === $data ) {
+			array_multisort( $names, SORT_ASC, $descendants_arr );
 		}
 
 		if ( 'string' === $format ) {
@@ -730,10 +764,10 @@ class VCA_ASM_Geography {
 				$level2[] = $region;
 			} else {
 				$supporters = $wpdb->get_results(
-						"SELECT user_id FROM " .
-						$wpdb->prefix . "usermeta " .
-						"WHERE meta_key = 'city' AND meta_value = " .
-						$region['id'], ARRAY_A
+					"SELECT user_id FROM " .
+					$wpdb->prefix . "usermeta " .
+					"WHERE meta_key = 'city' AND meta_value = " .
+					$region['id'], ARRAY_A
 				);
 				$supp_count = count( $supporters );
 				$mem_count = 0;
@@ -764,7 +798,7 @@ class VCA_ASM_Geography {
 		foreach ( $level1 as $region ) {
 			$supp_count = 0;
 			$mem_count = 0;
-			$descendants = $this->get_descendants( $region['id'], array( 'data' => 'id', 'format' => 'array', 'type' => 'nation' ) );
+			$descendants = $this->get_descendants( $region['id'], array( 'data' => 'id', 'format' => 'array', 'type' => 'city' ) );
 			foreach ( $descendants as $descendant ) {
 				$count_query = $wpdb->get_results(
 						"SELECT supporters, members FROM " .
@@ -1010,7 +1044,7 @@ class VCA_ASM_Geography {
 			$this->countries[$nation['id']] = $nation['name'];
 
 			$this->national_hierarchy[$i]['cities'] = array();
-			$cities = $this->get_descendants( $nation['id'], array( 'data' => 'all' ) );
+			$cities = $this->get_descendants( $nation['id'], array( 'data' => 'all', 'sorted' => true ) );
 
 			foreach ( $cities as $city ) {
 				$this->national_hierarchy[$i]['cities'][] = array(

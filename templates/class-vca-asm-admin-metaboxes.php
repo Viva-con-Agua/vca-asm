@@ -35,7 +35,7 @@ class VCA_ASM_Admin_Metaboxes {
 	 * @since 1.3
 	 * @access public
 	 */
-	public function VCA_ASM_Admin_Form( $args = array() ) {
+	public function VCA_ASM_Admin_Metaboxes( $args = array() ) {
 		$this->__construct( $args = array() );
 	}
 
@@ -82,7 +82,7 @@ class VCA_ASM_Admin_Metaboxes {
 			case 'mb_top':
 				$output .= '<div' . ( ! empty( $id ) ? ' id="' . $id . '"' : '' ) . ' class="postbox ">';
 				if ( $js ) {
-					$output .= '<div class="handlediv" title="' . esc_attr__('Click to toggle') . '"><br></div>' .
+					$output .= '<div class="handlediv" title="' . esc_attr__( 'Click to toggle', 'vca-asm' ) . '"><br></div>' .
 						'<h3 class="hndle"';
 				} else {
 					$output .= '<h3 class="no-hover"';

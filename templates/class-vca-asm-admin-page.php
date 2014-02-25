@@ -27,7 +27,9 @@ class VCA_ASM_Admin_Page {
 		'url' => '?page=admin.php',
 		'extra_head_html' => '',
 		'tabs' => array(),
-		'messages' => array()
+		'messages' => array(),
+		'back' => false,
+		'back_url' => '#'
 	);
 	private $args = array();
 
@@ -70,6 +72,12 @@ class VCA_ASM_Admin_Page {
 				$output .= '<div class="wrap">' .
 					'<div id="' . $icon . '" class="icon32-pa"></div>' .
 					'<h2>' . $title . '</h2><br />';
+
+				if ( $back ) {
+					$output .= '<a href="' . $back_url . '" class="button-secondary margin-bottom" title="' . __( 'Back to where you came from...', 'vca-asm' ) . '">' .
+							'&larr; ' . __( 'back', 'vca-asm' ) .
+						'</a>';
+				}
 
 				if( ! empty( $messages ) ) {
 					$output .= $vca_asm_admin->convert_messages( $messages );

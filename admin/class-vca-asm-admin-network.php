@@ -25,7 +25,7 @@ class VCA_ASM_Admin_Network {
 			'<div id="icon-network" class="icon32-pa"></div><h2>Übersicht: Netzwerk</h2>';
 		$feech = new VCA_ASM_Admin_Future_Feech( array(
 			'title' => 'Übersicht: Netzwerk',
-			'version' => '1.5',
+			'version' => '1.6 (?)',
 			'explanation' => 'Statistiken etc.'
 		));
 		$feech->output();

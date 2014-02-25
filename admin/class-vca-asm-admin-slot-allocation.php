@@ -34,13 +34,14 @@ class VCA_ASM_Admin_Slot_Allocation {
 	 * @access public
 	 */
 	public function control() {
-		global $current_user, $vca_asm_activities, $vca_asm_utilities;
+		global $current_user,
+			$vca_asm_activities, $vca_asm_utilities;
 
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
 		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
 
 		if ( isset( $_GET['page'] ) ) {
-			$dep = split( '-', $_GET['page'] );
+			$dep = explode( '-', $_GET['page'] );
 			if ( 'slot' === $dep[3] ) {
 				switch ( $dep[2] ) {
 					case 'education':
@@ -58,27 +59,13 @@ class VCA_ASM_Admin_Slot_Allocation {
 			return true;
 		}
 
-		$url = '?page=vca-asm-' . $this->department . '-slot-allocation';
+		$url = 'admin.php?page=vca-asm-' . $this->department . '-slot-allocation';
+		$sort_url = $url;
 
 		$activity_types = $vca_asm_activities->activities_by_department[$this->department] ? $vca_asm_activities->activities_by_department[$this->department] : array();
 
 		/* table order */
-		if( isset( $_GET['orderby'] ) ) {
-			$orderby = $_GET['orderby'];
-		} else {
-			$orderby = 'name';
-		}
-		if( isset( $_GET['order'] ) ) {
-			$order = $_GET['order'];
-			if( $order == 'ASC') {
-				$toggle_order = 'DESC';
-			} else {
-				$toggle_order = 'ASC';
-			}
-		} else {
-			$order = 'ASC';
-			$toggle_order = 'DESC';
-		}
+		extract( $vca_asm_utilities->table_order( 'timeframe' ), EXTR_OVERWRITE );
 
 		/***** QUERY *****/
 
@@ -87,7 +74,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 		if ( empty( $activity_types ) ) {
 			$rows = array();
 			$empty_message = __( 'This department does not have any activities yet...', 'vca-asm' );
-		} elseif ( isset( $_GET['types'] ) && empty( $_GET['types'] ) ) {
+		} elseif ( isset( $_GET['activities'] ) && empty( $_GET['activities'] ) ) {
 			$rows = array();
 			$empty_message = __( 'You have to select at least one type of activity, if you want results to be shown here...', 'vca-asm' );
 		} elseif ( isset( $_GET['phases'] ) && empty( $_GET['phases'] ) ) {
@@ -97,6 +84,9 @@ class VCA_ASM_Admin_Slot_Allocation {
 
 			if ( isset( $_GET['activities'] ) ) {
 				$post_types = $_GET['activities'];
+				foreach ( $post_types as $type ) {
+					$sort_url .= '&activities%5B%5D=' . $type;
+				}
 			} else {
 				$post_types = array();
 				foreach ( $activity_types as $type ) {
@@ -104,11 +94,12 @@ class VCA_ASM_Admin_Slot_Allocation {
 				}
 			}
 
-			$activities = array();
-
 			$phases = isset( $_GET['phases'] ) ? $_GET['phases'] : array( 'app', 'ft' );
 
+			$activities = array();
+
 			foreach ( $phases as $phase ) {
+				$sort_url .= '&phases%5B%5D=' . $phase;
 				switch ( $phase ) {
 					case 'bf':
 						$phase_acts = get_posts( array(
@@ -201,6 +192,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 				if ( ! $current_user->has_cap( 'vca_asm_manage_' . $this->department . '_global' ) ) {
 					$relevant_activities = array();
 					foreach ( $activities as $activity ) {
+						$cty_slots = get_post_meta( $activity->ID, 'cty_slots', true );
 						if (
 							(
 								$current_user->has_cap( 'vca_asm_manage_' . $this->department . '_nation' ) &&
@@ -212,7 +204,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 										get_post_meta( $activity->ID, 'city', true ) === $admin_city &&
 										'delegate' === get_post_meta( $activity->ID, 'delegate', true )
 									) || (
-										array_key_exists( $admin_city, get_post_meta( $activity->ID, 'cty_slots', true ) )
+										is_array( $cty_slots ) && array_key_exists( $admin_city, $cty_slots )
 									)
 								)
 							)
@@ -223,13 +215,25 @@ class VCA_ASM_Admin_Slot_Allocation {
 					$activities = $relevant_activities;
 				}
 
-				//var_dump( get_post_meta( 1058, 'cty_slots', true ) );
-
 				$activities_ordered = array();
 				$i = 0;
 				foreach ( $activities as $key => $activity ) {
-					if ( 'xxx' === $orderby ) {
-						$activities_ordered[$i]['xxx'] = get_post_meta( $activity->ID, 'xxx', true );
+					if ( 'name' === $orderby ) {
+						$activities_ordered[$i]['name'] = trim( $activity->post_title );
+					} else if ( 'type' === $orderby ) {
+						$activities_ordered[$i]['type'] = $vca_asm_activities->to_nicename[$activity->post_type];
+					} else if ( 'timeframe' === $orderby ) {
+						$activities_ordered[$i]['timeframe'] = get_post_meta( $activity->ID, 'start_act', true );
+					} else if ( 'start_app' === $orderby ) {
+						$activities_ordered[$i]['start_app'] = get_post_meta( $activity->ID, 'start_app', true );
+					} else if ( 'end_app' === $orderby ) {
+						$activities_ordered[$i]['end_app'] = get_post_meta( $activity->ID, 'end_app', true );
+					} else if ( 'slots' === $orderby ) {
+						$activities_ordered[$i]['slots'] = 0; /* currently not sortable */
+					} else if ( 'applications' === $orderby ) {
+						$activities_ordered[$i]['applications'] = 0; /* currently not sortable */
+					} else if ( 'participants' === $orderby ) {
+						$activities_ordered[$i]['participants'] = 0; /* currently not sortable */
 					} else {
 						$activities_ordered[$i][$orderby] = get_post_meta( $activity->ID, $orderby, true );
 					}
@@ -378,12 +382,25 @@ class VCA_ASM_Admin_Slot_Allocation {
 				'title' => __( 'Activity', 'vca-asm' ),
 				'strong' => true,
 				'sortable' => true,
-				'actions' => array( 'edit_act' ),
-				'cap' => array( 'edit-act-'.$this->department )
+				'link' => array(
+					'title' => __( 'Manage applicants & participants of %s', 'vca-asm' ),
+					'title_row_data' => 'name',
+					'url' => 'admin.php?page=vca-asm-' . $this->department . '-slot-allocation&activity=%d&tab=apps',
+					'url_row_data' => 'id'
+				),
+				'actions' => array( 'manage_apps' ),
+				'cap' => array( 'slots-'.$this->department )
 			),
 			array(
 				'id' => 'type',
 				'title' => __( 'Type', 'vca-asm' ),
+				'sortable' => true,
+				'actions' => array( 'edit_act' ),
+				'cap' => array( 'edit-act-'.$this->department )
+			),
+			array(
+				'id' => 'timeframe',
+				'title' => __( 'Timeframe', 'vca-asm' ),
 				'sortable' => true
 			),
 			array(
@@ -397,41 +414,33 @@ class VCA_ASM_Admin_Slot_Allocation {
 				'sortable' => true
 			),
 			array(
-				'id' => 'timeframe',
-				'title' => __( 'Timeframe', 'vca-asm' ),
-				'sortable' => true
-			),
-			array(
 				'id' => 'slots',
 				'title' => __( 'Slots (open)', 'vca-asm' ),
-				'sortable' => true
+				'sortable' => false
 			),
 			array(
 				'id' => 'applications',
 				'title' => __( 'Applications', 'vca-asm' ),
-				'sortable' => true,
-				'actions' => array( 'manage_apps' ),
-				'cap' => array( 'slots-'.$this->department )
+				'sortable' => false
 			),
 			array(
 				'id' => 'participants',
 				'title' => __( 'Participants', 'vca-asm' ),
-				'sortable' => true,
-				'actions' => array( 'manage_participants' ),
-				'cap' => array( 'slots-'.$this->department )
+				'sortable' => false
 			)
 		);
 
 		$tbl_args = array(
 			'page_slug' => 'vca-asm-slot-allocation',
-			'base_url' => 'admin.php?page=vca-asm-' . $this->department . '-slot-allocation',
-			'sort_url' =>  ! empty( $sort_url ) ? $sort_url : '',
+			'base_url' => $url,
+			'sort_url' =>  ! empty( $sort_url ) ? $sort_url : $url,
 			'icon' => 'icon-'.$this->department,
 			'headline' => sprintf( __( 'Activities of the %s department', 'vca-asm' ), $this->departments[$this->department] ),
 			'empty_message' => ! empty( $empty_message ) ? $empty_message : '',
 			'dspl_cnt' => true,
 			'count' => ! empty( $act_cnt ) ? $act_cnt : 0,
-			'cnt_txt' => __( '%d Activities', 'vca-asm' )
+			'cnt_txt' => __( '%d Activities', 'vca-asm' ),
+			'orderby' => 'timeframe'
 		);
 		$tbl_args = array_merge( $tbl_args, $pagination_args );
 		$tbl = new VCA_ASM_Admin_Table( $tbl_args, $columns, $rows );
@@ -501,7 +510,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 
 		$the_activity = new VCA_ASM_Activity( $activity_id );
 
-		$title = sprintf( __( 'Quotas, Slots &amp; Participants for &quot;%s&quot;', 'vca-asm' ), $the_activity->name );
+		$title = sprintf( __( 'Supporter Management for &quot;%s&quot;', 'vca-asm' ), $the_activity->name );
 
 		$profile_url = 'admin.php?page=vca-asm-' . $this->department . '-slot-allocation&activity=' . $activity_id . '&tab=' . $active_tab;
 		if( isset( $_GET['orderby'] ) ) {
@@ -720,6 +729,11 @@ class VCA_ASM_Admin_Slot_Allocation {
 					'value' => 'accepted',
 					'icon' => 'icon-accepted-applications',
 					'title' => _x( 'Participants', 'Slot Allocation Admin Menu', 'vca-asm' )
+				),
+				array(
+					'value' => 'data',
+					'icon' => 'icon-data',
+					'title' => _x( 'Lists &amp; Mailing', 'Slot Allocation Admin Menu', 'vca-asm' )
 				)
 			);
 		} else {
@@ -738,9 +752,14 @@ class VCA_ASM_Admin_Slot_Allocation {
 					'value' => 'accepted',
 					'icon' => 'icon-accepted-applications',
 					'title' => _x( 'Participants', 'Slot Allocation Admin Menu', 'vca-asm' )
+				),
+				array(
+					'value' => 'data',
+					'icon' => 'icon-data',
+					'title' => _x( 'Lists &amp; Mailing', 'Slot Allocation Admin Menu', 'vca-asm' )
 				)
 			);
-			if ( true ) {
+			if ( false ) { // future feature
 				$tabs[] = array(
 					'value' => 'slots',
 					'icon' => 'icon-supporters',
@@ -756,7 +775,9 @@ class VCA_ASM_Admin_Slot_Allocation {
 			'active_tab' => $active_tab,
 			'url' => '?page=vca-asm-' . $this->department . '-slot-allocation&activity=' . $activity_id,
 			'tabs' => $tabs,
-			'messages' => $messages
+			'messages' => $messages,
+			'back' => true,
+			'back_url' => '?page=vca-asm-' . $this->department . '-slot-allocation'
 		));
 
 		$page->top();
@@ -767,12 +788,256 @@ class VCA_ASM_Admin_Slot_Allocation {
 				$this->reallocate_slots( $the_activity );
 			break;
 
+			case "data":
+				$this->data_links( $the_activity );
+			break;
+
 			default:
 				$this->slot_allocation_list( $the_activity, $active_tab );
 			break;
 		}
 
 		$page->bottom();
+	}
+
+	/**
+	 * Displays Links to download activity specific data
+	 * and to contact participant groups
+	 *
+	 * @since 1.3
+	 * @access private
+	 */
+	private function data_links( $the_activity ) {
+		global $current_user, $vca_asm_registrations;
+		get_currentuserinfo();
+
+		$admin_city = get_user_meta( $current_user->ID, 'city', true );
+		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
+
+		$post_city = $the_activity->city;
+		$post_nation = $the_activity->nation;
+		$department = $the_activity->department;
+
+		$applicants = array();
+		$waiting = array();
+		$participants = array();
+
+		$excel_params = array(
+			'relpath' => VCA_ASM_RELPATH,
+			'pID' => $the_activity->ID
+		);
+		wp_localize_script( 'vca-asm-excel-export', 'excelParams', $excel_params );
+
+		if (
+			$current_user->has_cap( 'vca_asm_manage_' . $department . '_global' ) ||
+			(
+				$current_user->has_cap( 'vca_asm_manage_' . $department . '_nation' ) &&
+				$admin_nation &&
+				$admin_nation === $post_nation
+			) ||
+			(
+				$current_user->has_cap( 'vca_asm_manage_' . $department ) &&
+				$post_delegation &&
+				$admin_city &&
+				$admin_city === $post_city
+			)
+		) {
+			$applicants = $the_activity->applicants;
+			$waiting = $the_activity->waiting;
+			$participants = $the_activity->participants;
+			$scope = 'global';
+		} elseif (
+			$current_user->has_cap( 'vca_asm_manage_' . $department . '_nation' ) &&
+			$admin_nation
+		) {
+			$scope = 'nation';
+			if (
+				array_key_exists( $admin_nation, $the_activity->applicants_count_by )
+			) {
+				$applicants = $the_activity->applicants_by_quota[$admin_nation];
+			}
+			if (
+				array_key_exists( $admin_nation, $the_activity->waiting_count_by_quota )
+			) {
+				$waiting = $the_activity->waiting_by_quota[$admin_nation];
+			}
+			if (
+				array_key_exists( $admin_nation, $the_activity->participants_count_by_quota )
+			) {
+				$participants = $the_activity->participants_by_quota[$admin_nation];
+			}
+		} elseif (
+			$current_user->has_cap( 'vca_asm_manage_' . $department ) &&
+			$admin_city
+		) {
+			$scope = 'city';
+			if (
+				array_key_exists( $admin_city, $the_activity->applicants_count_by_slots )
+			) {
+				$applicants = $the_activity->applicants_by_slots[$admin_city];
+			}
+			if (
+				array_key_exists( $admin_city, $the_activity->waiting_count_by_slots )
+			) {
+				$waiting = $the_activity->waiting_by_slots[$admin_city];
+			}
+			if (
+				array_key_exists( $admin_city, $the_activity->participants_count_by_slots )
+			) {
+				$participants = $the_activity->participants_by_slots[$admin_city];
+			}
+		}
+
+		$mb_args = array(
+			'echo' => true,
+			'columns' => 1,
+			'running' => 1,
+			'id' => '',
+			'title' => __( 'Lists', 'vca-asm' ),
+			'js' => false
+		);
+		$mb_env = new VCA_ASM_Admin_Metaboxes( $mb_args );
+
+		$mb_env->top();
+
+		$mb_env->mb_top();
+			$output = '<table class="table-inside-table table-mobile-collapse subtable">';
+
+			$output .= '<tr><td>' .
+					'<strong>' . __( 'Applicants', 'vca-asm' ) . '</strong>' .
+				'</td></tr>';
+			if ( ! empty( $applicants ) ) {
+				$output .= '<tr><td>' .
+						'<a id="excel-download" href="#spreadsheet-full" onclick="p1exportExcel(\'applicants\');">' .
+							__( 'Download applicant data as an MS Excel spreadsheet', 'vca-asm' ) .
+							' (' . _x( 'including sensitive data, never (!) forward', 'non-sensitive data', 'vca-asm' ) . ')' .
+						'</a>' .
+					'</td></tr><tr><td>' .
+						'<a id="excel-download-minimal" href="#spreadsheet-minimal" onclick="p1exportExcelMin(\'applicants\');">' .
+							__( 'Download applicant data as an MS Excel spreadsheet', 'vca-asm' ) .
+							' (' . _x( 'safe to forward', 'non-sensitive data', 'vca-asm' ) . ')' .
+						'</a>' .
+					'</td></tr>';
+			} else {
+				$output .= '<tr><td>' .
+						__( 'Currently no applicants', 'vca-asm' ) .
+					'</td></tr>';
+			}
+			if ( $the_activity->upcoming ) {
+				$output .= '<tr><td style="padding-top:1em">' .
+						'<strong>' . __( 'Waiting List', 'vca-asm' ) . '</strong>' .
+					'</td></tr>';
+				if ( ! empty( $waiting ) ) {
+					$output .= '<tr><td>' .
+							'<a id="excel-download" href="#spreadsheet-full" onclick="p1exportExcel(\'waiting\');">' .
+								__( 'Download waiting list as an MS Excel spreadsheet', 'vca-asm' ) .
+								' (' . _x( 'including sensitive data, never (!) forward', 'non-sensitive data', 'vca-asm' ) . ')' .
+							'</a>' .
+						'</td></tr><tr><td>' .
+							'<a id="excel-download-minimal" href="#spreadsheet-minimal" onclick="p1exportExcelMin(\'waiting\');">' .
+								__( 'Download waiting list as an MS Excel spreadsheet', 'vca-asm' ) .
+								' (' . _x( 'safe to forward', 'non-sensitive data', 'vca-asm' ) . ')' .
+							'</a>' .
+						'</td></tr>';
+				} else {
+					$output .= '<tr><td>' .
+							__( 'Waiting List currently empty', 'vca-asm' ) .
+						'</td></tr>';
+				}
+			}
+			$output .= '<tr><td style="padding-top:1em">' .
+						'<strong>' . __( 'Participants', 'vca-asm' ) . '</strong>' .
+					'</td></tr>';
+			if ( ! empty( $participants ) ) {
+				$output .= '<tr><td>' .
+						'<a id="excel-download" href="#spreadsheet-full" onclick="p1exportExcel(\'participants\');">' .
+							__( 'Download participant data as an MS Excel spreadsheet', 'vca-asm' ) .
+							' (' . _x( 'including sensitive data, never (!) forward', 'non-sensitive data', 'vca-asm' ) . ')' .
+						'</a>' .
+					'</td></tr><tr><td>' .
+						'<a id="excel-download-minimal" href="#spreadsheet-minimal" onclick="p1exportExcelMin(\'participants\');">' .
+							__( 'Download participant data as an MS Excel spreadsheet', 'vca-asm' ) .
+							' (' . _x( 'safe to forward', 'non-sensitive data', 'vca-asm' ) . ')' .
+						'</a>' .
+					'</td></tr>';
+			} else {
+				$output .= '<tr><td>' .
+						__( 'No participants yet', 'vca-asm' ) .
+					'</td></tr>';
+			}
+
+			$output .= '<iframe id="excel-frame" src="" style="display:none; visibility:hidden;"></iframe>' .
+					'</table>';
+			echo $output;
+		$mb_env->mb_bottom();
+
+		$mb_env->mb_top( array( 'title' =>  __( 'E-Mails', 'vca-asm' ) ) );
+			$output = '<table class="table-inside-table table-mobile-collapse subtable">';
+
+			$output .= '<tr><td>' .
+					'<strong>' . __( 'Applicants', 'vca-asm' ) . '</strong>' .
+				'</td></tr>';
+			if ( ! empty( $applicants ) ) {
+				$output .= '<tr><td>' .
+						'<a href="' .
+							get_bloginfo('url') . '/wp-admin/admin.php?page=vca-asm-compose&tab=activity&activity=' . $the_activity->ID . '&group=apps' .
+						'">';
+							if ( $the_activity->upcoming ) {
+								$output .= __( 'Send an email to all current applicants', 'vca-asm' );
+							} else {
+								$output .= __( 'Send an email to all (denied) applicants', 'vca-asm' );
+							}
+						$output .= '</a>' .
+					'</td></tr>';
+			} else {
+				$output .= '<tr><td>' .
+						__( 'Currently no applicants', 'vca-asm' ) .
+					'</td></tr>';
+			}
+			if ( $the_activity->upcoming ) {
+				$output .= '<tr><td style="padding-top:1em">' .
+						'<strong>' . __( 'Waiting List', 'vca-asm' ) . '</strong>' .
+					'</td></tr>';
+				if ( ! empty( $waiting ) ) {
+					$output .= '<tr><td>' .
+							'<a href="' .
+								get_bloginfo('url') . '/wp-admin/admin.php?page=vca-asm-compose&tab=activity&activity=' . $the_activity->ID . '&group=waiting' .
+							'">' .
+								__( 'Send an email to all supporters currently on the waiting list', 'vca-asm' ) .
+							'</a>' .
+						'</td></tr>';
+				} else {
+					$output .= '<tr><td>' .
+							__( 'Waiting List currently empty', 'vca-asm' ) .
+						'</td></tr>';
+				}
+			}
+			$output .= '<tr><td style="padding-top:1em">' .
+					'<strong>' . __( 'Participants', 'vca-asm' ) . '</strong>' .
+				'</td></tr>';
+			if ( ! empty( $participants ) ) {
+				$output .= '<tr><td>' .
+						'<a href="' .
+							get_bloginfo('url') . '/wp-admin/admin.php?page=vca-asm-compose&tab=activity&activity=' . $the_activity->ID . '&group=parts' .
+						'">';
+							if ( $the_activity->upcoming ) {
+								$output .= __( 'Send an email to all accepted applicants', 'vca-asm' );
+							} else {
+								$output .= __( 'Send an email to all supporters that participated', 'vca-asm' );
+							}
+						$output .= '</a>' .
+					'</td></tr>';
+			} else {
+				$output .= '<tr><td>' .
+						__( 'No participants yet', 'vca-asm' ) .
+					'</td></tr>';
+			}
+
+			$output .= '</table>';
+			echo $output;
+		$mb_env->mb_bottom();
+
+		$mb_env->bottom();
 	}
 
 	/**
@@ -1047,6 +1312,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 			}
 		}
 
+		$empty_flag = true;
 		foreach ( $tables as $table ) {
 			$occupied = isset( $the_activity->participants_count_by_slots[$table['quota']] ) ?
 				$the_activity->participants_count_by_slots[$table['quota']] :
@@ -1056,10 +1322,58 @@ class VCA_ASM_Admin_Slot_Allocation {
 			$tbl_args['headline'] = $table['headline'] .
 				'<br />' . sprintf( __( 'Slots: %1$s, of which %2$s are free', 'vca-asm' ), $table['slots'], $free );
 
-			$tbl = new VCA_ASM_Admin_Table( $tbl_args, $columns, $this->gimme_rows( $table['supps_of_quota'], $the_activity->ID, $list_type ) );
+			$rows = $this->gimme_rows( $table['supps_of_quota'], $the_activity->ID, $list_type );
+			if ( ! empty( $rows ) ) {
+				$empty_flag = false;
+			}
+
+			$tbl = new VCA_ASM_Admin_Table( $tbl_args, $columns, $rows );
 
 			$tbl->output();
 		}
+
+		/* Possibly a future feature
+		if ( ! $empty_flag ) {
+
+			$excel_params = array(
+				'relpath' => VCA_ASM_RELPATH,
+				'pID' => $the_activity->ID
+			);
+			wp_localize_script( 'vca-asm-excel-export', 'excelParams', $excel_params );
+
+			$mb_args = array(
+				'echo' => true,
+				'columns' => 1,
+				'running' => 1,
+				'id' => '',
+				'title' => __( 'Lists &amp; Mailing', 'vca-asm' ),
+				'js' => false
+			);
+			$mb_env = new VCA_ASM_Admin_Metaboxes( $mb_args );
+
+			$mb_env->top();
+			$mb_env->mb_top();
+
+			switch ( $list_type ) {
+
+				case 'apps':
+
+				break;
+
+				case 'waiting':
+
+				break;
+
+				case 'participants':
+				default:
+
+				break;
+
+			}
+
+			$mb_env->mb_bottom();
+			$mb_env->bottom();
+		}*/
 	}
 
 	/**
@@ -1110,9 +1424,9 @@ class VCA_ASM_Admin_Slot_Allocation {
 			$rows[$i]['user_email'] = $supp_info->user_email;
 			$db_num = get_user_meta( $supp_id, 'mobile', true );
 			$rows[$i]['mobile'] = $vca_asm_utilities->normalize_phone_number(
-										$db_num,
-										array( 'nice' => true, 'nat_id' => $supp_nation ? $supp_nation : 0 )
-									);
+				$db_num,
+				array( 'nice' => true, 'nat_id' => $supp_nation ? $supp_nation : 0 )
+			);
 			$raw_num = $vca_asm_utilities->normalize_phone_number( $db_num, array( 'nat_id' => $supp_nation ? $supp_nation : 0 ) );
 			$rows[$i]['mobile-order'] = empty( $raw_num ) ? '999999999999999' : substr( $raw_num . '0000000000000000000', 0, 15 );
 			$rows[$i]['city'] = $cities[$supp_region];
@@ -1146,9 +1460,9 @@ class VCA_ASM_Admin_Slot_Allocation {
 		}
 
 		if ( 'age' === $orderby || 'mobile' === $orderby ) {
-			$rows = $this->sort_by_key( $rows, $orderby . '-order', $order );
+			$rows = $vca_asm_utilities->sort_by_key( $rows, $orderby . '-order', $order );
 		} else {
-			$rows = $this->sort_by_key( $rows, $orderby, $order );
+			$rows = $vca_asm_utilities->sort_by_key( $rows, $orderby, $order );
 		}
 
 		return $rows;
@@ -1172,44 +1486,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 	}
 
 	/**
-	 * Sorting Methods
-	 *
-	 * @since 1.1
-	 * @access private
-	 */
-	private function sort_by_key( $arr, $key, $order ) {
-	    global $vca_asm_key2sort;
-		$vca_asm_key2sort = $key;
-		if( $order == 'DESC' ) {
-			usort( $arr, array(&$this, 'sbk_cmp_desc') );
-		} else {
-			usort( $arr, array(&$this, 'sbk_cmp_asc') );
-		}
-		return ( $arr );
-	}
-	private function sbk_cmp_asc( $a, $b ) {
-		global $vca_asm_key2sort;
-		$encoding = mb_internal_encoding();
-		return strcmp( mb_strtolower( $a[$vca_asm_key2sort], $encoding ), mb_strtolower( $b[$vca_asm_key2sort], $encoding ) );
-	}
-	private function sbk_cmp_desc( $b, $a ) {
-		global $vca_asm_key2sort;
-		$encoding = mb_internal_encoding();
-		return strcmp( mb_strtolower( $a[$vca_asm_key2sort], $encoding ), mb_strtolower( $b[$vca_asm_key2sort], $encoding ) );
-	}
-
-	/**
-	 * PHP4 style constructor
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
-	public function VCA_ASM_Admin_Slot_Allocations() {
-		$this->__construct();
-	}
-
-	/**
-	 * PHP5 style constructor
+	 * Constructor
 	 *
 	 * @since 1.3
 	 * @access public

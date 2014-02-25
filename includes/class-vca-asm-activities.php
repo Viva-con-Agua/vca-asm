@@ -35,7 +35,14 @@ class VCA_ASM_Activities {
 		'nwgathering' => 'network'
 	);
 	public $activities_by_department = array();
+	public $to_nicename = array();
 	public $activities_to_nicename = array();
+	public $to_plural_nicename = array();
+	public $activities_to_plural_nicename = array();
+	public $options_array = array();
+	public $options_array_with_all = array();
+
+	/****************************** CUSTOM POST TYPES ******************************/
 
 	/**
 	 * Nested arrays of custom fields
@@ -311,6 +318,12 @@ class VCA_ASM_Activities {
 					'id' => 'participants',
 					'type' => 'participants',
 					'desc' => __( 'Supporters that are participating in this activity (i.e. accepted applications)', 'vca-asm' )
+				),
+				array(
+					'label' => _x( 'Lists &amp; Mailing', 'Registrations Meta Box', 'vca-asm' ),
+					'id' => 'data-links',
+					'type' => 'data-links',
+					'desc' => __( 'Contact the supporters', 'vca-asm' )
 				)
 			);
 		} else {
@@ -326,6 +339,12 @@ class VCA_ASM_Activities {
 					'id' => 'participants',
 					'type' => 'participants',
 					'desc' => __( 'Supporters that participated in this activity', 'vca-asm' )
+				),
+				array(
+					'label' => _x( 'Lists &amp; Mailing', 'Registrations Meta Box', 'vca-asm' ),
+					'id' => 'data-links',
+					'type' => 'data-links',
+					'desc' => __( 'Contact the supporters', 'vca-asm' )
 				)
 			);
 		}
@@ -534,7 +553,7 @@ class VCA_ASM_Activities {
 			'supports' => array( 'title' )
 		);
 
-		add_filter( 'map_meta_cap', array( &$this, 'vca_asm_map_meta_cap' ), 10, 4 );
+		add_filter( 'map_meta_cap', array( $this, 'vca_asm_map_meta_cap' ), 10, 4 );
 
 		/* post type registration in alphabetical order of German name */
 		register_post_type( 'festival', $festival_args );
@@ -543,19 +562,19 @@ class VCA_ASM_Activities {
 
 		register_post_type( 'nwgathering', $nwgathering_args );
 
-		add_action( 'add_meta_boxes', array( &$this, 'meta_boxes' ) );
-		add_action( 'save_post', array( &$this, 'save_meta' ) );
+		add_action( 'add_meta_boxes', array( $this, 'meta_boxes' ) );
+		add_action( 'save_post', array( $this, 'save_meta' ), 10, 2 );
 
-		add_filter( 'manage_edit-concert_columns', array( &$this, 'concert_columns' ) );
-		add_filter( 'manage_edit-festival_columns', array( &$this, 'festival_columns' ) );
-		add_filter( 'manage_edit-miscactions_columns', array( &$this, 'miscactions_columns' ) );
-		add_filter( 'manage_edit-nwgathering_columns', array( &$this, 'nwgathering_columns' ) );
+		add_filter( 'manage_edit-concert_columns', array( $this, 'concert_columns' ) );
+		add_filter( 'manage_edit-festival_columns', array( $this, 'festival_columns' ) );
+		add_filter( 'manage_edit-miscactions_columns', array( $this, 'miscactions_columns' ) );
+		add_filter( 'manage_edit-nwgathering_columns', array( $this, 'nwgathering_columns' ) );
 
-		add_action( 'manage_posts_custom_column',  array( &$this, 'custom_column' ) );
-		add_filter( 'gettext', array( &$this, 'admin_ui_text_alterations' ), 10, 2 );
-		add_filter( 'post_updated_messages', array( &$this, 'admin_ui_updated_messages' ) );
-		add_action( 'admin_enqueue_scripts', array( &$this, 'set_script_params' ) );
-		add_action( 'admin_notices', array( &$this, 'notice_handler' ) );
+		add_action( 'manage_posts_custom_column',  array( $this, 'custom_column' ) );
+		add_filter( 'gettext', array( $this, 'admin_ui_text_alterations' ), 10, 2 );
+		add_filter( 'post_updated_messages', array( $this, 'admin_ui_updated_messages' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'set_script_params' ) );
+		add_action( 'admin_notices', array( $this, 'notice_handler' ) );
 	}
 
 	/**
@@ -931,7 +950,7 @@ class VCA_ASM_Activities {
 		add_meta_box(
 			'vca-asm-meta',
 			_x( 'The Concert', 'meta box title, concert', 'vca-asm' ),
-			array( &$this, 'box_meta' ),
+			array( $this, 'box_meta' ),
 			'concert',
 			'normal',
 			'high'
@@ -939,7 +958,7 @@ class VCA_ASM_Activities {
 		add_meta_box(
 			'vca-asm-meta',
 			_x( 'The Festival', 'meta box title, festival', 'vca-asm' ),
-			array( &$this, 'box_meta' ),
+			array( $this, 'box_meta' ),
 			'festival',
 			'normal',
 			'high'
@@ -947,7 +966,7 @@ class VCA_ASM_Activities {
 		add_meta_box(
 			'vca-asm-meta',
 			_x( 'The miscellaneous activity', 'meta box title, miscellaneous activity', 'vca-asm' ),
-			array( &$this, 'box_meta' ),
+			array( $this, 'box_meta' ),
 			'miscactions',
 			'normal',
 			'high'
@@ -955,7 +974,7 @@ class VCA_ASM_Activities {
 		add_meta_box(
 			'vca-asm-meta',
 			_x( 'The Network Gathering', 'meta box title, network gathering', 'vca-asm' ),
-			array( &$this, 'box_meta' ),
+			array( $this, 'box_meta' ),
 			'nwgathering',
 			'normal',
 			'high'
@@ -965,7 +984,7 @@ class VCA_ASM_Activities {
 			add_meta_box(
 				'vca-asm-date',
 				_x( 'Timeframe', 'meta box title, festival', 'vca-asm' ),
-				array( &$this, 'box_date' ),
+				array( $this, 'box_date' ),
 				$activity_type,
 				'normal',
 				'high'
@@ -973,7 +992,7 @@ class VCA_ASM_Activities {
 			add_meta_box(
 				'vca-asm-geo',
 				_x( 'Association with Network Geography', 'meta box title, festival', 'vca-asm' ),
-				array( &$this, 'box_geo' ),
+				array( $this, 'box_geo' ),
 				$activity_type,
 				'normal',
 				'low'
@@ -981,7 +1000,7 @@ class VCA_ASM_Activities {
 			add_meta_box(
 				'vca-asm-contact-person',
 				_x( 'Contact Person', 'meta box title, festival', 'vca-asm' ),
-				array( &$this, 'box_contact' ),
+				array( $this, 'box_contact' ),
 				$activity_type,
 				'normal',
 				'low'
@@ -989,7 +1008,7 @@ class VCA_ASM_Activities {
 			add_meta_box(
 				'vca-asm-tools',
 				_x( 'Tools', 'meta box title, festival', 'vca-asm' ),
-				array( &$this, 'box_tools' ),
+				array( $this, 'box_tools' ),
 				$activity_type,
 				'normal',
 				'low'
@@ -997,7 +1016,7 @@ class VCA_ASM_Activities {
 			add_meta_box(
 				'vca-asm-applications',
 				_x( 'Application Phase', 'meta box title, festival', 'vca-asm' ),
-				array( &$this, 'box_application_phase' ),
+				array( $this, 'box_application_phase' ),
 				$activity_type,
 				'advanced',
 				'high'
@@ -1006,7 +1025,7 @@ class VCA_ASM_Activities {
 				add_meta_box(
 					'vca-asm-slots',
 					_x( 'Applicant Pool &amp; Participant Slots', 'meta box title, festival', 'vca-asm' ),
-					array( &$this, 'box_slots_settings' ),
+					array( $this, 'box_slots_settings' ),
 					$activity_type,
 					'advanced',
 					'high'
@@ -1015,7 +1034,7 @@ class VCA_ASM_Activities {
 				add_meta_box(
 					'vca-asm-slots',
 					_x( 'Applicant Pool &amp; Participant Slots', 'meta box title, festival', 'vca-asm' ),
-					array( &$this, 'box_slots_settings_nwgathering' ),
+					array( $this, 'box_slots_settings_nwgathering' ),
 					$activity_type,
 					'advanced',
 					'high'
@@ -1025,7 +1044,7 @@ class VCA_ASM_Activities {
 				add_meta_box(
 					'vca-asm-participants',
 					_x( 'Applicants &amp; Participants', 'meta box title, festival', 'vca-asm' ),
-					array( &$this, 'box_participants' ),
+					array( $this, 'box_participants' ),
 					$activity_type,
 					'advanced',
 					'high'
@@ -1177,8 +1196,8 @@ class VCA_ASM_Activities {
 	 * @since 1.0
 	 * @access public
 	 */
-	public function save_meta( $post_id ) {
-	    global $current_user, $pagenow, $post, $post_type, $wpdb, $vca_asm_geography, $vca_asm_registrations;
+	public function save_meta( $ID = false, $post = false ) {
+	    global $current_user, $pagenow, $wpdb, $vca_asm_geography, $vca_asm_registrations;
 		get_currentuserinfo();
 
 		$all_fields = $this->custom_fields( 'all' );
@@ -1186,8 +1205,8 @@ class VCA_ASM_Activities {
 		/* check autosave */
 		if (
 			( defined('DOING_AUTOSAVE') && DOING_AUTOSAVE ) ||
-			wp_is_post_revision( $post_id ) ||
-			! in_array( $post_type, $this->activity_types ) ||
+			wp_is_post_revision( $post->ID) ||
+			! in_array( $post->post_type, $this->activity_types ) ||
 			! isset( $post->post_status ) ||
 			! in_array( $post->post_status, array( 'publish', 'pending', 'draft', 'private', 'future' ) ) ||
 			! isset(  $_POST['start_app'] ) // hacky fix for problem when moving activity to trash
@@ -1195,7 +1214,7 @@ class VCA_ASM_Activities {
 			return isset( $post->ID ) ? $post->ID : false;
 		}
 
-		$current_post_type = isset( $_POST['post_type'] ) ? $_POST['post_type'] : $post_type;
+		$current_post_type = isset( $_POST['post_type'] ) ? $_POST['post_type'] : $post->post_type;
 		/* check permissions */
 		if ( in_array( $current_post_type, array( 'concert', 'festival', 'miscactions' ) ) ) {
 			if( ! current_user_can( 'vca_asm_edit_actions_activity', $post->ID ) ) {
@@ -1325,10 +1344,10 @@ class VCA_ASM_Activities {
 								$activity_data['post_author'] = $region_user_id;
 								if( $post->post_author != $region_user_id ) {
 									// unhook this method so it doesn't loop infinitely
-									remove_action( 'save_post', array( &$this, 'save_meta' ) );
+									remove_action( 'save_post', array( $this, 'save_meta' ) );
 									wp_update_post( $activity_data );
 									// re-hook this method
-									add_action( 'save_post', array( &$this, 'save_meta' ) );
+									add_action( 'save_post', array( $this, 'save_meta' ), 10, 2 );
 								}
 							}
 						} elseif ( empty( $new ) && $old ) {
@@ -1337,10 +1356,10 @@ class VCA_ASM_Activities {
 							$activity_data['post_author'] = $current_user->ID;
 							if( $post->post_author != $current_user->ID ) {
 									// unhook this method so it doesn't loop infinitely
-									remove_action( 'save_post', array( &$this, 'save_meta' ) );
+									remove_action( 'save_post', array( $this, 'save_meta' ) );
 									wp_update_post( $activity_data );
 									// re-hook this method
-									add_action( 'save_post', array( &$this, 'save_meta' ) );
+									add_action( 'save_post', array( $this, 'save_meta' ), 10, 2 );
 							}
 						}
 					}
@@ -1362,19 +1381,19 @@ class VCA_ASM_Activities {
 									$activity_data['post_author'] = $geo_user_id;
 									if( $post->post_author != $geo_user_id ) {
 										// unhook this method so it doesn't loop infinitely
-										remove_action( 'save_post', array( &$this, 'save_meta' ) );
+										remove_action( 'save_post', array( $this, 'save_meta' ) );
 										wp_update_post( $activity_data );
 										// re-hook this method
-										add_action( 'save_post', array( &$this, 'save_meta' ) );
+										add_action( 'save_post', array( $this, 'save_meta' ), 10, 2 );
 									}
 								} else {
 									$activity_data['post_author'] = $current_user->ID;
 									if( $post->post_author != $current_user->ID ) {
 										// unhook this method so it doesn't loop infinitely
-										remove_action( 'save_post', array( &$this, 'save_meta' ) );
+										remove_action( 'save_post', array( $this, 'save_meta' ) );
 										wp_update_post( $activity_data );
 										// re-hook this method
-										add_action( 'save_post', array( &$this, 'save_meta' ) );
+										add_action( 'save_post', array( $this, 'save_meta' ), 10, 2 );
 									}
 								}
 							}
@@ -1426,18 +1445,191 @@ class VCA_ASM_Activities {
 		delete_transient( 'admin_notices_'.$current_user->ID );
 	}
 
+	/****************************** UTILITY METHODS ******************************/
+
 	/**
-	 * PHP4 style constructor
+	 * Returns array of activity IDs based on phase & type
 	 *
-	 * @since 1.0
+	 * @since 1.3
 	 * @access public
 	 */
-	public function VCA_ASM_Activities() {
-		$this->__construct();
+	public function query_activities( $args = array() ) {
+		$default_args = array(
+			'phase' => 'all',
+			'type' => 'all'
+		);
+		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
+
+		$type = in_array( $type, $this->activity_types ) ? $type : $this->activity_types;
+
+		$meta_query = array();
+		if ( in_array( $phase, array( 'bf', 'app', 'ft', 'pst' ) ) ) {
+			switch ( $phase ) {
+				case 'bf':
+					$meta_query[] = array(
+						'key' => 'start_app',
+						'value' => time(),
+						'compare' => '>',
+						'type' => 'numeric'
+					);
+				break;
+
+				case 'app':
+					$meta_query['relation'] = 'AND';
+					$meta_query[] = array(
+						'key' => 'start_app',
+						'value' => time(),
+						'compare' => '<=',
+						'type' => 'numeric'
+					);
+					$meta_query[] = array(
+						'key' => 'end_app',
+						'value' => time() - 86400,
+						'compare' => '>',
+						'type' => 'numeric'
+					);
+				break;
+
+				case 'ft':
+					$meta_query['relation'] = 'AND';
+					$meta_query[] = array(
+						'key' => 'end_app',
+						'value' => time() - 86400,
+						'compare' => '<=',
+						'type' => 'numeric'
+					);
+					$meta_query[] = array(
+						'key' => 'end_act',
+						'value' => time(),
+						'compare' => '>=',
+						'type' => 'numeric'
+					);
+				break;
+
+				case 'pst':
+					$meta_query[] = array(
+						'key' => 'end_act',
+						'value' => time(),
+						'compare' => '<',
+						'type' => 'numeric'
+					);
+				break;
+			}
+
+			$activities = get_posts( array(
+				'post_type' => $type,
+				'post_status' => 'publish',
+				'numberposts' => -1,
+				'orderby' => 'title',
+				'order' => 'ASC',
+				'meta_query' => $meta_query
+			));
+
+		} else {
+
+			$activities = get_posts( array(
+				'post_type' => $type,
+				'post_status' => 'publish',
+				'numberposts' => -1,
+				'orderby' => 'title',
+				'order' => 'ASC'
+			));
+
+		}
+
+		return $activities;
 	}
 
 	/**
-	 * PHP5 style constructor
+	 * Returns "options array" of activities to populate dropdown menu
+	 * based on phase & type
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function options_array_activities( $args = array() ) {
+		global $current_user;
+
+		$default_args = array(
+			'phase' => 'all',
+			'type' => 'all',
+			'check_caps' => false
+		);
+		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
+
+		$activities = $this->query_activities( array(
+			'phase' => $phase,
+			'type' => $type
+		));
+
+		$admin_nation = 0;
+		$admin_city = 0;
+		if ( $check_caps ) {
+			$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
+			$admin_city = get_user_meta( $current_user->ID, 'city', true );
+		}
+
+		$options_array = array();
+
+		foreach ( $activities as $activity ) {
+			if (
+				false === $check_caps ||
+				(
+					$current_user->has_cap( 'vca_asm_manage_' . $this->departments_by_activity[$activity->post_type] . '_global' ) ||
+					(
+						$current_user->has_cap( 'vca_asm_manage_' . $this->departments_by_activity[$activity->post_type] . '_nation' ) &&
+						get_post_meta( $activity->ID, 'nation', true ) === $admin_nation
+					) || (
+						$current_user->has_cap( 'vca_asm_manage_' . $this->departments_by_activity[$activity->post_type] ) &&
+						get_post_meta( $activity->ID, 'city', true ) === $admin_city &&
+						'delegate' === get_post_meta( $activity->ID, 'delegate', true )
+					)
+				)
+			) {
+				$options_array[] = array(
+					'label' => $activity->post_title . ' (' . strftime( '%d.%m.%Y', get_post_meta( $activity->ID, 'start_act', true ) ) . ')',
+					'value' => $activity->ID
+				);
+			}
+		}
+
+		return $options_array;
+	}
+
+	/**
+	 * Returns the phase of an activity
+	 *
+	 * @since 1.3
+	 * @access public
+	 *
+	 * @param int $id
+	 *
+	 * @return string $phase
+	 */
+	public function get_phase( $id ) {
+
+		$start_app = get_post_meta( $id, 'start_app', true );
+		$end_app = get_post_meta( $id, 'end_app', true );
+		$end_act = get_post_meta( $id, 'end_act', true );
+		$current = time();
+
+		if ( $current > $end_act ) {
+			return 'pst';
+		} elseif ( $current > $end_app ) {
+			return 'ft';
+		} elseif ( $current > $start_app ) {
+			return 'app';
+		} else {
+			return 'bf';
+		}
+	}
+
+
+
+	/****************************** CONSTRUCTOR ******************************/
+
+	/**
+	 * Constructor
 	 *
 	 * @since 1.0
 	 * @access public
@@ -1469,14 +1661,43 @@ class VCA_ASM_Activities {
 			)
 		);
 
-		$this->activities_to_nicename = array(
+		$this->to_nicename = array(
 			'concert' => __( 'Concert', 'vca-asm' ),
 			'festival' => __( 'Festival', 'vca-asm' ),
+			'miscactions' => __( 'Miscellaneous action', 'vca-asm' ),
+			'misceducation' => __( 'Miscellaneous education activity', 'vca-asm' ),
+			'miscnetwork' => __( 'Miscellaneous network activity', 'vca-asm' ),
+			'nwgathering' => __( 'Network Gathering', 'vca-asm' )
+		);
+		asort( $this->to_nicename );
+		$this->activities_to_nicename = $this->to_nicename;
+
+		$this->to_plural_nicename = array(
+			'concert' => __( 'Concerts', 'vca-asm' ),
+			'festival' => __( 'Festivals', 'vca-asm' ),
 			'miscactions' => __( 'Miscellaneous activities', 'vca-asm' ),
 			'misceducation' => __( 'Miscellaneous activities', 'vca-asm' ),
 			'miscnetwork' => __( 'Miscellaneous activities', 'vca-asm' ),
-			'nwgathering' => __( 'Network Gathering', 'vca-asm' )
+			'nwgathering' => __( 'Network Gatherings', 'vca-asm' )
 		);
+		asort( $this->to_plural_nicename );
+		$this->activities_to_plural_nicename = $this->to_plural_nicename;
+
+		foreach ( $this->to_plural_nicename as $type => $nicename ) {
+			if ( in_array( $type, $this->activity_types ) ) {
+				$this->options_array[] = array(
+					'label' => $nicename,
+					'value' => $type
+				);
+			}
+		}
+
+		$this->options_array_with_all[] = array(
+			'label' => __( 'All', 'vca-asm' ),
+			'value' => 'all'
+		);
+		$this->options_array_with_all = array_merge( $this->options_array_with_all, $this->options_array );
+
 		$acts_by_dep = array();
 		foreach ( $this->activities_by_department as $dep => $acts ) {
 			$acts_by_dep[$dep] = $vca_asm_utilities->sort_by_key( $acts, 'name' );
@@ -1487,8 +1708,8 @@ class VCA_ASM_Activities {
 			$this->the_activity = new VCA_ASM_Activity( $post->ID );
 		}
 
-		add_action( 'admin_notices', array( &$this, 'notice_handler' ), 11 );
-		add_action( 'admin_footer', array( &$this, 'clear_notices' ) );
+		add_action( 'admin_notices', array( $this, 'notice_handler' ), 11 );
+		add_action( 'admin_footer', array( $this, 'clear_notices' ) );
 		$this->setup_activities();
 	}
 }

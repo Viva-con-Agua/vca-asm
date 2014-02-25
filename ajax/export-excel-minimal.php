@@ -3,8 +3,10 @@
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-load.php' );
 require_once( $_SERVER['DOCUMENT_ROOT'] . '/wp-content/plugins/vca-asm/lib/class-php2excel.php' );
 global $wpdb, $vca_asm_geography, $vca_asm_registrations, $vca_asm_utilities;
+get_currentuserinfo();
 
 $id = $_GET['activity'];
+$type = ( isset( $_GET['type'] ) && in_array( $_GET['type'], array( 'applicants', 'waiting', 'participants' ) ) ) ? $_GET['type'] : 'participants';
 $title = str_replace( ' ', '_', get_the_title( $id ) );
 
 $start_act = get_post_meta( $id, 'start_act', true );
@@ -15,7 +17,15 @@ $act_city = get_post_meta( $id, 'city', true );
 $act_nation = get_post_meta( $id, 'nation', true );
 $delegation = get_post_meta( $id, 'delegate', true );
 
-$filename = __( 'Participant_Data', 'vca-asm' ) . '_' . $title . '_' . $act_date;
+if ( 'applicants' === $type ) {
+	$type_name = __( 'Applicant_Data', 'vca-asm' );
+} elseif ( 'waiting' === $type ) {
+	$type_name = __( 'Waiting_List', 'vca-asm' );
+} else {
+	$type_name = __( 'Participant_Data', 'vca-asm' );
+}
+
+$filename = $type_name . '_' . $title . '_' . $act_date;
 if (
 	( in_array( 'city', $current_user->roles ) || in_array( 'head_of', $current_user->roles ) )
 	&&
@@ -29,7 +39,7 @@ $filename .= '.xls';
 
 $xls = new ExportXLS( $filename );
 
-$header = __( 'Participant Data', 'vca-asm' ) . ': ' . $title . ' (' . $year . ')';
+$header = str_replace( '_', ' ', $type_name ) . ': ' . $title . ' (' . $year . ')';
 $xls->addHeader($header);
 
 $empty_row = null;
@@ -48,15 +58,33 @@ $xls->addHeader( $header );
 $xls->addHeader( $empty_row );
 
 if ( is_numeric( $end_act ) && time() > $end_act ) {
-	$registered_supporters = $vca_asm_registrations->get_activity_participants_old( $id );
+	if ( 'applicants' === $type ) {
+		$the_supporters = $vca_asm_registrations->get_activity_applications_old( $id );
+		$the_db_table = $wpdb->prefix . 'vca_asm_applications_old';
+	} elseif ( 'waiting' === $type ) {
+		$the_supporters = $vca_asm_registrations->get_activity_waiting( $id );
+		$the_db_table = $wpdb->prefix . 'vca_asm_applications_old';
+	} else {
+		$the_supporters = $vca_asm_registrations->get_activity_participants_old( $id );
+		$the_db_table = $wpdb->prefix . 'vca_asm_registrations_old';
+	}
 } else {
-	$registered_supporters = $vca_asm_registrations->get_activity_registrations( $id );
+	if ( 'applicants' === $type ) {
+		$the_supporters = $vca_asm_registrations->get_activity_applications( $id );
+		$the_db_table = $wpdb->prefix . 'vca_asm_applications';
+	} elseif ( 'waiting' === $type ) {
+		$the_supporters = $vca_asm_registrations->get_activity_waiting( $id );
+		$the_db_table = $wpdb->prefix . 'vca_asm_applications';
+	} else {
+		$the_supporters = $vca_asm_registrations->get_activity_registrations( $id );
+		$the_db_table = $wpdb->prefix . 'vca_asm_registrations';
+	}
 }
 
 $rows = array();
 $f_names = array();
 $i = 0;
-foreach( $registered_supporters as $supporter ) {
+foreach( $the_supporters as $supporter ) {
 	$supp_info = get_userdata( $supporter );
 	$supp_bday = get_user_meta( $supporter, 'birthday', true );
 	if ( ! empty( $supp_bday ) && is_numeric( $supp_bday ) ) {
@@ -64,19 +92,11 @@ foreach( $registered_supporters as $supporter ) {
 	} else {
 		$supp_age = '???';
 	}
-	if ( is_numeric( $end_act ) && time() > $end_act ) {
-		$notes = $wpdb->get_results(
-			"SELECT notes FROM " .
-			$wpdb->prefix . "vca_asm_registrations_old " .
-			"WHERE activity=" . $id . " AND supporter=" . $supporter . ' LIMIT 1', ARRAY_A
-		);
-	} else {
-		$notes = $wpdb->get_results(
-			"SELECT notes FROM " .
-			$wpdb->prefix . "vca_asm_registrations " .
-			"WHERE activity=" . $id . " AND supporter=" . $supporter . ' LIMIT 1', ARRAY_A
-		);
-	}
+	$notes = $wpdb->get_results(
+		"SELECT notes FROM " .
+		$the_db_table . " " .
+		"WHERE activity=" . $id . " AND supporter=" . $supporter . ' LIMIT 1', ARRAY_A
+	);
 	$note = str_replace( '"', '&quot;', str_replace( "'", '&apos;', $notes[0]['notes'] ) );
 	if ( is_object( $supp_info ) ) {
 		$rows[$i] = array(

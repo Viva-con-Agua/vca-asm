@@ -2,7 +2,7 @@
 ----------------------------------------- */
 
 #wpadminbar .quicklinks ul#wp-admin-bar-root-default {
-     display: none;
+	 display: none;
 }
 #adminmenu .wp-menu-image img {
 	width: 16px;
@@ -113,6 +113,12 @@ input.button-primary.margin,
 a.button-secondary.margin,
 input.button-secondary.margin {
 	margin-right: .8em;
+}
+a.button-primary.margin-bottom,
+input.button-primary.margin-bottom,
+a.button-secondary.margin-bottom,
+input.button-secondary.margin-bottom {
+	margin-bottom: .8em;
 }
 .actions .wp-core-ui .button,
 .actions .wp-core-ui .button-primary,
@@ -283,7 +289,7 @@ ul.horiz-list li {
 	 overflow: hidden;
 }
 .default-button {
-    position: absolute;
+	position: absolute;
 	left: -1000%;
 	top: -1000%;
 }
@@ -371,6 +377,13 @@ div.alignleft h3.table-headline {
 
 .pool-form label {
 	padding-left:3px;
+}
+input:not([type]).wide-text,
+input[type="text"].wide-text {
+	 -webkit-box-sizing: border-box;
+	 -moz-box-sizing: border-box;
+	 box-sizing: border-box;
+	 width: 99.7%;
 }
 
 
@@ -462,7 +475,8 @@ a:hover .nt-icon-email,
 a:hover .nt-icon-mail {
 	background-position: -64px -16px;
 }
-#icon-activities {
+#icon-clock,
+#icon-timer {
 	background-position: -160px 0px;
 }
 #icon-question,
@@ -496,13 +510,19 @@ a:hover .nt-icon-waiting {
 }
 #icon-festival,
 #icon-actions,
+#icon-activity,
+#icon-activities,
 .icon32-posts-festival {
 	background-position: -288px 0px;
 }
+.nt-icon-activity,
+.nt-icon-activities,
 .nt-icon-action,
 .nt-icon-actions {
 	 background-position: -144px 0px;
 }
+a:hover .nt-icon-activity,
+a:hover .nt-icon-activities,
 a:hover .nt-icon-action,
 a:hover .nt-icon-actions {
 	 background-position: -144px -16px;
@@ -562,6 +582,14 @@ a:hover .nt-icon-education {
 }
 #icon-file {
 	background-position: -736px 0px;
+}
+.nt-icon-data,
+.nt-icon-file {
+	background-position: -368px 0px;
+}
+a:hover .nt-icon-data,
+a:hover .nt-icon-file {
+	background-position: -368px -16px;
 }
 #icon-love {
 	background-position: -768px 0px;
@@ -688,7 +716,7 @@ a:hover .nt-icon-nation-groups {
 	background-position: -560px -16px;
 }
 .icon32-posts-miscactions {
-	background-position: -1152px 0px;
+	background-position: -800px 0px;
 }
 
 
@@ -700,37 +728,37 @@ body #pass-strength-result {
 	font-family: GS, Helvetica, Arial, Verdana, sans-serif;
 	float: right !important;
 	width: 29%;
-    border: 2px solid #008fc1 !important;
+	border: 2px solid #008fc1 !important;
 	border-radius: 4px !important;
 	font-size: 1.2em !important;
 	line-height: 1 !important;
-    margin: 0;
-    padding: .166666667em 0 .25em !important;
-    text-align: center;
+	margin: 0;
+	padding: .166666667em 0 .25em !important;
+	text-align: center;
 	color: #002a3d;
 }
 body #pass-strength-result.strong,
 body #pass-strength-result.short {
-    font-weight: 700 !important;
+	font-weight: 700 !important;
 }
 body #pass-strength-result {
-    background: #dddddd !important;
+	background: #dddddd !important;
 }
 body #pass-strength-result.short {
-    background-color: #f19fc1 !important;
-    border-color: #e9619c !important;
+	background-color: #f19fc1 !important;
+	border-color: #e9619c !important;
 }
 body #pass-strength-result.bad {
-    background-color: #e3cf9a !important;
-    border-color: #bba259 !important;
+	background-color: #e3cf9a !important;
+	border-color: #bba259 !important;
 }
 body #pass-strength-result.good {
-    background-color: #d5ecf1 !important;
-    border-color: #00a8cf !important;
+	background-color: #d5ecf1 !important;
+	border-color: #00a8cf !important;
 }
 body #pass-strength-result.strong {
-    background-color: #7ec5e0 !important;
-    border-color: #008fc1 !important;
+	background-color: #7ec5e0 !important;
+	border-color: #008fc1 !important;
 }
 
 
@@ -743,6 +771,7 @@ body #pass-strength-result.strong {
 }
 
 @media handheld, only screen and (max-width: 1280px) {
+	.legacy-screen-hide,
 	.legacy-screen-hide-pa {
 		display: none;
 		visibility: hidden;
@@ -753,6 +782,7 @@ body #pass-strength-result.strong {
 }
 
 @media handheld, only screen and (max-width: 1024px) {
+	.tablet-hide,
 	.tablet-hide-pa {
 		display: none;
 		visibility: hidden;
@@ -762,7 +792,7 @@ body #pass-strength-result.strong {
 	}
 }
 
-@media handheld, only screen and (max-width: 799px) {
+@media handheld, only screen and (max-width: 767px) {
 	span.sorting-indicator {
 		display: none !important;
 		visibility: hidden !important;
@@ -800,6 +830,7 @@ body #pass-strength-result.strong {
 }
 
 @media handheld, only screen and (max-width: 480px) {
+	.legacy-mobile-hide,
 	.legacy-mobile-hide-pa {
 		display: none;
 		visibility: hidden;

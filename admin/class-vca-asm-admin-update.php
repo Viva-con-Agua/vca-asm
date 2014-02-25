@@ -33,6 +33,37 @@ class VCA_ASM_Admin_Update {
 		);
 	}
 
+function remote_file_exists($url, $followRedirects = true)
+{
+   $url_parsed = parse_url($url);
+   extract($url_parsed);
+   if (!@$scheme) $url_parsed = parse_url('http://'.$url);
+   extract($url_parsed);
+   if(!@$port) $port = 80;
+   if(!@$path) $path = '/';
+   if(@$query) $path .= '?'.$query;
+   $out = "HEAD $path HTTP/1.0\r\n";
+   $out .= "Host: $host\r\n";
+   $out .= "Connection: Close\r\n\r\n";
+   if(!$fp = @fsockopen($host, $port, $es, $en, 5)){
+       return false;
+   }
+   fwrite($fp, $out);
+   while (!feof($fp)) {
+       $s = fgets($fp, 128);
+       if(($followRedirects) && (preg_match('/^Location:/i', $s) != false)){
+           fclose($fp);
+           return http_file_exists(trim(preg_replace("/Location:/i", "", $s)));
+       }
+       if(preg_match('/^HTTP(.*?)200/i', $s)){
+           fclose($fp);
+           return true;
+       }
+   }
+   fclose($fp);
+   return false;
+}
+
 	/**
 	 * Update Routine and executing page & button
 	 *
@@ -40,7 +71,9 @@ class VCA_ASM_Admin_Update {
 	 * @access public
 	 */
 	public function control() {
-		global $wpdb, $vca_asm_geography, $vca_asm_admin, $vca_asm_activities;
+		global $wpdb,
+			$vca_asm_activities, $vca_asm_geography, $vca_asm_mailer,
+			$vca_asm_admin;
 
 		$messages = array();
 
@@ -49,57 +82,42 @@ class VCA_ASM_Admin_Update {
 
 			$users = get_users();
 
-			//$cities = $vca_asm_geography->get_all( 'name', 'ASC', 'city' );
-			//$cts = array();
-			//foreach ( $cities as $ct ) {
-			//	$cts[] = $ct['id'];
-			//}
-			//$nations = $vca_asm_geography->get_all( 'name', 'ASC', 'nation' );
-			//$nts = array();
-			//foreach ( $nations as $nt ) {
-			//	$nts[] = $nt['id'];
-			//}
-
 			$cases = 0;
 			$cases2 = 0;
 			$vals = array();
 			$vals2 = array();
 
 			foreach ( $users as $user ) {
-				$city = get_user_meta( $user->ID, 'city', true );
-				$region = get_user_meta( $user->ID, 'region', true );
-				$nation = get_user_meta( $user->ID, 'nation', true );
-				$supp_fname = get_user_meta( $user->ID, 'first_name', true );
-				$supp_lname = get_user_meta( $user->ID, 'last_name', true );
-
-				if ( empty( $supp_fname ) || empty( $supp_lname ) ) {
-					//update_user_meta( $user->ID, 'nation', NULL );
-					//update_user_meta( $user->ID, 'city', 0 );
-					//update_user_meta( $user->ID, 'region', 0 );
-					//update_user_meta( $user->ID, 'membership', 0 );
-					$cases++;
+				$result = get_user_meta( $user->ID, 'simple_local_avatar', true );
+				if ( empty( $result ) ) {
+					continue;
 				}
-				if ( empty( $nation ) && 0 !== $nation && '0' !== $nation ) {
-					//update_user_meta( $user->ID, 'nation', NULL );
+				$new = array();
+				$write_it = false;
+				foreach ( $result as $key => $value ) {
+					$url = $value;
+
+					if ( $this->remote_file_exists( $url ) ) {
+						$new[$key] = $value;
+					} else {
+						$write_it = true;
+					}
+				}
+				if ( true === $write_it ) {
 					$cases2++;
+					update_user_meta( $user->ID, 'simple_local_avatar', $new );
+				} else {
+					$cases++;
 				}
 			}
 
-			print '<pre>$cases = '
-    . htmlspecialchars( print_r( $cases, TRUE ), ENT_QUOTES, 'utf-8', FALSE )
-    . "</pre>\n";
+			print '<pre>EXIST = '
+				. htmlspecialchars( print_r( $cases, TRUE ), ENT_QUOTES, 'utf-8', FALSE )
+				. "</pre>\n";
 
-			print '<pre>$cases2 = '
-    . htmlspecialchars( print_r( $cases2, TRUE ), ENT_QUOTES, 'utf-8', FALSE )
-    . "</pre>\n";
-
-			print '<pre>$vals = '
-    . htmlspecialchars( print_r( $vals, TRUE ), ENT_QUOTES, 'utf-8', FALSE )
-    . "</pre>\n";
-
-			print '<pre>$vals2 = '
-    . htmlspecialchars( print_r( $vals2, TRUE ), ENT_QUOTES, 'utf-8', FALSE )
-    . "</pre>\n";
+			print '<pre>DOES NOT = '
+				. htmlspecialchars( print_r( $cases2, TRUE ), ENT_QUOTES, 'utf-8', FALSE )
+				. "</pre>\n";
 
 			//$activities = get_posts(
 			//	array(
@@ -121,10 +139,19 @@ class VCA_ASM_Admin_Update {
 
 		}
 
+		if ( ! empty( $updated ) && true === $updated ) {
+			$messages = array(
+				array(
+					'type' => 'message-pa',
+					'message' => 'Done!'//'Updated ' . $cases . ' Data Sets.'
+				)
+			);
+		}
+
 		$admin_page = new VCA_ASM_Admin_Page( array(
 			'echo' => true,
 			'icon' => 'icon-settings',
-			'title' => 'Datenstruktur von 1.2 an 1.3 anpassen',
+			'title' => 'Datenstruktur anpassen / Funktionen Testen',
 			'url' => '?page=vca-asm-update',
 			'messages' => $messages
 		));
@@ -140,31 +167,11 @@ class VCA_ASM_Admin_Update {
 		));
 		$update_form->output();
 
-		if ( ! empty( $updated ) && true === $updated ) {
-			$messages = array(
-				array(
-					'type' => 'message-pa',
-					'message' => 'Updated ' . $cases . ' Data Sets.'
-				)
-			);
-			echo $vca_asm_admin->convert_messages( $messages );
-		}
-
 		$admin_page->bottom();
 	}
 
 	/**
-	 * PHP4 style constructor
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
-	public function VCA_ASM_Admin_Update() {
-		$this->__construct();
-	}
-
-	/**
-	 * PHP5 style constructor
+	 * Constructor
 	 *
 	 * @since 1.3
 	 * @access public

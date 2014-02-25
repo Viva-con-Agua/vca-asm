@@ -95,17 +95,6 @@ class VCA_ASM_Admin_Home {
 		$admin_region_name = $vca_asm_geography->get_name( $admin_region );
 		$admin_region_status = $vca_asm_geography->get_status( $admin_region );
 
-		//if( in_array( 'content_admin', $current_user->roles ) || in_array( 'administrator', $current_user->roles ) ) {
-		//	$output .= '<h3 class="title title-top-pa">Entwicklungsfortschritt, Pool v1.2</h3>' .
-		//		'<p>' .
-		//			'aktuell aufgespielte Version: 1.2-rc1 (26.11.2012)<br />' .
-		//			'<a title="aktueller Stand" href="http://pool.vivaconagua.org/fortschritt/">' .
-		//				'Entwicklungsfortschritt einsehen' .
-		//			'</a>' .
-		//			'<br />(Head-Of-Benutzer und Abteilungsassistenzen sehen diese Nachricht nicht)' .
-		//		'</p>';
-		//}
-
 		$output = '<div id="poststuff">' .
 			'<div id="post-body" class="metabox-holder columns-1">' .
 			'<div id="postbox-container-1" class="postbox-container">' .
@@ -137,6 +126,12 @@ class VCA_ASM_Admin_Home {
 							'<strong>' . $stats->supporters_incomplete_total . '</strong>',
 							'<strong>' . $stats->supporters_incomplete_city . '</strong>',
 							$admin_region_status
+						) . '<br />' .
+						sprintf( _x( 'The average age of all supporters (%1$s) is %2$s, %3$s are under 25 years old and %4$s are 25 or older', 'Statistics', 'vca-asm' ),
+							'<strong>' . $stats->supporters_complete_total . '</strong>',
+							'<strong>' . $stats->supporters_average_age . '</strong>',
+							'<strong>' . $stats->supporters_complete_under25 . '</strong>',
+							'<strong>' . $stats->supporters_complete_over25 . '</strong>'
 						) .
 					'</p>' .
 					'<p>' .
@@ -205,31 +200,6 @@ class VCA_ASM_Admin_Home {
 					'</p>' .
 				'</div>' .
 			'</div></div></div></div>';
-
-
-
-		//if( 1 === $current_user->ID ) {
-		//
-		//		$oldregs = $wpdb->get_results(
-		//			"SELECT * FROM " . $wpdb->prefix."vca_asm_registrations_old_2", ARRAY_A
-		//		);
-		//
-		//		$supps = array();
-		//		foreach( $oldregs as $onereg ) {
-		//			if( ! in_array( $onereg['supporter'], $supps ) ) {
-		//				$end_date = intval( get_post_meta( $onereg['activity'], 'end_date', true ) );
-		//				$thetitle = get_the_title( $onereg['activity'] );
-		//				if( 1349049600 > $end_date && 'konz' !== strtolower(substr($thetitle,0,4)) ) {
-		//					$supps[] = $onereg['supporter'];
-		//				}
-		//			}
-		//		}
-		//
-		//		foreach( $supps as $supp ) {
-		//			$userobj = new WP_User( $supp );
-		//			$output .= $userobj->user_email . '<br />';
-		//		}
-		//}
 
 		echo $output;
 

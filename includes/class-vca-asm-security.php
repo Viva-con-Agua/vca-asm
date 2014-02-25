@@ -270,7 +270,7 @@ class VCA_ASM_Security {
 	 * @access public
 	 */
 	public function pass_reset_redirect( $redirect_to, $url_redirect_to = '', $user = null ) {
-		if( isset($user->ID) && ! $this->check_pass_age( $user, true ) ) {
+		if( isset( $user->ID ) && ! $this->check_pass_age( $user, true ) ) {
 			return get_site_option('home') . '/bitte-passwort-erneuern/';
 		}
 		return $redirect_to;

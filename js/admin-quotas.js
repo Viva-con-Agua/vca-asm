@@ -5,6 +5,9 @@ $(document).ready(function() {
 });
 
 function initSlots() {
+	$('div.no-js-fallback-vals').remove();
+	$('tr.quotas-wrap').hide();
+	$('div.no-js-fallback-vals').remove();
 	if ( null !=  quotasParams.total_slider ) {
 		totalSlider();
 	}
@@ -117,8 +120,8 @@ function createQuotaGroup( qgParams ) {
 	if ( elWrap.find('div#quotas-group-'+qgParams.id+'-wrap').length === 0 ) {
 		var QGs = elWrap.find('div.quotas-group-wrap');
 		if ( 0 < QGs.length ) {
-			var doneSwitch = false;
-			var lastCtr = elWrap.find('div.quotas-group-wrap').last().find('h4').first().text();
+			var doneSwitch = false,
+				lastCtr = elWrap.find('div.quotas-group-wrap').last().find('h4').first().text();
 			elWrap.find('div.quotas-group-wrap').each( function() {
 				var curCtr = $(this).find('h4').text();
 				if( curCtr > quotasParams.countries[qgParams.id] && ! doneSwitch ) {

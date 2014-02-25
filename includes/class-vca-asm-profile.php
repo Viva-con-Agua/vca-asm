@@ -20,9 +20,8 @@ class VCA_ASM_Profile {
 	 */
 	private function create_extra_profile_fields( $part = false ) {
 		global $current_user;
-		get_currentuserinfo();
 
-		if ( ( is_array( $current_user->roles ) && ( in_array( 'head_of', $current_user->roles ) ) || in_array( 'city', $current_user->roles ) ) ) {
+		if ( in_array( 'city', $current_user->roles ) ) {
 			$is_city = true;
 			$disable_field = true;
 		} else {
@@ -166,8 +165,8 @@ class VCA_ASM_Profile {
 	 * A supporter may cancel his or her membership whenever he or she likes,
 	 * he or she however cannot join a cell (or local crew) without approval.
 	 *
-	 * @global object vca_asm_regions
-	 * @see class VCA_ASM_Regions in /includes/class-vca-asm-regions.php
+	 * @global object vca_asm_geography
+	 * @global object vca_asm_utilities
 	 *
 	 * @since 1.0
 	 * @access private
@@ -184,7 +183,6 @@ class VCA_ASM_Profile {
 			$user_nation = get_user_meta( $edited_user->ID, 'nation', true );
 		} else {
 			global $current_user;
-			get_currentuserinfo();
 			$mem = get_user_meta( $current_user->ID, 'membership', true );
 			$user_city = get_user_meta( $current_user->ID, 'city', true );
 			$user_nation = get_user_meta( $current_user->ID, 'nation', true );
@@ -402,11 +400,11 @@ class VCA_ASM_Profile {
 
 					case 'membership':
 						$this_user = new WP_User( $user_id );
-						if( ( is_array( $this_user->roles ) && in_array( 'head_of', $this_user->roles ) ) || ( ! is_array( $this_user->roles ) && 'head_of' == $this_user->roles ) ) {
+						if( in_array( 'city', $this_user->roles ) ) {
 							update_user_meta( $user_id, $field['id'], '2' );
 						} else {
 							$regions = $vca_asm_geography->get_ids();
-							$region_name = $regions[$_POST['city']];
+							$region_name = isset( $_POST['city'] ) ? $regions[$_POST['city']] : $regions[get_user_meta( $user_id, 'city', true )];
 							$old = get_user_meta( $user_id, $field['id'], true );
 							if( isset( $_POST[ $field['id'] ] ) ) {
 								if( ( ( is_array( $this_user->roles ) && ! in_array( 'supporter', $this_user->roles ) ) || ( ! is_array( $this_user->roles ) && 'supporter' != $this_user->roles ) ) && $old != '2' ) {

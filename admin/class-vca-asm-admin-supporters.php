@@ -20,6 +20,13 @@ if ( ! class_exists( 'VCA_ASM_Admin_Supporters' ) ) :
 
 class VCA_ASM_Admin_Supporters {
 
+	/**
+	 * Class Properties
+	 *
+	 * @since 1.4
+	 */
+	private $per_page = 50;
+
 	/**** THE ADMIN PAGE *****/
 
 	/**
@@ -123,13 +130,21 @@ class VCA_ASM_Admin_Supporters {
 					   )
 					) {
 						update_user_meta( $_GET['id'], 'membership', '0' );
-						$region_name = $cities[ get_user_meta( $_GET['id'], 'city', true ) ];
-						$vca_asm_mailer->auto_response( $_GET['id'], 'mem_denied', $region_name );
+						$city_name = $cities[$user_city];
+						$vca_asm_mailer->auto_response(
+							$_GET['id'],
+							'mem_denied',
+							array(
+								'city' => $city_name,
+								'city_id' => $user_city
+							)
+						);
 						$success++;
 					}
 				} elseif( isset( $_GET['supporters'] ) && is_array( $_GET['supporters'] ) ) {
 					foreach( $_GET['supporters'] as $supporter ) {
 						$user_city = get_user_meta( intval( $supporter ), 'city', true );
+						$membership = get_user_meta( intval( $supporter ), 'membership', true );
 						if( $current_user->has_cap('vca_asm_promote_supporters_global') ||
 						   (
 								$current_user->has_cap('vca_asm_promote_supporters_nation') &&
@@ -141,11 +156,18 @@ class VCA_ASM_Admin_Supporters {
 								$admin_city == $user_city
 						   )
 						) {
-							if( 0 != $user_city ) {
+							if( 0 != $membership ) {
 								$success++;
 								update_user_meta( intval( $supporter ), 'membership', '0' );
-								$region_name = $cities[ get_user_meta( intval( $supporter ), 'city', true ) ];
-								$vca_asm_mailer->auto_response( intval( $supporter ), 'mem_denied', $region_name );
+								$city_name = $cities[$user_city];
+								$vca_asm_mailer->auto_response(
+									intval( $supporter ),
+									'mem_denied',
+									array(
+										'city' => $city_name,
+										'city_id' => $user_city
+									)
+								);
 								$tmp_name = get_user_meta( intval( $supporter ), 'first_name', true );
 								$name_arr[] = ! empty( $tmp_name ) ? $tmp_name : __( 'unknown Supporter', 'vca-asm' );
 							}
@@ -202,14 +224,22 @@ class VCA_ASM_Admin_Supporters {
 					   )
 					) {
 						update_user_meta( $_GET['id'], 'membership', '2' );
-						$region_name = $cities[ get_user_meta( $_GET['id'], 'city', true ) ];
-						$vca_asm_mailer->auto_response( $_GET['id'], 'mem_accepted', $region_name );
+						$city_name = $cities[$user_city];
+						$vca_asm_mailer->auto_response(
+							$_GET['id'],
+							'mem_accepted',
+							array(
+								'city' => $city_name,
+								'city_id' => $user_city
+							)
+						);
 						$name = get_user_meta( intval( $_GET['id'] ), 'first_name', true );
 						$success++;
 					}
 				} elseif( isset( $_GET['supporters'] ) && is_array( $_GET['supporters'] ) ) {
 					foreach( $_GET['supporters'] as $supporter ) {
 						$user_city = get_user_meta( intval( $supporter ), 'city', true );
+						$membership = get_user_meta( intval( $supporter ), 'membership', true );
 						if ( $current_user->has_cap('vca_asm_promote_supporters_global') ||
 						   (
 								$current_user->has_cap('vca_asm_promote_supporters_nation') &&
@@ -221,11 +251,18 @@ class VCA_ASM_Admin_Supporters {
 								$admin_city == $user_city
 						   )
 						) {
-							if ( 2 != $user_city ) {
+							if ( 2 != $membership ) {
 								$success++;
 								update_user_meta( intval( $supporter ), 'membership', '2' );
-								$region_name = $cities[ get_user_meta( intval( $supporter ), 'city', true ) ];
-								$vca_asm_mailer->auto_response( intval( $supporter ), 'mem_accepted', $region_name );
+								$city_name = $cities[$user_city];
+								$vca_asm_mailer->auto_response(
+									intval( $supporter ),
+									'mem_accepted',
+									array(
+										'city' => $city_name,
+										'city_id' => $user_city
+									)
+								);
 								$tmp_name = get_user_meta( intval( $supporter ), 'first_name', true );
 								$name_arr[] = ! empty( $tmp_name ) ? $tmp_name : __( 'unknown Supporter', 'vca-asm' );
 							}
@@ -654,22 +691,7 @@ class VCA_ASM_Admin_Supporters {
 		$sort_url = $url;
 
 		/* table order */
-		if( isset( $_GET['orderby'] ) ) {
-			$orderby = $_GET['orderby'];
-		} else {
-			$orderby = 'first_name';
-		}
-		if( isset( $_GET['order'] ) ) {
-			$order = $_GET['order'];
-			if( $order == 'ASC') {
-				$toggle_order = 'DESC';
-			} else {
-				$toggle_order = 'ASC';
-			}
-		} else {
-			$order = 'ASC';
-			$toggle_order = 'DESC';
-		}
+		extract( $vca_asm_utilities->table_order( 'first_name' ), EXTR_OVERWRITE );
 
 		$headline = _x( 'Supporter Overview', 'Admin Supporters', 'vca-asm' );
 		$table_headline = _x( 'All Supporters', 'Admin Supporters', 'vca-asm' );
@@ -856,7 +878,6 @@ class VCA_ASM_Admin_Supporters {
 					}
 				}
 			}
-			//var_dump( $supp_ids );
 			$table_headline = str_replace( '%results%', count( $supporters ), str_replace( '%term%', $term, _x( 'Showing %results% search results for &quot;%term%&quot;', 'Admin Supporters', 'vca-asm' ) ) );
 			$empty_message = sprintf( __( 'No results for the search term &quot;%s&quot;...', 'vca-asm' ), $term );
 		}
@@ -922,11 +943,11 @@ class VCA_ASM_Admin_Supporters {
 		$supporters_ordered = $vca_asm_utilities->sort_by_key( $supporters_ordered, $orderby, $order );
 
 		$user_count = count( $supporters_ordered );
-		if ( $user_count > 100 ) {
+		if ( $user_count > $this->per_page ) {
 			$cur_page = isset( $_GET['p'] ) ? $_GET['p'] : 1;
-			$pagination_offset = 100 * ( $cur_page - 1 );
-			$total_pages = ceil( $user_count / 100 );
-			$cur_end = $total_pages == $cur_page ? $pagination_offset + ( $user_count % 100 ) : $pagination_offset + 100;
+			$pagination_offset = $this->per_page * ( $cur_page - 1 );
+			$total_pages = ceil( $user_count / $this->per_page );
+			$cur_end = $total_pages == $cur_page ? $pagination_offset + ( $user_count % $this->per_page ) : $pagination_offset + $this->per_page;
 
 			$pagination_args = array(
 				'pagination' => true,

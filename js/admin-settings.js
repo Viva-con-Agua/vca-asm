@@ -1,28 +1,28 @@
 (function($){ // closure
 
 $(function() {
-	for( var i=0; i<secOptions.length; i++ ) {
-		$( "#" + secOptions[i].id + "-slider" ).slider({
+	for( var i=0; i<settingsOptions.length; i++ ) {
+		$( "#" + settingsOptions[i].id + "-slider" ).slider({
 			range: 'min',
-			value: secOptions[i].value,
-			min: secOptions[i].min,
-			max: secOptions[i].max,
-			step: secOptions[i].step,
+			value: settingsOptions[i].value,
+			min: settingsOptions[i].min,
+			max: settingsOptions[i].max,
+			step: settingsOptions[i].step,
 			slide: function( event, ui ) {
 				var target = $( ui.handle ).parent();
 				$( target ).siblings('input').val( ui.value ).trigger('change');
 			}
 		});
 		if ( null != hasCap && hasCap.hasOwnProperty('bool') && 0 == hasCap.bool ) {
-			$( "#" + secOptions[i].id + "-slider" ).slider( 'option', 'disabled', true );
+			$( "#" + settingsOptions[i].id + "-slider" ).slider( 'option', 'disabled', true );
 		}
 	}
 });
 
 $('input.js-hide').change( function() {
 	var allOptions = new Object;
-	for( var i=0; i<secOptions.length; i++ ) {
-		allOptions[secOptions[i].id] = secOptions[i];
+	for( var i=0; i<settingsOptions.length; i++ ) {
+		allOptions[settingsOptions[i].id] = settingsOptions[i];
 	}
 	var optionsObj = allOptions[$(this).attr('id')];
 	var newVal = $(this).val();

@@ -40,7 +40,9 @@ class VCA_ASM_Activity {
 	public $icon_url = 'http://vivaconagua.org/wp-content/plugins/vca-asm/img/icon-festivals_32.png';
 
 	public $nation = 0;
+	public $nation_name = '';
 	public $city = 0;
+	public $city_name = '';
 	public $delegation = false;
 
 	public $membership_required = false;
@@ -73,6 +75,7 @@ class VCA_ASM_Activity {
 	public $applicants_count_by_quota = array( 0 => 0 );
 
 	public $minimum_quotas = array();
+	public $non_global_participants = false;
 
 	public $total_slots = 0;
 	public $global_slots = 0;
@@ -89,7 +92,7 @@ class VCA_ASM_Activity {
 	 * @since 1.3
 	 * @access public
 	 */
-	public function is_activity( $id  ) {
+	public function is_activity( $id ) {
 		global $wpdb, $vca_asm_activities;
 
 		$post_type = get_post_type( $id );
@@ -138,7 +141,9 @@ class VCA_ASM_Activity {
 			'actions';
 
 		$this->nation = get_post_meta( $id, 'nation', true );
+		$this->nation_name = $this->nation > 0 ? $vca_asm_geography->get_name( $this->nation ) : '';
 		$this->city = get_post_meta( $id, 'city', true );
+		$this->city_name = $this->city > 0 ? $vca_asm_geography->get_name( $this->city ) : '';
 		$this->delegation = get_post_meta( $id, 'delegate', true );
 
 		$this->total_slots = get_post_meta( $id, 'total_slots', true );
@@ -174,6 +179,9 @@ class VCA_ASM_Activity {
 			$this->applicants = $vca_asm_registrations->get_activity_applications( $id );
 
 			foreach ( $this->participants_by_slots as $geo_id => $participants_bs ) {
+				if ( $geo_id !== 0 && ! $this->non_global_participants && ! empty( $participants_bs ) ) {
+					$this->non_global_participants = true;
+				}
 				if ( ! array_key_exists( $geo_id, $this->participants_count_by_slots ) ) {
 					$this->participants_count_by_slots[$geo_id] = 0;
 				}
@@ -369,6 +377,9 @@ class VCA_ASM_Activity {
 			$this->applicants = $vca_asm_registrations->get_activity_applications_old( $id );
 
 			foreach ( $this->participants_by_slots as $geo_id => $participants_bs ) {
+				if ( $geo_id !== 0 && ! $this->non_global_participants && ! empty( $participants_bs ) ) {
+					$this->non_global_participants = true;
+				}
 				if ( ! array_key_exists( $geo_id, $this->participants_count_by_slots ) ) {
 					$this->participants_count_by_slots[$geo_id] = 0;
 				}
@@ -413,7 +424,7 @@ class VCA_ASM_Activity {
 				$nation_id = ! empty( $nation_id ) ? $nation_id : ( $vca_asm_geography->has_nation( $city_id ) ? $vca_asm_geography->has_nation( $city_id ) : 'not_existent' );
 				$level = 0;
 
-				if ( array_key_exists( $city_id, $this->cty_slots ) ) {
+				if ( $city_id && array_key_exists( $city_id, $this->cty_slots ) ) {
 					$level = $city_id;
 					if ( ! array_key_exists( $city_id, $this->applicants_by_slots ) ) {
 						$this->applicants_by_slots[$city_id] = array();
@@ -433,7 +444,7 @@ class VCA_ASM_Activity {
 					if ( ! array_key_exists( $nation_id, $this->applicants_count_by_quota ) ) {
 						$this->applicants_count_by_quota[$nation_id] = 0;
 					}
-				} elseif ( array_key_exists( $nation_id, $this->ctr_slots ) ) {
+				} elseif ( $nation_id && array_key_exists( $nation_id, $this->ctr_slots ) ) {
 					$level = $nation_id;
 					if ( ! array_key_exists( $nation_id, $this->applicants_by_slots ) ) {
 						$this->applicants_by_slots[$nation_id] = array();
@@ -542,7 +553,29 @@ class VCA_ASM_Activity {
 	 */
 	public function reset() {
 
+		$this->department = 'actions';
+
+		$this->post_object = object;
+		$this->name = '';
+		$this->meta = array();
+
+		$this->type = 'festival';
+		$this->nice_type = 'Festival';
+		$this->icon_url = 'http://vivaconagua.org/wp-content/plugins/vca-asm/img/icon-festivals_32.png';
+
+		$this->nation = 0;
+		$this->nation_name = '';
+		$this->city = 0;
+		$this->city_name = '';
+		$this->delegation = false;
+
 		$this->membership_required = false;
+
+		$this->start_app = 0;
+		$this->end_app = 0;
+		$this->start_act = 0;
+		$this->end_act = 0;
+		$this->upcoming = true;
 
 		$this->participants = array();
 		$this->participants_count = 0;
@@ -566,6 +599,7 @@ class VCA_ASM_Activity {
 		$this->applicants_count_by_quota = array( 0 => 0 );
 
 		$this->minimum_quotas = array();
+		$this->non_global_participants = false;
 
 		$this->total_slots = 0;
 		$this->global_slots = 0;
@@ -586,50 +620,14 @@ class VCA_ASM_Activity {
 	 * @access public
 	 */
 	public function array_dump() {
-		$dump = array(
-			'id' => $this->id,
-			'post_object' => $this->post_object,
-			'meta' => $this->meta,
-			'exists' => $this->exists,
-			'is_activity' => $this->is_activity,
-			'name' => $this->name,
-			'membership_required' => $this->membership_required,
-			'participants' => $this->participants,
-			'participants_count' => $this->participants_count,
-			'waiting' => $this->waiting,
-			'waiting_count' => $this->waiting_count,
-			'applicants' => $this->applicants,
-			'applicants_count' => $this->applicants_count,
-			'participants_by_slots' => $this->participants_by_slots,
-			'participants_count_by_slots' => $this->participants_count_by_slots,
-			'waiting_by_slots' => $this->waiting_by_slots,
-			'waiting_count_by_slots' => $this->waiting_count_by_slots,
-			'applicants_by_slots' => $this->applicants_by_slots,
-			'applicants_count_by_slots' => $this->applicants_count_by_slots,
-			'participants_by_quota' => $this->participants_by_quota,
-			'participants_count_by_quota' => $this->participants_count_by_quota,
-			'waiting_by_quota' => $this->waiting_by_quota,
-			'waiting_count_by_quota' => $this->waiting_count_by_quota,
-			'applicants_by_quota' => $this->applicants_by_quota,
-			'applicants_count_by_quota' => $this->applicants_count_by_quota,
-			'minimum_quotas' => $this->minimum_quotas,
-			'total_slots' => $this->total_slots,
-			'global_slots' => $this->global_slots,
-			'ctr_quotas_switch' => $this->ctr_quotas_switch,
-			'ctr_quotas' => $this->ctr_quotas,
-			'ctr_slots' => $this->ctr_slots,
-			'ctr_cty_switch' => $this->ctr_cty_switch,
-			'cty_slots' => $this->cty_slots,
-			'slots' => $this->slots
-		);
 
-		return $dump;
+		return get_object_vars( $this );
 	}
 
 	/**
 	 * PHP4 style constructor
 	 *
-	 * @since 1.0
+	 * @since 1.3
 	 * @access public
 	 */
 	public function VCA_ASM_Activity( $id, $args = array() ) {
@@ -639,7 +637,7 @@ class VCA_ASM_Activity {
 	/**
 	 * PHP5 style constructor
 	 *
-	 * @since 1.0
+	 * @since 1.3
 	 * @access public
 	 */
 	public function __construct( $id, $args = array() ) {

@@ -559,7 +559,14 @@ class VcA_ASM_Registrations {
 			);
 		}
 
-		$vca_asm_mailer->auto_response( $supporter, 'applied', get_the_title( $activity ) );
+		$vca_asm_mailer->auto_response(
+			$supporter,
+			'applied',
+			array(
+				'activity' => get_the_title( $activity ),
+				'activity_id' => $activity
+			)
+		);
 
 		return $success;
 	}
@@ -594,7 +601,14 @@ class VcA_ASM_Registrations {
 			)
 		);
 
-		$vca_asm_mailer->auto_response( $supporter, 'denied', get_the_title($activity) );
+		$vca_asm_mailer->auto_response(
+			$supporter,
+			'denied',
+			array(
+				'activity' => get_the_title( $activity ),
+				'activity_id' => $activity
+			)
+		);
 
 		return $success;
 	}
@@ -650,7 +664,14 @@ class VcA_ASM_Registrations {
 						'%s'
 					)
 				);
-				$vca_asm_mailer->auto_response( $supporter, 'accepted', get_the_title( $activity ) );
+				$vca_asm_mailer->auto_response(
+					$supporter,
+					'accepted',
+					array(
+						'activity' => get_the_title( $activity ),
+						'activity_id' => $activity
+					)
+				);
 			}
 		}
 
@@ -788,7 +809,14 @@ class VcA_ASM_Registrations {
 			'WHERE activity = ' . $activity . ' AND supporter = ' . $supporter . ' LIMIT 1'
 		);
 
-		$vca_asm_mailer->auto_response( $supporter, 'reg_revoked', get_the_title($activity) );
+		$vca_asm_mailer->auto_response(
+			$supporter,
+			'reg_revoked',
+			array(
+				'activity' => get_the_title( $activity ),
+				'activity_id' => $activity
+			)
+		);
 
 		return $success;
 	}

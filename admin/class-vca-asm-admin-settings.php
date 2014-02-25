@@ -24,6 +24,7 @@ class VCA_ASM_Admin_Settings {
 	private $security_options_values = array();
 	private $security_options = array();
 	private $emails_options_values = array();
+	private $emails_sending_options = array();
 	private $mode_options_values = array();
 	private $has_cap = false;
 
@@ -122,6 +123,32 @@ class VCA_ASM_Admin_Settings {
 				'step' => 5,
 				'value' => $values[4],
 				'callback' => 'number',
+				'append' => ' ' . __( 'Minutes', 'vca-asm' ),
+				'never' => ' ' . __( 'never', 'vca-asm' )
+			)
+		);
+		$this->emails_sending_options = array(
+			0 => array(
+				'id' => 'email_sending_packet_size',
+				'min' => 50,
+				'max' => 500,
+				'step' => 50,
+				'value' => ! empty( $this->emails_options_values['email_sending_packet_size'] ) ? $this->emails_options_values['email_sending_packet_size'] : 100,
+				'callback' => 'number',
+				'classes' => '',
+				'content' => '',
+				'append' => ' ' . __( 'E-Mails', 'vca-asm' ),
+				'never' => ' ' . __( 'never', 'vca-asm' )
+			),
+			1 => array(
+				'id' => 'email_sending_interval',
+				'min' => 2,
+				'max' => 30,
+				'step' => 2,
+				'value' => ! empty( $this->emails_options_values['email_sending_interval'] ) ? $this->emails_options_values['email_sending_interval'] : 5,
+				'callback' => 'number',
+				'classes' => '',
+				'content' => '',
 				'append' => ' ' . __( 'Minutes', 'vca-asm' ),
 				'never' => ' ' . __( 'never', 'vca-asm' )
 			)
@@ -495,7 +522,7 @@ class VCA_ASM_Admin_Settings {
 		global $vca_asm_utilities;
 
 		wp_enqueue_script( 'vca-asm-admin-settings' );
-		wp_localize_script( 'vca-asm-admin-settings', 'secOptions', $this->security_options );
+		wp_localize_script( 'vca-asm-admin-settings', 'settingsOptions', $this->security_options );
 		$bool = 0;
 		if ( $this->has_cap ) {
 			$bool = 1;
@@ -527,6 +554,15 @@ class VCA_ASM_Admin_Settings {
 	 */
 	private function emails_menu() {
 		global $vca_asm_utilities;
+
+		wp_enqueue_script( 'vca-asm-admin-settings' );
+		wp_localize_script( 'vca-asm-admin-settings', 'settingsOptions', $this->emails_sending_options );
+		$bool = 0;
+		if ( $this->has_cap ) {
+			$bool = 1;
+		}
+		wp_localize_script( 'vca-asm-admin-settings', 'hasCap', array( 'bool' => $bool ) );
+
 		$mb_env = new VCA_ASM_Admin_Metaboxes( 'echo=true' );
 
 		echo '<form method="post" action="options.php">';
@@ -569,6 +605,9 @@ class VCA_ASM_Admin_Settings {
 		if( false == get_option( 'vca_asm_security_options' ) ) {
 			add_option( 'vca_asm_security_options' );
 		}
+		if( false == get_option( 'vca_asm_mode_options' ) ) {
+			add_option( 'vca_asm_mode_options' );
+		}
 		if( false == get_option( 'vca_asm_emails_options' ) ) {
 			add_option( 'vca_asm_emails_options' );
 		}
@@ -590,16 +629,22 @@ class VCA_ASM_Admin_Settings {
 			array( &$this, 'automatic_logout_section' ),
 			'vca_asm_security_options'
 		);
-		//add_settings_section(
-		//	'force_ssl',
-		//	_x( 'Secure Login', 'Settings Admin Menu', 'vca-asm' ),
-		//	array( &$this, 'secure_login_section' ),
-		//	'vca_asm_security_options'
-		//);
 		add_settings_section(
 			'email_format',
 			_x( 'Email Format', 'Settings Admin Menu', 'vca-asm' ),
 			array( &$this, 'email_format_section' ),
+			'vca_asm_emails_options'
+		);
+		add_settings_section(
+			'email_sending',
+			_x( 'Sending Options', 'Settings Admin Menu', 'vca-asm' ),
+			array( &$this, 'email_sending_section' ),
+			'vca_asm_emails_options'
+		);
+		add_settings_section(
+			'email_protocol',
+			_x( 'Server / Protocol', 'Settings Admin Menu', 'vca-asm' ),
+			array( &$this, 'email_protocol_section' ),
 			'vca_asm_emails_options'
 		);
 		add_settings_section(
@@ -628,22 +673,6 @@ class VCA_ASM_Admin_Settings {
 			'pass_reset_cycle',
 			array( 'id' => 'global_pass_reset' )
 		);
-		//add_settings_field(
-		//	'force_ssl_supporter',
-		//	_x( 'Supporter', 'Settings Admin Menu', 'vca-asm' ),
-		//	array( &$this, 'secure_login_fields' ),
-		//	'vca_asm_security_options',
-		//	'force_ssl',
-		//	array( 'id' => 'forrce_ssl_supporter', 'value' =>  ! empty( $this->security_options_values['force_ssl_supporter'] ) ? $this->security_options_values['force_ssl_supporter'] : 'no' )
-		//);
-		//add_settings_field(
-		//	'force_ssl_admin',
-		//	_x( 'Access to Administration', 'Settings Admin Menu', 'vca-asm' ),
-		//	array( &$this, 'secure_login_fields' ),
-		//	'vca_asm_security_options',
-		//	'force_ssl',
-		//	array( 'id' => 'force_ssl_admin', 'value' =>  ! empty( $this->security_options_values['force_ssl_admin'] ) ? $this->security_options_values['force_ssl_admin'] : 'yes' )
-		//);
 		add_settings_field(
 			'email_format_admin',
 			_x( 'Office / Administrators', 'Settings Admin Menu', 'vca-asm' ),
@@ -667,6 +696,70 @@ class VCA_ASM_Admin_Settings {
 			'vca_asm_emails_options',
 			'email_format',
 			array( 'id' => 'email_format_auto', 'value' =>  ! empty( $this->emails_options_values['email_format_auto'] ) ? $this->emails_options_values['email_format_auto'] : 'plain' )
+		);
+		add_settings_field(
+			'email_sending_packet_switch',
+			_x( 'Send in packets?', 'Settings Admin Menu', 'vca-asm' ),
+			array( &$this, 'email_sending_packet_switch_field' ),
+			'vca_asm_emails_options',
+			'email_sending',
+			array( 'id' => 'email_sending_packet_switch', 'value' =>  ! empty( $this->emails_options_values['email_sending_packet_switch'] ) ? $this->emails_options_values['email_sending_packet_switch'] : 1 )
+		);
+		add_settings_field(
+			'email_sending_packet_size',
+			_x( 'Packet size', 'Settings Admin Menu', 'vca-asm' ),
+			array( &$this, 'slider_fields' ),
+			'vca_asm_emails_options',
+			'email_sending',
+			$this->emails_sending_options[0]
+		);
+		add_settings_field(
+			'email_sending_interval',
+			_x( 'Interval', 'Settings Admin Menu', 'vca-asm' ),
+			array( &$this, 'slider_fields' ),
+			'vca_asm_emails_options',
+			'email_sending',
+			$this->emails_sending_options[1]
+		);
+		add_settings_field(
+			'email_protocol_type',
+			_x( 'How?', 'Settings Admin Menu', 'vca-asm' ),
+			array( &$this, 'email_protocol_type_field' ),
+			'vca_asm_emails_options',
+			'email_protocol',
+			array( 'id' => 'email_protocol_type', 'value' =>  ! empty( $this->emails_options_values['email_protocol_type'] ) ? $this->emails_options_values['email_protocol_type'] : 'sendmail' )
+		);
+		add_settings_field(
+			'email_protocol_url',
+			_x( 'Server URL', 'Settings Admin Menu', 'vca-asm' ),
+			array( &$this, 'email_protocol_text_fields' ),
+			'vca_asm_emails_options',
+			'email_protocol',
+			array( 'id' => 'email_protocol_url', 'value' =>  ! empty( $this->emails_options_values['email_protocol_url'] ) ? $this->emails_options_values['email_protocol_url'] : '' )
+		);
+		add_settings_field(
+			'email_protocol_port',
+			_x( 'Port', 'Settings Admin Menu', 'vca-asm' ),
+			array( &$this, 'email_protocol_text_fields' ),
+			'vca_asm_emails_options',
+			'email_protocol',
+			array( 'id' => 'email_protocol_port', 'value' =>  ! empty( $this->emails_options_values['email_protocol_port'] ) ? $this->emails_options_values['email_protocol_port'] : 25 )
+		);
+		add_settings_field(
+			'email_protocol_username',
+			_x( 'Username', 'Settings Admin Menu', 'vca-asm' ),
+			array( &$this, 'email_protocol_text_fields' ),
+			'vca_asm_emails_options',
+			'email_protocol',
+			array( 'id' => 'email_protocol_username', 'value' =>  ! empty( $this->emails_options_values['email_protocol_username'] ) ? $this->emails_options_values['email_protocol_username'] : '' )
+		);
+		add_settings_field(
+			'email_protocol_pass',
+			_x( 'Password', 'Settings Admin Menu', 'vca-asm' ),
+			array( &$this, 'email_protocol_text_fields' ),
+			'vca_asm_emails_options',
+			'email_protocol',
+			array( 'id' => 'email_protocol_pass', 'value' =>  ! empty( $this->emails_options_values['email_protocol_pass'] ) ? $this->emails_options_values['email_protocol_pass'] : '' )
 		);
 		add_settings_field(
 			'mode',
@@ -710,6 +803,12 @@ class VCA_ASM_Admin_Settings {
 	}
 	public function email_format_section() {
 		echo '<p>' . _x( 'For each type of Email or Sender, set the format of the outgoing Email.', 'Settings Admin Menu', 'vca-asm' ) . '</p>';
+	}
+	public function email_sending_section() {
+		echo '<p>' . _x( 'Emails can either be sent in bulk, or split in packets in pre-defined intervals.', 'Settings Admin Menu', 'vca-asm' ) . '</p>';
+	}
+	public function email_protocol_section() {
+		echo '<p>' . _x( 'The Emails can be sent via Unix Sendmail or SMTP. In the latter case, server data is required. When using sendmail, the server fields maybe left blank.', 'Settings Admin Menu', 'vca-asm' ) . '</p>';
 	}
 	public function mode_section() {
 		echo '<p>' . _x( 'The Pool can be put into Maintenance Mode. If in this mode, non-management users will be prohibited to login. Activity registrations are not possible.', 'Settings Admin Menu', 'vca-asm' ) . '</p>';
@@ -778,6 +877,80 @@ class VCA_ASM_Admin_Settings {
 			'<label for="' . $args['id']  . '_plain">' . _x( 'Plain Text', 'Settings Admin Menu', 'vca-asm' ) . '</label>';
 		echo $output;
 	}
+	public function email_sending_packet_switch_field( $args ) {
+		$output = '<input type="radio" id="' . $args['id']  . '_0" name="vca_asm_emails_options[' . $args['id'] . ']" value="0"';
+		if ( $args['value'] == 0 ) {
+			$output .= ' checked="checked"';
+		}
+		if ( ! $this->has_cap ) {
+			$output .= 'disabled="disabled" ';
+		}
+		$output .= ' />' .
+			'<label for="' . $args['id']  . '_0">' . __( 'No', 'vca-asm' ) . '</label>' .
+			'<br />' .
+			'<input type="radio" id="' . $args['id']  . '_1" name="vca_asm_emails_options[' . $args['id'] . ']" value="1"';
+		if ( $args['value'] == 1 ) {
+			$output .= ' checked="checked"';
+		}
+		if ( ! $this->has_cap ) {
+			$output .= 'disabled="disabled" ';
+		}
+		$output .= ' />' .
+			'<label for="' . $args['id']  . '_1">' . __( 'Yes', 'vca-asm' ) . '</label>';
+		echo $output;
+	}
+	public function slider_fields( $args ) {
+		$output = '<div id="' . $args['id'] . '-slider"></div>' .
+			'<input type="text" ';
+		if ( ! $this->has_cap ) {
+			$output .= 'disabled="disabled" ';
+		}
+		$output .= 'class="js-hide" id="' . $args['id'] . '" ' .
+				'name="vca_asm_emails_options[' . $args['id'] . ']" value="' .
+					$args['value'] .
+				'" />' .
+			'&nbsp;&nbsp;&nbsp;';
+		if( $args['callback'] === 'number' ) {
+			if( $args['value'] == 0 ) {
+				$output .= '<span id="' . $args['id'] . '-slider_result">' . $args['never'] . '</span>';
+			} else {
+				$output .= '<span id="' . $args['id'] . '-slider_result">' . $args['value'] . ' ' . $args['append'] . '</span>';
+			}
+		} else {
+			$output .= $args['append'];
+		}
+		echo $output;
+	}
+	public function email_protocol_type_field( $args ) {
+		$output = '<input type="radio" id="' . $args['id']  . '_sendmail" name="vca_asm_emails_options[' . $args['id'] . ']" value="sendmail"';
+		if ( $args['value'] === 'sendmail' ) {
+			$output .= ' checked="checked"';
+		}
+		if ( ! $this->has_cap ) {
+			$output .= 'disabled="disabled" ';
+		}
+		$output .= ' />' .
+			'<label for="' . $args['id']  . '_sendmail">' . _x( 'Unix Sendmail', 'Settings Admin Menu', 'vca-asm' ) . '</label>' .
+			'<br />' .
+			'<input type="radio" id="' . $args['id']  . '_smtp" name="vca_asm_emails_options[' . $args['id'] . ']" value="smtp"';
+		if ( $args['value'] === 'smtp' ) {
+			$output .= ' checked="checked"';
+		}
+		if ( ! $this->has_cap ) {
+			$output .= 'disabled="disabled" ';
+		}
+		$output .= ' />' .
+			'<label for="' . $args['id']  . '_smtp">' . _x( 'SMTP', 'Settings Admin Menu', 'vca-asm' ) . '</label>';
+		echo $output;
+	}
+	public function email_protocol_text_fields( $args ) {
+		$output = '<input type="text" id="' . $args['id']  . '" name="vca_asm_emails_options[' . $args['id'] . ']" value="' . $args['value'] . '"';
+		if ( ! $this->has_cap ) {
+			$output .= 'disabled="disabled" ';
+		}
+		$output .= ' />';
+		echo $output;
+	}
 	public function secure_login_fields( $args ) {
 		$output = '<input type="radio" id="' . $args['id']  . '_yes" name="vca_asm_security_options[' . $args['id'] . ']" value="yes"';
 		if ( $args['value'] === 'yes' ) {
@@ -826,17 +999,7 @@ class VCA_ASM_Admin_Settings {
 	/******************** CONSTRUCTORS ********************/
 
 	/**
-	 * PHP4 style constructor
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function VCA_ASM_Settings() {
-		$this->__construct();
-	}
-
-	/**
-	 * PHP5 style constructor
+	 * Constructor
 	 *
 	 * @since 1.0
 	 * @access public

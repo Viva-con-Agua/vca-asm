@@ -22,6 +22,7 @@ class VCA_ASM_Admin_Form {
 	private $default_args = array(
 		'echo' => true,
 		'form' => false,
+		'name' => 'vca-asm-form',
 		'method' => 'post',
 		'metaboxes' => false,
 		'js' => false,
@@ -30,7 +31,10 @@ class VCA_ASM_Admin_Form {
 		'nonce' => 'vca-asm',
 		'id' => 0,
 		'button' => 'Save',
+		'button_id' => 'submit',
 		'top_button' => true,
+		'confirm' => false,
+		'confirm_text' => 'Really?',
 		'back' => false,
 		'back_url' => '#',
 		'has_cap' => true,
@@ -80,10 +84,17 @@ class VCA_ASM_Admin_Form {
 
 		$output = '';
 
-		$the_button = '<input type="submit" name="submit" id="submit" class="button-primary" value="' . $button . '">';
+		$the_button = '<input type="submit" name="submit" id="' . $button_id . '" class="button-primary" value="' . $button . '"';
+		if ( $confirm ) {
+			$the_button .= ' onclick="' .
+				'if ( confirm(\'' .
+					$confirm_text .
+				'\') ) { return true; } return false;"';
+		}
+		$the_button .= '>';
 
 		if ( $form ) {
-			$output .= '<form name="vca-asm-form" method="' . $method . '" action="' . $action . '">';
+			$output .= '<form name="' . $name . '" method="' . $method . '" action="' . $action . '">';
 			if ( $back ) {
 				$output .= '<a href="' . $back_url . '" class="button-secondary margin" title="' . __( 'Back to where you came from...', 'vca-asm' ) . '">' .
 						'&larr; ' . __( 'back', 'vca-asm' ) .
@@ -102,14 +113,18 @@ class VCA_ASM_Admin_Form {
 		}
 
 		if ( $metaboxes ) {
-			$output .= '<div id="poststuff" class="noflow"><div id="post-body" class="metabox-holder columns-1"><div id="postbox-container-1" class="postbox-container">';
+			$output .= '<div id="poststuff"';
+			if ( $js ) {
+				$output .= ' class="noflow"';
+			}
+			$output .= '><div id="post-body" class="metabox-holder columns-1"><div id="postbox-container-1" class="postbox-container">';
 			if ( $js ) {
 				$output .= '<div id="normal-sortables" class="meta-box-sortables ui-sortable">';
 			}
 			foreach ( $fields as $box ) {
 				$output .= '<div class="postbox">';
 				if ( $js ) {
-					$output .= '<div class="handlediv" title="' . esc_attr__('Click to toggle') . '"><br></div>' .
+					$output .= '<div class="handlediv" title="' . esc_attr__( 'Click to toggle', 'vca-asm' ) . '"><br></div>' .
 						'<h3 class="hndle"';
 				} else {
 					$output .= '<h3 class="no-hover"';
@@ -239,6 +254,15 @@ class VCA_ASM_Admin_Form {
 				$output .= '>' . $field['value'] . '</textarea>';
 			break;
 
+			case 'tinymce':
+				$field['args'] = empty( $field['args'] ) ? array() : $field['args'];
+				$field['id'] = empty( $field['args'] ) ? 'vca-editor' : $field['id'];
+				add_filter( 'wp_default_editor', create_function( '', 'return "tinymce";' ) );
+				ob_start();
+				wp_editor( $field['value'], $field['id'], $field['args'] );
+				$output .= ob_get_clean();
+			break;
+
 			case 'select':
 				$output .= '<select name="' . $field['name'] .
 				'" id="' . $field['id'] . '"';
@@ -249,8 +273,11 @@ class VCA_ASM_Admin_Form {
 
 				foreach ($field['options'] as $option) {
 					$output .= '<option';
-					if( ( $field['value'] == $option['value'] && $option['value'] != 0 ) || $field['value'] === $option['value'] ) {
+					if ( ( $field['value'] == $option['value'] && $option['value'] != 0 ) || $field['value'] === $option['value'] ) {
 						$output .= ' selected="selected"';
+					}
+					if ( ! empty( $option['class'] ) ) {
+						$output .= ' class="' . $option['class'] . '"';
 					}
 					$output .= ' value="' . $option['value'] . '">' . $option['label'] . '&nbsp;</option>';
 				}
@@ -271,25 +298,58 @@ class VCA_ASM_Admin_Form {
 			break;
 
 			case 'radio':
-				$end = count( $field['options'] );
-				$i = 1;
-				foreach ( $field['options'] as $option ) {
-					$output .= '<input type="radio"' .
-						'name="' . $field['name'] .
-						'" id="' . $field['id'] . '_' . $option['value'] .
-						'" value="' . $option['value'] . '" ';
 
-					if( $field['value'] == $option['value'] ) {
-						$output .= ' checked="checked"';
+				if( isset( $field['cols'] ) ) {
+					$cols = $field['cols'];
+				} else {
+					$cols = 1;
+				}
+
+				if ( ! empty( $field['options'] ) ) {
+
+					if( $cols !== 1 ) {
+						$output .= '<table class="table-inside-table table-mobile-collapse subtable subtable-' . $field['id'] . '"><tr><td>';
 					}
-					if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
-						$output .= ' disabled="disabled"';
+					$i = 1;
+					$end = count( $field['options'] );
+
+					foreach ( $field['options'] as $option ) {
+						$output .= '<input type="radio"' .
+							'name="' . $field['name'] .
+							'" id="' . $field['id'] . '_' . $option['value'] .
+							'" value="' . $option['value'] . '" ';
+
+						if( $field['value'] == $option['value'] ) {
+							$output .= ' checked="checked"';
+						}
+						if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
+							$output .= ' disabled="disabled"';
+						}
+						$output .= ' /><label for="' . $field['id'] . '_' . $option['value'] . '">' . $option['label'] . '</label>';
+
+						if( $cols !== 1 ) {
+							if( ( $i % $cols ) === 0 ) {
+								if( $i === $end ) {
+									$output .= '</td></tr></table>';
+								} else {
+									$output .= '</td></tr><tr><td>';
+								}
+							} elseif( $i === $end ) {
+								$empty_cell = '</td><td>';
+								for( $i = 0; $i < ( $i % $cols ); $i++ ) {
+									$output .= $empty_cell;
+								}
+								$output .= '</td></tr></table>';
+							} else {
+								$output .= '</td><td>';
+							}
+						} else {
+							$output .= '<br />';
+						}
+						$i++;
 					}
-					$output .= ' /><label for="' . $field['id'] . '_' . $option['value'] . '">' . $option['label'] . '</label>';
-					if( $i < $end ) {
-						$output .= '<br />';
-					}
-					$i++;
+				} else {
+					$output .= '<p>' . __( 'There is no data to select...', 'vca-asm' ) . '</p>';
 				}
 			break;
 
@@ -306,11 +366,9 @@ class VCA_ASM_Admin_Form {
 
 					if( $cols !== 1 ) {
 						$output .= '<table class="table-inside-table table-mobile-collapse subtable subtable-' . $field['id'] . '"><tr><td>';
-						$i = 1;
-						$end = count( $field['options'] );
 					}
-					$optcount = count( $field['options'] );
-					$j = 1;
+					$i = 1;
+					$end = count( $field['options'] );
 					foreach( $field['options'] as $option ) {
 
 						$output .= '<input type="checkbox"' .
@@ -341,17 +399,16 @@ class VCA_ASM_Admin_Form {
 							} elseif( $i === $end ) {
 								$empty_cell = '</td><td>';
 								for( $i = 0; $i < ( $i % $cols ); $i++ ) {
-									$$output .= $empty_cell;
+									$output .= $empty_cell;
 								}
 								$output .= '</td></tr></table>';
 							} else {
 								$output .= '</td><td>';
 							}
-							$i++;
 						} else {
 							$output .= '<br />';
 						}
-						//$j++;
+						$i++;
 					}
 				} else {
 					$output .= '<p>' . __( 'There is no data to select...', 'vca-asm' ) . '</p>';
@@ -393,24 +450,25 @@ class VCA_ASM_Admin_Form {
 				$output .= '<input type="text"' .
 					'name="' . $field['name'] .
 					'" id="' . $field['id'] .
-					'" class="input regular-text"' .
-					'" value="' . $field['value'] . '" size="40"';
-				if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
+					'" class="input regular-text';
+				if ( ! empty( $field['class'] ) ) {
+					$output .= ' ' . $field['class'];
+				}
+				$output .= '" value="' . $field['value'] . '" size="40"';
+				if ( isset( $field['disabled'] ) && $field['disabled'] === true ) {
 					$output .= ' disabled="disabled"';
 				}
 				$output .= ' />';
 			break;
 		} // type switch
 
-		if ( 'hidden' !== $field['type'] ) {
-			if( isset( $field['desc'] ) && ! empty( $field['desc'] ) ) {
-				if( ! in_array( $field['type'], array( 'hidden', 'checkbox_group', 'checkbox-group' ) ) ) {
-					$output .= '<br />';
-				}
-				$output .= '<span class="description">' . $field['desc'] . '</span>';
+		if( isset( $field['desc'] ) && ! empty( $field['desc'] ) ) {
+			if ( ! in_array( $field['type'], array( 'hidden', 'checkbox_group', 'checkbox-group', 'radio' ) ) ) {
+				$output .= '<br />';
 			}
-			$output .= '</td></tr>';
+			$output .= '<span class="description">' . $field['desc'] . '</span>';
 		}
+		$output .= '</td></tr>';
 
 		return $output;
 	}

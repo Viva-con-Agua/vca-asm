@@ -29,38 +29,39 @@ class VCA_ASM {
 		}
 
 		/* VcA ASM's @global objects (these need to be accessible from within other classes) */
-		$GLOBALS['vca_asm_utilities'] =& new VCA_ASM_Utilities(); // used in other constructors, needs to be instantiated first
+		$GLOBALS['vca_asm_cron'] = new VCA_ASM_Cron(); // used in other constructors, needs to be instantiated first
+		$GLOBALS['vca_asm_utilities'] = new VCA_ASM_Utilities(); // used in other constructors, needs to be instantiated first
 
-		$GLOBALS['vca_asm_activities'] =& new VCA_ASM_Activities();
-		$GLOBALS['vca_asm_mailer'] =& new VCA_ASM_Mailer();
-		$GLOBALS['vca_asm_geography'] =& new VCA_ASM_Geography();
-		$GLOBALS['vca_asm_regions'] =& new VCA_ASM_Geography(); // legacy
-		$GLOBALS['vca_asm_registrations'] =& new VCA_ASM_Registrations();
+		$GLOBALS['vca_asm_activities'] = new VCA_ASM_Activities();
+		$GLOBALS['vca_asm_mailer'] = new VCA_ASM_Mailer();
+		$GLOBALS['vca_asm_geography'] = new VCA_ASM_Geography();
+		$GLOBALS['vca_asm_regions'] = new VCA_ASM_Geography(); // legacy
+		$GLOBALS['vca_asm_registrations'] = new VCA_ASM_Registrations();
 
 		/* other objects */
-		$vca_asm_lists =& new VCA_ASM_Lists();
-		$vca_asm_profile =& new VCA_ASM_Profile();
-		$vca_asm_security =& new VCA_ASM_Security();
+		$vca_asm_lists = new VCA_ASM_Lists();
+		$vca_asm_profile = new VCA_ASM_Profile();
+		$vca_asm_security = new VCA_ASM_Security();
 
 		if ( is_admin() ) {
-			$GLOBALS['vca_asm_admin'] =& new VCA_ASM_Admin();
-			$GLOBALS['vca_asm_admin_actions'] =& new VCA_ASM_Admin_Actions();
-			$GLOBALS['vca_asm_admin_education'] =& new VCA_ASM_Admin_Education();
-			$GLOBALS['vca_asm_admin_emails'] =& new VCA_ASM_Admin_Emails();
-			$GLOBALS['vca_asm_admin_finances'] =& new VCA_ASM_Admin_Finances();
-			$GLOBALS['vca_asm_admin_geography'] =& new VCA_ASM_Admin_Geography();
-			$GLOBALS['vca_asm_admin_home'] =& new VCA_ASM_Admin_Home();
-			$GLOBALS['vca_asm_admin_network'] =& new VCA_ASM_Admin_Network();
-			$GLOBALS['vca_asm_admin_settings'] =& new VCA_ASM_Admin_Settings();
-			$GLOBALS['vca_asm_admin_slot_allocation'] =& new VCA_ASM_Admin_Slot_Allocation();
-			$GLOBALS['vca_asm_admin_applications'] =& new VCA_ASM_Admin_Slot_Allocation();
-			$GLOBALS['vca_asm_admin_supporters'] =& new VCA_ASM_Admin_Supporters();
+			$GLOBALS['vca_asm_admin'] = new VCA_ASM_Admin();
+			$GLOBALS['vca_asm_admin_actions'] = new VCA_ASM_Admin_Actions();
+			$GLOBALS['vca_asm_admin_education'] = new VCA_ASM_Admin_Education();
+			$GLOBALS['vca_asm_admin_emails'] = new VCA_ASM_Admin_Emails();
+			$GLOBALS['vca_asm_admin_finances'] = new VCA_ASM_Admin_Finances();
+			$GLOBALS['vca_asm_admin_geography'] = new VCA_ASM_Admin_Geography();
+			$GLOBALS['vca_asm_admin_home'] = new VCA_ASM_Admin_Home();
+			$GLOBALS['vca_asm_admin_network'] = new VCA_ASM_Admin_Network();
+			$GLOBALS['vca_asm_admin_settings'] = new VCA_ASM_Admin_Settings();
+			$GLOBALS['vca_asm_admin_slot_allocation'] = new VCA_ASM_Admin_Slot_Allocation();
+			$GLOBALS['vca_asm_admin_applications'] = new VCA_ASM_Admin_Slot_Allocation();
+			$GLOBALS['vca_asm_admin_supporters'] = new VCA_ASM_Admin_Supporters();
 
 			/* so far only used in the backend */
-			$GLOBALS['vca_asm_roles'] =& new VCA_ASM_Roles();
+			$GLOBALS['vca_asm_roles'] = new VCA_ASM_Roles();
 
 			/* sporadically used to alter data structure or the like */
-			//$GLOBALS['vca_asm_admin_update'] =& new VCA_ASM_Admin_Update();
+			$GLOBALS['vca_asm_admin_update'] = new VCA_ASM_Admin_Update();
 		}
 	}
 
@@ -144,34 +145,127 @@ class VCA_ASM {
 		return $caps;
 	}
 
+	/**
+	 * Enqueue the plugin's javascript & styles
+	 *
+	 * @since 1.0
+	 */
+	public function vca_asm_admin_enqueue() {
+		global $pagenow;
+
+		$jqui_params = array(
+			'monthNames' => array(
+				_x( 'January', 'Months', 'vca-asm' ),
+				_x( 'February', 'Months', 'vca-asm' ),
+				_x( 'March', 'Months', 'vca-asm' ),
+				_x( 'April', 'Months', 'vca-asm' ),
+				_x( 'May', 'Months', 'vca-asm' ),
+				_x( 'June', 'Months', 'vca-asm' ),
+				_x( 'July', 'Months', 'vca-asm' ),
+				_x( 'August', 'Months', 'vca-asm' ),
+				_x( 'September', 'Months', 'vca-asm' ),
+				_x( 'October', 'Months', 'vca-asm' ),
+				_x( 'November', 'Months', 'vca-asm' ),
+				_x( 'December', 'Months', 'vca-asm' )
+			),
+			'dayNamesMin' => array(
+				_x( 'Sun', 'Weekdays, Shortform', 'vca-asm' ),
+				_x( 'Mon', 'Weekdays, Shortform', 'vca-asm' ),
+				_x( 'Tue', 'Weekdays, Shortform', 'vca-asm' ),
+				_x( 'Wed', 'Weekdays, Shortform', 'vca-asm' ),
+				_x( 'Thu', 'Weekdays, Shortform', 'vca-asm' ),
+				_x( 'Fri', 'Weekdays, Shortform', 'vca-asm' ),
+				_x( 'Sat', 'Weekdays, Shortform', 'vca-asm' )
+			)
+		);
+		$generic_params = array(
+			'strings' => array(
+				'btnDeselect' => __( 'Deselect all', 'vca-asm' ),
+				'btnSelect' => __( 'Select all', 'vca-asm' )
+			)
+		);
+
+		wp_register_script( 'vca-asm-admin-email-preview', VCA_ASM_RELPATH . 'js/admin-email-preview.js', array( 'jquery' ), '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-admin-email-compose', VCA_ASM_RELPATH . 'js/admin-email-compose.js', array( 'jquery' ), '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-admin-generic', VCA_ASM_RELPATH . 'js/admin-generic.js', array( 'jquery' ), '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-admin-repeatable-custom-fields', VCA_ASM_RELPATH . 'js/admin-repeatable-custom-fields.js',
+			array( 'jquery', 'jquery-ui-slider', 'jquery-ui-datepicker' ), '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-admin-jquery-ui-integration', VCA_ASM_RELPATH . 'js/admin-jquery-ui-integration.js',
+			array( 'jquery', 'jquery-ui-slider', 'jquery-ui-datepicker' ), '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-admin-profile', VCA_ASM_RELPATH . 'js/admin-profile.js', false, '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-admin-quotas', VCA_ASM_RELPATH . 'js/admin-quotas.js',
+			array( 'jquery', 'jquery-ui-slider' ), '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-admin-settings', VCA_ASM_RELPATH . 'js/admin-settings.js', array( 'jquery', 'jquery-ui-slider' ), '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-admin-supporter-filter', VCA_ASM_RELPATH . 'js/admin-supporter-filter.js', array( 'jquery' ), '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-admin-validation', VCA_ASM_RELPATH . 'js/admin-validation.js', array( 'jquery' ), '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-excel-export', VCA_ASM_RELPATH . 'js/excel-export.js', array( 'jquery' ), '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-tooltip', VCA_ASM_RELPATH . 'js/tooltip.js', array( 'jquery' ), '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-ctr-to-cty', VCA_ASM_RELPATH . 'js/ctr-to-cty.js', array( 'jquery' ), '2013.11.6.1', true );
+
+		/* used throughout the backend, enqueued everywhere */
+		wp_enqueue_script( 'jquery-ui-slider' );
+		wp_enqueue_script( 'vca-asm-admin-generic' );
+		wp_enqueue_script( 'vca-asm-tooltip' );
+
+		wp_localize_script( 'vca-asm-admin-generic', 'genericParams', $generic_params );
+
+		/* used on activity/post edit screens only */
+		if( 'post.php' == $pagenow || 'post-new.php' == $pagenow ) {
+			wp_enqueue_script( 'jquery-ui-datepicker' );
+			wp_enqueue_script( 'vca-asm-admin-validation' );
+			wp_enqueue_script( 'vca-asm-admin-jquery-ui-integration' );
+			wp_enqueue_script( 'vca-asm-admin-repeatable-custom-fields' );
+			wp_enqueue_script( 'vca-asm-admin-quotas' );
+			wp_enqueue_script( 'vca-asm-ctr-to-cty' );
+
+			wp_localize_script( 'vca-asm-admin-jquery-ui-integration', 'jquiParams', $jqui_params );
+		}
+
+		/* conditional (context) based enqueue as well ? */
+		wp_enqueue_script( 'vca-asm-admin-profile' );
+		wp_enqueue_script( 'vca-asm-excel-export' );
+
+		wp_register_style( 'jquery-ui-framework', VCA_ASM_RELPATH . 'css/jquery-ui-framework.css' );
+		wp_register_style( 'jquery-ui-custom', VCA_ASM_RELPATH . 'css/jquery-ui-custom.css' );
+		wp_register_style( 'vca-asm-admin-generic-style', VCA_ASM_RELPATH . 'css/admin-generic.css', false, '2013.11.15.2' );
+
+		wp_register_style( 'vca-asm-tooltips', VCA_ASM_RELPATH . 'css/admin-tooltips.css', false, '2013.11.6.1' );
+
+		wp_enqueue_style( 'jquery-ui-framework' );
+		wp_enqueue_style( 'jquery-ui-custom' );
+		wp_enqueue_style( 'vca-asm-admin-generic-style' );
+		wp_enqueue_style( 'vca-asm-tooltips' );
+	}
+
+
+	public function vca_asm_frontend_enqueue() {
+		global $vca_asm_activities;
+
+		wp_register_script( 'isotope-metafizzy', VCA_ASM_RELPATH . 'js/jquery.isotope.min.js', array( 'jquery' ), '2013.11.6.1', true );
+		wp_register_script( 'jquery-scrollTo', VCA_ASM_RELPATH . 'js/jquery.scrollTo.min.js', array( 'jquery' ), '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-activities', VCA_ASM_RELPATH . 'js/vca-asm-activities.js', array( 'jquery', 'isotope-metafizzy' ), '2013.11.15.7', true );
+		wp_register_script( 'vca-asm-profile', VCA_ASM_RELPATH . 'js/profile.js', array( 'jquery' ), '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-strength-meter-init', VCA_ASM_RELPATH . 'js/strength-meter-init.js', array( 'jquery' ), '2013.11.6.1', true );
+
+		wp_enqueue_script( 'vca-asm-profile' );
+
+		wp_register_style( 'vca-asm-activities-style', VCA_ASM_RELPATH . 'css/activities.css', false, '2013.11.15.4' );
+		wp_register_style( 'vca-asm-isotope-style', VCA_ASM_RELPATH . 'css/isotope.css', false, '2013.11.6.3' );
+
+		if ( is_singular( $vca_asm_activities->activity_types ) ) {
+			wp_enqueue_style( 'vca-asm-activities-style' );
+		}
+	}
+
 	function clean_unwanted_caps(){
 		$delete_caps = array(
-			'vca_asm_send_emails_city',
-			'vca_asm_send_global_emails',
-			'vca_asm_publish_activities',
-			'vca_asm_edit_activities',
-			'vca_asm_edit_others_activities',
-			'vca_asm_delete_activities',
-			'vca_asm_delete_others_activities',
-			'vca_asm_read_private_activities',
-			'vca_asm_manage_applications',
-			'vca_asm_manage_all_applications',
-			'vca_asm_edit_regions',
-			'vca_asm_manage_actions_city',
-			'vca_asm_manage_education_city',
-			'vca_asm_manage_network_city',
-			'vca_asm_manage_applications_city',
-			'vca_asm_access_actions',
-			'vca_asm_access_education',
-			'vca_asm_access_finances',
-			'vca_asm_access_network',
-			'vca_asm_view_all_supporters',
-			'vca_asm_promote_all_supporters',
-			'vca_asm_delete_all_supporters',
-			'vca_asm_manage_applications',
-			'vca_asm_manage_applications_nation',
-			'vca_asm_manage_applications_global',
-			'vca_asm_edit_autoresponses'
+			'vca_asm_view_all_finances',
+			'vdu_admin_edit_others',
+			'vdu_admin_delete_plumbing',
+			'vdu_admin_delete_others',
+			'vdu_admin_edit_plumbing',
+			'vdu_admin_publish',
+			'vdu_admin_read_private'
 		);
 		global $wp_roles;
 		foreach ($delete_caps as $cap) {
@@ -182,23 +276,15 @@ class VCA_ASM {
 	}
 
 	/**
-	 * PHP4 style constructor
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function VCA_ASM() {
-		$this->__construct();
-	}
-
-	/**
-	 * PHP5 style constructor
+	 * Constructor
 	 *
 	 * @since 1.0
 	 * @access public
 	 */
 	public function __construct() {
 		add_action( 'init', array( $this, 'init' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'vca_asm_frontend_enqueue' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'vca_asm_admin_enqueue' ) );
 		add_action( 'admin_init', array( $this, 'clean_unwanted_caps' ) );
 	}
 } // class

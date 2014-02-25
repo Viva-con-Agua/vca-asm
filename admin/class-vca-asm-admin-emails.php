@@ -26,22 +26,149 @@ class VCA_ASM_Admin_Emails {
 	public $emails_options = array();
 
 	/**
-	 * Outputs form to send mails
+	 * Outputs tabular data of mail currently being send
 	 *
-	 * @since 1.0
+	 * @since 1.3
+	 * @access public
+	 */
+	public function outbox_control() {
+		global $wpdb, $vca_asm_utilities,
+			$vca_asm_mailer;
+
+		$messages = array();
+
+		if ( isset( $_GET['todo'] ) && $_GET['todo'] == 'process' ) {
+			/* send it! */
+			$success = $this->process();
+			if ( $success ) {
+				$messages[] = $success;
+			}
+		} elseif( isset( $_GET['todo'] ) && $_GET['todo'] == 'test' ) {
+			echo $vca_asm_mailer->check_outbox();
+		}
+
+		$url = "admin.php?page=vca-asm-outbox";
+		$sort_url = $url;
+
+		extract( $vca_asm_utilities->table_order( 'id' ) );
+
+		$columns = array(
+			array(
+				'id' => 'to',
+				'title' => __( 'To', 'vca-asm' ),
+				'sortable' => false
+			),
+			array(
+				'id' => 'subject',
+				'title' => __( 'Subject', 'vca-asm' ),
+				'sortable' => false,
+				'actions' => array( 'outbox_read' ),
+				'cap' => 'view_emails'
+			),
+			array(
+				'id' => 'receipients_cnt',
+				'title' => __( 'Queued Mails', 'vca-asm' ),
+				'sortable' => false
+			),
+			array(
+				'id' => 'total_receipients',
+				'title' => __( 'Total Receipients', 'vca-asm' ),
+				'sortable' => false
+			)
+		);
+
+		$queued_emails = $wpdb->get_results(
+			"SELECT * FROM " . $wpdb->prefix."vca_asm_emails_queue", ARRAY_A
+		);
+
+		$rows = array();
+		$i = 0;
+		$total_queue = 0;
+		if ( ! empty( $queued_emails ) ) {
+			foreach ( $queued_emails as $queued_email ) {
+				$the_mail = $wpdb->get_results(
+					"SELECT * FROM " . $wpdb->prefix . "vca_asm_emails " .
+					"WHERE id = " . $queued_email['mail_id'] . " LIMIT 1", ARRAY_A
+				);
+				if ( ! empty( $the_mail ) ) {
+					$the_mail = $the_mail[0];
+					$rows[$i] = array();
+					$rows[$i]['id'] = $queued_email['id'];
+					$rows[$i]['mail_id'] = $queued_email['mail_id'];
+					$rows[$i]['subject'] = $the_mail['subject'];
+					$rows[$i]['to'] = $vca_asm_mailer->determine_for_field( $the_mail['receipient_group'], $the_mail['receipient_id'], $the_mail['membership'] );
+					$rows[$i]['receipients_cnt'] = count( unserialize( $queued_email['receipients'] ) );
+					$rows[$i]['total_receipients'] = ! empty( $queued_email['total_receipients'] ) ? $queued_email['total_receipients'] : '---';
+				}
+				$total_queue = $total_queue + $rows[$i]['receipients_cnt'];
+				$i++;
+			}
+		}
+
+		$page_args = array(
+			'echo' => true,
+			'icon' => 'icon-emails',
+			'title' => __( 'Outbox', 'vca-asm' ),
+			'url' => $url,
+			'messages' => $messages
+		);
+
+		$tbl_args = array(
+			'echo' => true,
+			'orderby' => $orderby,
+			'order' => $order,
+			'toggle_order' => $toggle_order,
+			'page_slug' => 'vca-asm-outbox',
+			'base_url' => $url,
+			'sort_url' => $url,
+			'with_wrap' => false,
+			'icon' => 'icon-emails',
+			'headline' => '',
+			'messages' => $messages,
+			'headspace' => true,
+			'show_empty_message' => true,
+			'empty_message' => __( 'No mails queued for sending...', 'vca-asm' ),
+			'dspl_cnt' => true,
+			'count' => $total_queue,
+			'cnt_txt' => __( '%d Mails queued', 'vca-asm' ),
+			'with_bulk' => false,
+			'bulk_btn' => 'Execute',
+			'bulk_confirm' => '',
+			'bulk_name' => 'bulk',
+			'bulk_param' => 'todo',
+			'bulk_desc' => '',
+			'extra_bulk_html' => '',
+			'bulk_actions' => array()
+		);
+
+		$the_page = new VCA_ASM_Admin_Page( $page_args );
+		$the_table = new VCA_ASM_Admin_Table( $tbl_args, $columns, $rows );
+
+		$the_page->top();
+		if ( ! empty( $queued_emails ) && $vca_asm_mailer->use_packets && $vca_asm_mailer->packet_size ) {
+			global $vca_asm_utilities;
+			$next = wp_next_scheduled( 'vca_asm_check_outbox' );
+			$time_diff = $vca_asm_utilities->date_diff( $next, time() );
+			echo '<p>' .
+					sprintf( __( 'The next package of %1$d e-mails will be sent in %2$d:%3$s', 'vca-asm' ), $vca_asm_mailer->packet_size, $time_diff['minute'], str_pad( strval( $time_diff['second'] ), 2, '0', STR_PAD_LEFT ) ) .
+				'</p>';
+		}
+		$the_table->output();
+		$the_page->bottom();
+	}
+
+	/**
+	 * Outputs tabular data of previously sent mail
+	 *
+	 * @todo Rewrite to use OOP-templates
+	 *
+	 * @since 1.2
 	 * @access public
 	 */
 	public function sent_control() {
-		global $current_user, $wpdb, $vca_asm_geography;
+		global $current_user, $wpdb, $vca_asm_geography, $vca_asm_mailer, $vca_asm_utilities;
 		get_currentuserinfo();
 		$admin_region = get_user_meta( $current_user->ID, 'city', true );
-
-		if( isset( $_GET['todo'] ) && $_GET['todo'] == 'send' ) {
-			/* send it! */
-			$message = $this->mail_send();
-		} else {
-			$message = '';
-		}
 
 		$url = "admin.php?page=vca-asm-emails";
 		$sort_url = $url;
@@ -115,35 +242,25 @@ class VCA_ASM_Admin_Emails {
 		$i = 0;
 		foreach ( $emails_raw as $key => $mail ) {
 			$emails[$i] = $emails_raw[$key];
+
 			$user = new WP_User( $mail['sent_by'] );
-			if( 'Head' === mb_substr( $user->first_name, 0, 4 ) ) {
+			if( 'Head' === mb_substr( $user->first_name, 0, 4 ) ) { //legacy
 				$by =  $vca_asm_geography->get_status( get_user_meta( $user->ID, 'city', true ) ) . ' ' . $user->last_name;
 			} else {
 				$by = trim( $user->first_name . ' ' .$user->last_name );
 			}
 			$emails[$i]['sent_by'] = $by;
-			if( $emails[$i]['membership'] == 2 ) {
-				$mem = __( 'active members', 'vca-asm' );
-			} else {
-				$mem = __( 'all', 'vca-asm' );
-			}
-			if( $emails[$i]['receipient_group'] == 'region' ) {
-				$receipient = $vca_asm_geography->get_name( $emails[$i]['receipient_id'] );
-				$emails[$i]['to'] = $receipient . ' (' . $mem . ')';
-			} elseif( $emails[$i]['receipient_group'] == 'all' ) {
-				$receipient = __( 'All Supporters', 'vca-asm' );
-				$emails[$i]['to'] = $receipient . ' (' . $mem . ')';
-			} elseif( $emails[$i]['receipient_group'] == 'ho' ) {
-				$emails[$i]['to'] = __( 'All Head Ofs', 'vca-asm' );
-			} elseif( $emails[$i]['receipient_group'] == 'admins' ) {
-				$emails[$i]['to'] = __( 'Office / Administrators', 'vca-asm' );
-			} else {
-				$emails[$i]['to'] = __( 'Selection', 'vca-asm' );
-			}
+
+			$emails[$i]['to'] = $vca_asm_mailer->determine_for_field(
+					$emails[$i]['receipient_group'],
+					$emails[$i]['receipient_id'],
+					$emails[$i]['membership']
+			);
+
 			$emails[$i]['from'] = preg_replace( '/<|>/', '', $emails[$i]['from'] );
 			$i++;
 		}
-		$emails = $this->sort_by_key( $emails, $orderby, $order );
+		$emails = $vca_asm_utilities->sort_by_key( $emails, $orderby, $order );
 
 		$email_count = count( $emails );
 
@@ -330,33 +447,6 @@ class VCA_ASM_Admin_Emails {
 	}
 
 	/**
-	 * Sorting Methods
-	 *
-	 * @since 1.0
-	 * @access private
-	 */
-	private function sort_by_key( $arr, $key, $order ) {
-	    global $vca_asm_key2sort;
-		$vca_asm_key2sort = $key;
-		if( $order == 'DESC' ) {
-			usort( $arr, array(&$this, 'sbk_cmp_desc') );
-		} else {
-			usort( $arr, array(&$this, 'sbk_cmp_asc') );
-		}
-		return ( $arr );
-	}
-	private function sbk_cmp_asc( $a, $b ) {
-		global $vca_asm_key2sort;
-		$encoding = mb_internal_encoding();
-		return strcmp( mb_strtolower( $a[$vca_asm_key2sort], $encoding ), mb_strtolower( $b[$vca_asm_key2sort], $encoding ) );
-	}
-	private function sbk_cmp_desc( $b, $a ) {
-		global $vca_asm_key2sort;
-		$encoding = mb_internal_encoding();
-		return strcmp( mb_strtolower( $a[$vca_asm_key2sort], $encoding ), mb_strtolower( $b[$vca_asm_key2sort], $encoding ) );
-	}
-
-	/**
 	 * Outputs form to send mails
 	 *
 	 * @since 1.0
@@ -366,215 +456,10 @@ class VCA_ASM_Admin_Emails {
 		global $wpdb, $current_user, $vca_asm_geography;
 		get_currentuserinfo();
 
-		$admin_region = get_user_meta( $current_user->ID, 'city', true );
-
-		wp_enqueue_script( 'vca-asm-admin-email-preview' );
-		$params = array(
-			'url' => get_option( 'siteurl' ),
-			'btnVal' => __( 'Preview', 'vca-asm' )
-		);
-		wp_localize_script( 'vca-asm-admin-email-preview', 'emailParams', $params );
-
-		$initial = array();
-		if ( isset( $_GET['id'] ) ) {
-			$email_query = $wpdb->get_results(
-				"SELECT subject, message, sent_by FROM " . $wpdb->prefix."vca_asm_emails" .
-				" WHERE id = " . $_GET['id'] . " LIMIT 1", ARRAY_A
-			);
-			$initial['sent_by'] = $email_query[0]['sent_by'];
-			if ( $current_user->has_cap( 'vca_asm_send_global_emails' ) || $current_user->has_cap( 'vca_asm_send_emails' ) && $current_user->ID == $initial['sent_by'] ) {
-				$initial['message'] = $email_query[0]['message'];
-				$initial['subject'] = $email_query[0]['subject'];
-			}
-		}
-
-		/* form parameters */
-		$url = "admin.php?page=vca-asm-emails";
-		$form_action = $url . "&amp;todo=send";
-
-		if( isset( $_GET['uid'] ) ) {
-			$user_obj = new WP_User( intval( $_GET['uid'] ) );
-			$name = $user_obj->first_name . ' ' . $user_obj->last_name;
-			$receipient_field = array(
-				'type' => 'hidden',
-				'label' => _x( 'Receipient', 'Admin Email Interface', 'vca-asm' ),
-				'id' => 'receipient',
-				'value' => 'single'.$user_obj->user_email,
-				'desc' => sprintf( _x( 'You are writing to a single supporter: %s.', 'Admin Email Interface', 'vca-asm' ), $name )
-			);
-		} elseif( isset( $_GET['email'] ) ) {
-			$user_obj = get_user_by( 'email', $_GET['email'] );
-			$name = $user_obj->first_name . ' ' . $user_obj->last_name;
-			$receipient_field = array(
-				'type' => 'hidden',
-				'label' => _x( 'Receipient', 'Admin Email Interface', 'vca-asm' ),
-				'id' => 'receipient',
-				'value' => 'single'.$_GET['email'],
-				'desc' => sprintf( _x( 'You are writing to a single supporter: %s.', 'Admin Email Interface', 'vca-asm' ), $name )
-			);
-		} elseif( isset( $_GET['sids'] ) ) {
-			$receipient_field = array(
-				'type' => 'hidden',
-				'label' => _x( 'Receipient', 'Admin Email Interface', 'vca-asm' ),
-				'id' => 'receipient',
-				'value' => 'selection'.$_GET['sids'],
-				'desc' => _x( 'You are writing to a selected group of supporters.', 'Admin Email Interface', 'vca-asm' )
-			);
-		} elseif( isset( $_GET['group'] ) && ( $_GET['group'] == 'participants' || $_GET['group'] == 'applicants' || $_GET['group'] == 'applicants_global' || $_GET['group'] == 'waiting' ) && isset( $_GET['activity'] ) ) {
-			$name = get_the_title( $_GET['activity'] );
-			$receipient_field = array(
-				'type' => 'hidden',
-				'label' => _x( 'Receipient', 'Admin Email Interface', 'vca-asm' ),
-				'id' => 'receipient',
-				'value' => 'actpart'.$_GET['activity'],
-				'desc' => sprintf( _x( 'You are writing to supporters with accepted applications to &quot;%s&quot;.', 'Admin Email Interface', 'vca-asm' ), $name )
-			);
-			if( $_GET['group'] == 'applicants' ) {
-				$receipient_field['desc'] = sprintf( _x( 'You are writing to supporters currently applying to &quot;%s&quot;.', 'Admin Email Interface', 'vca-asm' ), $name );
-				$receipient_field['value'] = 'actappl'.$_GET['activity'];
-			}
-			if( $_GET['group'] == 'applicants_global' ) {
-				$receipient_field['desc'] = sprintf( _x( 'You are writing to supporters currently applying to &quot;%s&quot; via the global contingent.', 'Admin Email Interface', 'vca-asm' ), $name );
-				$receipient_field['value'] = 'actappg'.$_GET['activity'];
-			}
-			if( $_GET['group'] == 'waiting' ) {
-				$receipient_field['desc'] = sprintf( _x( 'You are writing to supporters currently on the waiting list for &quot;%s&quot;.', 'Admin Email Interface', 'vca-asm' ), $name );
-				$receipient_field['value'] = 'actwait'.$_GET['activity'];
-			}
+		if ( isset( $_GET['tab'] ) && in_array( $_GET['tab'], array( 'newsletter', 'activity' ) ) ) {
+			$active_tab = $_GET['tab'];
 		} else {
-			/* receipients (regions) array for select */
-			$nations = $vca_asm_geography->get_all( 'name', 'ASC', 'nation' );
-			$cities = $vca_asm_geography->get_all( 'name', 'ASC', 'city' );
-			$receipients = array();
-			if( in_array( 'administrator', $current_user->roles ) || 3 === $current_user->ID ) {
-				$receipients[0] = array(
-					'label' => __( 'Testmail to yourself', 'vca-asm' ),
-					'value' => 'tm'
-				);
-			} else {
-				$receipients[0] = array(
-					'label' => __( 'Please select...', 'vca-asm' ),
-					'value' => 'please-select'
-				);
-			}
-			if( current_user_can( 'vca_asm_send_emails_global' ) || current_user_can( 'vca_asm_send_emails_nation' ) ) {
-				$receipients[1] = array(
-					'label' => __( 'All users of the Pool', 'vca-asm' ),
-					'value' => 'all'
-				);
-				$receipients[2] = array(
-					'label' => __( 'All City Users', 'vca-asm' ),
-					'value' => 'ho'
-				);
-				$receipients[3] = array(
-					'label' => __( 'Admin Users (besides City Users)', 'vca-asm' ),
-					'value' => 'admins'
-				);
-				$receipients[4] = array(
-					'label' => __( 'Supporters with no specific region', 'vca-asm' ),
-					'value' => 0
-				);
-				foreach( $nations as $region ) {
-					$receipients[] = array(
-						'label' => $region['name'],
-						'value' => 'nat' . $region['id']
-					);
-				}
-				foreach( $cities as $region ) {
-					switch( $region['type'] ) {
-						case 'cell':
-							$receipients[] = array(
-								'label' =>  $region['name'] . ' (' . __( 'Cell', 'vca-asm' ) . ')',
-								'value' => $region['id']
-							);
-						break;
-						case 'lc':
-							$receipients[] = array(
-								'label' => $region['name'] . ' (' . __( 'Local Crew', 'vca-asm' ) . ')',
-								'value' => $region['id']
-							);
-						break;
-						default:
-							$receipients[] = array(
-								'label' => $region['name'],
-								'value' => $region['id']
-							);
-						break;
-					}
-				}
-			} else {
-				$receipients[] = array(
-					'label' => sprintf( __( 'Supporters from %s', 'vca-asm' ), $vca_asm_geography->get_name( $admin_region ) ),
-					'value' => $admin_region
-				);
-			}
-			$mem_field = array(
-				'type' => 'radio',
-				'label' => _x( 'Membership?', 'Admin Email Interface', 'vca-asm' ),
-				'id' => 'membership',
-				'options' => array(
-					array(
-						'label' => __( 'Active Members', 'vca-asm' ),
-						'value' => 2
-					),
-					array(
-						'label' => _x( 'All', 'Admin Email Interface', 'vca-asm' ),
-						'value' => 0
-					)
-				),
-				'desc' => _x( 'Select whether to send the email to all supporters of the selected group or to active members only.', 'Admin Email Interface', 'vca-asm' )
-			);
-			$receipient_field = array(
-				'type' => 'select',
-				'label' => _x( 'Receipient', 'Admin Email Interface', 'vca-asm' ),
-				'id' => 'receipient',
-				'options' => $receipients,
-				'desc' => _x( 'Select who receives the email. Choose the &quot;Testmail to yourself&quot; to see how it will look in your own inbox.', 'Admin Email Interface', 'vca-asm' )
-			);
-			$extra_selection = array(
-				'type' => 'checkbox',
-				'label' => _x( 'Ignore user settings?', 'Admin Email Interface', 'vca-asm' ),
-				'id' => 'ignore_switch',
-				'desc' => _x( 'As you know from your own profile, users may select which news to receive - general news, regional ones, both or none. In rare cases you have a message so important, that you might want to ignore the users wishes and reach everyone within your selected group. Tick this box to do so. Please do not make use of this feature frequently!', 'Admin Email Interface', 'vca-asm' )
-			);
-		}
-
-		$fields = array(
-			$receipient_field,
-			array(
-				'type' => 'select',
-				'label' => _x( 'Sender', 'Admin Email Interface', 'vca-asm' ),
-				'id' => 'sender',
-				'options' => array(
-					array(
-						'label' => 'no-reply@vivaconagua.org',
-						'value' => 'nr'
-					),
-					array(
-						'label' => _x( 'Your own email address', 'Admin Email Interface', 'vca-asm' ),
-						'value' => 'own'
-					)
-				),
-				'desc' => _x( 'Send the email either from your personal email address or select the generic no-reply.', 'Admin Email Interface', 'vca-asm' )
-			),
-			array(
-				'type' => 'text',
-				'label' =>  _x( 'Subject', 'Admin Email Interface', 'vca-asm' ),
-				'id' => 'subject',
-				'tabindex' => 1,
-				'desc' => _x( "The email's subject line", 'Admin Email Interface', 'vca-asm' ),
-				'value' => ! empty( $initial['subject'] ) ? $initial['subject'] : ''
-			)
-		);
-
-		/* this is somewhat legacy, needs improvement */
-		if( isset( $extra_selection ) ) {
-			$first = array_shift($fields);
-			array_unshift( $fields, $first, $extra_selection );
-		}
-		if( isset( $mem_field ) ) {
-			$first = array_shift($fields);
-			array_unshift( $fields, $first, $mem_field );
+			$active_tab = 'newsletter';
 		}
 
 		$format = 'html';
@@ -584,93 +469,495 @@ class VCA_ASM_Admin_Emails {
 			$format = ! empty( $this->emails_options['email_format_ho'] ) ? $this->emails_options['email_format_ho'] : 'plain';
 		}
 
-		if ( $format !== 'html' ) {
-			$fields[] = array(
-				'type' => 'textarea',
-				'label' =>  _x( 'Message', 'Admin Email Interface', 'vca-asm' ),
-				'id' => 'message',
-				'tabindex' => 2,
-				'desc' => _x( 'Message Body', 'Admin Email Interface', 'vca-asm' ),
-				'value' => ! empty( $initial['message'] ) ? $initial['message'] : ''
+		$this->compose_view( array(), $active_tab, $format );
+	}
+
+	/**
+	 * Outputs the form to compose an email
+	 *
+	 * @since 1.3.3
+	 * @access public
+	 */
+	public function compose_view( $messages = array(), $active_tab = 'newsletter', $editor_type = 'plain' ) {
+		global $current_user, $vca_asm_activities, $vca_asm_geography;
+		get_currentuserinfo();
+
+		wp_enqueue_script( 'vca-asm-admin-email-compose' );
+		$act_sel_options = array();
+		$types = array( 'all' );
+		$types = array_merge( $types, $vca_asm_activities->activity_types );
+		$phases = array( 'all', 'bf', 'app', 'ft', 'pst' );
+		foreach ( $types as $type ) {
+			$act_sel_options[$type] = array();
+			foreach ( $phases as $phase ) {
+				$act_sel_options[$type][$phase] = $vca_asm_activities->options_array_activities(array(
+					'type' => $type,
+					'phase' => $phase
+				));
+			}
+		}
+		wp_localize_script( 'vca-asm-admin-email-compose', 'actSelOptions', $act_sel_options );
+		wp_localize_script( 'vca-asm-admin-email-compose', 'activeTab', array( 'name' => $active_tab ) );
+		wp_localize_script( 'vca-asm-admin-email-compose', 'noActivity', array( 'string' => __( 'No activities for the currently selected criteria...', 'vca-asm' ) ) );
+
+		$admin_city = get_user_meta( $current_user->ID, 'city', true );
+		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
+		$admin_city_name = $vca_asm_geography->get_name( $admin_city );
+		$admin_nation_name = $vca_asm_geography->get_name( $admin_nation );
+
+		wp_enqueue_script( 'vca-asm-admin-email-preview' );
+		$params = array(
+			'url' => get_option( 'siteurl' ),
+			'btnVal' => __( 'Preview', 'vca-asm' )
+		);
+		wp_localize_script( 'vca-asm-admin-email-preview', 'emailParams', $params );
+
+		/* form parameters */
+		$url = "admin.php?page=vca-asm-compose";
+		$form_action = "admin.php?page=vca-asm-outbox&amp;todo=process";
+
+		$initial = array(
+			'sent_by' => '',
+			'message' => '',
+			'subject' => ''
+		);
+		if ( isset( $_GET['id'] ) ) {
+			$email_query = $wpdb->get_results(
+				"SELECT subject, message, sent_by FROM " . $wpdb->prefix."vca_asm_emails" .
+				" WHERE id = " . $_GET['id'] . " LIMIT 1", ARRAY_A
 			);
+			if ( isset( $email_query[0] ) ) {
+				$initial['sent_by'] = $email_query[0]['sent_by'];
+				if ( $current_user->has_cap( 'vca_asm_send_global_emails' ) || $current_user->has_cap( 'vca_asm_send_emails' ) && $current_user->ID == $initial['sent_by'] ) {
+					$initial['message'] = $email_query[0]['message'];
+					$initial['subject'] = $email_query[0]['subject'];
+				}
+			}
 		}
 
-		$output = '<div class="wrap">' .
-				'<div id="icon-write" class="icon32-pa"></div>' .
-				'<h2>' . __( 'Send an email', 'vca-asm' ) . '</h2>';
+		$output = '';
 
-		$output .= '<form name="vca_asm_groupmail_form" method="post" action="' . $form_action . '">' .
-					'<input type="hidden" name="submitted" value="y"/>';
-						require( VCA_ASM_ABSPATH . '/templates/admin-form.php' );
+		switch ( $editor_type ) {
+			case 'html':
+				$editor_field = array(
+					'id' => 'newsletter-editor',
+					'type' => 'tinymce',
+					'label' =>  _x( 'Message', 'Admin Email Interface', 'vca-asm' ),
+					'desc' => _x( 'Message Body', 'Admin Email Interface', 'vca-asm' ),
+					'value' => ! empty( $initial['message'] ) ? $initial['message'] : '',
+					'args' =>array(
+						'media_buttons' => false,
+						'textarea_name' => 'message',
+						'textarea_rows' => 20,
+						'tabindex' => 2,
+						'quicktags' => false,
+						'tinymce' => array(
+							'plugins' => 'fullscreen, paste, spellchecker, tabfocus',
+							'content_css' =>  VCA_ASM_RELPATH . 'css/tinymce.css?ver=' . time(),
+							'theme_advanced_buttons1' => 'bold,italic,underline,strikethrough,separator,styleselect,formatselect,separator,link,unlink,separator,forecolor',
+							'theme_advanced_buttons2' => 'justifyleft,justifycenter,justifyright,justifyfull,separator,bullist,numlist,separator,outdent,indent',
+							'theme_advanced_buttons3' => 'charmap,hr,separator,pastetext,pasteword,removeformat,separator,undo,redo,separator,spellchecker,separator,fullscreen',
+							'theme_advanced_blockformats' => 'p,h1,h2',
+							'theme_advanced_text_colors' => '000000,646567,8F9092,B6B7B9,C5C6C8,D5D6D7,E3E4E5,FFFFFF,008FC1,00A8CF,7EC5E0,C4E3F0,E2007A,E9619C,F19FC1,F9D3E3,002A3D,00586C,588B9B,A9C4CE,A4D8E3,BEE3EB,D5ECF1,EBF7F9,584619,857043,B09E79,D9CDB8,BBA259,CCB882,DDD0AC,EEE7D5,E3CF9A,EBDBB3,F1E6CC,F9F3E6',
+							'theme_advanced_more_colors' => false,
+							'invalid_elements' => 'form,frame,iframe,object,video',
+							'force_hex_style_colors' => true,
+							'theme_advanced_path' => false,
+							'theme_advanced_resizing' => true,
+							'theme_advanced_styles' => 'VcA Link=vca-link',
+							'style_formats' => '[{title:"VcA ' . _x( 'Headline', 'Editor Styles', 'vca-asm' ) . '",block:"h1",styles:{color:"#008FC1",background:"transparent",fontSize:"28px",fontWeight:"bold",lineHeight:"1",marginTop:"0",marginRight:"0",marginBottom:"14px",marginLeft:"0",paddingTop:"0",paddingRight:"0",paddingBottom:"0",paddingLeft:"0",fontFamily:"Verdana,Geneva,Arial,Helvetica,sans-serif;-webkit-text-size-adjust:none;"}},' .
+								'{title:"VcA ' . _x( 'Subline', 'Editor Styles', 'vca-asm' ) . '",block:"h2",styles:{color:"#002A3D",background:"transparent",fontSize:"18px",fontWeight:"bold",lineHeight:"1.1666667",marginTop:"0",marginRight:"0",marginBottom:"21px",marginLeft:"0",paddingTop:"0",paddingRight:"0",paddingBottom:"0",paddingLeft:"0",fontFamily:"Verdana,Geneva,Arial,Helvetica,sans-serif;-webkit-text-size-adjust:none;"}},' .
+								'{title:"VcA ' . _x( 'Lead Paragraph', 'Editor Styles', 'vca-asm' ) . '",block:"p",styles:{color:"#00586C",background:"transparent",fontSize:"14px",fontWeight:"bold",lineHeight:"1.5",marginTop:"0",marginRight:"0",marginBottom:"21px",marginLeft:"0",paddingTop:"0",paddingRight:"0",paddingBottom:"0",paddingLeft:"0",fontFamily:"Verdana,Geneva,Arial,Helvetica,sans-serif;-webkit-text-size-adjust:none;"}},' .
+								'{title:"VcA ' . _x( 'regular Paragraph', 'Editor Styles', 'vca-asm' ) . '",block:"p",styles:{color:"#0B0B0B",background:"transparent",fontWeight:"400",fontSize:"14px",lineHeight:"1.5",marginTop:"0",marginRight:"0",marginBottom:"21px",marginLeft:"0",paddingTop:"0",paddingRight:"0",paddingBottom:"0",paddingLeft:"0",fontFamily:"Verdana,Geneva,Arial,Helvetica,sans-serif;-webkit-text-size-adjust:none;"}},' .
+								'{title:"VcA ' . _x( 'Callout, blue', 'Editor Styles', 'vca-asm' ) . '",block:"p",styles:{color:"#002A3D",fontWeight:"normal",fontSize:"14px",lineHeight:"1.5",background:"#C4E3F0",marginTop:"10px",marginRight:"0",marginBottom:"32px",marginLeft:"0",paddingTop:"21px",paddingRight:"21px",paddingBottom:"21px",paddingLeft:"21px",borderRadius:"22px",fontFamily:"Verdana,Geneva,Arial,Helvetica,sans-serif;-webkit-text-size-adjust:none;"}},' .
+								'{title:"VcA ' . _x( 'Callout, magenta', 'Editor Styles', 'vca-asm' ) . '",block:"p",styles:{color:"#00586c",fontWeight:"bold",fontSize:"14px",lineHeight:"1.5",background:"#F19FC1",marginTop:"10px",marginRight:"0",marginBottom:"32px",marginLeft:"0",paddingTop:"21px",paddingRight:"21px",paddingBottom:"21px",paddingLeft:"21px",borderRadius:"22px",fontFamily:"Verdana,Geneva,Arial,Helvetica,sans-serif;-webkit-text-size-adjust: none;"}}]',
+							'setup' => 'function(ed){ed.onPostProcess.add(function(ed,o){' .
+								'o.content=o.content.replace(/<p>/gi,\'<p style="line-height:1.5;margin-top:0;margin-right:0;margin-bottom:21px;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;color:#0B0B0B;font-size:14px;font-family:Verdana,Geneva,Arial,Helvetica,sans-serif">\');' .
+								'o.content=o.content.replace(/<h1>/gi,\'<h1 style="display:block;line-height:1.5;margin-top:0;margin-right:0;margin-bottom:21px;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;color:#0B0B0B;font-size:28px;font-family:Verdana,Geneva,Arial,Helvetica,sans-serif">\');' .
+								'o.content=o.content.replace(/<h2>|<h3>|<h4>|<h5>|<h6>/gi,\'<h2 style="display:block;line-height:1.16666667;margin-top:0;margin-right:0;margin-bottom:21px;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;color:#0B0B0B;font-size:18px;font-family:Verdana,Geneva,Arial,Helvetica,sans-serif">\');' .
+								'o.content=o.content.replace(/<\/h3>|<\/h4>|<\/h5>|<\/h6>/gi,"<\/h2>");' .
+								'o.content=o.content.replace(/<a([^>]*?)>(?:(?!\s*?<span))/gi,"<a$1 style=\"color:inherit;text-decoration:none;border-bottom:1px dotted #008fc1;\"><span style=\"color:inherit;text-decoration:none;border-bottom:1px dotted #008fc1;\"><span>");' .
+								'o.content=o.content.replace(/<\/a[^>]*?>(?:(?!\s*?&#8288;))/gi,"<\/span><\/span><\/a>&#8288;");' .
+								'o.content=o.content.replace(/<ul(?:[^>]*?)>/gi,"<ul style=\"margin-top:0;margin-right:0;margin-bottom:21px;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:42px;\">");' .
+								'o.content=o.content.replace(/<hr(?:[^>]*?)>/gi,"<hr style=\"margin-top:0;margin-right:0;margin-bottom:21px;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;\">");' .
+								'o.content=o.content.replace(/<li(?:[^>]*?)>/gi,"<li style=\"color:#0B0B0B;font-size:13px;line-height:21px;font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;\">");' .
+								'o.content=o.content.replace(/(<h[1-6][^>]*?>)((?:.(?!<\/h))*?)(<\/h[1-6]>)/gi,"$1<span style=\"font-family:\'Gill Sans Bold Condensed\',\'Gill Sans Condensed\',\'Gill Sans Bold\',\'Gill Sans\',\'Gill Sans MT\'\">$2</span>$3");});}'
+							)
+					)
+				);
+			break;
 
-		echo $output;
+			case 'plain':
+			default:
+				$editor_field = array(
+					'type' => 'textarea',
+					'label' =>  _x( 'Message', 'Admin Email Interface', 'vca-asm' ),
+					'id' => 'message',
+					'tabindex' => 2,
+					'desc' => _x( 'Message Body', 'Admin Email Interface', 'vca-asm' ),
+					'value' => ! empty( $initial['message'] ) ? $initial['message'] : ''
+				);
+			break;
+		}
 
-		if ( $format === 'html' ) {
-			echo '<table class="form-table pool-form"><tbody><tr valign="top"><th scope="row">' .
-					'<label for="message">' . _x( 'Message', 'Admin Email Interface', 'vca-asm' ) . '</label>' .
-				'</th><td>';
+		$compose_box = array(
+			'title' => __( 'The E-Mail', 'vca-asm' ),
+			'fields' => array(
+				array(
+					'type' => 'text',
+					'label' =>  _x( 'Subject', 'Admin Email Interface', 'vca-asm' ),
+					'id' => 'subject',
+					'class' => 'wide-text',
+					'tabindex' => 1,
+					'desc' => _x( 'The email&apos;s subject line', 'Admin Email Interface', 'vca-asm' ),
+					'value' => ! empty( $initial['subject'] ) ? $initial['subject'] : ''
+				),
+				$editor_field
+			)
+		);
 
-			/* Rich-Text Editor */
+		$sender_field = array(
+			'type' => 'select',
+			'label' => _x( 'Sender', 'Admin Email Interface', 'vca-asm' ),
+			'id' => 'sender',
+			'options' => array(
+				array(
+					'label' => 'no-reply@vivaconagua.org',
+					'value' => 'nr'
+				),
+				array(
+					'label' => _x( 'Your own email address', 'Admin Email Interface', 'vca-asm' ),
+					'value' => 'own'
+				)
+			),
+			'desc' => _x( 'Send the email either from your personal email address or select the generic no-reply.', 'Admin Email Interface', 'vca-asm' )
+		);
 
-			add_filter( 'wp_default_editor', create_function( '', 'return "tinymce";' ) );
-			$editor_args = array(
-				'media_buttons' => false,
-				'textarea_name' => 'message',
-				'textarea_rows' => 20,
-				'tabindex' => 2,
-				'quicktags' => false,
-				'tinymce' => array(
-					'plugins' => 'fullscreen, paste, spellchecker, tabfocus',
-					'content_css' =>  VCA_ASM_RELPATH . 'css/tinymce.css?ver=' . time(),
-					'theme_advanced_buttons1' => 'bold,italic,underline,strikethrough,separator,styleselect,formatselect,separator,link,unlink,separator,forecolor',
-					'theme_advanced_buttons2' => 'justifyleft,justifycenter,justifyright,justifyfull,separator,bullist,numlist,separator,outdent,indent',
-					'theme_advanced_buttons3' => 'charmap,hr,separator,pastetext,pasteword,removeformat,separator,undo,redo,separator,spellchecker,separator,fullscreen',
-					'theme_advanced_blockformats' => 'p,h1,h2',
-					'theme_advanced_text_colors' => '000000,646567,8F9092,B6B7B9,C5C6C8,D5D6D7,E3E4E5,FFFFFF,008FC1,00A8CF,7EC5E0,C4E3F0,E2007A,E9619C,F19FC1,F9D3E3,002A3D,00586C,588B9B,A9C4CE,A4D8E3,BEE3EB,D5ECF1,EBF7F9,584619,857043,B09E79,D9CDB8,BBA259,CCB882,DDD0AC,EEE7D5,E3CF9A,EBDBB3,F1E6CC,F9F3E6',
-					'theme_advanced_more_colors' => false,
-					'invalid_elements' => 'form,frame,iframe,object,video',
-					'force_hex_style_colors' => true,
-					'theme_advanced_path' => false,
-					'theme_advanced_resizing' => true,
-					'theme_advanced_styles' => 'VcA Link=vca-link',
-					'style_formats' => '[{title:"VcA ' . _x( 'Headline', 'Editor Styles', 'vca-asm' ) . '",block:"h1",styles:{color:"#008FC1",background:"transparent",fontSize:"28px",fontWeight:"bold",lineHeight:"1",marginTop:"0",marginRight:"0",marginBottom:"14px",marginLeft:"0",paddingTop:"0",paddingRight:"0",paddingBottom:"0",paddingLeft:"0",fontFamily:"Verdana,Geneva,Arial,Helvetica,sans-serif;-webkit-text-size-adjust:none;"}},' .
-						'{title:"VcA ' . _x( 'Subline', 'Editor Styles', 'vca-asm' ) . '",block:"h2",styles:{color:"#002A3D",background:"transparent",fontSize:"18px",fontWeight:"bold",lineHeight:"1.1666667",marginTop:"0",marginRight:"0",marginBottom:"21px",marginLeft:"0",paddingTop:"0",paddingRight:"0",paddingBottom:"0",paddingLeft:"0",fontFamily:"Verdana,Geneva,Arial,Helvetica,sans-serif;-webkit-text-size-adjust:none;"}},' .
-						'{title:"VcA ' . _x( 'Lead Paragraph', 'Editor Styles', 'vca-asm' ) . '",block:"p",styles:{color:"#00586C",background:"transparent",fontSize:"14px",fontWeight:"bold",lineHeight:"1.5",marginTop:"0",marginRight:"0",marginBottom:"21px",marginLeft:"0",paddingTop:"0",paddingRight:"0",paddingBottom:"0",paddingLeft:"0",fontFamily:"Verdana,Geneva,Arial,Helvetica,sans-serif;-webkit-text-size-adjust:none;"}},' .
-						'{title:"VcA ' . _x( 'regular Paragraph', 'Editor Styles', 'vca-asm' ) . '",block:"p",styles:{color:"#0B0B0B",background:"transparent",fontWeight:"400",fontSize:"14px",lineHeight:"1.5",marginTop:"0",marginRight:"0",marginBottom:"21px",marginLeft:"0",paddingTop:"0",paddingRight:"0",paddingBottom:"0",paddingLeft:"0",fontFamily:"Verdana,Geneva,Arial,Helvetica,sans-serif;-webkit-text-size-adjust:none;"}},' .
-						'{title:"VcA ' . _x( 'Callout, blue', 'Editor Styles', 'vca-asm' ) . '",block:"p",styles:{color:"#002A3D",fontWeight:"normal",fontSize:"14px",lineHeight:"1.5",background:"#C4E3F0",marginTop:"10px",marginRight:"0",marginBottom:"32px",marginLeft:"0",paddingTop:"21px",paddingRight:"21px",paddingBottom:"21px",paddingLeft:"21px",borderRadius:"22px",fontFamily:"Verdana,Geneva,Arial,Helvetica,sans-serif;-webkit-text-size-adjust:none;"}},' .
-						'{title:"VcA ' . _x( 'Callout, magenta', 'Editor Styles', 'vca-asm' ) . '",block:"p",styles:{color:"#00586c",fontWeight:"bold",fontSize:"14px",lineHeight:"1.5",background:"#F19FC1",marginTop:"10px",marginRight:"0",marginBottom:"32px",marginLeft:"0",paddingTop:"21px",paddingRight:"21px",paddingBottom:"21px",paddingLeft:"21px",borderRadius:"22px",fontFamily:"Verdana,Geneva,Arial,Helvetica,sans-serif;-webkit-text-size-adjust: none;"}}]',
-					'setup' => 'function(ed){ed.onPostProcess.add(function(ed,o){' .
-						'o.content=o.content.replace(/<p>/gi,\'<p style="line-height:1.5;margin-top:0;margin-right:0;margin-bottom:21px;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;color:#0B0B0B;font-size:14px;font-family:Verdana,Geneva,Arial,Helvetica,sans-serif">\');' .
-						'o.content=o.content.replace(/<h1>/gi,\'<h1 style="display:block;line-height:1.5;margin-top:0;margin-right:0;margin-bottom:21px;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;color:#0B0B0B;font-size:28px;font-family:Verdana,Geneva,Arial,Helvetica,sans-serif">\');' .
-						'o.content=o.content.replace(/<h2>|<h3>|<h4>|<h5>|<h6>/gi,\'<h2 style="display:block;line-height:1.16666667;margin-top:0;margin-right:0;margin-bottom:21px;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;color:#0B0B0B;font-size:18px;font-family:Verdana,Geneva,Arial,Helvetica,sans-serif">\');' .
-						'o.content=o.content.replace(/<\/h3>|<\/h4>|<\/h5>|<\/h6>/gi,"<\/h2>");' .
-						'o.content=o.content.replace(/<a([^>]*?)>(?:(?!\s*?<span))/gi,"<a$1 style=\"color:inherit;text-decoration:none;border-bottom:1px dotted #008fc1;\"><span style=\"color:inherit;text-decoration:none;border-bottom:1px dotted #008fc1;\"><span>");' .
-						'o.content=o.content.replace(/<\/a[^>]*?>(?:(?!\s*?&#8288;))/gi,"<\/span><\/span><\/a>&#8288;");' .
-						'o.content=o.content.replace(/<ul(?:[^>]*?)>/gi,"<ul style=\"margin-top:0;margin-right:0;margin-bottom:21px;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:42px;\">");' .
-						'o.content=o.content.replace(/<hr(?:[^>]*?)>/gi,"<hr style=\"margin-top:0;margin-right:0;margin-bottom:21px;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;\">");' .
-						'o.content=o.content.replace(/<li(?:[^>]*?)>/gi,"<li style=\"color:#0B0B0B;font-size:13px;line-height:21px;font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;\">");' .
-						'o.content=o.content.replace(/(<h[1-6][^>]*?>)((?:.(?!<\/h))*?)(<\/h[1-6]>)/gi,"$1<span style=\"font-family:\'Gill Sans Bold Condensed\',\'Gill Sans Condensed\',\'Gill Sans Bold\',\'Gill Sans\',\'Gill Sans MT\'\">$2</span>$3");});}'
+		if ( $current_user->has_cap('vca_asm_send_emails_global') ) {
+			$rg_options = array(
+				array(
+					'label' => _x( 'All Pool Users', 'Admin Email Interface', 'vca-asm' ),
+					'value' => 'all'
+				),
+				array(
+					'label' => sprintf( _x( 'Pool Users from %s', 'Admin Email Interface', 'vca-asm' ), $admin_nation_name ),
+					'value' => 'alln'
+				),
+				array(
+					'label' => _x( 'All City Users', 'Admin Email Interface', 'vca-asm' ),
+					'value' => 'cu'
+				),
+				array(
+					'label' => sprintf( _x( 'City Users from %s', 'Admin Email Interface', 'vca-asm' ), $admin_nation_name ),
+					'value' => 'cun'
 				)
 			);
-			$initial['message'] = isset( $initial['message'] ) ? $initial['message'] : '';
-			wp_editor( $initial['message'], 'newsletter-editor', $editor_args );
-
-			echo '<br />' .
-				'<span class="description">' . _x( 'Message Body', 'Admin Email Interface', 'vca-asm' ) . '</span>' .
-				'</td></tr></tbody></table>';
+		} elseif ( $current_user->has_cap('vca_asm_send_emails_nation') ) {
+			$rg_options = array(
+				array(
+					'label' => sprintf( _x( 'All Pool Users from %s', 'Admin Email Interface', 'vca-asm' ), $admin_nation_name ),
+					'value' => 'alln'
+				),
+				array(
+					'label' => sprintf( _x( 'City Users from %s', 'Admin Email Interface', 'vca-asm' ), $admin_nation_name ),
+					'value' => 'cun'
+				)
+			);
 		}
-		echo '<p class="submit">' .
-					'<input type="submit" name="mail_submit" id="submit" class="button-primary "' .
-					' onclick="
-						if ( jQuery(\'select#receipient option:selected\').val() == \'please-select\' ) {' .
-							'alert(\'' . __( 'Please choose a receipient...', 'vca-asm' ) . '\'); return false;' .
-						'} else if ( confirm(\'' .
-							__( 'Send Email now?', 'vca-asm' ) .
-						'\') ) { return true; } return false;"' .
-					' value="' .
-					__( 'Send Mail!', 'vca-asm' ) .
-					'"></p></form>' .
-				'<table class="form-table pool-form"><tbody><tr valign="top"><th scope="row">' .
+
+		$rg_options[] = array(
+			'label' => _x( 'by City', 'Admin Email Interface', 'vca-asm' ),
+			'value' => 'city',
+			'class' => 'no-js-hide'
+		);
+		$rg_options[] = array(
+			'label' => _x( 'by City Group', 'Admin Email Interface', 'vca-asm' ),
+			'value' => 'cg',
+			'class' => 'no-js-hide'
+		);
+
+		if ( $current_user->has_cap('vca_asm_send_emails_global') ) {
+			$rg_options[] = array(
+				'label' => _x( 'by Country', 'Admin Email Interface', 'vca-asm' ),
+				'value' => 'nation',
+				'class' => 'no-js-hide'
+			);
+			$rg_options[] = array(
+				'label' => _x( 'by Country Group', 'Admin Email Interface', 'vca-asm' ),
+				'value' => 'ng',
+				'class' => 'no-js-hide'
+			);
+		}
+
+		$newsletter_meta_fields = array(
+			array(
+				'id' => 'mail_type',
+				'type' => 'hidden',
+				'value' => $active_tab
+			),
+			array(
+				'type' => 'radio',
+				'label' => _x( 'Membership?', 'Admin Email Interface', 'vca-asm' ),
+				'id' => 'membership',
+				'options' => array(
+					array(
+						'label' => __( 'All', 'vca-asm' ),
+						'value' => 0
+					),
+					array(
+						'label' => _x( '&quot;Active Members&quot; only', 'Admin Email Interface', 'vca-asm' ),
+						'value' => 2
+					)
+				),
+				'value' => 0,
+				'desc' => _x( 'Select whether to send the email to all users of the selected group or to those with &quot;active membership&quot; status only.', 'Admin Email Interface', 'vca-asm' )
+			),
+			array(
+				'type' => 'checkbox',
+				'label' => _x( 'Ignore user settings?', 'Admin Email Interface', 'vca-asm' ),
+				'id' => 'ignore_switch',
+				'desc' => _x( 'As you know from your own profile, users may select which news to receive - general news, regional ones, both or none. In rare cases you have a message so important, that you might want to ignore the users wishes and reach everyone within your selected group. Tick this box to do so. Please do not make use of this feature frequently!', 'Admin Email Interface', 'vca-asm' )
+			),
+			$sender_field
+		);
+
+		if ( $current_user->has_cap('vca_asm_send_emails_global') || $current_user->has_cap('vca_asm_send_emails_nation') ) {
+			$newsletter_meta_admins = array(
+				array(
+					'type' => 'select',
+					'label' => _x( 'Receipient Group', 'Admin Email Interface', 'vca-asm' ),
+					'id' => 'receipient-group',
+					'options' => $rg_options,
+					'desc' => __( 'Select the type of group this mail will be addressed to.', 'vca-asm' )
+				),
+				array(
+					'type' => 'radio',
+					'label' => __( 'City', 'vca-asm' ),
+					'id' => 'city-id',
+					'row-class' => 'receipient-group-id',
+					'options' => $vca_asm_geography->options_array( array( 'type' => 'city' )),
+					'desc' => _x( 'Select the city you want to write to.', 'Admin Supporters', 'vca-asm' ),
+					'cols' => 3,
+					'js-only' => true
+				),
+				array(
+					'type' => 'radio',
+					'label' => __( 'City Group', 'vca-asm' ),
+					'id' => 'cg-id',
+					'row-class' => 'receipient-group-id',
+					'options' => $vca_asm_geography->options_array( array( 'type' => 'cg' )),
+					'desc' => _x( 'Select the city group you want to write to.', 'Admin Supporters', 'vca-asm' ),
+					'cols' => 3,
+					'js-only' => true
+				)
+			);
+		}
+
+		if ( $current_user->has_cap('vca_asm_send_emails_global') ) {
+			$newsletter_meta_admins[] = array(
+				'type' => 'radio',
+				'label' => __( 'Country', 'vca-asm' ),
+				'id' => 'nation-id',
+				'row-class' => 'receipient-group-id',
+				'options' => $vca_asm_geography->options_array( array( 'type' => 'nation' )),
+				'desc' => _x( 'Select the country you want to write to', 'Admin Supporters', 'vca-asm' ),
+				'cols' => 3,
+				'js-only' => true
+			);
+			$newsletter_meta_admins[] = array(
+				'type' => 'radio',
+				'label' => __( 'Country Group', 'vca-asm' ),
+				'id' => 'ng-id',
+				'row-class' => 'receipient-group-id',
+				'options' => $vca_asm_geography->options_array( array( 'type' => 'ng' )),
+				'desc' => _x( 'Select the country group you want to write to', 'Admin Supporters', 'vca-asm' ),
+				'cols' => 3,
+				'js-only' => true
+			);
+		}
+
+		if ( $current_user->has_cap('vca_asm_send_emails_global') || $current_user->has_cap('vca_asm_send_emails_nation') ) {
+			$newsletter_meta_fields = array_merge( $newsletter_meta_admins, $newsletter_meta_fields );
+			$newsletter_boxes = array(
+				array(
+					'title' => __( 'Receipients &amp; Meta Data', 'vca-asm' ),
+					'fields' => $newsletter_meta_fields
+				),
+				$compose_box
+			);
+		} else {
+			$newsletter_meta_fields[] = array(
+				'type' => 'hidden',
+				'id' => 'receipient-group',
+				'value' => 'city'
+			);
+			$newsletter_meta_fields[] = array(
+				'type' => 'hidden',
+				'id' => 'city-id',
+				'value' => get_user_meta( $current_user->ID, 'city', true )
+			);
+			$newsletter_boxes = array(
+				array(
+					'title' => sprintf( __( 'Newsletter to your %s', 'vca-asm' ), $vca_asm_geography->get_type( $current_user->ID ) ),
+					'fields' => $newsletter_meta_fields
+				),
+				$compose_box
+			);
+		}
+
+		$activity_options_array = $vca_asm_activities->options_array_with_all;
+
+		$act_id = isset( $_GET['activity'] ) ? $_GET['activity'] : NULL;
+		$act_phase = ! empty( $act_id ) ? $vca_asm_activities->get_phase( $act_id ) : 'all';
+		$act_type = ! empty( $act_id ) ? get_post_type( $act_id ) : 'all';
+		$act_group = isset( $_GET['group'] ) ? $_GET['group'] : 'parts';
+
+		$activity_boxes = array(
+			array(
+				'title' => __( 'Receipients &amp; Meta Data', 'vca-asm' ),
+				'fields' => array(
+					array(
+						'id' => 'mail_type',
+						'type' => 'hidden',
+						'value' => $active_tab
+					),
+					array(
+						'id' => 'phases',
+						'type' => 'radio',
+						'label' => __( 'Phase', 'vca-asm' ),
+						'options' => array(
+							array(
+								'label' => __( 'All', 'vca-asm' ),
+								'value' => 'all',
+							),
+							array(
+								'label' => __( 'before application phase', 'vca-asm' ),
+								'value' => 'bf',
+							),
+							array(
+								'label' => __( 'in application phase', 'vca-asm' ),
+								'value' => 'app',
+							),
+							array(
+								'label' => __( 'future activities where the application phase has ended', 'vca-asm' ),
+								'value' => 'ft',
+							),
+							array(
+								'label' => __( 'past activities', 'vca-asm' ),
+								'value' => 'pst',
+							)
+						),
+						'desc' => __( 'Narrow activity list by current phase', 'vca-asm' ),
+						'value' => $act_phase,
+						'cols' => 1,
+						'js-only' => true,
+						'class' => 'no-js-hide'
+					),
+					array(
+						'id' => 'type',
+						'type' => 'radio',
+						'label' => __( 'Type', 'vca-asm' ),
+						'options' => $activity_options_array,
+						'desc' => __( 'Narrow activity list by its type', 'vca-asm' ),
+						'value' => $act_type,
+						'cols' => 1,
+						'js-only' => true,
+						'class' => 'no-js-hide'
+					),
+					array(
+						'id' => 'activity',
+						'type' => 'select',
+						'label' => _x( 'The Activity', 'Admin Email Interface', 'vca-asm' ),
+						'options' => $vca_asm_activities->options_array_activities( array(
+							'phase' => $act_phase,
+							'type' => $act_type,
+							'check_caps' => true
+						)),
+						'value' => $act_id,
+						'desc' => _x( 'Which activity are the users associated with?', 'Admin Email Interface', 'vca-asm' )
+					),
+					array(
+						'id' => 'receipient-group',
+						'type' => 'radio',
+						'label' => _x( 'Group', 'Admin Email Interface', 'vca-asm' ),
+						'options' => array(
+							array(
+								'label' => __( 'Applicants', 'vca-asm' ),
+								'value' => 'apps'
+							),
+							array(
+								'label' => __( 'Participants', 'vca-asm' ),
+								'value' => 'parts'
+							),
+							array(
+								'label' => __( 'Waiting List', 'vca-asm' ),
+								'value' => 'waiting'
+							)
+						),
+						'value' => $act_group,
+						'desc' => _x( 'Select the status of the applications', 'Admin Email Interface', 'vca-asm' )
+					),
+					$sender_field
+				)
+			),
+			$compose_box
+		);
+
+		$adminpage = new VCA_ASM_Admin_Page( array(
+			'echo' => false,
+			'icon' => 'icon-write',
+			'title' => __( 'Send an email', 'vca-asm' ),
+			'messages' => $messages,
+			'url' => $url,
+			'tabs' => array(
+				array(
+					'title' => __( 'Newsletters', 'vca-asm' ),
+					'value' => 'newsletter',
+					'icon' => 'icon-emails'
+				),
+				array(
+					'title' => __( 'Activity Notifications', 'vca-asm' ),
+					'value' => 'activity',
+					'icon' => 'icon-activity'
+				)
+			),
+			'active_tab' => $active_tab
+		));
+
+		$form = new VCA_ASM_Admin_Form( array(
+			'echo' => false,
+			'form' => true,
+			'name' => 'vca-asm-groupmail-form',
+			'method' => 'post',
+			'metaboxes' => true,
+			'js' => false,
+			'url' => $url,
+			'action' => $form_action,
+			'nonce' => 'vca-asm',
+			'id' => 0,
+			'button' => __( 'Send Mail!', 'vca-asm' ),
+			'button_id' => 'sendmail-submit',
+			'top_button' => false,
+			'confirm' => true,
+			'confirm_text' => __( 'Send Email now?', 'vca-asm' ),
+			'has_cap' => true,
+			'fields' => 'activity' === $active_tab ? $activity_boxes : $newsletter_boxes
+		));
+
+		$mb_env = new VCA_ASM_Admin_Metaboxes( array(
+			'echo' => false,
+			'running' => 2,
+			'id' => '',
+			'title' => __( 'Tips &amp; Help', 'vca-asm' )
+		));
+
+		$output .= $adminpage->top();
+
+		$output .= $form->output();
+
+		$output .= $mb_env->top();
+		$output .= $mb_env->mb_top();
+		$output .= '<table class="form-table pool-form"><tbody><tr valign="top"><th scope="row">' .
 					'<label>' . _x( 'Help / Tips', 'Admin Email Interface', 'vca-asm' ) . '</label>' .
 				'</th><td>' .
 					'<p><strong>' . _x( '&quot;Styles&quot; Dropdown Menu', 'Admin Email Interface', 'vca-asm' ) . '</strong><br />' .
@@ -682,7 +969,13 @@ class VCA_ASM_Admin_Emails {
 					'<p><strong>' . _x( 'Copy and Pasting from somewhere else', 'Admin Email Interface', 'vca-asm' ) . '</strong><br />' .
 					_x( 'You <em>can</em> copy and paste from pretty much anywhere and the previously selected formatting will be preserved. Most times that is not what you want though, as it is not inline with the VcA-specific styling used by default. Hence when copying text from somewhere else, please use the &quot;Copy without formatting&quot; Button (3rd from the left, bottom row). If you must copy formatted text from a Word document, it is safest to use the &quot;Copy from Word&quot; Button (4th from the left, bottom row).', 'Admin Email Interface', 'vca-asm' ) .
 					'</p>' .
-			'</td></tr></tbody></table></div>';
+			'</td></tr></tbody></table>';
+		$output .= $mb_env->mb_bottom();
+		$output .= $mb_env->bottom();
+
+		$output .= $adminpage->bottom();
+
+		echo $output;
 	}
 
 	/**
@@ -691,254 +984,83 @@ class VCA_ASM_Admin_Emails {
 	 * @since 1.0
 	 * @access private
 	 */
-	private function mail_send() {
-		global $current_user, $wpdb, $vca_asm_mailer, $vca_asm_geography;
+	private function process() {
+		global $current_user, $wpdb,
+			$vca_asm_mailer, $vca_asm_geography;
 		get_currentuserinfo();
 
-		$membership = 0;
-		$receipient_group = 'all';
+		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
+		$membership = ( isset( $_POST['membership'] ) && in_array( $_POST['membership'], array( 0, 2 ) ) ) ? $_POST['membership'] : 0;
+		$receipient_group = isset( $_POST['receipient-group'] ) ? $_POST['receipient-group'] : '';
 		$receipient_id = 0;
+		$activity_id = isset( $_POST['activity'] ) ? $_POST['activity'] : 0;
 		$save = true;
-		if( isset( $_POST['receipient'] ) && $_POST['receipient'] == 'all' ) {
-			$metaqueries = array( 'relation' => 'AND' );
-			if( ! isset( $_POST['ignore_switch'] ) ) {
-				$metaqueries[] = array(
-					'key' => 'mail_switch',
-					'value' => array( 'all', 'global' ),
-					'compare' => 'IN'
-				);
-			}
-			if( 2 == $_POST['membership'] ) {
-				$metaqueries[] = array(
-					'key' => 'membership',
-					'value' => 2
-				);
-				$membership = 2;
-			}
-			$args = array(
-				'meta_query' => $metaqueries
-			);
-			$users = get_users( $args );
-			$to = array();
-			foreach( $users as $user ) {
-				if( ! in_array( 'pending', $user->roles ) ) {
-					$to[] = $user->user_email;
-				}
-			}
-		} elseif( isset( $_POST['receipient'] ) && substr( $_POST['receipient'], 0, 6 ) === 'single' ) {
-			$to = substr( $_POST['receipient'], 6 );
-			$user_obj = get_user_by( 'email', $to );
-			$receipient_group = 'single';
-			$receipient_id = $user_obj->ID;
-		} elseif( isset( $_POST['receipient'] ) && substr( $_POST['receipient'], 0, 9 ) === 'selection' ) {
-			$users = unserialize( substr( $_POST['receipient'], 9 ) );
-			foreach( $users as $user_id ) {
-				$user = new WP_User( $user_id );
-				$to[] = $user->user_email;
-			}
-			$receipient_group = 'selection';
-		} elseif( isset( $_POST['receipient'] ) && $_POST['receipient'] == 'tm' ) {
-			$receipient_group = 'self';
-			$to = $current_user->user_email;
-			$save = false;
-		} elseif( isset( $_POST['receipient'] ) && $_POST['receipient'] == 'ho' ) {
-			$args = array(
-				'role' => 'head_of'
-			);
-			$supporters = get_users( $args );
-			$to = array();
-			foreach( $supporters as $supporter ) {
-				$to[] = $supporter->user_email;
-			}
-			$receipient_group = 'ho';
-		} elseif( isset( $_POST['receipient'] ) && $_POST['receipient'] == 'admins' ) {
-			$supporters = array_merge(
-				get_users( array( 'role' => 'administrator' ) ),
-				get_users( array( 'role' => 'content_admin' ) ),
-				get_users( array( 'role' => 'activities' ) ),
-				get_users( array( 'role' => 'education' ) ),
-				get_users( array( 'role' => 'network' ) )
-			);
-			$to = array();
-			foreach( $supporters as $supporter ) {
-				$to[] = $supporter->user_email;
-			}
-			$receipient_group = 'admins';
-		} elseif( isset( $_POST['receipient'] ) && substr( $_POST['receipient'], 0, 3 ) === 'act' ) {
-			$subgroup = substr( $_POST['receipient'], 3, 4 );
-			$activity_id = intval( substr( $_POST['receipient'], 7 ) );
-			$to = array();
-			if( $subgroup == 'part' ) {
-				$supporters = $wpdb->get_results(
-					"SELECT supporter FROM " .
-					$wpdb->prefix . "vca_asm_registrations " .
-					"WHERE activity = " . $activity_id, ARRAY_A
-				);
-			} elseif( $subgroup == 'appl' || 'appg' == $subgroup ) {
-				$supporters = $wpdb->get_results(
-					"SELECT supporter FROM " .
-					$wpdb->prefix . "vca_asm_applications " .
-					"WHERE activity = " . $activity_id . " AND state = 0", ARRAY_A
-				);
-			} elseif( $subgroup == 'wait' ) {
-				$supporters = $wpdb->get_results(
-					"SELECT supporter FROM " .
-					$wpdb->prefix . "vca_asm_applications " .
-					"WHERE activity = " . $activity_id . " AND state = 1", ARRAY_A
-				);
-			}
-			$to = array();
-			foreach( $supporters as $supporter ) {
-				$supp_id = $supporter['supporter'];
-				if( $subgroup == 'appg' ) {
-					$slots_arr = get_post_meta( $activity_id, 'slots', true );
-					$user_region = get_user_meta( $supp_id, 'city', true );
-					if( $user_region != 0 && array_key_exists( $user_region, $slots_arr ) ) {
-						continue;
-					}
-				}
-				$user_obj = new WP_User( $supp_id );
-				$to[] = $user_obj->user_email;
-			}
-			var_dump($to);
-			$type = substr( $_POST['receipient'], 3, 4 );
-			if( 'appl' === $type || 'appg' === $type ) {
-				$receipient_group = 'applicants';
-			} elseif( 'wait' === $type ) {
-				$receipient_group = 'waiting';
+		$mail_type = isset( $_POST['mail_type'] ) ? $_POST['mail_type'] : '';
+		$ignore_switch = isset( $_POST['ignore_switch'] ) ? true : false;
+		$receipients = array();
+
+		if ( ! empty( $receipient_group ) ) {
+
+			list( $receipient_id, $receipients ) = $vca_asm_mailer->receipient_id_from_group( $receipient_group, true );
+
+			if ( ! in_array( 'city', $current_user->roles ) ) {
+				$from_name = trim( $current_user->first_name . ' ' . $current_user->last_name );
+				$format = ! empty( $this->emails_options['email_format_admin'] ) ? $this->emails_options['email_format_admin'] : 'html';
 			} else {
-				$receipient_group = 'participants';
+				$city_id = get_user_meta( $current_user->ID, 'city', true );
+				$city_name = $vca_asm_geography->get_name( $city_id );
+				$from_name =  $vca_asm_geography->get_status( $city_id ) . ' ' . $city_name;
+				$format = ! empty( $this->emails_options['email_format_ho'] ) ? $this->emails_options['email_format_ho'] : 'html';
 			}
-			$receipient_id = substr( $_POST['receipient'], 7 );
-		} elseif( isset( $_POST['receipient'] ) && substr( $_POST['receipient'], 0, 3 ) === 'nat' ) {
 
-			$metaqueries = array( 'relation' => 'AND' );
+			$from_email = ( isset( $_POST['sender'] ) && $_POST['sender'] === 'own' ) ? $current_user->user_email : 'no-reply@vivaconagua.org';
 
-			if( ! isset( $_POST['ignore_switch'] ) ) {
-				$metaqueries[] = array(
-					'key' => 'mail_switch',
-					'value' => array( 'all', 'regional' ),
-					'compare' => 'IN'
-				);
-			}
-			if( 2 == $_POST['membership'] ) {
-				$metaqueries[] = array(
-					'key' => 'membership',
-					'value' => 2
-				);
-				$membership = 2;
-			}
-			$metaqueries[] = array(
-				'key' => 'nation',
-				'value' => intval( substr( $_POST['receipient'], 3 ) )
+			$queue_args = array(
+				'receipients' => $receipients,
+				'subject' => $_POST['subject'],
+				'message' => $_POST['message'],
+				'from_name' => $from_name,
+				'from_email' => $from_email,
+				'format' => $format,
+				'save' => $save,
+				'membership' => $membership,
+				'receipient_group' => $receipient_group,
+				'receipient_id' => $receipient_id,
+				'type' => $mail_type,
+				'time' => time()
 			);
-			$args = array(
-				'meta_query' => $metaqueries
+
+			$vca_asm_mailer->queue( $queue_args );
+
+			$success = array(
+				'type' => 'message',
+				'message' => sprintf(
+						_x( 'The Email has been added to the sending queue.', 'Admin Email Interface', 'vca-asm' ) . '</a>'
+					) .
+					'<br />' .
+					sprintf(
+						_x( 'It has been saved to %1$s and you can view it %2$s.', 'Admin Email Interface', 'vca-asm' ),
+						'<a href="admin.php?page=vca-asm-emails" title="' . __( 'View Sent Items', 'vca-asm' ) . '">' . __( 'Sent Items', 'vca-asm' ) . '</a>',
+						'<a href="' . get_site_url() . '/email/?id=' . $insert_id . '" title="' . __( 'Read the E-Mail', 'vca-asm' ) . '">' . __( 'here', 'vca-asm' ) . '</a>'
+					) .
+					'<br /><br />' .
+					'<a title="' . _x( 'One more...', 'Admin Email Interface', 'vca-asm' ) . '" ' .
+						'href="' . get_option( 'siteurl' ) . '/wp-admin/admin.php?page=vca-asm-compose">' .
+							'&larr; ' . _x( 'Send further mails', 'Admin Email Interface', 'vca-asm' ) .
+					'</a>'
 			);
-			$supporters = get_users( $args );
 
-			$to = array();
-			foreach( $supporters as $supporter ) {
-				if ( ! in_array( 'city', $supporter->roles ) && ! in_array( 'head_of', $supporter->roles ) ) {
-					$to[] = $supporter->user_email;
-				}
-			}
-			$receipient_group = 'region';
-			$receipient_id = intval( substr( $_POST['receipient'], 3 ) );
-
-		} elseif( isset( $_POST['receipient'] ) ) {
-			$metaqueries = array( 'relation' => 'AND' );
-			if( ! isset( $_POST['ignore_switch'] ) ) {
-				$metaqueries[] = array(
-					'key' => 'mail_switch',
-					'value' => array( 'all', 'regional' ),
-					'compare' => 'IN'
-				);
-			}
-			if( 2 == $_POST['membership'] ) {
-				$metaqueries[] = array(
-					'key' => 'membership',
-					'value' => 2
-				);
-				$membership = 2;
-			}
-			$metaqueries[] = array(
-				'key' => 'city',
-				'value' => $_POST['receipient']
-			);
-			$args = array(
-				'meta_query' => $metaqueries
-			);
-			$supporters = get_users( $args );
-
-			$to = array();
-			foreach( $supporters as $supporter ) {
-				if ( ! in_array( 'city', $supporter->roles ) && ! in_array( 'head_of', $supporter->roles ) ) {
-					$to[] = $supporter->user_email;
-				}
-			}
-			$receipient_group = 'region';
-			$receipient_id = $_POST['receipient'];
-		}
-
-		$format = 'html';
-		if( ! in_array( 'head_of', $current_user->roles ) && ! in_array( 'city', $current_user->roles ) ) {
-			$from_name = trim( $current_user->first_name . ' ' . $current_user->last_name );
-			$format = ! empty( $this->emails_options['email_format_admin'] ) ? $this->emails_options['email_format_admin'] : 'html';
 		} else {
-			$region_id = get_user_meta( $current_user->ID, 'city', true );
-			$region_name = $vca_asm_geography->get_name( $region_id );
-			$from_name =  $vca_asm_geography->get_status( $region_id ) . ' ' . $region_name;
-			$format = ! empty( $this->emails_options['email_format_ho'] ) ? $this->emails_options['email_format_ho'] : 'plain';
+			$success = false;
 		}
-
-		if( isset( $_POST['sender'] ) && $_POST['sender'] === 'own' ) {
-			if ( ! in_array( 'head_of', $current_user->roles ) && ! in_array( 'city', $current_user->roles ) ) {
-				$from_email = $current_user->user_email;
-			} else {
-				$from_email = $current_user->user_email;
-			}
-		} else {
-			$from_email = NULL;
-		}
-
-		list( $total_count, $success_count, $fail_count, $insert_id ) = $vca_asm_mailer->send( $to, $_POST['subject'], $_POST['message'], $from_name, $from_email, $format, $save, $membership, $receipient_group, $receipient_id );
-
-		$success = '<div class="message"><p>' .
-			sprintf(
-				_x( 'The Email titled "%1$s" has been successfully sent to %2$s out of %3$s recipients.', 'Admin Email Interface', 'vca-asm' ),
-				$_POST['subject'], $success_count, $total_count
-			) .
-			'</p><p>' .
-				sprintf(
-					_x( 'The Email has been saved to %1$s and you can view it %2$s.', 'Admin Email Interface', 'vca-asm' ),
-					'<a href="admin.php?page=vca-asm-emails" title="' . __( 'View Sent Items', 'vca-asm' ) . '">' . __( 'Sent Items', 'vca-asm' ) . '</a>',
-					'<a href="' . get_site_url() . '/email/?id=' . $insert_id . '" title="' . __( 'Read the E-Mail', 'vca-asm' ) . '">' . __( 'here', 'vca-asm' ) . '</a>'
-				) .
-			'</p><p>' .
-				'<a title="' . _x( 'One more...', 'Admin Email Interface', 'vca-asm' ) . '" ' .
-					'href="' . get_option( 'siteurl' ) . '/wp-admin/admin.php?page=vca-asm-compose">' .
-						'&larr; ' . _x( 'Send further mails', 'Admin Email Interface', 'vca-asm' ) .
-					'</a>' .
-			'</p></div>';
 
 		return $success;
 	}
 
-	/******************** CONSTRUCTORS ********************/
+	/******************** CONSTRUCTOR ********************/
 
 	/**
-	 * PHP4 style constructor
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function VCA_ASM_Admin_Emails() {
-		$this->__construct();
-	}
-
-	/**
-	 * PHP5 style constructor
+	 * Constructor
 	 *
 	 * @since 1.0
 	 * @access public

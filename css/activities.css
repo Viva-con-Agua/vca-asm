@@ -4,15 +4,92 @@ This stylesheet is responsible for
 how activities are displayed in the front-end
 */
 
+.activities-container-wrap {
+	width: 103.8%;
+	margin: 0 -1.9%;
+}
+
+.csscolumns-notice {
+	display: none;
+}
+
+@supports ((-webkit-column-count:2) and (-webkit-column-gap:0px)) or
+			((-moz-column-count:2) and (-moz-column-gap:0px)) or
+			((-ms-column-count:2) and (-ms-column-gap:0px)) or
+			((-o-column-count:2) and (-o-column-gap:0px)) or
+			((column-count:2) and (column-gap:0px)) {
+	.no-js .activities-container {
+		-webkit-column-count: 2;
+		-webkit-column-gap: 0px;
+		-moz-column-count: 2;
+		-moz-column-gap: 0px;
+		-ms-column-count: 2;
+		-ms-column-gap: 0px;
+		-o-column-count: 2;
+		-o-column-gap: 0px;
+		column-count: 2;
+		column-gap: 0px;
+		width: 100%;
+	}
+	.no-js .csscolumns-notice {
+		display: inline;
+	}
+}
+
 .activity {
+	width: 46.24%;
+	margin: 2.1em 1.83% 0 1.83%;
+	float: left;
+}
+.activity-open {
+	z-index: 3 !important;
+}
+
+.activity.activity-full-width {
+	width: 100%;
+	margin: 1.1em 0 1em;
+}
+
+.activity.toggle-wrapper {
+	padding: 0;
+}
+
+@supports ((-webkit-column-count:2) and (-webkit-column-gap:0px)) or
+			((-moz-column-count:2) and (-moz-column-gap:0px)) or
+			((-ms-column-count:2) and (-ms-column-gap:0px)) or
+			((-o-column-count:2) and (-o-column-gap:0px)) or
+			((column-count:2) and (column-gap:0px)) {
+	.no-js .activity {
+		display: inline-block;
+		margin: 2.1em 0 0 3.66%;
+		width: 92.68%;
+		box-sizing: border-box;
+		float: none;
+	}
+}
+
+.activity.single-activity {
 	padding: 1.2em 1.3em .9em;
 	border-radius: 1em;
-	margin: 2.1em 0 0;
+	width: 100%;
+	margin: 0;
 	background: #eee7d5;
+	float: none;
+	-webkit-box-sizing: border-box; /* add modernizr test and polyfill this shit! */
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
-div.activity {
-	margin-top: 0;
+
+.activity-island {
+	padding: 1.2em 1.3em .9em;
+	border-radius: 1em;
+	width: 100%;
+	background: #eee7d5;
+	-webkit-box-sizing: border-box; /* add modernizr test and polyfill this shit! */
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 }
+
 .activity a {
 	border-bottom: 1px dotted #008fc1;
 }
@@ -23,8 +100,7 @@ div.activity {
 	text-shadow: 0 0 1px #008fc1;
 	border-color: #e2007a;
 }
-.activity h4,
-.past-activity h4 {
+.activity h4 {
 	font-family: GS;
 	font-size: 1.8em;
 	font-weight: 700;
@@ -43,23 +119,6 @@ div.activity {
 	color: #00586c;
 	text-shadow: 0 0 3px #008fc1;
 	text-decoration: none;
-}
-.past-activity h4 {
-	color: #bba259;
-}
-.past-activity h4 a {
-	color: #bba259;
-}
-.no-touch .past-activity h4 a:hover,
-.past-activity h4 a:focus,
-.past-activity h4 a:active {
-	color: #857043;
-	text-shadow: 0 0 3px #bba259;
-}
-.past-activity p {
-	font-size: 1.2em;
-	margin-bottom: .9em;
-	line-height: 1;
 }
 .activity p.type {
 	color: #008fc1 !important;
@@ -132,6 +191,127 @@ div.activity {
 						0 1px 2px #ddd0ac;
 }
 img.activity-icon {
-	margin: 0;
+	margin: 0 0 0 1.6em;
 	float: right;
+}
+
+/* FILTER BOX
+----------------------------------------- */
+
+div.filter-container.sticky {
+	z-index: 1000;
+	position: fixed;
+	width: 100%;
+	top: 0;
+	left: 0;
+	padding: 0 2em;
+	-webkit-box-sizing: border-box; /* add modernizr test and polyfill this shit! */
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+div.filter-container.sticky .filter-wrap {
+	margin-left: 15em;
+	-webkit-box-sizing: border-box; /* add modernizr test and polyfill this shit! */
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.filter-container .filter-wrap {
+	padding: 1.6em 0 0;
+	margin: 0;
+	background: #f1f2f2;
+	overflow: hidden;
+}
+.filter-container .filter-wrap .filter-inner {
+	padding: .6em 1.3em 1.5em;
+	margin: 0;
+	border-radius: 1em;
+	background: #c4e3f0;
+	overflow: hidden;
+}
+.filter-container .filter-bottom {
+	margin: 0 0 0 15em;
+	padding: 0;
+	height: 2.6em;/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2YxZjJmMiIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmMWYyZjIiIHN0b3Atb3BhY2l0eT0iMCIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+	background: -moz-linear-gradient(top,  rgba(241,242,242,1) 0%, rgba(241,242,242,0) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(241,242,242,1)), color-stop(100%,rgba(241,242,242,0))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top,  rgba(241,242,242,1) 0%,rgba(241,242,242,0) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top,  rgba(241,242,242,1) 0%,rgba(241,242,242,0) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top,  rgba(241,242,242,1) 0%,rgba(241,242,242,0) 100%); /* IE10+ */
+	background: linear-gradient(to bottom,  rgba(241,242,242,1) 0%,rgba(241,242,242,0) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f1f2f2', endColorstr='#00f1f2f2',GradientType=0 ); /* IE6-8 */
+
+}
+.ie9 div.filter-container .filter-bottom,
+.ie10 div.filter-container .filter-bottfom {
+	filter: none;
+}
+div.filter-container div.options-island {
+	margin: 0;
+}
+div.filter-container div.anchors-wrap { /* deprecation fix (element still exists in DOM) */
+	display: none;
+	visibility: hidden;
+}
+div.filter-container h3 {
+	margin: .444444em 0 .38888889em;
+}
+div.filter-container select {
+	margin: .6em .3em 0;
+}
+
+/* CONDITIONAL STYLES / POLYFILLS
+----------------------------------------- */
+
+.js div.minimalistic-activity:hover,
+.js div.minimalistic-activity:active {
+	cursor: pointer;
+}
+
+/* MOBILE
+----------------------------------------- */
+
+@media handheld, only screen and (max-width: 919px) {
+	.activities-container-wrap {
+		width: auto;
+		margin: 0;
+	}
+	.activity {
+		width: 100%;
+		margin: 2.1em 0 0;
+	}
+}
+
+@media only screen and (min-height: 600px) and (min-width: 767px) {
+	div.filter-container.sticky {
+		top: 0;
+	}
+}
+
+@media handheld, only screen and (max-width: 767px) {
+	div.filter-container .filter-bottom,
+	div.filter-container.sticky .filter-wrap {
+		margin-left: 0;
+	}
+}
+
+@media handheld, only screen and (max-height: 699px) {
+	.filter-container.sticky .filter-wrap {
+		padding: 0;
+	}
+	.filter-container.sticky .filter-wrap .filter-inner {
+		padding: .7em 1.3em 1.4em;
+		margin:0;
+		border-radius: 0 0 1em 1em;
+	}
+}
+
+@media handheld, only screen and (max-width: 767px), only screen and (max-height: 699px) {
+	/* collapsable filter box */
+}
+
+@media handheld, only screen and (max-width: 479px) {
+	div.filter-container.sticky {
+		padding: 0 1.2em;
+	}
 }

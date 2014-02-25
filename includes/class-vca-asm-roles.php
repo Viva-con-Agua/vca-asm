@@ -144,7 +144,6 @@ class VCA_ASM_Roles {
 		$roles = $wp_roles->roles;
 		$role_names = $wp_roles->role_names;
 
-		/* define the translatable roles here */
 		$translated_roles = $this->translated_roles;
 
 		foreach ( $roles as $role_slug => $role_info ) {
@@ -161,17 +160,7 @@ class VCA_ASM_Roles {
 	}
 
 	/**
-	 * PHP4 style constructor
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
-	public function VCA_ASM_Roles() {
-		$this->__construct();
-	}
-
-	/**
-	 * PHP5 style constructor
+	 * Constructor
 	 *
 	 * @since 1.3
 	 * @access public

@@ -22,7 +22,8 @@ class VCA_ASM_Admin {
 	 * @access public
 	 */
 	public function high_priority_admin_menu() {
-		global $wpdb, $current_user, $vca_asm_registrations, $vca_asm_admin_actions, $vca_asm_admin_emails, $vca_asm_admin_education, $vca_asm_admin_finances, $vca_asm_admin_geography, $vca_asm_admin_home, $vca_asm_admin_network, $vca_asm_admin_settings, $vca_asm_admin_slot_allocation, $vca_asm_admin_supporters;
+		global $wpdb, $current_user,
+			$vca_asm_registrations, $vca_asm_admin_actions, $vca_asm_admin_emails, $vca_asm_admin_education, $vca_asm_admin_finances, $vca_asm_admin_geography, $vca_asm_admin_home, $vca_asm_admin_network, $vca_asm_admin_settings, $vca_asm_admin_slot_allocation, $vca_asm_admin_supporters;
 
 		/* Home */
 		add_menu_page(
@@ -43,6 +44,17 @@ class VCA_ASM_Admin {
 			array( $vca_asm_admin_home, 'home' )
 		);
 
+		/* Supporter / User */
+		add_menu_page(
+			__( 'Supporters', 'vca-asm' ),
+			__( 'Supporters', 'vca-asm' ),
+			'vca_asm_view_supporters',
+			'vca-asm-supporters',
+			array( $vca_asm_admin_supporters, 'control' ),
+			VCA_ASM_RELPATH . 'img/icon-supporters_32.png',
+			102
+		);
+
 		/* Actions Menu */
 		add_menu_page(
 			__( 'Actions', 'vca-asm' ),
@@ -51,7 +63,7 @@ class VCA_ASM_Admin {
 			'vca-asm-actions',
 			array( $vca_asm_admin_actions, 'actions_overview' ),
 			VCA_ASM_RELPATH . 'img/icon-actions_32.png',
-			102
+			103
 		);
 		add_submenu_page(
 			'vca-asm-actions',
@@ -72,7 +84,7 @@ class VCA_ASM_Admin {
 			'vca-asm-education',
 			array( $vca_asm_admin_education, 'education_overview' ),
 			VCA_ASM_RELPATH . 'img/icon-education_32.png',
-			103
+			104
 		);
 		add_submenu_page(
 			'vca-asm-education',
@@ -84,11 +96,11 @@ class VCA_ASM_Admin {
 		);
 		add_submenu_page(
 			'vca-asm-education',
-			'Free Teacher Workshops',
-			'Free Teacher WS',
+			'Knowledge Tour',
+			'Knowledge Tour',
 			'vca_asm_view_education',
-			'vca-asm-education-workshops',
-			array( $vca_asm_admin_education, 'pseudo_workshops' )
+			'vca-asm-education-tour',
+			array( $vca_asm_admin_education, 'pseudo_tour' )
 		);
 
 		/* Network Menu */
@@ -99,7 +111,7 @@ class VCA_ASM_Admin {
 			'vca-asm-network',
 			array( $vca_asm_admin_network, 'network_overview' ),
 			VCA_ASM_RELPATH . 'img/icon-network_32.png',
-			104
+			105
 		);
 		add_submenu_page(
 			'vca-asm-network',
@@ -108,14 +120,6 @@ class VCA_ASM_Admin {
 			'vca_asm_view_network',
 			'vca-asm-network',
 			array( $vca_asm_admin_network, 'network_overview' )
-		);
-		add_submenu_page(
-			'vca-asm-network',
-			__( 'Pool User', 'vca-asm' ),
-			__( 'Pool User', 'vca-asm' ),
-			'vca_asm_view_supporters',
-			'vca-asm-supporters',
-			array( $vca_asm_admin_supporters, 'control' )
 		);
 		add_submenu_page(
 			'vca-asm-network',
@@ -134,7 +138,7 @@ class VCA_ASM_Admin {
 			'vca-asm-emails',
 			array( $vca_asm_admin_emails, 'sent_control' ),
 			VCA_ASM_RELPATH . 'img/icon-mail_32.png',
-			105
+			106
 		);
 		add_submenu_page(
 			'vca-asm-emails',
@@ -154,6 +158,14 @@ class VCA_ASM_Admin {
 		);
 		add_submenu_page(
 			'vca-asm-emails',
+			__( 'Outbox', 'vca-asm' ),
+			__( 'Outbox', 'vca-asm' ),
+			'vca_asm_view_emails',
+			'vca-asm-outbox',
+			array( $vca_asm_admin_emails, 'outbox_control' )
+		);
+		add_submenu_page(
+			'vca-asm-emails',
 			__( 'Sent Items', 'vca-asm' ),
 			__( 'Sent Items', 'vca-asm' ),
 			'vca_asm_view_emails',
@@ -169,7 +181,7 @@ class VCA_ASM_Admin {
 			'vca-asm-finances',
 			array( $vca_asm_admin_finances, 'control' ),
 			VCA_ASM_RELPATH . 'img/icon-finances_32.png',
-			106
+			107
 		);
 		add_submenu_page(
 			'vca-asm-finances',
@@ -188,7 +200,7 @@ class VCA_ASM_Admin {
 		//	'edit.php',
 		//	'',
 		//	VCA_ASM_RELPATH . 'img/icon-write_32.png',
-		//	107
+		//	108
 		//);
 
 		/* Settings Menu */
@@ -199,7 +211,7 @@ class VCA_ASM_Admin {
 			'vca-asm-settings',
 			array( $vca_asm_admin_settings, 'control' ),
 			VCA_ASM_RELPATH . 'img/icon-settings_32.png',
-			108
+			109
 		);
 		add_submenu_page(
 			'vca-asm-settings',
@@ -281,17 +293,7 @@ class VCA_ASM_Admin {
 	}
 
 	/**
-	 * PHP4 style constructor
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function VCA_ASM_Admin() {
-		$this->__construct();
-	}
-
-	/**
-	 * PHP5 style constructor
+	 * Constructor
 	 *
 	 * @since 1.0
 	 * @access public

@@ -64,10 +64,26 @@ class VCA_ASM_Lists {
 		}
 
 		extract( shortcode_atts( array(
-			'class' => ''
+			'class' => '',
+			'heading' => 1
 		), $atts ) );
 
 		$exclude = $vca_asm_registrations->get_supporter_all();
+
+		if ( isset( $_GET['dir'] ) && isset( $_GET['sort'] ) && 'date' === $_GET['sort'] ) {
+			$order = $_GET['dir'];
+			if ( 'DESC' === $order ) {
+				$toggle_order = 'ASC';
+			} else {
+				$toggle_order = 'DESC';
+				if ( $order !== 'ASC' ) {
+					$order = 'ASC';
+				}
+			}
+		} else {
+			$order = 'ASC';
+			$toggle_order = 'DESC';
+		}
 
 		$args = array(
 			'posts_per_page' 	=>	-1,
@@ -76,7 +92,7 @@ class VCA_ASM_Lists {
 			'post__not_in'		=>	$exclude,
 			'meta_key'			=>	'start_act',
 			'orderby'           =>	'meta_value_num',
-			'order'             =>	'ASC',
+			'order'             =>	$order,
 			'meta_query' => array(
 				'relation' => 'AND',
 				array(
@@ -100,14 +116,21 @@ class VCA_ASM_Lists {
 
 		if( ! empty( $activities->posts ) ) {
 
+			wp_enqueue_script( 'isotope-metafizzy' );
+			wp_enqueue_script( 'vca-asm-activities' );
+
+			wp_enqueue_style( 'vca-asm-activities-style' );
+			wp_enqueue_style( 'vca-asm-isotope-style' );
+
 			$template = new VCA_ASM_Frontend_Activities(
 				$activities,
 				array(
 					'action' => 'app',
-					'list_class' => 'activities-open',
+					'container_class' => 'activities-open',
 					'with_filter' => true,
 					'eligibility_check' => true,
-					'pre_text' => sprintf( __( 'Before you apply for an activity, please make sure you will indeed have spare time on your hands in the given timeframe. For general infos about festivals and VcA, please refer to the %s.', 'vca-asm' ), $faq_link )
+					'heading' => ! empty( $heading ) ? __( 'Current Activities', 'vca-asm' ) : '',
+					'pre_text' => sprintf( __( 'Before you apply for an activity, please make sure you will indeed have spare time on your hands in the given timeframe. For general infos about festivals and VcA, please refer to the %s.', 'vca-asm' ), $faq_link ) . '<br />' . __( 'The following activities are currently in the application phase:', 'vca-asm' )
 				)
 			);
 
@@ -131,8 +154,11 @@ class VCA_ASM_Lists {
 	public function my_activities( $atts ) {
 		global $vca_asm_activities, $vca_asm_registrations;
 
+		wp_enqueue_style( 'vca-asm-activities-style' );
+
 		extract( shortcode_atts( array(
-			'class' => ''
+			'class' => '',
+			'heading' => 1
 		), $atts ) );
 
 		$registrations = $vca_asm_registrations->get_supporter_registrations();
@@ -140,7 +166,12 @@ class VCA_ASM_Lists {
 		$waiting = $vca_asm_registrations->get_supporter_waiting();
 		$registrations_old = $vca_asm_registrations->get_supporter_registrations_old();
 
-		$output = '<section id="section_regs"><p class="pointer">&#9654;</p><h5><a href="#section_regs">' .
+		$output = '';
+
+		if ( ! empty( $heading ) ) {
+			$output .= '<div class="break-heading first"><div class="grid-block"><h2>' . __( 'My Activities', 'vca-asm' ) . '</h2></div></div>';
+		}
+		$output .= '<section id="section_regs"><p class="pointer">&#9654;</p><h5><a href="#section_regs">' .
 				__( 'Activities you are participating in', 'vca-asm' ) . ' <span class="thin">(' . count( $registrations ) . ')</span>' .
 			'</a></h5><div class="acc-body"><div class="measuring-wrapper">';
 
@@ -166,7 +197,7 @@ class VCA_ASM_Lists {
 			$template = new VCA_ASM_Frontend_Activities(
 				$activities,
 				array(
-					'list_class' => 'activities-registrations',
+					'container_class' => 'activities-registrations',
 					'minimalistic' => true
 				)
 			);
@@ -209,7 +240,7 @@ class VCA_ASM_Lists {
 				$activities,
 				array(
 					'action' => 'rev_app',
-					'list_class' => 'activities-applications',
+					'container_class' => 'activities-applications',
 					'minimalistic' => true
 				)
 			);
@@ -250,7 +281,7 @@ class VCA_ASM_Lists {
 			$template = new VCA_ASM_Frontend_Activities(
 				$activities,
 				array(
-					'list_class' => 'activities-waiting',
+					'container_class' => 'activities-waiting',
 					'minimalistic' => true
 				)
 			);
@@ -292,7 +323,7 @@ class VCA_ASM_Lists {
 			$template = new VCA_ASM_Frontend_Activities(
 				$activities,
 				array(
-					'list_class' => 'activities-registrations-old',
+					'container_class' => 'activities-registrations-old',
 					'minimalistic' => true
 				)
 			);

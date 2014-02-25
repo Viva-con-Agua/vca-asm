@@ -498,7 +498,10 @@ class VCA_ASM_Admin_Geography {
 		global $current_user, $vca_asm_geography, $vca_asm_utilities;
 		get_currentuserinfo();
 
-		$vca_asm_geography->update_member_count();
+		if ( ! get_transient( 'vca-asm-update-member-count' ) ) {
+			$vca_asm_geography->update_member_count();
+			set_transient( 'vca-asm-update-member-count', 1, 60*60*24 );
+		}
 
 		$url = "admin.php?page=vca-asm-geography";
 

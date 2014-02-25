@@ -25,7 +25,7 @@ class VCA_ASM_Admin_Actions {
 			'<div id="icon-actions" class="icon32-pa"></div><h2>Übersicht: Aktionsbereich</h2>';
 		$feech = new VCA_ASM_Admin_Future_Feech( array(
 			'title' => 'Übersicht: Aktionsbereich',
-			'version' => '1.5',
+			'version' => '1.6 (?)',
 			'explanation' => 'Statistiken etc.'
 		));
 		$feech->output();

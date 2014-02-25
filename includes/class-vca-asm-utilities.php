@@ -87,7 +87,7 @@ class VcA_ASM_Utilities {
 		/* make sure there is an http:// on all URLs */
 		$string = rtrim( preg_replace( "/([^\w\/])(www\.[a-z0-9\-]+\.[a-z0-9\-]+)/i", "$1http://$2", $string ), "/" );
 		/* create links */
-		$string = preg_replace( "/([\w]+:\/\/[\w-?&;#~=\.\/\@]+[\w\/])/i", "<a target=\"_blank\" title=\"" . __( 'Visit Site', 'vca-asm' ) . "\" href=\"$1\">$1</A>",$string);
+		$string = preg_replace( "/([\w]+:\/\/[\w-?&;%#~=\.\/\@]+[\w\/])/i", "<a target=\"_blank\" title=\"" . __( 'Visit Site', 'vca-asm' ) . "\" href=\"$1\">$1</a>", $string);
 
 		return $string;
 	}

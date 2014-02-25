@@ -25,7 +25,7 @@ class VCA_ASM_Admin_Education {
 			'<div id="icon-education" class="icon32-pa"></div><h2>Übersicht: Bildungsbereich</h2>';
 		$feech = new VCA_ASM_Admin_Future_Feech( array(
 			'title' => 'Übersicht: Bildungsbereich',
-			'version' => '1.5',
+			'version' => '1.6 (?)',
 			'explanation' => 'Statistiken etc.'
 		));
 		$feech->output();
@@ -38,13 +38,13 @@ class VCA_ASM_Admin_Education {
 	 * @since 1.3
 	 * @access public
 	 */
-	public function pseudo_workshops() {
+	public function pseudo_tour() {
 		echo '<div class="wrap">' .
-			'<div id="icon-education" class="icon32-pa"></div><h2>Free Teacher Workshops</h2>';
+			'<div id="icon-education" class="icon32-pa"></div><h2>Knowledge Tour</h2>';
 		$feech = new VCA_ASM_Admin_Future_Feech( array(
-			'title' => 'Free Teacher Workshops',
-			'version' => '1.5',
-			'explanation' => 'Erster Aktivitätstyp des Bildungsbereichs: der Free Teacher Workshop.'
+			'title' => 'Knowledge Tour',
+			'version' => '1.6 (?)',
+			'explanation' => 'Die Tour halt, nee.'
 		));
 		$feech->output();
 		echo '</div>';

@@ -30,6 +30,8 @@ class VCA_ASM_Supporter {
 
 	public $age = '';
 	public $avatar = '';
+	public $avatar_medium = '';
+	public $avatar_small = '';
 	public $birthday = '';
 	public $birthday_combined = '';
 	public $email = '';
@@ -107,6 +109,8 @@ class VCA_ASM_Supporter {
 
 		$this->age = $supp_age['year'];
 		$this->avatar = get_avatar( $supporter_id );
+		$this->avatar_medium = get_avatar( $supporter_id, 96 );
+		$this->avatar_small = get_avatar( $supporter_id, 32 );
 		$this->birthday = ! empty( $supp_bday ) ? strftime ( '%e. %B %Y', $supp_bday ) : __( 'not set', 'vca-asm' );
 		$this->birthday_combined = ! empty( $supp_bday ) ? strftime ( '%e. %B %Y', $supp_bday ) . ' (' . $supp_age['year'] . ')' : __( 'not set', 'vca-asm' );
 		$this->email = $user_obj->user_email;

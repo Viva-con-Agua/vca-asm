@@ -34,6 +34,7 @@ class VCA_ASM_Admin_Table {
 		'headline' => 'Data Table',
 		'data_name' => NULL,
 		'headspace' => false,
+		'messages' => array(),
 		'show_empty_message' => true,
 		'empty_message' => '',
 		'pagination' => false,
@@ -61,17 +62,7 @@ class VCA_ASM_Admin_Table {
 	public $rows = array();
 
 	/**
-	 * PHP4 style constructor
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
-	public function VCA_ASM_Admin_Table( $args, $columns, $rows ) {
-		$this->__construct( $args, $columns, $rows );
-	}
-
-	/**
-	 * PHP5 style constructor
+	 * Constructor
 	 *
 	 * @since 1.3
 	 * @access public
@@ -136,8 +127,12 @@ class VCA_ASM_Admin_Table {
 
 		if ( $with_wrap ) {
 			$output .= '<div class="wrap">' .
-				'<div id="' . $icon . '" class="icon32"><br></div>' .
+				'<div id="' . $icon . '" class="icon32-pa"><br></div>' .
 				'<h2>' . $headline . '</h2><br />';
+
+			if( ! empty( $messages ) ) {
+				$output .= $vca_asm_admin->convert_messages( $messages );
+			}
 		}
 
 		if ( $headspace ) {
@@ -274,7 +269,7 @@ class VCA_ASM_Admin_Table {
 				$output .= '<input type="submit" name="" id="bulk-action-submit" class="button-secondary do-bulk-action" value="' .
 						$bulk_btn . '"';
 				if ( ! empty( $bulk_confirm ) ) {
-					$output .= ' cc="ccc"';// onclick="if ( confirm(\'' . $bulk_confirm . '\') ) { return true; } return false;"';
+					$output .= ' onclick="if ( confirm(\'' . $bulk_confirm . '\') ) { return true; } return false;"';
 				}
 				$output .= '/></div>';
 			} elseif (
@@ -377,6 +372,42 @@ class VCA_ASM_Admin_Table {
 						(
 							'ng' === $column['cap'] &&
 							$current_user->has_cap( 'vca_asm_manage_network_global' )
+						) ||
+						(
+							'slots-actions' === $column['cap'] &&
+							(
+								$current_user->has_cap( 'vca_asm_manage_actions_global' )
+							) ||
+							(
+								$current_user->has_cap( 'vca_asm_manage_actions_nation' )
+							) ||
+							(
+								$current_user->has_cap( 'vca_asm_manage_actions' )
+							)
+						) ||
+						(
+							'slots-education' === $column['cap'] &&
+							(
+								$current_user->has_cap( 'vca_asm_manage_education_global' )
+							) ||
+							(
+								$current_user->has_cap( 'vca_asm_manage_education_nation' )
+							) ||
+							(
+								$current_user->has_cap( 'vca_asm_manage_education' )
+							)
+						) ||
+						(
+							'slots-network' === $column['cap'] &&
+							(
+								$current_user->has_cap( 'vca_asm_manage_network_global' )
+							) ||
+							(
+								$current_user->has_cap( 'vca_asm_manage_network_nation' )
+							) ||
+							(
+								$current_user->has_cap( 'vca_asm_manage_network' )
+							)
 						)
 					) {
 						$capable = true;
@@ -523,6 +554,19 @@ class VCA_ASM_Admin_Table {
 		} else {
 			$name = __( 'this supporter', 'vca-asm' );
 		}
+
+		if( ! empty( $row['name'] ) ) {
+			$activity_title = $row['name'];
+		} else {
+			$activity_title = __( 'this activity', 'vca-asm' );
+		}
+
+		if( ! empty( $row['type'] ) ) {
+			$activity_type = $row['type'];
+		} else {
+			$activity_type = __( 'this activity', 'vca-asm' );
+		}
+
 		$url = $this->args['base_url'];
 
 		$action_count = count( $actions );
@@ -684,10 +728,13 @@ class VCA_ASM_Admin_Table {
 						$current_user->has_cap( 'vca_asm_manage_actions_global' )
 					) ||
 					(
-						$current_user->has_cap( 'vca_asm_manage_actions_nation' )
+						$current_user->has_cap( 'vca_asm_manage_actions_nation' ) &&
+						$admin_nation === get_post_meta( $row['id'], 'nation', true )
 					) ||
 					(
-						$current_user->has_cap( 'vca_asm_manage_actions' )
+						$current_user->has_cap( 'vca_asm_manage_actions' ) &&
+						$admin_city === get_post_meta( $row['id'], 'city', true ) &&
+						'delegate' === get_post_meta( $row['id'], 'delegate', true )
 					)
 				) ||
 				(
@@ -696,10 +743,13 @@ class VCA_ASM_Admin_Table {
 						$current_user->has_cap( 'vca_asm_manage_education_global' )
 					) ||
 					(
-						$current_user->has_cap( 'vca_asm_manage_education_nation' )
+						$current_user->has_cap( 'vca_asm_manage_actions_nation' ) &&
+						$admin_nation === get_post_meta( $row['id'], 'nation', true )
 					) ||
 					(
-						$current_user->has_cap( 'vca_asm_manage_education' )
+						$current_user->has_cap( 'vca_asm_manage_actions' ) &&
+						$admin_city === get_post_meta( $row['id'], 'city', true ) &&
+						'delegate' === get_post_meta( $row['id'], 'delegate', true )
 					)
 				) ||
 				(
@@ -708,10 +758,13 @@ class VCA_ASM_Admin_Table {
 						$current_user->has_cap( 'vca_asm_manage_network_global' )
 					) ||
 					(
-						$current_user->has_cap( 'vca_asm_manage_network_nation' )
+						$current_user->has_cap( 'vca_asm_manage_actions_nation' ) &&
+						$admin_nation === get_post_meta( $row['id'], 'nation', true )
 					) ||
 					(
-						$current_user->has_cap( 'vca_asm_manage_network' )
+						$current_user->has_cap( 'vca_asm_manage_actions' ) &&
+						$admin_city === get_post_meta( $row['id'], 'city', true ) &&
+						'delegate' === get_post_meta( $row['id'], 'delegate', true )
 					)
 				) ||
 				(
@@ -725,8 +778,29 @@ class VCA_ASM_Admin_Table {
 				(
 					'manage-accepted' === $cur_cap &&
 					true
+				) ||
+				(
+					( 'view_emails' === $cur_cap ) &&
+					(
+						$current_user->has_cap( 'vca_asm_view_emails_global' ) ||
+						(
+							$current_user->has_cap( 'vca_asm_view_emails_nation' ) &&
+							$admin_nation &&
+							$admin_nation == 999 // need to pass email nation
+						) ||
+						(
+							$current_user->has_cap( 'vca_asm_view_emails' ) &&
+							$admin_city &&
+							$admin_city == 999 // need to pass email city
+						)
+					)
 				)
 			) {
+				if ( $i !== 0 && $i < $action_count ) {
+					$output .= $flipper ? ' | ' : '<br />';
+					$flipper = ! $flipper;
+				}
+
 				switch( $actions[$i] ) {
 					case 'edit':
 						$output .= '<span class="edit">' .
@@ -867,9 +941,9 @@ class VCA_ASM_Admin_Table {
 					case 'edit_act':
 						$output .= '<span class="edit">' .
 							'<a title="' .
-								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
+								sprintf( __( 'Edit &quot;%s&quot;', 'vca-asm' ), $activity_title ) .
 								'" href="post.php?post=' . $row['id'] . '&action=edit">' .
-								__( 'Edit the activity', 'vca-asm' ) .
+								sprintf( __( 'Edit %s', 'vca-asm' ), $activity_type ) .
 							'</a></span>';
 					break;
 
@@ -878,7 +952,7 @@ class VCA_ASM_Admin_Table {
 							'<a title="' .
 								sprintf( __( 'Manage applications of %s', 'vca-asm' ), $name ) .
 								'" href="' . $url . '&activity=' . $row['id'] . '&tab=apps">' .
-								__( 'Manage applications', 'vca-asm' ) .
+								__( 'Applicants & participants', 'vca-asm' ) .
 							'</a></span>';
 					break;
 
@@ -890,11 +964,40 @@ class VCA_ASM_Admin_Table {
 								__( 'Manage participants', 'vca-asm' ) .
 							'</a></span>';
 					break;
-				}
 
-				if ( ($i + 1) < $action_count ) {
-					$output .= $flipper ? ' | ' : '<br />';
-					$flipper = ! $flipper;
+					case 'emails_read':
+						$output .= '<span class="edit">' .
+								'<a title="' .
+									__( 'View the Email', 'vca-asm' ) .
+									'" target="_blank" href="' . get_option( 'siteurl' ) . '/email?id=' . $row['id'] . '">' .
+									__( 'Read', 'vca-asm' ) .
+								'</a>' .
+							'</span> | ' .
+							'<span class="edit">' .
+								'<a title="' .
+									__( 'Edit the Email and forward it to another receipient group', 'vca-asm' ) .
+									'" href="admin.php?page=vca-asm-compose&amp;id=' . $row['id'] . '">' .
+									__( 'Forward', 'vca-asm' ) .
+								'</a>' .
+							'</span>';
+					break;
+
+					case 'outbox_read':
+						$output .= '<span class="edit">' .
+								'<a title="' .
+									__( 'View the Email', 'vca-asm' ) .
+									'" target="_blank" href="' . get_option( 'siteurl' ) . '/email?id=' . $row['mail_id'] . '">' .
+									__( 'Read', 'vca-asm' ) .
+								'</a>' .
+							'</span> | ' .
+							'<span class="edit">' .
+								'<a title="' .
+									__( 'Edit the Email and forward it to another receipient group', 'vca-asm' ) .
+									'" href="admin.php?page=vca-asm-compose&amp;id=' . $row['mail_id'] . '">' .
+									__( 'Forward', 'vca-asm' ) .
+								'</a>' .
+							'</span>';
+					break;
 				}
 			} else {
 				$output .= '&nbsp;';

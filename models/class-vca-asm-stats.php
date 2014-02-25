@@ -23,14 +23,25 @@ class VCA_ASM_Stats {
 	public $supporters_active_total = 0;
 	public $supporters_applied_total = 0;
 	public $supporters_inactive_total = 0;
+	public $supporters_complete_total = 0;
 	public $supporters_incomplete_total = 0;
+
+	public $supporters_complete_under25 = 0;
+	public $supporters_complete_over25 = 0;
+	public $supporters_complete_under25_clean = 0;
+	public $supporters_complete_over25_clean = 0;
+	public $supporters_average_age = 0;
+
 	public $supporters_total_city = 0;
 	public $supporters_active_city = 0;
 	public $supporters_applied_city = 0;
 	public $supporters_inactive_city = 0;
+	public $supporters_complete_city = 0;
 	public $supporters_incomplete_city = 0;
+
 	public $admins_total = 0;
 	public $admins_city = 0;
+
 	public $cities_total = 0;
 	public $cities_cells = 0;
 	public $cities_crews = 0;
@@ -50,18 +61,47 @@ class VCA_ASM_Stats {
 		)
 	);
 
-
 	/**
 	 * Assigns values to class properties
 	 *
 	 * @since 1.2
 	 * @access public
 	 */
-	public function gather_stats() {
-		global $current_user, $wpdb, $vca_asm_activities, $vca_asm_geography;
-		get_currentuserinfo();
+	public function set_properties() {
+		//delete_transient( 'vca-asm-statistics' );
+		if ( ! get_transient( 'vca-asm-statistics' ) ) {
+			$this->gather_global_stats();
+			set_transient( 'vca-asm-statistics', 1, 60*60*24 );
+		} else {
 
-		$admin_region = get_user_meta( $current_user->ID, 'city', true );
+			global $wpdb;
+
+			$stats = $wpdb->get_results(
+				"SELECT cache FROM " .
+				$wpdb->prefix . "vca_asm_cache " .
+				"WHERE handle = 'stats' LIMIT 1", ARRAY_A
+			);
+
+			$cached_stats = unserialize( $stats[0]['cache'] );
+
+			foreach ( $cached_stats as $cached_stat_key => $cached_stat_value ) {
+				$this->{$cached_stat_key} = $cached_stat_value;
+			}
+
+			$this->gather_local_stats();
+		}
+	}
+
+	/**
+	 * Gather global statistics
+	 *
+	 * @since 1.2
+	 * @access public
+	 */
+	public function gather_global_stats() {
+		global $current_user, $wpdb, $vca_asm_activities, $vca_asm_geography, $vca_asm_utilities;
+
+		$admin_city = get_user_meta( $current_user->ID, 'city', true );
 		$user_count = count_users();
 		$this->supporters_total_total = $user_count['avail_roles']['supporter'];
 		$this->supporters_total_city = count( get_users( array(
@@ -69,18 +109,18 @@ class VCA_ASM_Stats {
 			'meta_query' => array(
 				array(
 					'key' => 'city',
-					'value' => $admin_region,
+					'value' => $admin_city,
 					'compare' => '=',
 					'type' => 'numeric'
 				)
 			)
 		) ) );
-		$this->admins_total = $user_count['total_users'] - ( $user_count['avail_roles']['supporter'] + $user_count['avail_roles']['city'] );
+		$this->admins_total = $user_count['total_users'] - ( $user_count['avail_roles']['pending'] + $user_count['avail_roles']['supporter'] + $user_count['avail_roles']['city'] );
 		$users_city = count( get_users( array(
 				'meta_query' => array(
 				array(
 					'key' => 'city',
-					'value' => $admin_region,
+					'value' => $admin_city,
 					'compare' => '=',
 					'type' => 'numeric'
 				)
@@ -91,7 +131,7 @@ class VCA_ASM_Stats {
 			'meta_query' => array(
 				array(
 					'key' => 'city',
-					'value' => $admin_region,
+					'value' => $admin_city,
 					'compare' => '=',
 					'type' => 'numeric'
 				)
@@ -122,7 +162,7 @@ class VCA_ASM_Stats {
 				),
 				array(
 					'key' => 'city',
-					'value' => $admin_region,
+					'value' => $admin_city,
 					'compare' => '=',
 					'type' => 'numeric'
 				)
@@ -151,7 +191,7 @@ class VCA_ASM_Stats {
 				),
 				array(
 					'key' => 'city',
-					'value' => $admin_region,
+					'value' => $admin_city,
 					'compare' => '=',
 					'type' => 'numeric'
 				)
@@ -159,23 +199,52 @@ class VCA_ASM_Stats {
 		) ) );
 
 		$inactive = get_users( array( 'role' => 'supporter' ) );
+		$age_outliers = 0;
+		$ages_sum = 0;
+		$ages_sum_clean = 0;
 		foreach( $inactive as $supporter ) {
 			$mem = get_user_meta( $supporter->ID, 'membership', true );
+			$supp_fname = get_user_meta( $supporter->ID, 'first_name', true );
+			$supp_lname = get_user_meta( $supporter->ID, 'last_name', true );
+			$supp_city = get_user_meta( $supporter->ID, 'city', true );
+			$supp_bday = get_user_meta( $supporter->ID, 'birthday', true );
 			if( empty( $mem ) ) {
 				$this->supporters_inactive_total++;
-				if( $admin_region === get_user_meta( $supporter->ID, 'city', true ) ) {
+				if( $admin_city === $supp_city ) {
 					$this->supporters_inactive_city++;
 				}
 			}
-			$supp_fname = get_user_meta( $supporter->ID, 'first_name', true );
-			$supp_lname = get_user_meta( $supporter->ID, 'last_name', true );
-			if( empty( $supp_fname ) || empty( $supp_lname ) ) {
+			if( empty( $supp_fname ) || empty( $supp_lname ) || empty( $supp_bday ) ) {
 				$this->supporters_incomplete_total++;
-				if( $admin_region === get_user_meta( $supporter->ID, 'city', true ) ) {
+				if( $admin_city === $supp_city ) {
 					$this->supporters_incomplete_city++;
+				}
+			} else {
+				$this->supporters_complete_total++;
+				if( $admin_city === $supp_city ) {
+					$this->supporters_complete_city++;
+				}
+				$supp_age = $vca_asm_utilities->date_diff( time(), intval( $supp_bday ) );
+				$ages_sum = $ages_sum + intval($supp_age['year']);
+				if ( 16 < $supp_age['year'] && $supp_age['year'] < 41 ) {
+					$ages_sum_clean = $ages_sum_clean + intval($supp_age['year']);
+					if ( 25 > $supp_age['year'] ) {
+						$this->supporters_complete_under25_clean++;
+					} else {
+						$this->supporters_complete_over25_clean++;
+					}
+				} else {
+					$age_outliers++;
+				}
+				if ( 25 > $supp_age['year'] ) {
+					$this->supporters_complete_under25++;
+				} else {
+					$this->supporters_complete_over25++;
 				}
 			}
 		}
+
+		$this->supporters_average_age = round( $ages_sum_clean / ( $this->supporters_complete_total - $age_outliers ), 2 );
 
 		$this->cities_total = $wpdb->get_var(
 			"SELECT COUNT(id) FROM " .
@@ -302,26 +371,141 @@ class VCA_ASM_Stats {
 			}
 
 		}
+
+		$to_be_cached = serialize( get_object_vars( $this ) );
+
+		$exists = $wpdb->get_results(
+			"SELECT handle FROM " .
+			$wpdb->prefix . "vca_asm_cache " .
+			"WHERE handle = 'stats' LIMIT 1", ARRAY_A
+		);
+
+		if ( ! empty( $exists ) ) {
+
+			$wpdb->update(
+				$wpdb->prefix.'vca_asm_cache',
+				array( 'cache' => $to_be_cached ),
+				array( 'handle'=> 'stats' ),
+				array( '%s' ),
+				array( '%s' )
+			);
+
+		} else {
+
+			$wpdb->insert(
+				$wpdb->prefix.'vca_asm_cache',
+				array( 'cache' => $to_be_cached, 'handle'=> 'stats' ),
+				array( '%s', '%s' )
+			);
+
+		}
 	}
 
 	/**
-	 * PHP4 style constructor
+	 * Gather local statistics
 	 *
-	 * @since 1.0
+	 * @since 1.4
 	 * @access public
 	 */
-	public function VcA_ASM_Stats() {
-		$this->__construct();
+	public function gather_local_stats() {
+		global $current_user;
+
+		$admin_city = get_user_meta( $current_user->ID, 'city', true );
+		$all_city_users = get_users( array(
+			'role' => 'supporter',
+			'meta_query' => array(
+				array(
+					'key' => 'city',
+					'value' => $admin_city,
+					'compare' => '=',
+					'type' => 'numeric'
+				)
+			)
+		));
+		$this->supporters_total_city = count( $all_city_users );
+		$users_city = count( get_users( array(
+				'meta_query' => array(
+				array(
+					'key' => 'city',
+					'value' => $admin_city,
+					'compare' => '=',
+					'type' => 'numeric'
+				)
+			)
+		) ) );
+		$city_users_city = count( get_users( array(
+			'role' => 'city',
+			'meta_query' => array(
+				array(
+					'key' => 'city',
+					'value' => $admin_city,
+					'compare' => '=',
+					'type' => 'numeric'
+				)
+			)
+		) ) );
+		$this->admins_city = $users_city - ( $city_users_city + $this->supporters_total_city );
+
+		$this->supporters_active_city = count( get_users( array(
+			'role' => 'supporter',
+			'meta_query' => array(
+				'relation' => 'AND',
+				array(
+					'key' => 'membership',
+					'value' => 2,
+					'compare' => '=',
+					'type' => 'numeric'
+				),
+				array(
+					'key' => 'city',
+					'value' => $admin_city,
+					'compare' => '=',
+					'type' => 'numeric'
+				)
+			)
+		) ) );
+		$this->supporters_applied_city = count( get_users( array(
+			'role' => 'supporter',
+			'meta_query' => array(
+				'relation' => 'AND',
+				array(
+					'key' => 'membership',
+					'value' => 1,
+					'compare' => '=',
+					'type' => 'numeric'
+				),
+				array(
+					'key' => 'city',
+					'value' => $admin_city,
+					'compare' => '=',
+					'type' => 'numeric'
+				)
+			)
+		) ) );
+
+		foreach( $all_city_users as $supporter ) {
+			$mem = get_user_meta( $supporter->ID, 'membership', true );
+			$supp_fname = get_user_meta( $supporter->ID, 'first_name', true );
+			$supp_lname = get_user_meta( $supporter->ID, 'last_name', true );
+			if( empty( $mem ) ) {
+				$this->supporters_inactive_city++;
+			}
+			if( empty( $supp_fname ) || empty( $supp_lname ) || empty( $supp_bday ) ) {
+				$this->supporters_incomplete_city++;
+			} else {
+				$this->supporters_complete_city++;
+			}
+		}
 	}
 
 	/**
-	 * PHP5 style constructor
+	 * Constructor
 	 *
 	 * @since 1.0
 	 * @access public
 	 */
 	public function __construct() {
-		$this->gather_stats();
+		$this->set_properties();
 	}
 
 } // class
