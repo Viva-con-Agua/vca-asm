@@ -121,13 +121,22 @@ class VCA_ASM_Activities {
 			),
 			'geo' => array (
 				array(
+					'label'	=> __( 'Country', 'vca-asm' ),
+					'desc'	=> _x( 'Associate the activity with a country.', 'Geo Meta Box', 'vca-asm' ) . ' ' . _x( 'This is irrelevant to slots &amp; participants and only matters for categorization and sorting.', 'Geo Meta Box', 'vca-asm' ),
+					'id'	=> 'nation',
+					'type'	=> 'select',
+					'options' => $vca_asm_geography->options_array( array( 'type' => 'nation' ) )
+				),
+				array(
 					'label'	=> _x( 'City', 'Geo Meta Box', 'vca-asm' ),
-					'desc'	=> _x( 'Associate with the activity with a city. This is irrelevant to slots &amp; participants and only matters for categorization and sorting.', 'Region Meta Box', 'vca-asm' ),
-					'id'	=> 'geo',
+					'desc'	=> _x( 'Associate the activity with a city.', 'Geo Meta Box', 'vca-asm' ) . ' ' . _x( 'This is irrelevant to slots &amp; participants and only matters for categorization and sorting.', 'Geo Meta Box', 'vca-asm' ),
+					'id'	=> 'city',
 					'type'	=> 'select',
 					'options' => $vca_asm_geography->options_array( array(
 						'global_option' => _x( 'no specific city', 'Regions', 'vca-asm' ),
-						'type' => 'city'
+						'type' => 'city',
+						'descendants_of' => ( is_object( $this->the_activity ) && ! empty( $this->the_activity->nation ) ) ?
+							$this->the_activity->nation : 40
 					))
 				),
 				array(
@@ -156,14 +165,14 @@ class VCA_ASM_Activities {
 				),
 				array(
 					'label' => _x( 'Directions', 'Festival Data Meta Box', 'vca-asm' ),
-					'desc'	=> _x( 'Description of how to reach the festival grounds', 'Festival Data Meta Box', 'vca-asm' ) . ' ' . __( 'You can use &lt;br /&gt; tags for line breaks.', 'vca-asm' ),
+					'desc'	=> _x( 'Description of how to reach the festival grounds', 'Festival Data Meta Box', 'vca-asm' ),
 					'id'	=> 'directions',
 					'type'	=> 'textarea'
 				),
 				array(
-					'label' => _x( 'Parking Lot(s)', 'Festival Data Meta Box', 'vca-asm' ),
-					'desc'	=> _x( 'How many parking lots are where?', 'Festival Data Meta Box', 'vca-asm' ) . ' ' . __( 'You can use &lt;br /&gt; tags for line breaks.', 'vca-asm' ),
-					'id'	=> 'parking',
+					'label' => _x( 'additional Notes', 'Activity Data Meta Box', 'vca-asm' ),
+					'desc'	=> _x( 'Got anything else to say?', 'Festival Data Meta Box', 'vca-asm' ),
+					'id'	=> 'notes',
 					'type'	=> 'textarea'
 				)
 			),
@@ -259,8 +268,7 @@ class VCA_ASM_Activities {
 				),
 				array(
 					'id' => 'contact_mobile',
-					'type' => 'contact',
-					'validation' => 'phone'
+					'type' => 'contact'
 				)
 			)
 		);
@@ -289,7 +297,7 @@ class VCA_ASM_Activities {
 		} else {
 			$custom_fields['participants'] = array(
 				array(
-					'label' => _x( 'Applicants', 'Registrations Meta Box', 'vca-asm' ),
+					'label' => _x( '(denied) Applicants', 'Registrations Meta Box', 'vca-asm' ),
 					'id' => 'applicants',
 					'type' => 'applicants',
 					'desc' => __( 'Supporters that had unsuccessfully applied to this activity', 'vca-asm' )
@@ -588,64 +596,64 @@ class VCA_ASM_Activities {
 
 		$messages['concert'] = array(
 			0 => '', // Unused. Messages start at index 1.
-			1 => sprintf( __( 'Concert updated. <a href=&quot;%s&quot;>View Concert</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
+			1 => sprintf( __( 'Concert updated. <a href="%s">View Concert</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
 			2 => __( 'Custom field updated.', 'vca-asm' ),
 			3 => __( 'Custom field deleted.', 'vca-asm' ),
 			4 => __( 'Concert updated.', 'vca-asm' ),
 			5 => isset($_GET['revision']) ? sprintf( __( 'Concert restored to revision from %s', 'vca-asm' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-			6 => sprintf( __( 'Concert published. <a href=&quot;%s&quot;>View Concert</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
+			6 => sprintf( __( 'Concert published. <a href="%s">View Concert</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
 			7 => __( 'Concert saved.', 'vca-asm' ),
-			8 => sprintf( __( 'Concert submitted. <a target=&quot;_blank&quot; href=&quot;%s&quot;>Preview Concert</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) ),
-			9 => sprintf( __( 'Concert scheduled for: <strong>%1$s</strong>. <a target=&quot;_blank&quot; href=&quot;%2$s&quot;>Preview Concert</a>', 'vca-asm' ),
+			8 => sprintf( __( 'Concert submitted. <a target="_blank" href="%s">Preview Concert</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) ),
+			9 => sprintf( __( 'Concert scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview Concert</a>', 'vca-asm' ),
 			date_i18n( get_option( 'date_format' ), strtotime( $post->post_date ) ), esc_url( get_permalink($post_ID) ) ),
-			10 => sprintf( __( 'Concert draft updated. <a target=&quot;_blank&quot; href=&quot;%s&quot;>Preview Concert</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) )
+			10 => sprintf( __( 'Concert draft updated. <a target="_blank" href="%s">Preview Concert</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) )
 		);
 
 		$messages['festival'] = array(
 			0 => '', // Unused. Messages start at index 1.
-			1 => sprintf( __( 'Festival updated. <a href=&quot;%s&quot;>View Festival</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
+			1 => sprintf( __( 'Festival updated. <a href="%s">View Festival</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
 			2 => __( 'Custom field updated.', 'vca-asm' ),
 			3 => __( 'Custom field deleted.', 'vca-asm' ),
 			4 => __( 'Festival updated.', 'vca-asm' ),
 			5 => isset($_GET['revision']) ? sprintf( __( 'Festival restored to revision from %s', 'vca-asm' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-			6 => sprintf( __( 'Festival published. <a href=&quot;%s&quot;>View Festival</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
+			6 => sprintf( __( 'Festival published. <a href="%s">View Festival</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
 			7 => __( 'Festival saved.', 'vca-asm' ),
-			8 => sprintf( __( 'Festival submitted. <a target=&quot;_blank&quot; href=&quot;%s&quot;>Preview Festival</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) ),
-			9 => sprintf( __( 'Festival scheduled for: <strong>%1$s</strong>. <a target=&quot;_blank&quot; href=&quot;%2$s&quot;>Preview Festival</a>', 'vca-asm' ),
+			8 => sprintf( __( 'Festival submitted. <a target="_blank" href="%s">Preview Festival</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) ),
+			9 => sprintf( __( 'Festival scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview Festival</a>', 'vca-asm' ),
 			date_i18n( get_option( 'date_format' ), strtotime( $post->post_date ) ), esc_url( get_permalink($post_ID) ) ),
-			10 => sprintf( __( 'Festival draft updated. <a target=&quot;_blank&quot; href=&quot;%s&quot;>Preview Festival</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) )
+			10 => sprintf( __( 'Festival draft updated. <a target="_blank" href="%s">Preview Festival</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) )
 		);
 
 		$messages['miscactions'] = array(
 			0 => '', // Unused. Messages start at index 1.
-			1 => sprintf( __( 'Miscellaneous activity updated. <a href=&quot;%s&quot;>View miscellaneous activity</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
+			1 => sprintf( __( 'Miscellaneous activity updated. <a href="%s">View miscellaneous activity</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
 			2 => __( 'Custom field updated.', 'vca-asm' ),
 			3 => __( 'Custom field deleted.', 'vca-asm' ),
 			4 => __( 'Miscellaneous activity updated.', 'vca-asm' ),
 			5 => isset($_GET['revision']) ? sprintf( __( 'miscellaneous activity restored to revision from %s', 'vca-asm' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-			6 => sprintf( __( 'Miscellaneous activity published. <a href=&quot;%s&quot;>View miscellaneous activity</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
+			6 => sprintf( __( 'Miscellaneous activity published. <a href="%s">View miscellaneous activity</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
 			7 => __( 'Miscellaneous activity saved.', 'vca-asm' ),
-			8 => sprintf( __( 'Miscellaneous activity submitted. <a target=&quot;_blank&quot; href=&quot;%s&quot;>Preview miscellaneous activity</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) ),
-			9 => sprintf( __( 'Miscellaneous activity scheduled for: <strong>%1$s</strong>. <a target=&quot;_blank&quot; href=&quot;%2$s&quot;>Preview miscellaneous activity</a>', 'vca-asm' ),
+			8 => sprintf( __( 'Miscellaneous activity submitted. <a target="_blank" href="%s">Preview miscellaneous activity</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) ),
+			9 => sprintf( __( 'Miscellaneous activity scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview miscellaneous activity</a>', 'vca-asm' ),
 			date_i18n( get_option( 'date_format' ), strtotime( $post->post_date ) ), esc_url( get_permalink($post_ID) ) ),
-			10 => sprintf( __( 'Miscellaneous activity draft updated. <a target=&quot;_blank&quot; href=&quot;%s&quot;>Preview miscellaneous activity</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) )
+			10 => sprintf( __( 'Miscellaneous activity draft updated. <a target="_blank" href="%s">Preview miscellaneous activity</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) )
 		);
 		$messages['misceducation'] = $messages['miscactions'];
 		$messages['miscnetwork'] = $messages['miscactions'];
 
 		$messages['nwgathering'] = array(
 			0 => '', // Unused. Messages start at index 1.
-			1 => sprintf( __( 'Network Gathering updated. <a href=&quot;%s&quot;>View Network Gathering</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
+			1 => sprintf( __( 'Network Gathering updated. <a href="%s">View Network Gathering</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
 			2 => __( 'Custom field updated.', 'vca-asm' ),
 			3 => __( 'Custom field deleted.', 'vca-asm' ),
 			4 => __( 'Network Gathering updated.', 'vca-asm' ),
 			5 => isset($_GET['revision']) ? sprintf( __( 'Network Gathering restored to revision from %s', 'vca-asm' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
-			6 => sprintf( __( 'Network Gathering published. <a href=&quot;%s&quot;>View Network Gathering</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
+			6 => sprintf( __( 'Network Gathering published. <a href="%s">View Network Gathering</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
 			7 => __( 'Network Gathering saved.', 'vca-asm' ),
-			8 => sprintf( __( 'Network Gathering submitted. <a target=&quot;_blank&quot; href=&quot;%s&quot;>Preview Network Gathering</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) ),
-			9 => sprintf( __( 'Network Gathering scheduled for: <strong>%1$s</strong>. <a target=&quot;_blank&quot; href=&quot;%2$s&quot;>Preview Network Gathering</a>', 'vca-asm' ),
+			8 => sprintf( __( 'Network Gathering submitted. <a target="_blank" href="%s">Preview Network Gathering</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) ),
+			9 => sprintf( __( 'Network Gathering scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview Network Gathering</a>', 'vca-asm' ),
 			date_i18n( get_option( 'date_format' ), strtotime( $post->post_date ) ), esc_url( get_permalink($post_ID) ) ),
-			10 => sprintf( __( 'Network Gathering draft updated. <a target=&quot;_blank&quot; href=&quot;%s&quot;>Preview Network Gathering</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) )
+			10 => sprintf( __( 'Network Gathering draft updated. <a target="_blank" href="%s">Preview Network Gathering</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) )
 		);
 
 		return $messages;
@@ -764,6 +772,7 @@ class VCA_ASM_Activities {
 			wp_localize_script( 'vca-asm-admin-validation', 'validationParams', $validation_params );
 			wp_localize_script( 'vca-asm-admin-jquery-ui-integration', 'jquiDynamicParams', $jqui_dynamic_params );
 			wp_localize_script( 'vca-asm-admin-quotas', 'quotasParams', $activity_data );
+			wp_localize_script( 'vca-asm-ctr-to-cty', 'nationalHierarchy', $vca_asm_geography->national_hierarchy );
 		}
 
 		if ( is_object( $post ) ) {
@@ -924,7 +933,7 @@ class VCA_ASM_Activities {
 				'normal',
 				'high'
 			);
-			if( 'city' !== $role ) {
+			if( ! in_array( $role, array( 'city', 'head_of' ) ) ) {
 				add_meta_box(
 					'vca-asm-geo',
 					_x( 'Association with Network Geography', 'meta box title, festival', 'vca-asm' ),
@@ -1002,16 +1011,22 @@ class VCA_ASM_Activities {
 		get_currentuserinfo();
 
 		$fields = $this->custom_fields('tools');
-		$region = intval( get_user_meta( $current_user->ID, 'region', true ) );
+		$city = intval( get_user_meta( $current_user->ID, 'city', true ) );
+		$nation = intval( get_user_meta( $current_user->ID, 'nation', true ) );
 		$roles = $current_user->roles;
 		$role =  array_shift( $roles );
 
 		/* Region + Head Of Hack, dirty, to be moved */
 		if ( 'city' === $role ) {
 			$fields[] = array(
-				'id'	=> 'geo',
+				'id'	=> 'nation',
 				'type'	=> 'hidden',
-				'value' => $region
+				'value' => $nation
+			);
+			$fields[] = array(
+				'id'	=> 'city',
+				'type'	=> 'hidden',
+				'value' => $city
 			);
 			$fields[] = array(
 				'id'	=> 'delegate',
@@ -1200,7 +1215,7 @@ class VCA_ASM_Activities {
 
 					$old = get_post_meta( $post->ID, $field['id'], true );
 
-					$new = $_POST[$field['id']];
+					$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : '';
 
 					if ( isset( $field['validation'] ) && 'post-new.php' !== $pagenow ) {
 						$validation->is_valid( $_POST[$field['id']], array( 'type' => $field['validation'], 'id' => $field['validation'] ) );
@@ -1291,8 +1306,8 @@ class VCA_ASM_Activities {
 						if( $new && $new != $old ) {
 							$region_user_id = $wpdb->get_results(
 								"SELECT user_id FROM " .
-								$wpdb->prefix . "vca_asm_regions " .
-								"WHERE id = " . $_POST['geo'], ARRAY_A
+								$wpdb->prefix . "vca_asm_geography " .
+								"WHERE id = " . $_POST['city'], ARRAY_A
 							);
 							$region_user_id = $region_user_id[0]['user_id'];
 							if( ! empty( $region_user_id ) ) {
@@ -1313,7 +1328,7 @@ class VCA_ASM_Activities {
 						}
 					}
 
-					if( $field['id'] == 'geo' ) {
+					if( $field['id'] == 'city' ) {
 						if( $new && $new != $old ) {
 							$old_delegation = get_post_meta( $post->ID, 'delegate', true );
 							$new_delegation = $_POST['delegate'];
@@ -1321,7 +1336,7 @@ class VCA_ASM_Activities {
 								$geo_user_id = $wpdb->get_results(
 									"SELECT user_id FROM " .
 									$wpdb->prefix . "vca_asm_geography " .
-									"WHERE id = " . $_POST['geo'], ARRAY_A
+									"WHERE id = " . $_POST['city'], ARRAY_A
 								);
 								$geo_user_id = $geo_user_id[0]['user_id'];
 								$activity_data = array();

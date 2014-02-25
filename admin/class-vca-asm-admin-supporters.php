@@ -640,6 +640,7 @@ class VCA_ASM_Admin_Supporters {
 		$admin_city = get_user_meta( $current_user->ID, 'region', true );
 		$status = $vca_asm_geography->get_status( $admin_city );
 		$admin_nation = $vca_asm_geography->has_nation( $admin_city );
+		$admin_nation_name = $vca_asm_geography->get_name( $admin_nation );
 
 		$url = "admin.php?page=vca-asm-supporters";
 		$sort_url = $url;
@@ -668,12 +669,21 @@ class VCA_ASM_Admin_Supporters {
 		$metaqueries['relation'] = 'AND';
 
 		if( ! $current_user->has_cap('vca_asm_view_supporters_global') ) {
-			$headline = str_replace( '%region_status%', $status, _x( 'Supporters of your %region_status%', 'Admin Supporters', 'vca-asm' ) );
-			$table_headline = str_replace( '%region_status%', $status, _x( 'All Supporters of your %region_status%', 'Admin Supporters', 'vca-asm' ) );
-			$metaqueries[] = array(
-				'key' => 'region',
-				'value' => intval( $admin_city )
-			);
+			if( $current_user->has_cap('vca_asm_view_supporters_nation') ) {
+				$headline = str_replace( '%country%', $admin_nation_name, _x( 'Supporters from %country%', 'Admin Supporters', 'vca-asm' ) );
+				$table_headline = str_replace( '%country%', $admin_nation_name, _x( 'All supporters from %country%', 'Admin Supporters', 'vca-asm' ) );
+				$metaqueries[] = array(
+					'key' => 'nation',
+					'value' => $admin_nation
+				);
+			} else {
+				$headline = str_replace( '%region_status%', $status, _x( 'Supporters of your %region_status%', 'Admin Supporters', 'vca-asm' ) );
+				$table_headline = str_replace( '%region_status%', $status, _x( 'All Supporters of your %region_status%', 'Admin Supporters', 'vca-asm' ) );
+				$metaqueries[] = array(
+					'key' => 'region',
+					'value' => intval( $admin_city )
+				);
+			}
 		}
 
 		if( isset( $_GET['todo'] ) && 'filter' ===  $_GET['todo'] ) {
@@ -793,39 +803,26 @@ class VCA_ASM_Admin_Supporters {
 		$supporters = get_users( $args );
 
 		if( isset( $_GET['todo'] ) &&
-		   'search' ===  $_GET['todo'] &&
-		   ( isset( $_POST['term'] ) || isset( $_GET['term'] ) )
+		   'filter' ===  $_GET['todo'] &&
+		   ( isset( $_POST['term'] ) || isset( $_GET['term'] ) ) &&
+		   ( ! empty( $_POST['term'] ) || ! empty( $_GET['term'] ) )
 		) {
 			if( isset( $_POST['term'] ) ) {
 				$term = $_POST['term'];
 			} else {
 				$term = $_GET['term'];
 			}
-			$sort_url = $url . '&amp;todo=search&amp;term=' . $term;
+			$sort_url = ! empty( $sort_url ) ? $sort_url . '&amp;term=' . $term : $url . '&amp;term=' . $term;
 			$supp_query_results = $supporters;
 			$supporters = array();
 			$supp_ids = array();
 			foreach( $supp_query_results as $temp_supp ) {
 				if( strstr( mb_strtolower( get_user_meta( $temp_supp->ID, 'first_name', true ) ), mb_strtolower( $term ) ) ||
-					strstr( mb_strtolower( get_user_meta( $temp_supp->ID, 'last_name', true ) ), mb_strtolower( $term ) )
+					strstr( mb_strtolower( get_user_meta( $temp_supp->ID, 'last_name', true ) ), mb_strtolower( $term ) ) ||
+					strstr( mb_strtolower( $temp_supp->user_email ), mb_strtolower( $term ) )
 				) {
 					$supporters[] = $temp_supp;
 					$supp_ids[] = $temp_supp->ID;
-				}
-			}
-			$supporters_by_mail = $wpdb->get_results(
-				"SELECT ID FROM " .
-				$wpdb->prefix . "users " .
-				"WHERE user_email LIKE '%" . $term . "%'", ARRAY_A
-			);
-			foreach( $supporters_by_mail as $temp_supp ) {
-				$temp_sobj = new WP_User( $temp_supp['ID'] );
-				if( ( $current_user->has_cap('vca_asm_view_supporters_global') ||
-				   $admin_city === get_user_meta( $temp_supp['ID'], 'region', true ) ) &&
-				   in_array( 'supporter', $temp_sobj->roles ) &&
-				   ! in_array( $temp_supp['ID'], $supp_ids ) )
-				{
-					$supporters[] = get_userdata( $temp_supp['ID'] );
 				}
 			}
 			$table_headline = str_replace( '%results%', count( $supporters ), str_replace( '%term%', $term, _x( 'Showing %results% search results for &quot;%term%&quot;', 'Admin Supporters', 'vca-asm' ) ) );
@@ -857,10 +854,10 @@ class VCA_ASM_Admin_Supporters {
 					continue;
 				}
 				if ( $orderby === 'city' ||  $orderby === 'membership' ) {
-					$supp_region = get_user_meta( $supporter->ID, 'region', true );
-					$supporters_ordered[$i]['city'] = mb_substr( $regions[$supp_region], 0, 3 );
+					$supp_city = get_user_meta( $supporter->ID, 'region', true );
+					$supporters_ordered[$i]['city'] = mb_substr( $regions[$supp_city], 0, 3 );
 					if( $orderby === 'membership' ) {
-						$supporters_ordered[$i]['membership'] = ( isset( $supp_region ) && $supp_region != 0 ) ? $this->get_membership_status( $supporter->ID, $stati[$supp_region] ) : __( 'No', 'vca-asm' );
+						$supporters_ordered[$i]['membership'] = ( isset( $supp_city ) && $supp_city != 0 ) ? $this->get_membership_status( $supporter->ID, $stati[$supp_city] ) : __( 'No', 'vca-asm' );
 					}
 				} elseif ( $orderby === 'user_email' ) {
 					$supporters_ordered[$i]['user_email'] = $supporter->user_email;
@@ -870,7 +867,11 @@ class VCA_ASM_Admin_Supporters {
 					$supp_bday = get_user_meta( $supporter->ID, 'birthday', true );
 					$supporters_ordered[$i]['age'] = empty( $supp_bday ) ? 1 : ( doubleval(555555555555) - doubleval( $supp_bday ) );
 				} elseif ( $orderby === 'mobile' ) {
-					$raw_num = $vca_asm_utilities->normalize_phone_number( get_user_meta( $supporter->ID, 'mobile', true ) );
+					$supp_nation = get_user_meta( $supp_id, 'nation', true );
+					$raw_num = $vca_asm_utilities->normalize_phone_number(
+									get_user_meta( $supporter->ID, 'mobile', true ),
+									array( 'nat_id' => $supp_nation ? $supp_nation : 0 )
+								);
 					$supporters_ordered[$i]['mobile'] = empty( $raw_num ) ? '999999999999999' : substr( $raw_num . '0000000000000000000', 0, 15 );
 				} elseif ( $orderby === 'gender' ) {
 					$supporters_ordered[$i]['gender'] = $vca_asm_utilities->convert_strings( get_user_meta( $supporter->ID, 'gender', true ) );
@@ -910,11 +911,12 @@ class VCA_ASM_Admin_Supporters {
 			$supp_id = $supp_obj->ID;
 			$supp_fname = get_user_meta( $supp_id, 'first_name', true );
 			$supp_lname = get_user_meta( $supp_id, 'last_name', true );
-			$supp_region = get_user_meta( $supp_id, 'region', true );
+			$supp_city = get_user_meta( $supp_id, 'region', true );
 			$supp_bday = get_user_meta( $supp_id, 'birthday', true );
 			$supp_age = ! empty( $supp_bday ) ? $vca_asm_utilities->date_diff( time(), intval( $supp_bday ) ) : array( 'year' => __( 'not set', 'vca-asm' ) );
-			if( empty ( $supp_region ) ) {
-				$supp_region = '0';
+			$supp_nation = get_user_meta( $supp_id, 'nation', true );
+			if( empty ( $supp_city ) ) {
+				$supp_city = '0';
 			}
 			$photo_info = $this->photo_info( $supp_id );
 			$supp_role = ! empty( $supp_role ) ? $supp_role : 'supporter';
@@ -933,15 +935,21 @@ class VCA_ASM_Admin_Supporters {
 			$rows[$i]['first_name'] = empty( $supp_fname ) ? __( 'not set', 'vca-asm' ) : $supp_fname;
 			$rows[$i]['last_name'] = empty( $supp_lname ) ? __( 'not set', 'vca-asm' ) : $supp_lname;
 			$rows[$i]['user_email'] = $supp_obj->user_email;
-			$rows[$i]['mobile'] = $vca_asm_utilities->normalize_phone_number( get_user_meta( $supp_id, 'mobile', true ), true );
-			$rows[$i]['region'] = $regions[$supp_region];
-			if ( $supp_region != 0 ) {
-				$rows[$i]['region'] .= ' (' . $stati_conv[$supp_region] . ')';
+			$rows[$i]['mobile'] = $vca_asm_utilities->normalize_phone_number(
+										get_user_meta( $supp_id, 'mobile', true ),
+										array(
+											'nice' => true,
+											'nat_id' => $supp_nation ? $supp_nation : 0
+										)
+									);
+			$rows[$i]['region'] = $regions[$supp_city];
+			if ( $supp_city != 0 ) {
+				$rows[$i]['region'] .= ' (' . $stati_conv[$supp_city] . ')';
 			}
 			$rows[$i]['city'] = $rows[$i]['region'];
 			$rows[$i]['role'] = $supp_role;
 			$rows[$i]['role_slug'] = $supp_role_slug;
-			$rows[$i]['membership'] = ( isset( $supp_region ) && $supp_region != 0 ) ? $this->get_membership_status( $supp_id, $stati[$supp_region] ) :  __( 'No', 'vca-asm' );
+			$rows[$i]['membership'] = ( isset( $supp_city ) && $supp_city != 0 ) ? $this->get_membership_status( $supp_id, $stati[$supp_city] ) :  __( 'No', 'vca-asm' );
 			$rows[$i]['membership_raw'] = get_user_meta( $supp_id, 'membership', true );
 			$rows[$i]['age'] = $supp_age['year'];
 			$rows[$i]['gender'] = $vca_asm_utilities->convert_strings( get_user_meta( $supp_id, 'gender', true ) );
@@ -1017,23 +1025,23 @@ class VCA_ASM_Admin_Supporters {
 			'legacy-screen' => false
 		);
 
-		$search_fields = array(
+		$filter_fields = array(
 			array(
 				'type' => 'text',
-				'label' =>  _x( 'Search Supporters', 'Admin Supporters', 'vca-asm' ),
+				'label' =>  _x( 'Search Term', 'Admin Supporters', 'vca-asm' ),
 				'id' => 'term',
-				'desc' => _x( "You can search the supporters by first and last name as well as email address.", 'Admin Supporters', 'vca-asm' )
+				'desc' => _x( "You can search the Pool's userbase by first and last name as well as email address.", 'Admin Supporters', 'vca-asm' ) . '<br />' . _x( 'If you only want to filter the list and not search for anything specific, simply leave this field empty.', 'Admin Supporters', 'vca-asm' )
 			)
 		);
 
-		$filter_fields = array();
-
 		if( $current_user->has_cap('vca_asm_view_supporters_global') ) {
+
 			wp_enqueue_script( 'vca-asm-admin-supporter-filter' );
 			$filter_params = array(
 				'gfb' => ! empty( $_POST['geo-filter-by'] ) ? $_POST['geo-filter-by'] : ( ! empty( $_GET['gfb'] ) ? $_GET['gfb'] : 'city' )
 			);
 			wp_localize_script( 'vca-asm-admin-supporter-filter', 'filterParams', $filter_params );
+
 			$filter_fields[] = array(
 				'type' => 'select',
 				'label' => _x( 'Filter by', 'Admin Supporters', 'vca-asm' ),
@@ -1061,6 +1069,7 @@ class VCA_ASM_Admin_Supporters {
 				'value' => $filter_params['gfb']
 			);
 		}
+
 		if ( $current_user->has_cap('vca_asm_view_supporters_global') || $current_user->has_cap('vca_asm_view_supporters_nation') ) {
 			if ( $current_user->has_cap('vca_asm_view_supporters_global') ) {
 				$limit = false;
@@ -1104,12 +1113,15 @@ class VCA_ASM_Admin_Supporters {
 				1 => _x( 'Supporters that have applied for membership status', 'Admin Supporters', 'vca-asm' ),
 				0 => _x( 'Supporters that simply are registered to the Pool', 'Admin Supporters', 'vca-asm' )
 			);
+
 		} else {
+
 			$membership_labels = array(
 				2 => str_replace( '%region_status%', $status, _x( 'Supporters that are &quot;active members&quot; of your %region_status%', 'Admin Supporters', 'vca-asm' ) ),
 				1 => str_replace( '%region_status%', $status, _x( 'Supporters that have applied for membership to your %region_status%', 'Admin Supporters', 'vca-asm' ) ),
 				0 => _x( 'Supporters that simply live in your city', 'Admin Supporters', 'vca-asm' )
 			);
+
 		}
 
 		if( $current_user->has_cap('vca_asm_view_supporters_global') ) {
@@ -1349,29 +1361,7 @@ class VCA_ASM_Admin_Supporters {
 		}
 
 		$mbs->mb_top( array(
-			'title' => _x( 'Search', 'Admin Supporters', 'vca-asm' ),
-			'id' => 'search'
-		));
-
-		$search_form = new VCA_ASM_Admin_Form( array(
-			'echo' => true,
-			'form' => true,
-			'method' => 'post',
-			'metaboxes' => false,
-			'url' => $url,
-			'action' => $url .'&amp;todo=search',
-			'id' => 0,
-			'button' => _x( 'Search', 'Admin Supporters', 'vca-asm' ),
-			'top_button' => false,
-			'back' => false,
-			'back_url' => '#',
-			'fields' => $search_fields
-		));
-		$search_form->output();
-
-		$mbs->mb_bottom();
-		$mbs->mb_top( array(
-			'title' => _x( 'Filter', 'Admin Supporters', 'vca-asm' ),
+			'title' => _x( 'Search and Filter Criteria', 'Admin Supporters', 'vca-asm' ),
 			'id' => 'filter'
 		));
 
@@ -1383,7 +1373,7 @@ class VCA_ASM_Admin_Supporters {
 			'url' => $url,
 			'action' => $url .'&amp;todo=filter',
 			'id' => 0,
-			'button' => _x( 'Filter', 'Admin Supporters', 'vca-asm' ),
+			'button' => _x( 'Search / Filter', 'Admin Supporters', 'vca-asm' ),
 			'top_button' => false,
 			'back' => false,
 			'back_url' => '#',
@@ -1435,8 +1425,6 @@ class VCA_ASM_Admin_Supporters {
 		}
 
 		$page->bottom();
-
-		//echo $output;
 	}
 
 	/**** UTILITY METHODS *****/

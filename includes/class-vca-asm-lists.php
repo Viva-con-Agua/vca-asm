@@ -28,19 +28,17 @@ class VCA_ASM_Lists {
 	    get_currentuserinfo();
 
 		$birthday = get_user_meta( $current_user->ID, 'birthday', true );
-		$city = get_user_meta( $current_user->ID, 'city', true );
-		$gender = get_user_meta( $current_user->ID, 'gender', true );
+		$nation = get_user_meta( $current_user->ID, 'nation', true );
 		$mobile = get_user_meta( $current_user->ID, 'mobile', true );
 
 		if( ! empty( $current_user->user_firstname ) &&
 			! empty( $current_user->user_lastname ) &&
 			! empty( $mobile ) &&
 			$birthday !== '' &&
-			! empty( $city ) &&
-			! empty( $gender ) ) {
+			! empty( $nation ) ) {
 			return true;
 		} else {
-			return __( "In order to be able to register for activities, you should at least have filled out first- and lastname as well as your, location, mobile phone and birthday in your user profile.", 'vca-asm' );
+			return __( "In order to be able to register for activities, you should at least have filled out first- and lastname, your mobile phone and birthday, as well as selected a country in your user profile.", 'vca-asm' );
 		}
 	}
 
@@ -69,12 +67,6 @@ class VCA_ASM_Lists {
 
 		$exclude = $vca_asm_registrations->get_supporter_all();
 
-		$output = '<p class="message">' .
-				sprintf( __( 'Before you apply for an activity, please make sure you will indeed have spare time on your hands in the given timeframe. For general infos about festivals and VcA, please refer to the %s.', 'vca-asm' ), $faq_link ) .
-				'</p><p class="message">' .
-					__( 'Currently the following activities are open to registration for you:', 'vca-asm' ) .
-				'</p>';
-
 		$args = array(
 			'posts_per_page' 	=>	-1,
 			'post_type'         =>	$vca_asm_activities->activity_types,
@@ -102,20 +94,28 @@ class VCA_ASM_Lists {
 
 		$activities = new WP_Query( $args );
 
-		$list_class = 'activities activities-open';
-		$show_app = true;
-		$split_months = true;
+		$output = '';
 
 		if( ! empty( $activities->posts ) ) {
-			require( VCA_ASM_ABSPATH . '/templates/frontend-activities.php' );
+
+			$template = new VCA_ASM_Frontend_Activities(
+				$activities,
+				array(
+					'action' => 'app',
+					'list_class' => 'activities-open',
+					'with_filter' => true,
+					'eligibility_check' => true,
+					'pre_text' => sprintf( __( 'Before you apply for an activity, please make sure you will indeed have spare time on your hands in the given timeframe. For general infos about festivals and VcA, please refer to the %s.', 'vca-asm' ), $faq_link )
+				)
+			);
+
+			$output .= $template->output();
+
 		} else {
 			$output = '<p class="message">' .
-				__( 'Currently there are no activities in the registration phase', 'vca-asm' ) .
+				__( 'Currently there are no activities in the registration phase.', 'vca-asm' ) .
 				'</p>';
 		}
-
-		/* reset the post data, required when using the WP_Query class */
-		wp_reset_postdata();
 
 		return $output;
 	}
@@ -146,8 +146,6 @@ class VCA_ASM_Lists {
 				__( 'These are the future activities you are participating in:', 'vca-asm' ) .
 				'</p>';
 
-			$show_xtra_info = true;
-
 			$args = array(
 				'posts_per_page' 	=>	-1,
 				'post_type'         =>	$vca_asm_activities->activity_types,
@@ -164,8 +162,6 @@ class VCA_ASM_Lists {
 
 			require( VCA_ASM_ABSPATH . '/templates/frontend-activities.php' );
 
-			$show_xtra_info = false;
-
 		} else {
 
 			$output .= '<p class="message">' .
@@ -176,9 +172,7 @@ class VCA_ASM_Lists {
 
 		if( ! empty( $applications ) ) {
 
-			$show_rev_app = true;
-
-			$output .= '<h2 class="underline h2-margin">' . __( 'Current Applications', 'vca-asm' ) . '</h2>' .
+			$output .= '<h2 class="h2-margin">' . __( 'Current Applications', 'vca-asm' ) . '</h2>' .
 				'<p class="message">' .
 				__( 'You have applied to participate in the following activities. You will get an answer at the latest one day after the application deadline has passed.', 'vca-asm' ) .
 				'</p>';
@@ -195,16 +189,21 @@ class VCA_ASM_Lists {
 			);
 
 			$activities = new WP_Query( $args );
-			$list_class = 'activities activities-applications';
 
-			require( VCA_ASM_ABSPATH . '/templates/frontend-activities.php' );
+			$template = new VCA_ASM_Frontend_Activities(
+				$activities,
+				array(
+					'action' => 'rev_app',
+					'list_class' => 'activities-applications'
+				)
+			);
 
-			$show_rev_app = false;
+			$output .= $template->output();
 		}
 
 		if( ! empty( $waiting ) ) {
 
-			$output .= '<h2 class="underline h2-margin">' . __( 'Waiting List', 'vca-asm' ) . '</h2>' .
+			$output .= '<h2 class="h2-margin">' . __( 'Waiting List', 'vca-asm' ) . '</h2>' .
 				'<p class="message">' .
 				__( 'Your application to these activites was denied. You are now on the waiting list and will be contacted, if slots open up again.', 'vca-asm' ) .
 				'</p>';
@@ -221,15 +220,21 @@ class VCA_ASM_Lists {
 			);
 
 			$activities = new WP_Query( $args );
-			$list_class = 'activities activities-waiting';
 
-			require( VCA_ASM_ABSPATH . '/templates/frontend-activities.php' );
+			$template = new VCA_ASM_Frontend_Activities(
+				$activities,
+				array(
+					'list_class' => 'activities-waiting'
+				)
+			);
+
+			$output .= $template->output();
 
 		}
 
 		if( ! empty( $registrations_old ) ) {
 
-			$output .= '<h2 class="underline h2-margin">' . __( 'Past Activities', 'vca-asm' ) . '</h2>' .
+			$output .= '<h2 class="h2-margin">' . __( 'Past Activities', 'vca-asm' ) . '</h2>' .
 				'<p class="message">' .
 				__( 'These are the activities you have participated in in the past.', 'vca-asm' ) .
 				'</p>';
@@ -266,41 +271,43 @@ class VCA_ASM_Lists {
 	private function handle_applications() {
 		global $vca_asm_registrations;
 
-		if( isset( $_POST['todo'] ) && $_POST['todo'] == 'apply' && isset( $_POST['activity'] ) && is_numeric( $_POST['activity'] ) ) {
+		if ( ! is_admin() ) {
+			if ( isset( $_POST['todo'] ) && $_POST['todo'] == 'apply' && isset( $_POST['activity'] ) && is_numeric( $_POST['activity'] ) ) {
 
-			/* Avoid form resubmission after page refresh */
-			session_start();
-			if( isset( $_POST['unique_id'] ) ) {
-				$unique_id = $_POST['unique_id'];
-				$allow_submission = isset( $_SESSION['allow_submission'] ) ? $_SESSION['allow_submission'] : array();
-				if(isset($allow_submission[$unique_id])){
-					unset($_POST['submit_form']);
-					session_destroy();
-					header('Location: ' . $_SERVER['HTTP_REFERER']);
-				} else{
-					$allow_submission[$unique_id] = TRUE;
-					$_SESSION['allow_submission'] = $allow_submission;
+				/* Avoid form resubmission after page refresh */
+				session_start();
+				if( isset( $_POST['unique_id'] ) ) {
+					$unique_id = $_POST['unique_id'];
+					$allow_submission = isset( $_SESSION['allow_submission'] ) ? $_SESSION['allow_submission'] : array();
+					if(isset($allow_submission[$unique_id])){
+						unset($_POST['submit_form']);
+						session_destroy();
+						header('Location: ' . $_SERVER['HTTP_REFERER']);
+					} else{
+						$allow_submission[$unique_id] = TRUE;
+						$_SESSION['allow_submission'] = $allow_submission;
+					}
+				}
+
+				if( 'If you wish to send a message with your application' === substr( $_POST['notes'], 0, 51 ) ||
+				   'Wenn du eine Nachricht mit deiner Bewerbung schicken willst' === substr( $_POST['notes'], 0, 59 ) ) {
+					$notes = '';
+				} else {
+					$notes = $_POST['notes'];
+				}
+
+				if( isset( $_POST['submit_form'] ) ) {
+					$vca_asm_registrations->set_application( $_POST['activity'], $notes );
 				}
 			}
 
-			if( 'If you wish to send a message with your application' === substr( $_POST['notes'], 0, 51 ) ||
-			   'Wenn du eine Nachricht mit deiner Bewerbung schicken willst' === substr( $_POST['notes'], 0, 59 ) ) {
-				$notes = '';
-			} else {
-				$notes = $_POST['notes'];
+			if( isset( $_POST['todo'] ) && $_POST['todo'] == 'revoke_app' && isset( $_POST['activity'] ) && is_numeric( $_POST['activity'] ) ) {
+				$vca_asm_registrations->revoke_application( $_POST['activity'] );
 			}
 
-			if( isset( $_POST['submit_form'] ) ) {
-				$vca_asm_registrations->set_application( $_POST['activity'], $notes );
-			}
+			add_shortcode( 'vca-asm-list-activities', array( &$this, 'list_activities' ) );
+			add_shortcode( 'vca-asm-my-activities', array( &$this, 'my_activities' ) );
 		}
-
-		if( isset( $_POST['todo'] ) && $_POST['todo'] == 'revoke_app' && isset( $_POST['activity'] ) && is_numeric( $_POST['activity'] ) ) {
-			$vca_asm_registrations->revoke_application( $_POST['activity'] );
-		}
-
-		add_shortcode( 'vca-asm-list-activities', array( &$this, 'list_activities' ) );
-		add_shortcode( 'vca-asm-my-activities', array( &$this, 'my_activities' ) );
 	}
 
 	/**

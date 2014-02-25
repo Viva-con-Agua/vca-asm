@@ -78,7 +78,7 @@ class VcA_ASM_Utilities {
 	 */
 	public function urls_to_links( $string ) {
 		/* make sure there is an http:// on all URLs */
-		$string = preg_replace( "/([^\w\/])(www\.[a-z0-9\-]+\.[a-z0-9\-]+)/i", "$1http://$2", $string );
+		$string = rtrim( preg_replace( "/([^\w\/])(www\.[a-z0-9\-]+\.[a-z0-9\-]+)/i", "$1http://$2", $string ), "/" );
 		/* create links */
 		$string = preg_replace( "/([\w]+:\/\/[\w-?&;#~=\.\/\@]+[\w\/])/i", "<a target=\"_blank\" title=\"" . __( 'Visit Site', 'vca-asm' ) . "\" href=\"$1\">$1</A>",$string);
 
@@ -115,16 +115,30 @@ class VcA_ASM_Utilities {
 	 * @since 1.2
 	 * @access public
 	 */
-	public function normalize_phone_number( $number, $nice = false ) {
+	public function normalize_phone_number( $number, $args = array() ) {
+		global $vca_asm_geography;
 
-		$number = preg_replace( "/[^0-9]/", "", $number );
+		$default_args = array(
+			'nice' => false,
+			'ext' => '49',
+			'nat_id' => 0
+		);
+		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
+
+		if ( is_numeric( $nat_id ) && 0 != $nat_id ) {
+			$ext = $vca_asm_geography->get_phone_extension( $nat_id );
+		}
+
+		$number = preg_replace( "/[^0-9+]/", "", $number );
 
 		if( ! empty( $number ) ) {
 
 			if( mb_substr( $number, 0, 2 ) == '00' ) {
 				$number = mb_substr( $number, 2 );
+			} elseif( mb_substr( $number, 0, 1 ) == '+' ) {
+				$number = mb_substr( $number, 1 );
 			} elseif( mb_substr( $number, 0, 1 ) == '0' ) {
-				$number = '49' . mb_substr( $number, 1 );
+				$number = $ext . mb_substr( $number, 1 );
 			}
 
 			if( $nice === true ) {
@@ -197,7 +211,7 @@ class VcA_ASM_Utilities {
 	}
 
 	/**
-	 * Custom do_settings_sections (WP-core function)
+	 * Custom do_settings_sections (originally WP-core function)
 	 *
 	 * @since 1.3
 	 * @access public
@@ -223,6 +237,32 @@ class VcA_ASM_Utilities {
 			do_settings_fields( $page, $section['id'] );
 			echo '</table></div></div>';
 		}
+	}
+
+
+	/**
+	 * Returns a country-alpha-code (ISO 3166-1-alpha-2),
+	 * depending on the URL/Domain used to reach the site
+	 *
+	 * @see http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+	 *
+	 * @return string $alpha
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function current_country() {
+		if ( ! empty( $_SERVER['SERVER_NAME'] ) ) {
+			$domain = $_SERVER['SERVER_NAME'];
+		} elseif ( ! isset( $domain ) && ! empty( $_SERVER['HTTP_HOST'] ) ) {
+			$domain = $_SERVER['HTTP_HOST'];
+		}
+
+		if ( 'pool.vivaconagua.ch' === $domain ) {
+			return 'ch';
+		}
+
+		return 'de';
 	}
 
 } // class

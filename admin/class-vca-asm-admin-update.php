@@ -43,65 +43,44 @@ class VCA_ASM_Admin_Update {
 	public function control() {
 		global $wpdb, $vca_asm_geography, $vca_asm_admin, $vca_asm_activities;
 
+		$messages = array();
+
 		if ( isset( $_GET['todo'] ) && 'update' === $_GET['todo'] ) {
 			$updated = true;
 
-			//$actis = get_posts(
+			//$users = get_users();
+			//
+			//foreach ( $users as $user ) {
+			//	if( 1 !== $user->ID ) {
+			//	$residence = get_user_meta( $user->ID, 'city', true );
+			//	$city = get_user_meta( $user->ID, 'region', true );
+			//	update_user_meta( $user->ID, 'residence', $residence );
+			//	update_user_meta( $user->ID, 'city', $city );
+			//	$nation = $vca_asm_geography->has_nation( $city );
+			//	if ( $nation ) {
+			//		update_user_meta( $user->ID, 'nation', $nation );
+			//	} else {
+			//		update_user_meta( $user->ID, 'nation', 0 );
+			//	}
+			//	}
+			//}
+
+			//$activities = get_posts(
 			//	array(
 			//		'post_type' => $vca_asm_activities->activity_types,
 			//		'posts_per_page' => -1
 			//	)
 			//);
 			//
-			//foreach ( $actis as $act ) {
-			//	$region = get_post_meta( $act->ID, 'region', true );
-			//	if ( ! empty( $region ) ) {
-			//		update_post_meta( $act->ID, 'geo', $region );
+			//foreach ( $activities as $activity ) {
+			//	$city = get_post_meta( $activity->ID, 'geo', true );
+			//	update_post_meta( $activity->ID, 'city', $city );
+			//	$nation = $vca_asm_geography->has_nation( $city );
+			//	if ( $nation ) {
+			//		update_post_meta( $activity->ID, 'nation', $nation );
+			//	} else {
+			//		update_post_meta( $activity->ID, 'nation', 40 );
 			//	}
-			//}
-
-			//$old_apps = $wpdb->get_results(
-			//	"SELECT * FROM " .
-			//	$wpdb->prefix . "vca_asm_applications_very_old", ARRAY_A
-			//);
-			//
-			//foreach ( $old_apps as $app ) {
-			//	$activities = unserialize($app['activities']);
-			//	foreach ( $activities as $act ) {
-			//		$wpdb->insert(
-			//			$wpdb->prefix . 'vca_asm_applications_old',
-			//			array(
-			//				'supporter' => $app['supporter'],
-			//				'activity' => $act
-			//			),
-			//			array(
-			//				'%d',
-			//				'%d'
-			//			)
-			//		);
-			//	}
-			//}
-			//
-			//$wpdb->query(
-			//	"DELETE FROM " . $wpdb->prefix . "usermeta" .
-			//	" WHERE meta_key LIKE 'meta-box%'"
-			//);
-			//
-			//$misc = array(686);
-			//$concerts = array(441,410,215,485);
-			//
-			//foreach ( $misc as $activ ) {
-			//	wp_update_post( array(
-			//		'ID' => $activ,
-			//		'post_type' => 'miscactions',
-			//	));
-			//}
-			//
-			//foreach ( $concerts as $activ ) {
-			//	wp_update_post( array(
-			//		'ID' => $activ,
-			//		'post_type' => 'concert',
-			//	));
 			//}
 
 		}
@@ -125,7 +104,7 @@ class VCA_ASM_Admin_Update {
 		));
 		$update_form->output();
 
-		if ( $updated ) {
+		if ( ! empty( $updated ) && true === $updated ) {
 			$messages = array(
 				array(
 					'type' => 'message-pa',

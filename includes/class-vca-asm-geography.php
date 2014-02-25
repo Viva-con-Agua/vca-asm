@@ -27,7 +27,7 @@ class VCA_ASM_Geography {
 	public $cities = array();
 
 	/**
-	 * Returns the name of a region if fed its ID
+	 * Returns the name of a geographical unit if fed its ID
 	 *
 	 * @param int $id
 	 * @return string $region
@@ -35,7 +35,8 @@ class VCA_ASM_Geography {
 	 * @since 1.0
 	 * @access public
 	 */
-	public function get_name( $id ) {
+	public function get_name( $id )
+	{
 		global $wpdb;
 
 		$region_query = $wpdb->get_results(
@@ -48,7 +49,104 @@ class VCA_ASM_Geography {
 			$region = sprintf( __( 'Error: Region of ID %s does not exist.', 'vca-asm' ), $id );
 		}
 
+		if ( $region === 'Switzerland' ) {
+			$region = __( 'Switzerland', 'vca-asm' );
+		} elseif ( $region === 'Germany' ) {
+			$region = __( 'Germany', 'vca-asm' );
+		} elseif ( $region === 'Austria' ) {
+			$region = __( 'Austria', 'vca-asm' );
+		}
+
 		return $region;
+	}
+
+	/**
+	 * Returns the currency name of a geographical unit if fed its ID
+	 *
+	 * @param int $id
+	 * @param string $type
+	 * @return string $currency
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function get_currency( $id, $type = 'name' ) {
+		global $wpdb;
+
+		if ( ! in_array( $type, array( 'name', 'code' ) ) ) {
+			$type = 'name';
+		}
+
+		if ( $this->is_city( $id ) ) {
+			$nat_id = $this->has_nation( $id );
+			if ( ! $nat_id ) {
+				return false;
+			}
+		} elseif ( $this->is_nation( $id ) ) {
+			$nat_id = $id;
+		} else {
+			return false;
+		}
+
+		$currency_query = $wpdb->get_results(
+				"SELECT currency_" . $type . " FROM " .
+				$wpdb->prefix . "vca_asm_geography " .
+				"WHERE id = " . $nat_id . " LIMIT 1", ARRAY_A
+		);
+		$currency = $currency_query[0]['currency_'.$type];
+
+		return $currency;
+	}
+	/* Wrappers for the above */
+	public function get_currency_name( $id ) {
+		return $this->get_currency( $id, 'name' );
+	}
+	public function get_currency_code( $id ) {
+		return $this->get_currency( $id, 'code' );
+	}
+
+	/**
+	 * Returns the 2-letter ISO 3166-1 code of a geographical unit if fed its ID
+	 *
+	 * @param int $id
+	 * @return string $alpha
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function get_alpha_code( $id ) {
+		global $wpdb;
+
+		$alpha_query = $wpdb->get_results(
+				"SELECT alpha_code FROM " .
+				$wpdb->prefix . "vca_asm_geography " .
+				"WHERE id = " . $id . " LIMIT 1", ARRAY_A
+		);
+		$alpha = $alpha_query[0]['alpha_code'];
+
+		return $alpha;
+	}
+
+	/**
+	 * Returns the phone extension geographical unit if fed its ID
+	 *
+	 * @param int $id
+	 * @return string $ext
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function get_phone_extension( $id ) {
+		global $wpdb;
+
+		$ext_query = $wpdb->get_results(
+				"SELECT phone_code FROM " .
+				$wpdb->prefix . "vca_asm_geography " .
+				"WHERE id = " . $id . " LIMIT 1", ARRAY_A
+		);
+		$ext = $ext_query[0]['phone_code'];
+
+		return $ext;
 	}
 
 	/**
@@ -311,7 +409,8 @@ class VCA_ASM_Geography {
 			'data' => 'name',
 			'format' => 'array',
 			'concat' => ', ',
-			'type' => 'all'
+			'type' => 'all',
+			'grouped' => true
 		);
 		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
 
@@ -349,7 +448,7 @@ class VCA_ASM_Geography {
 					$descendants_arr[] = array(
 						'id' => $descendant['descendant'],
 						'name' => $this->get_name( $descendant['descendant'] ),
-						'type' => $this->get_type( $descendant['descendant'], false, true )
+						'type' => $this->get_type( $descendant['descendant'], false, $grouped )
 					);
 				} else {
 					$descendants_arr[] = $descendant['descendant'];
@@ -773,13 +872,14 @@ class VCA_ASM_Geography {
 			'please_select' => false,
 			'type' => 'all',
 			'descendants_of' => false,
-			'not_has_nation' => false
+			'not_has_nation' => false,
+			'grouped' => true
 		);
 		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
 
 		$all = $this->get_all( $orderby, $order, $type );
 		if( is_numeric( $descendants_of ) ) {
-			$desc = $this->get_descendants( intval( $descendants_of ), array( 'data' => 'all' ) );
+			$desc = $this->get_descendants( intval( $descendants_of ), array( 'data' => 'all', 'grouped' => $grouped ) );
 			$raw = $desc;
 		} else {
 			$raw = $all;

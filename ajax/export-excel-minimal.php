@@ -24,11 +24,7 @@ $header = array(
 	__( 'First Name', 'vca-asm' ),
 	__( 'Last Name', 'vca-asm' ),
 	__( 'City / Cell / Local Crew', 'vca-asm' ),
-	__( 'Age', 'vca-asm' ),
-	__( 'Email-Address', 'vca-asm' ),
-	__( 'Mobile Phone', 'vca-asm' ),
-	__( 'Ticket Received', 'vca-asm' ),
-	__( 'Note', 'vca-asm' )
+	__( 'Email-Address', 'vca-asm' )
 );
 $xls->addHeader( $header );
 
@@ -70,11 +66,7 @@ foreach( $registered_supporters as $supporter ) {
 			$supp_info->first_name,
 			$supp_info->last_name,
 			$vca_asm_geography->get_name( get_user_meta( $supporter, 'region', true ) ),
-			$supp_age['year'],
-			$supp_info->user_email,
-			get_user_meta( $supporter, 'mobile', true ),
-			'',
-			$note
+			$supp_info->user_email
 		);
 	} else {
 		$rows[$i] = array(

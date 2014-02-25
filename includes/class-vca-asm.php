@@ -22,9 +22,6 @@ class VCA_ASM {
 	public function init() {
 		/* add multilinguality support */
 		load_plugin_textdomain( 'vca-asm', false, VCA_ASM_DIRNAME . '/languages/' );
-		setlocale ( LC_ALL , 'de_DE.UTF-8' );
-		setlocale( LC_MESSAGES, 'en_US' );
-		setlocale( LC_NUMERIC, 'en_US' );
 
 		/* integrate into the "Members" plugin */
 		if ( function_exists( 'members_get_capabilities' ) ) {
@@ -62,8 +59,8 @@ class VCA_ASM {
 			/* so far only used in the backend */
 			$GLOBALS['vca_asm_roles'] =& new VCA_ASM_Roles();
 
-			/* used on major updates */
-			// $GLOBALS['vca_asm_admin_update'] =& new VCA_ASM_Admin_Update();
+			/* sporadically used to alter data structure or the like */
+			//$GLOBALS['vca_asm_admin_update'] =& new VCA_ASM_Admin_Update();
 		}
 	}
 
@@ -201,8 +198,8 @@ class VCA_ASM {
 	 * @access public
 	 */
 	public function __construct() {
-		add_action( 'init', array( &$this, 'init' ) );
-		add_action( 'admin_init', array( &$this, 'clean_unwanted_caps' ) );
+		add_action( 'init', array( $this, 'init' ) );
+		add_action( 'admin_init', array( $this, 'clean_unwanted_caps' ) );
 	}
 } // class
 

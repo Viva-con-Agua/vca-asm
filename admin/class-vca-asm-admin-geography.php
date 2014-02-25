@@ -214,8 +214,10 @@ class VCA_ASM_Admin_Geography {
 								$user_obj->remove_role( 'supporter' );
 								$user_obj->add_role( 'city' );
 								update_user_meta( $region_user_id, 'membership', '2' );
-								update_user_meta( $region_user_id, 'first_name', 'City' );
+								update_user_meta( $region_user_id, 'first_name', 'Viva con Agua' );
 								update_user_meta( $region_user_id, 'last_name', $_POST['name'] );
+								update_user_meta( $region_user_id, 'nickname', 'VcA ' . $_POST['name'] );
+								update_user_meta( $region_user_id, 'mail_switch', 'none' );
 								update_user_meta( $region_user_id, 'region', $_POST['name'] );
 								update_user_meta( $region_user_id, 'birthday', '1159444800' );
 								$new_pass = base64_encode( mcrypt_encrypt( MCRYPT_RIJNDAEL_256, md5(REGION_KEY), $_POST['pass'], MCRYPT_MODE_CBC, md5(md5(REGION_KEY)) ) );
@@ -240,14 +242,17 @@ class VCA_ASM_Admin_Geography {
 								array(
 									'name' => $_POST['name'],
 									'type' => $_POST['type'],
-									'country_code' => ( isset( $_POST['country_code'] ) && is_numeric( $_POST['country_code'] ) ) ? $_POST['country_code'] : 0,
+									'phone_code' => ( isset( $_POST['phone_code'] ) && is_numeric( $_POST['phone_code'] ) ) ? $_POST['phone_code'] : 0,
+									'alpha_code' => ( isset( $_POST['alpha_code'] ) && ! empty( $_POST['alpha_code'] ) ) ? $_POST['alpha_code'] : 'xx',
+									'currency_name' => ( isset( $_POST['currency_name'] ) && ! empty( $_POST['currency_name'] ) ) ? $_POST['currency_name'] : '',
+									'currency_code' => ( isset( $_POST['currency_code'] ) && ! empty( $_POST['currency_code'] ) ) ? $_POST['currency_code'] : '',
 									'has_user' => $has_user,
 									'user_id' => $region_user_id,
 									'user' => $new_user,
 									'pass' => $new_pass
 								),
 								array( 'id'=> $_GET['id'] ),
-								array( '%s', '%s', '%d', '%d', '%d', '%s', '%s' ),
+								array( '%s', '%s', '%d', '%s', '%s', '%s', '%d', '%d', '%s', '%s' ),
 								array( '%d' )
 							);
 							$region_id = $_GET['id'];
@@ -328,7 +333,10 @@ class VCA_ASM_Admin_Geography {
 								array(
 									'name' => $_POST['name'],
 									'type' => $_POST['type'],
-									'country_code' => ( isset( $_POST['country_code'] ) && is_numeric( $_POST['country_code'] ) ) ? $_POST['country_code'] : 0,
+									'phone_code' => ( isset( $_POST['phone_code'] ) && is_numeric( $_POST['phone_code'] ) ) ? $_POST['phone_code'] : 0,
+									'alpha_code' => ( isset( $_POST['alpha_code'] ) && is_numeric( $_POST['alpha_code'] ) ) ? $_POST['alpha_code'] : 'xx',
+									'currency_name' => ( isset( $_POST['currency_name'] ) && is_numeric( $_POST['currency_name'] ) ) ? $_POST['currency_name'] : '',
+									'currency_code' => ( isset( $_POST['currency_code'] ) && is_numeric( $_POST['currency_code'] ) ) ? $_POST['currency_code'] : '',
 									'has_user' => $has_user,
 									'user_id' => isset( $region_user_id ) ? $region_user_id : 0,
 									'user' => $_POST['user'],
@@ -336,7 +344,7 @@ class VCA_ASM_Admin_Geography {
 									'supporters' => 0,
 									'members' => 0
 								),
-								array( '%s', '%s', '%d', '%d', '%d', '%s', '%s', '%d', '%d' )
+								array( '%s', '%s', '%d', '%s', '%s', '%s', '%d', '%d', '%s', '%s', '%d', '%d' )
 							);
 							$region_id = $wpdb->insert_id;
 
@@ -520,7 +528,7 @@ class VCA_ASM_Admin_Geography {
 			'sortable' => false
 		);
 		$phone_col = array(
-			'id' => 'country_code',
+			'id' => 'phone_code',
 			'title' => __( 'Phone Country Code', 'vca-asm' ),
 			'sortable' => false,
 			'conversion' => 'pcc'
@@ -789,8 +797,26 @@ class VCA_ASM_Admin_Geography {
 							array(
 								'type' => 'text',
 								'label' => __( 'Phone Country Code', 'vca-asm' ),
-								'id' => 'country_code',
+								'id' => 'phone_code',
 								'desc' => __( 'The phone extension of the country (without &quot;+&quot; or &quot;00&quot;)', 'vca-asm' )
+							),
+							array(
+								'type' => 'text',
+								'label' => __( '2-letter Country Code', 'vca-asm' ),
+								'id' => 'alpha_code',
+								'desc' => __( 'The 2-letter country code (as defined by <a target="_blank" title="Read the standard" href="http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1-alpha-2</a>)', 'vca-asm' )
+							),
+							array(
+								'type' => 'text',
+								'label' => __( 'Currency (Name)', 'vca-asm' ),
+								'id' => 'currency_name',
+								'desc' => __( 'The name of the local currency', 'vca-asm' )
+							),
+							array(
+								'type' => 'text',
+								'label' => __( 'Currency (Code)', 'vca-asm' ),
+								'id' => 'currency_code',
+								'desc' => __( 'The 3-letter code of the local currency (as defined by <a target="_blank" title="Read the standard" href="http://en.wikipedia.org/wiki/ISO_4217">ISO 4217</a>)', 'vca-asm' )
 							)
 						)
 					),
@@ -993,7 +1019,7 @@ class VCA_ASM_Admin_Geography {
 		);
 
 		$data = $data[0];
-		$data['country_code'] = 0 === $data['country_code'] ? '' : $data['country_code'];
+		$data['phone_code'] = 0 === $data['phone_code'] ? '' : $data['phone_code'];
 
 		if( $data['has_user'] == 1 ) {
 			$head_of_obj = get_userdata(  $data['user_id'] );

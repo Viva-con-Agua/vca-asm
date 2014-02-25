@@ -35,6 +35,14 @@ class VCA_ASM_Activity {
 	public $name = '';
 	public $meta = array();
 
+	public $type = 'festival';
+	public $nice_type = 'Festival';
+	public $icon_url = 'http://vivaconagua.org/wp-content/plugins/vca-asm/img/icon-festivals_32.png';
+
+	public $nation = 0;
+	public $city = 0;
+	public $delegation = false;
+
 	public $membership_required = false;
 
 	public $start_app = 0;
@@ -108,11 +116,30 @@ class VCA_ASM_Activity {
 		$this->name = $this->post_object->post_title;
 		$this->meta = get_post_meta( $id );
 
+		$this->type = $this->post_object->post_type;
+		if ( 'concert' === $this->type ) {
+			$this->nice_type = __( 'Concert', 'vca-asm' );
+			$this->icon_url = VCA_ASM_RELPATH . 'img/icon-concert_32.png';
+		} elseif ( 'festival' === $this->type ) {
+			$this->nice_type = __( 'Festival', 'vca-asm' );
+			$this->icon_url = VCA_ASM_RELPATH . 'img/icon-festival_32.png';
+		} elseif ( 'nwgathering' === $this->type ) {
+			$this->nice_type = __( 'Network Gathering', 'vca-asm' );
+			$this->icon_url = VCA_ASM_RELPATH . 'img/icon-network_32.png';
+		} elseif ( 'miscactions' === $this->type ) {
+			$this->nice_type = __( 'Miscellaneous', 'vca-asm' );
+			$this->icon_url = VCA_ASM_RELPATH . 'img/icon-miscaction_32.png';
+		}
+
 		$this->membership_required = ( 1 == get_post_meta( $id, 'membership_required', true ) ) ? true : false;
 
 		$this->department = $vca_asm_activities->departments_by_activity[$this->post_object->post_type] ?
 			$vca_asm_activities->departments_by_activity[$this->post_object->post_type] :
 			'actions';
+
+		$this->nation = get_post_meta( $id, 'nation', true );
+		$this->city = get_post_meta( $id, 'city', true );
+		$this->delegation = get_post_meta( $id, 'delegate', true );
 
 		$this->total_slots = get_post_meta( $id, 'total_slots', true );
 		$this->global_slots = get_post_meta( $id, 'global_slots', true );
@@ -444,13 +471,41 @@ class VCA_ASM_Activity {
 	}
 
 	/**
+	 * Determines whether a supporter has applied for this activity
+	 *
+	 * @param int $supporter_id
+	 *
+	 * @return (bool)
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function has_applied( $supporter_id ) {
+		return in_array( $supporter_id, $this->applicants );
+	}
+
+	/**
+	 * Determines whether a supporter is a partcipant of this activity
+	 *
+	 * @param int $supporter_id
+	 *
+	 * @return (bool)
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function is_participant( $supporter_id ) {
+		return in_array( $supporter_id, $this->participants );
+	}
+
+	/**
 	 * Determines whether a supporter is eligible to this activity
 	 *
 	 * @param int $supporter_id
 	 *
 	 * @return mixed (bool) false if not, (int) quota (geo-unit) id if so
 	 *
-	 * @since 1.0
+	 * @since 1.3
 	 * @access public
 	 */
 	public function is_eligible( $supporter_id ) {

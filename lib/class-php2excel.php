@@ -15,7 +15,7 @@
 */
 
 /*
-	
+
 	Filename	: export.xls.class.php
 	Description	: A small light weight PHP class to allow the creation of simple xls excel spreadsheets from array data.
 	Version 	: 1.01
@@ -38,7 +38,7 @@ class ExportXLS {
 
 
 	#Class constructor
-	function ExportXLS($filename) { 
+	function ExportXLS($filename) {
 		$this->filename = $filename;
 	}
 
@@ -74,15 +74,15 @@ class ExportXLS {
 			else
 			{
 				$this->bodyArray[] = $row;
-			}			
+			}
 		}
 		else
 		{
 			$this->bodyArray[][0] = $row;
 		}
-	
+
 	}
-	
+
 	public function returnSheet() {
 	# returns the spreadsheet as a variable
 
@@ -118,8 +118,8 @@ class ExportXLS {
 	*/
 
 	private function buildXLS() {
-	# build and return the xls 
-	
+	# build and return the xls
+
 		#Excel BOF
 		$xls = pack("ssssss", 0x809, 0x8, 0x0, 0x10, 0x0, 0x0);
 
@@ -139,7 +139,8 @@ class ExportXLS {
 	}
 
 	private function build($array) {
-	#build and return the headers 
+	#build and return the headers
+		$build = '';
 
 		foreach($array as $key=>$row) {
 			$colNo = 0;
@@ -167,16 +168,16 @@ class ExportXLS {
 		$field = pack("ssssss", 0x204, 8 + $length, $row, $col, 0x0, $length);
 		$field .= $data;
 
-		return $field; 
+		return $field;
 	}
-		
+
 
 	private function numFormat($row, $col, $data) {
 	# format and return the field as a header
     		$field = pack("sssss", 0x203, 14, $row, $col, 0x0);
-    		$field .= pack("d", $data); 
-		
-		return $field; 
+    		$field .= pack("d", $data);
+
+		return $field;
 	}
 }
 ?>

@@ -13,6 +13,7 @@ function initSlots() {
 		qgParams.prefix = 'ctr';
 		qgParams.fieldID = 'ctr_quotas';
 		qgParams.id = 0;
+		qgParams.init = true;
 		createQuotaGroup( qgParams );
 	}
 	if ( null != quotasParams.ctr_cty_switch ) {
@@ -22,6 +23,7 @@ function initSlots() {
 				qgParams.prefix = 'cty';
 				qgParams.fieldID = 'cty_slots';
 				qgParams.id = geoID;
+				qgParams.init = true;
 				createQuotaGroup( qgParams );
 			}
 		}
@@ -131,8 +133,9 @@ function createQuotaGroup( qgParams ) {
 		}
 	}
 
-	var i = 0;
-	var highestRunning = 0;
+	var i = 0,
+		highestRunning = 0;
+
 	if ( 'cty' === qgParams.prefix && 0 < $('tr#cty_slots-wrap').find('li.quotas-item').length ) {
 		$('tr#cty_slots-wrap').find('li.quotas-item').each( function() {
 			var currentRunning = parseInt( $(this).attr('id').split('-').pop() );
@@ -143,21 +146,26 @@ function createQuotaGroup( qgParams ) {
 		i = highestRunning + 1;
 	}
 
+	var groupCnt = 0;
+
 	for ( var geoID in quotasParams[qgParams.fieldID] ) {
 		if ( quotasParams[qgParams.fieldID].hasOwnProperty(geoID) ) {
 			if ( 'ctr' === qgParams.prefix ) {
 				createField( i, geoID, qgParams );
 				i++;
+				groupCnt++;
 			} else {
 				for ( var j = 0; j < quotasParams.national_hierarchy.length; j++ ) {
 					if (
 						qgParams.id === quotasParams.national_hierarchy[j].id &&
 						null != quotasParams.national_hierarchy[j].cities
 					) {
+						groupCnt = 0;
 						for ( var k = 0; k < quotasParams.national_hierarchy[j].cities.length; k++ ) {
 							if ( geoID === quotasParams.national_hierarchy[j].cities[k].id ) {
 								createField( i, geoID, qgParams );
 								i++;
+								groupCnt++;
 							}
 						}
 					}
@@ -165,8 +173,10 @@ function createQuotaGroup( qgParams ) {
 			}
 		}
 	}
-	if ( 0 === i || ( highestRunning + 1 ) === i ) {
-		createField( i, null, qgParams );
+	if ( 0 === i || ( ( highestRunning + 1 ) === i && ( true != qgParams.init || 0 === groupCnt ) ) ) {
+		var extraParams = new Object;
+		extraParams.groupRunning = groupCnt;
+		createField( i, null, qgParams, extraParams );
 	}
 
 	var geoOptions = $('ul#quotas-group-'+qgParams.id).find('li').last().find('select.quotas-geo').children('option').length;
@@ -181,7 +191,13 @@ function createQuotaGroup( qgParams ) {
 	quotaGroupWrapAdjust();
 }
 
-function createField( runningNumber, geoID, qgParams ) {
+function createField( runningNumber, geoID, qgParams, extraParams ) {
+	extraParams = extraParams || {};
+	var groupRunning = runningNumber;
+	if ( null != extraParams.groupRunning ) {
+		groupRunning = extraParams.groupRunning;
+	}
+
 	var output = '<li id="'+qgParams.prefix+'-quotas-item-'+runningNumber+'" class="quotas-item">' +
 			'<select name="quotas-'+qgParams.prefix+'['+runningNumber+']"' +
 				' id="quotas-'+qgParams.prefix+'" class="quotas-geo">';
@@ -325,7 +341,7 @@ function createField( runningNumber, geoID, qgParams ) {
 		}
 	});
 
-	if ( runningNumber === 0 ) {
+	if ( groupRunning === 0 ) {
 		$('ul#quotas-group-'+qgParams.id).find('.quotas-group-remove').hide(400);
 	} else {
 		$('ul#quotas-group-'+qgParams.id).find('.quotas-group-remove').show(400);

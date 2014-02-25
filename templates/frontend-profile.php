@@ -169,7 +169,7 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 				if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
 					echo ' disabled="disabled"';
 				}
-				echo '/><label for="' . $field['id'] . '"><span class="box"></span>' . $field['option'] . '</label>';
+				echo '/><label for="' . $field['id'] . '"><span class="box"></span>' . ( isset( $field['option'] ) ? $field['option'] : '' ) . '</label>';
 			break;
 
 			case 'radio':
@@ -177,7 +177,7 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 				foreach ( $field['options'] as $option ) {
 					echo '<span class="box-test"></span><input type="radio"' .
 						'name="' . $field['id'] .
-						'" id="' . $option['value'] .
+						'" id="' . $field['id'] .'_' . $option['value'] .
 						'" value="' . $option['value'] . '" ';
 					if( $field['value'] == $option['value'] ) {
 						echo ' checked="checked"';
@@ -185,7 +185,7 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 					if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
 						echo ' disabled="disabled"';
 					}
-					echo ' /><label for="' . $option['value'] . '"><span class="box"></span>' . $option['label'] . '</label><br />';
+					echo ' /><label for="' . $field['id'] .'_' . $option['value'] . '"><span class="box"></span>' . $option['label'] . '</label><br />';
 				}
 			break;
 

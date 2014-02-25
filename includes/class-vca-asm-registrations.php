@@ -214,7 +214,7 @@ class VcA_ASM_Registrations {
 		$applications = $wpdb->get_results(
 			"SELECT supporter FROM " .
 			$wpdb->prefix . "vca_asm_applications_old " .
-			"WHERE activity = " . $activity, ARRAY_N
+			"WHERE activity = " . $activity, ARRAY_A
 		);
 		$supporters = array();
 		foreach( $applications as $application ) {
@@ -265,12 +265,20 @@ class VcA_ASM_Registrations {
 	 * @access public
 	 */
 	public function get_activity_registration_count( $activity, $region = 'all' ) {
-		global $wpdb;
+		global $wpdb, $vca_asm_activities;
+
+		if ( time() > get_post_meta( $activity, 'end_act', true ) ) {
+			$tbl_name = 'vca_asm_registrations_old';
+			$quota_str = 'quota';
+		} else {
+			$tbl_name = 'vca_asm_registrations';
+			$quota_str = 'contingent';
+		}
 
 		if( $region === 'all' ) {
 			$count = $wpdb->get_var( $wpdb->prepare(
 				"SELECT COUNT(*) FROM " .
-				$wpdb->prefix . "vca_asm_registrations " .
+				$wpdb->prefix . $tbl_name . " " .
 				"WHERE activity= %d", $activity
 			) );
 			$end_date = intval( get_post_meta( $activity, 'end_act', true ) );
@@ -281,8 +289,8 @@ class VcA_ASM_Registrations {
 		} else {
 			$count = 0;
 			$registrations = $wpdb->get_results(
-				"SELECT contingent FROM " .
-				$wpdb->prefix . "vca_asm_registrations " .
+				"SELECT " . $quota_str . " FROM " .
+				$wpdb->prefix . $tbl_name . " " .
 				"WHERE activity=" . $activity, ARRAY_A
 			);
 			foreach( $registrations as $supporter ) {

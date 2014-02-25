@@ -63,6 +63,7 @@ class VCA_ASM_Security {
 		$supp_level = $this->options['pass_strength_supporter'];
 		$admin_level = $this->options['pass_strength_admin'];
 		$user_id = $user->ID;
+		$user_login = ! empty( $_POST['user_login'] ) ? $_POST['user_login'] : ( ! empty( $user->user_login ) ? $user->user_login : '' );
 
 		if ( $user_id ) {
 			$user_obj = new WP_User( $user_id );
@@ -86,7 +87,7 @@ class VCA_ASM_Security {
 			$errors->add( 'pass', $error );
 		} elseif ( ! $errors->get_error_data('pass') &&
 			$_POST['pass1'] && $_POST['pass2'] &&
-			$this->password_strength( $_POST['pass1'], $_POST["user_login"] ) < $level
+			$this->password_strength( $_POST['pass1'], $user_login ) < $level
 		) {
 			$error = __( 'The password you have chosen is not strong enough.', 'vca-asm' ) . '<br />' .
 				sprintf(
@@ -103,7 +104,7 @@ class VCA_ASM_Security {
 		}
 		if ( empty( $errors->errors ) && isset( $user_obj ) && ! empty ( $_POST['pass1'] ) ) {
 			update_user_meta( $user_obj->ID, 'vca_asm_last_pass_reset', time() );
-			if( in_array( 'head_of', $user_obj->roles ) ) {
+			if( in_array( 'head_of', $user_obj->roles ) || in_array( 'city', $user_obj->roles ) ) {
 				global $wpdb;
 				$wpdb->update(
 					$wpdb->prefix.'vca_asm_regions',
@@ -124,7 +125,7 @@ class VCA_ASM_Security {
 	 * @since 1.2
 	 * @access private
 	 */
-	private function password_strength( $pass, $username ) {
+	private function password_strength( $pass, $username = '' ) {
 		$str_coeff = 0;
 		if ( strlen( $pass ) < 4 )
 			return 1;

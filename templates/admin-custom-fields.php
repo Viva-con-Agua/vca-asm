@@ -30,8 +30,6 @@ if ( ! isset( $output ) ) {
 	$output = '';
 }
 
-//echo 'FUCK YOU!';
-
 /* table & loop through fields */
 $output .=  '<table class="form-table">';
 
@@ -148,7 +146,8 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 					$output .= '<input type="checkbox"' .
 						'value="' . $option['value'] .
 						'" name="' . $field['id'] . '[]' .
-						'" class="' . $field['id'] . '"';
+						'" class="' . $field['id'] . '"' .
+						' id="' . $field['id'] . '_' . $option['value'] . '"';
 
 					if( isset( $meta ) && is_array( $meta ) && in_array( $option['value'], $meta ) ||
 					    empty( $meta ) && isset( $option['default'] ) && true === $option['default']
@@ -159,7 +158,7 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 						$output .= ' disabled="disabled"';
 					}
 
-					$output .= ' /><label>' .
+					$output .= ' /><label for="' . $field['id'] . '_' . $option['value'] . '">' .
 						$option['label'] .
 						'</label><br />';
 				}
@@ -234,11 +233,11 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 				} else {
 					$output .= '<tbody>' .
 						'<tr><th><label for="contact_name['.$i.']">'. _x( 'Name', 'Contact Person Meta Box', 'vca-asm' ) .'</label></th><td>' .
-						'<input type="text" name="contact_name'.'['.$i.']" id="contact_name" value="'.$row.'" size="30" /></td></tr>' .
+						'<input type="text" name="contact_name'.'['.$i.']" id="contact_name" value="" size="30" /></td></tr>' .
 						'<tr><th><label for="contact_email['.$i.']">'. _x( 'E-Mail', 'Contact Person Meta Box', 'vca-asm' ) .'</label></th><td>' .
-						'<input type="text" name="contact_email'.'['.$i.']" id="contact_email" value="'.$emails[$i].'" size="30" /></td></tr>' .
+						'<input type="text" name="contact_email'.'['.$i.']" id="contact_email" value="" size="30" /></td></tr>' .
 						'<tr><th><label for="contact_mobile['.$i.']">'. _x( 'Mobile Phone', 'Contact Person Meta Box', 'vca-asm' ) .'</label></th><td>' .
-						'<input type="text" name="contact_mobile'.'['.$i.']" id="contact_mobile" class="phone-number" value="'.$mobiles[$i].'" size="30" />' .
+						'<input type="text" name="contact_mobile'.'['.$i.']" id="contact_mobile" class="phone-number" value="" size="30" />' .
 						'<a class="contact-cf-remove no-js-hide" href="#" style="display:none">' .
 							_x( 'remove', 'Quotas', 'vca-asm' ) .
 						'</a></td></tr></tbody>';
@@ -455,7 +454,6 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 			/* BEGIN: Slots */
 
 			case 'total_slots':
-				//print '<pre>$activity = ' . htmlspecialchars( print_r( $the_activity, TRUE ), ENT_QUOTES, 'utf-8', FALSE ) . "</pre>\n";
 				$value = ! empty( $meta ) ? $meta : $field['min'];
 				$output .= '<div id="' . $field['id'] . '-slider"></div>' .
 					'<span class="value total_slots-value no-js-hide" id="total_slots-value">' . $meta . '</span>' .
@@ -527,10 +525,7 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 			case 'applicants':
 			case 'waiting':
 			case 'participants':
-
-				if ( $field['type'] === 'applicants' && $current_user->ID === 1 ) {
-					print '<pre>$activity = ' . htmlspecialchars( print_r( $the_activity, TRUE ), ENT_QUOTES, 'utf-8', FALSE ) . "</pre>\n";
-				}
+				global $vca_asm_registrations;
 
 				$supporters = array();
 
@@ -632,12 +627,18 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 					if ( 'waiting' === $field['type'] ) {
 						$mng_string = __( 'Manage this activities&apos; Waiting List', 'vca-asm' );
 						$active_tab = 'waiting';
+						$group_qry_string = 'waiting';
+						$group_string = __( 'Send an email to all supporters currently on the waiting list', 'vca-asm' );
 					} elseif ( 'participants' === $field['type'] ) {
 						$mng_string = __( 'Manage this activities&apos; participants', 'vca-asm' );
 						$active_tab = 'accepted';
+						$group_qry_string = 'participants';
+						$group_string = __( 'Send an email to all accepted applicants', 'vca-asm' );
 					} else {
 						$mng_string = __( 'Manage this activities&apos; applications', 'vca-asm' );
 						$active_tab = 'apps';
+						$group_qry_string = 'applicants';
+						$group_string = __( 'Send an email to all current applicants', 'vca-asm' );
 					}
 
 					$output .= '<tr><td colspan="3"><a ' .
@@ -645,7 +646,28 @@ if ( isset ( $fields ) &&  ! empty( $fields ) ) {
 						'title="' . $mng_string  . '"' .
 					'>' .
 						$mng_string .
-					'</a></td></tr></table>';
+					'</a></td></tr>' .
+					'<tr><td colspan="3"><a href="' .
+						get_bloginfo('url') . '/wp-admin/admin.php?page=vca-asm-compose&activity=' . $post->ID . '&group=' . $group_qry_string .
+					'">' . $group_string . '</a></td></tr>';
+
+					if ( 'participants' === $field['type'] ) {
+						$output .= '<tr><td colspan="3">' .
+							'<a id="excel-download" href="#spreadsheet-full" onclick="p1exportExcel();">' .
+								__( 'Download participant data as an MS Excel spreadsheet', 'vca-asm' ) .
+								' (' . _x( 'including sensitive data, never (!) forward', 'non-sensitive data', 'vca-asm' ) . ')' .
+							'</a>' .
+						'</td></tr>' .
+						'<tr><td colspan="3">' .
+							'<a id="excel-download-minimal" href="#spreadsheet-minimal" onclick="p1exportExcelMin();">' .
+								__( 'Download participant data as an MS Excel spreadsheet', 'vca-asm' ) .
+								' (' . _x( 'safe to forward', 'non-sensitive data', 'vca-asm' ) . ')' .
+							'</a>' .
+							'<iframe id="excel-frame" src="" style="display:none; visibility:hidden;"></iframe>' .
+						'</td></tr>';
+					}
+
+					$output .= '</table>';
 				}
 			break;
 

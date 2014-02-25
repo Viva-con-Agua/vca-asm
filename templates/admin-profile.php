@@ -173,14 +173,14 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 				if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
 					echo ' disabled="disabled"';
 				}
-				echo '/><label for="' . $field['id'] . '">' . $field['option'] . '</label>';
+				echo '/><label for="' . $field['id'] . '">' . ( isset( $field['option'] ) ? $field['option'] : '' ) . '</label>';
 			break;
 
 			case 'radio':
 				foreach ( $field['options'] as $option ) {
 					echo '<input type="radio"' .
 						'name="' . $field['id'] .
-						'" id="' . $option['value'] .
+						'" id="' . $field['id'] . '_' . $option['value'] .
 						'" value="' . $option['value'] . '" ';
 					if( $field['value'] == $option['value'] ) {
 						echo ' checked="checked"';
@@ -188,7 +188,7 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 					if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
 						echo ' disabled="disabled"';
 					}
-					echo ' /><label for="' . $option['value'] . '">' . $option['label'] . '</label><br />';
+					echo ' /><label for="' . $field['id'] . '_' . $option['value'] . '">' . $option['label'] . '</label><br />';
 				}
 			break;
 

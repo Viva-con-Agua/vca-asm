@@ -25,6 +25,7 @@ class VCA_ASM_Supporter {
 
 	public $first_name = '';
 	public $last_name = '';
+	public $user_name = '';
 	public $nice_name = '';
 
 	public $age = '';
@@ -37,10 +38,14 @@ class VCA_ASM_Supporter {
 	public $membership_id = 0;
 	public $membership = '';
 	public $mobile = '';
+
 	public $region = '';
 	public $region_id = '';
 	public $city = '';
 	public $city_id = '';
+	public $nation = '';
+	public $nation_id = '';
+	
 	public $registration_date = '';
 	public $role_slug = '';
 	public $role = '';
@@ -77,6 +82,7 @@ class VCA_ASM_Supporter {
 		global $wpdb, $wp_roles, $vca_asm_geography, $vca_asm_utilities;
 
 		$supp_region = get_user_meta( $supporter_id, 'region', true );
+		$supp_nation = get_user_meta( $supporter_id, 'nation', true );
 		$supp_bday = get_user_meta( $supporter_id, 'birthday', true );
 		$supp_age = ! empty( $supp_bday ) ? $vca_asm_utilities->date_diff( time(), intval( $supp_bday ) ) : array( 'year' => __( 'not set', 'vca-asm' ) );
 		$user_obj = get_userdata( $supporter_id );
@@ -85,12 +91,15 @@ class VCA_ASM_Supporter {
 
 		$this->first_name = $user_obj->first_name;
 		$this->last_name = $user_obj->last_name;
+		$this->user_name = $user_obj->user_login;
 		if( ! empty( $this->first_name ) && ! empty( $this->last_name ) ) {
 			$this->nice_name = $this->first_name . ' ' . $this->last_name;
 		} elseif( ! empty( $this->first_name ) ) {
 			$this->nice_name = $this->first_name;
 		} elseif( ! empty( $this->last_name ) ) {
 			$this->nice_name = $this->last_name;
+		} elseif( ! empty( $this->user_name ) ) {
+			$this->nice_name = $this->user_name;
 		} else {
 			$this->nice_name = __( 'unknown Supporter', 'vca-asm' );
 		}
@@ -105,11 +114,16 @@ class VCA_ASM_Supporter {
 		$this->last_activity = strftime ( '%e. %B %Y', time( get_user_meta( $supporter_id, 'vca_asm_last_activity', true ) ) );
 		$this->membership_id = intval( get_user_meta( $supporter_id, 'membership', true ) );
 		$this->membership = $vca_asm_utilities->convert_strings( $this->membership_id );
-		$this->mobile = $vca_asm_utilities->normalize_phone_number( get_user_meta( $supporter_id, 'mobile', true ), true );
+		$this->mobile = $vca_asm_utilities->normalize_phone_number(
+							get_user_meta( $supporter_id, 'mobile', true ),
+							array( 'nice' => true, 'nat_id' => $supp_nation ? $supp_nation : 0 )
+						);
 		$this->region = ! empty( $supp_region ) ? $vca_asm_geography->get_name( $supp_region ) : __( 'not set', 'vca-asm' );
 		$this->region_id = intval( $supp_region );
 		$this->city = $this->region;
 		$this->city_id = $this->region_id;
+		$this->nation = ! empty( $supp_nation ) ? $vca_asm_geography->get_name( $supp_nation ) : __( 'not set', 'vca-asm' );
+		$this->nation_id = intval( $supp_nation );
 		$this->registration_date = strftime( '%e. %B %Y', strtotime( $user_obj->user_registered ) );
 		$this->role_slug = ! empty( $user_role ) ? $user_role : 'supporter';
 		$this->role = $wp_roles->role_names[$this->role_slug];

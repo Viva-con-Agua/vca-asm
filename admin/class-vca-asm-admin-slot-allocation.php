@@ -458,61 +458,6 @@ class VCA_ASM_Admin_Slot_Allocation {
 	}
 
 	/**
-	 * Returns an array of activities
-	 * and correspinding relevant data
-	 * depending on the admin user's capabilities
-	 *
-	 * @since 1.1
-	 * @access private
-	 */
-	private function get_activities_data() {
-		global $current_user, $vca_asm_registrations;
-		get_currentuserinfo();
-
-		$activities_obj = $this->get_activites_in_application_phase();
-		$activities = array();
-		$admin_city = get_user_meta( $current_user->ID, 'region', true );
-
-		while ( $activities_obj->have_posts() ) : $activities_obj->the_post();
-
-			$slots_arr = get_post_meta( get_the_ID(), 'slots', true );
-			$post_city = get_post_meta( get_the_ID(), 'region', true );
-			$delegation = get_post_meta( get_the_ID(), 'delegate', true );
-
-			if( current_user_can( 'vca_asm_manage_all_applications' ) || ( $delegation == 'delegate' && $post_city == $admin_city ) ) {
-				$app_count = $vca_asm_registrations->get_activity_application_count( get_the_ID() );
-				$wait_count = $vca_asm_registrations->get_activity_waiting_count( get_the_ID() );
-				$reg_count = $vca_asm_registrations->get_activity_registration_count( get_the_ID() );
-			} else {
-				if( ! array_key_exists( $admin_city, $slots_arr ) ) {
-					continue;
-				}
-				$app_count = $vca_asm_registrations->get_activity_application_count( get_the_ID(), $admin_city );
-				$wait_count = $vca_asm_registrations->get_activity_waiting_count( get_the_ID(), $admin_city );
-				$reg_count = $vca_asm_registrations->get_activity_registration_count( get_the_ID(), $admin_city );
-			}
-
-			$activities[get_the_ID()] = array(
-				'id' => get_the_ID(),
-				'title' => get_the_title(),
-				'slots' => $slots_arr,
-				'applications' => $app_count,
-				'waiting' => $wait_count,
-				'registrations' => $reg_count
-			);
-
-		endwhile;
-
-		wp_reset_postdata();
-
-		if( ! empty( $activities ) ) {
-			return $activities;
-		} else {
-			return false;
-		}
-	}
-
-	/**
 	 * Slot allocation menu controller
 	 *
 	 * @since 1.2
@@ -736,10 +681,6 @@ class VCA_ASM_Admin_Slot_Allocation {
 			}
 		}
 
-		$admin_city = get_user_meta( $current_user->ID, 'region', true );
-		$post_city = get_post_meta( $activity_id, 'region', true );
-		$delegation = get_post_meta( $activity_id, 'delegate', true );
-
 		if ( ! $the_activity->upcoming ) {
 			$tabs = array(
 				array(
@@ -821,8 +762,6 @@ class VCA_ASM_Admin_Slot_Allocation {
 
 		$admin_city = get_user_meta( $current_user->ID, 'region', true );
 		$admin_city_status = $vca_asm_geography->get_status( $admin_city );
-		$post_city = get_post_meta( $the_activity->ID, 'geo', true );
-		$delegation = get_post_meta( $the_activity->ID, 'delegate', true );
 
 		$columns = array(
 			array(
@@ -1014,7 +953,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 		$tables = array();
 		if (
 			current_user_can( 'vca_asm_manage_' . $this->department . '_global' ) ||
-			$delegation === 'delegate' && $post_city === $admin_city
+			$the_activity->delegation === 'delegate' && $the_activity->city === $admin_city
 		) {
 			if ( 0 < $the_activity->global_slots || ! empty( $supporters_by_quota[1410065407] ) ) {
 				$tables[0] = array(
@@ -1115,6 +1054,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 		for ( $i = 0; $i < $soq_count; $i++ ) {
 			$supp_id = intval( $supps_of_quota[$i] );
 			$supp_region = get_user_meta( $supp_id, 'region', true );
+			$supp_nation = get_user_meta( $supp_id, 'nation', true );
 			$supp_bday = get_user_meta( $supp_id, 'birthday', true );
 			$supp_age = ! empty( $supp_bday ) ? $vca_asm_utilities->date_diff( time(), intval( $supp_bday ) ) : array( 'year' => __( 'not set', 'vca-asm' ) );
 			$supp_info = get_userdata( $supp_id );
@@ -1140,8 +1080,11 @@ class VCA_ASM_Admin_Slot_Allocation {
 			$rows[$i]['last_name'] = get_user_meta( $supp_id, 'last_name', true );
 			$rows[$i]['user_email'] = $supp_info->user_email;
 			$db_num = get_user_meta( $supp_id, 'mobile', true );
-			$rows[$i]['mobile'] = $vca_asm_utilities->normalize_phone_number( $db_num, true );
-			$raw_num = $vca_asm_utilities->normalize_phone_number( $db_num );
+			$rows[$i]['mobile'] = $vca_asm_utilities->normalize_phone_number(
+										$db_num,
+										array( 'nice' => true, 'nat_id' => $supp_nation ? $supp_nation : 0 )
+									);
+			$raw_num = $vca_asm_utilities->normalize_phone_number( $db_num, array( 'nat_id' => $supp_nation ? $supp_nation : 0 ) );
 			$rows[$i]['mobile-order'] = empty( $raw_num ) ? '999999999999999' : substr( $raw_num . '0000000000000000000', 0, 15 );
 			$rows[$i]['city'] = $cities[$supp_region];
 			if( $supp_region != 0 ) {

@@ -4,18 +4,37 @@ This stylesheet is responsible for
 how activities are displayed in the front-end
 */
 
-.activities {
-	margin-bottom: 4.2em;
-}
 .activity {
 	padding: 2.1em;
-	border-radius: 2.2em;
+	border-radius: 1em;
 	margin: 2.1em 0 0;
-	background: #ddd0ac;
+	background: #eee7d5;
+}
+div.activity {
+	margin-top: 0;
+}
+.activity a {
+	border-bottom: 1px dotted #008fc1;
+}
+.no-touch .activity a:focus,
+.activity a:active,
+.activity a:hover {
+	color: #008fc1;
+	text-shadow: 0 0 1px #008fc1;
+	border-color: #e2007a;
 }
 .activity ul li {
 	font-size: 1.4em;
-	line-height: 1.5;
+	line-height: 1.2857;
+	margin-bottom: .429em;
+}
+.activity span.label {
+	font-size: 1em;
+	color: #333333;
+	font-style: italic;
+}
+.activity ul li span.label {
+	font-size: 0.714em;
 }
 .activity-month h3 {
 	font-family: GS;
@@ -37,6 +56,40 @@ how activities are displayed in the front-end
 	color: #008fc1;
 	text-transform: uppercase;
 }
+.activity h4 a {
+	color: #008fc1;
+	border-bottom: 0;
+}
+.no-touch .activity h4 a:hover,
+.activity h4 a:focus,
+.activity h4 a:active {
+	color: #00586c;
+	text-shadow: 0 0 3px #008fc1;
+	text-decoration: none;
+}
+.past-activity h4 {
+	color: #bba259;
+}
+.past-activity h4 a {
+	color: #bba259;
+}
+.no-touch .past-activity h4 a:hover,
+.past-activity h4 a:focus,
+.past-activity h4 a:active {
+	color: #857043;
+	text-shadow: 0 0 3px #bba259;
+}
+.past-activity p {
+	font-size: 1.2em;
+	margin-bottom: .9em;
+	line-height: 1;
+}
+.activity p.type {
+	color: #008fc1;
+	font-size: 1em;
+	line-height: 1;
+	margin: 0 0 1.1em;
+}
 .activity h5 {
 	font-size: 1.4em;
 	font-weight: 700;
@@ -55,14 +108,14 @@ how activities are displayed in the front-end
 .activity textarea,
 .activity select {
 	border: 2px solid #584619;
-	background: rgb(217,205,184); /* Old browsers */
-	background: -moz-linear-gradient(top, rgba(217,205,184,1) 0%, rgba(255,255,255,1) 100%); /* FF3.6+ */
-	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(217,205,184,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
-	background: -webkit-linear-gradient(top, rgba(217,205,184,1) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
-	background: -o-linear-gradient(top, rgba(217,205,184,1) 0%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
-	background: -ms-linear-gradient(top, rgba(217,205,184,1) 0%,rgba(255,255,255,1) 100%); /* IE10+ */
-	background: linear-gradient(top, rgba(217,205,184,1) 0%,rgba(255,255,255,1) 100%); /* W3C */
-	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#d9cdb8', endColorstr='#ffffff',GradientType=0 ); /* IE6-8 */
+	background: rgb(221,208,172); /* Old browsers */
+	background: -moz-linear-gradient(top, rgba(221,208,172,1) 0%, rgba(255,255,255,1) 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(221,208,172,1)), color-stop(100%,rgba(255,255,255,1))); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, rgba(221,208,172,1) 0%,rgba(255,255,255,1) 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, rgba(221,208,172,1) 0%,rgba(255,255,255,1) 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, rgba(221,208,172,1) 0%,rgba(255,255,255,1) 100%); /* IE10+ */
+	background: linear-gradient(top, rgba(221,208,172,1) 0%,rgba(255,255,255,1) 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ddd0ac', endColorstr='#ffffff',GradientType=0 ); /* IE6-8 */
 }
 .ie9 .activity input,
 .ie9 .activity textarea,

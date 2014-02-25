@@ -92,20 +92,21 @@ function vca_asm_enqueue() {
 	);
 
 	if( is_admin() ) {
-		wp_register_script( 'vca-asm-admin-email-preview', VCA_ASM_RELPATH . 'js/admin-email-preview.js', false, '1.2', true );
-		wp_register_script( 'vca-asm-admin-generic', VCA_ASM_RELPATH . 'js/admin-generic.js', false, '1.2', true );
+		wp_register_script( 'vca-asm-admin-email-preview', VCA_ASM_RELPATH . 'js/admin-email-preview.js', false, '1.3', true );
+		wp_register_script( 'vca-asm-admin-generic', VCA_ASM_RELPATH . 'js/admin-generic.js', false, '1.3', true );
 		wp_register_script( 'vca-asm-admin-repeatable-custom-fields', VCA_ASM_RELPATH . 'js/admin-repeatable-custom-fields.js',
-			array( 'jquery-ui-slider', 'jquery-ui-datepicker' ), '1.2', true );
+			array( 'jquery-ui-slider', 'jquery-ui-datepicker' ), '1.3', true );
 		wp_register_script( 'vca-asm-admin-jquery-ui-integration', VCA_ASM_RELPATH . 'js/admin-jquery-ui-integration.js',
-			array( 'jquery-ui-slider', 'jquery-ui-datepicker' ), '1.2', true );
-		wp_register_script( 'vca-asm-admin-profile', VCA_ASM_RELPATH . 'js/admin-profile.js', false, '1.2', true );
+			array( 'jquery-ui-slider', 'jquery-ui-datepicker' ), '1.3', true );
+		wp_register_script( 'vca-asm-admin-profile', VCA_ASM_RELPATH . 'js/admin-profile.js', false, '1.3', true );
 		wp_register_script( 'vca-asm-admin-quotas', VCA_ASM_RELPATH . 'js/admin-quotas.js',
-			array( 'jquery-ui-slider' ), '1.2', true );
-		wp_register_script( 'vca-asm-admin-settings', VCA_ASM_RELPATH . 'js/admin-settings.js', false, '1.2', true );
-		wp_register_script( 'vca-asm-admin-supporter-filter', VCA_ASM_RELPATH . 'js/admin-supporter-filter.js', false, '1.2', true );
-		wp_register_script( 'vca-asm-admin-validation', VCA_ASM_RELPATH . 'js/admin-validation.js', false, '1.2', true );
-		wp_register_script( 'vca-asm-excel-export', VCA_ASM_RELPATH . 'js/excel-export.js', false, '1.2', true );
-		wp_register_script( 'vca-asm-tooltip', VCA_ASM_RELPATH . 'js/tooltip.js', false, '1.2', true );
+			array( 'jquery-ui-slider' ), '1.3', true );
+		wp_register_script( 'vca-asm-admin-settings', VCA_ASM_RELPATH . 'js/admin-settings.js', false, '1.3', true );
+		wp_register_script( 'vca-asm-admin-supporter-filter', VCA_ASM_RELPATH . 'js/admin-supporter-filter.js', false, '1.3', true );
+		wp_register_script( 'vca-asm-admin-validation', VCA_ASM_RELPATH . 'js/admin-validation.js', false, '1.3', true );
+		wp_register_script( 'vca-asm-excel-export', VCA_ASM_RELPATH . 'js/excel-export.js', false, '1.3', true );
+		wp_register_script( 'vca-asm-tooltip', VCA_ASM_RELPATH . 'js/tooltip.js', false, '1.3', true );
+		wp_register_script( 'vca-asm-ctr-to-cty', VCA_ASM_RELPATH . 'js/ctr-to-cty.js', false, '1.3', true );
 
 		/* used throughout the backend, enqueued everywhere */
 		wp_enqueue_script( 'jquery-ui-slider' );
@@ -122,6 +123,8 @@ function vca_asm_enqueue() {
 			wp_enqueue_script( 'vca-asm-admin-jquery-ui-integration' );
 			wp_enqueue_script( 'vca-asm-admin-repeatable-custom-fields' );
 			wp_enqueue_script( 'vca-asm-admin-quotas' );
+			wp_enqueue_script( 'vca-asm-ctr-to-cty' );
+
 			wp_localize_script( 'vca-asm-admin-jquery-ui-integration', 'jquiParams', $jqui_params );
 		}
 		/* conditional (context) based enqueue as well ? */
@@ -130,15 +133,15 @@ function vca_asm_enqueue() {
 
 		wp_enqueue_style( 'jquery-ui-framework', VCA_ASM_RELPATH . 'css/jquery-ui-framework.css' );
 		wp_enqueue_style( 'jquery-ui-custom', VCA_ASM_RELPATH . 'css/jquery-ui-custom.css' );
-		wp_enqueue_style( 'vca-asm-admin-generic-style', VCA_ASM_RELPATH . 'css/admin-generic.css', false, '1.23' );
-		wp_enqueue_style( 'vca-asm-tooltips', VCA_ASM_RELPATH . 'css/admin-tooltips.css', false, '1.2' );
+		wp_enqueue_style( 'vca-asm-admin-generic-style', VCA_ASM_RELPATH . 'css/admin-generic.css', false, '1.3' );
+		wp_enqueue_style( 'vca-asm-tooltips', VCA_ASM_RELPATH . 'css/admin-tooltips.css', false, '1.3' );
 	} else {
-		wp_register_script( 'vca-asm-profile', VCA_ASM_RELPATH . 'js/profile.js', false, '1.2', true );
-		wp_register_script( 'vca-asm-strength-meter-init', VCA_ASM_RELPATH . 'js/strength-meter-init.js', false, '1.2', true );
+		wp_register_script( 'vca-asm-profile', VCA_ASM_RELPATH . 'js/profile.js', false, '1.3', true );
+		wp_register_script( 'vca-asm-strength-meter-init', VCA_ASM_RELPATH . 'js/strength-meter-init.js', false, '1.3', true );
 
 		wp_enqueue_script( 'vca-asm-profile' );
 
-		wp_enqueue_style( 'vca-asm-activities', VCA_ASM_RELPATH . 'css/activities.css', false, '1.2' );
+		wp_enqueue_style( 'vca-asm-activities', VCA_ASM_RELPATH . 'css/activities.css', false, '1.3.0.2' );
 	}
 }
 add_action( 'wp_loaded', 'vca_asm_enqueue' );
@@ -164,6 +167,10 @@ require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-stats.php' );
 require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-supporter.php' );
 /* foreign code */
 require_once( VCA_ASM_ABSPATH . '/lib/class-php2excel.php' );
+/* template classes (non-OOP templates are included on the spot) */
+if ( ! is_admin() ) {
+	require_once( VCA_ASM_ABSPATH . '/templates/class-vca-asm-frontend-activities.php' );
+}
 
 /**
  * Admin UI
@@ -198,8 +205,35 @@ if ( is_admin() ) {
 	require_once( ABSPATH . '/wp-admin/includes/user.php' );
 
 	/* used on major updates */
-	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-update.php' );
+	//require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-update.php' );
 }
+
+/**
+ * Sets the locale depending on a user's settings
+ *
+ * @since 1.3
+ */
+function vca_asm_user_locale() {
+	add_filter( 'locale', 'vca_asm_set_locale', 1 );
+}
+function vca_asm_set_locale( $locale ) {
+	global $current_user;
+	get_currentuserinfo();
+
+	if ( 'en' === get_user_meta( $current_user->ID, 'pool_lang', true ) ) {
+		setlocale ( LC_ALL , 'en_US' );
+		setlocale( LC_MESSAGES, 'en_US' );
+		setlocale( LC_NUMERIC, 'en_US' );
+		return 'en_US';
+	}
+
+	setlocale ( LC_ALL , 'de_DE.UTF-8' );
+	setlocale( LC_MESSAGES, 'en_US' );
+	setlocale( LC_NUMERIC, 'en_US' );
+
+	return $locale;
+}
+add_action( 'plugins_loaded', 'vca_asm_user_locale' );
 
 /**
  * VCA_ASM Initial Object
@@ -256,6 +290,9 @@ function vca_asm_install() {
 		user varchar(255) NOT NULL ,
 		pass varchar(255) NOT NULL ,
 		country_code int UNSIGNED NOT NULL,
+		alpha_code tinytext NOT NULL ,
+		currency_name text NOT NULL ,
+		currency_code tinytext NOT NULL ,
 		UNIQUE KEY id (id)
     );";
 	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_geography_hierarchy (

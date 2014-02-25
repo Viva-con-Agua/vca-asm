@@ -216,6 +216,13 @@ class VCA_ASM_Admin {
 			'vca-asm-mode-settings',
 			array( &$vca_asm_admin_settings, 'mode_control' )
 		);
+		add_submenu_page(
+			'vca-asm-settings',
+			__( 'WP Users', 'vca-asm' ),
+			__( 'WP Users', 'vca-asm' ),
+			'vca_asm_wp_users_ui',
+			'users.php'
+		);
 	}
 
 	/**
