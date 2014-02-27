@@ -16,6 +16,24 @@ class VCA_ASM_Admin_Finances
 {
 
 	/**
+	 * Controller for the Finances Admin Menu
+	 *
+	 * @since 1.2
+	 * @access public
+	 */
+	public function ff_control() {
+		echo '<div class="wrap">' .
+			'<div id="icon-finances" class="icon32-pa"></div><h2>(Zellen-)Finanzen</h2>';
+		$feech = new VCA_ASM_Admin_Future_Feech( array(
+			'title' => '(Zellen-)Finanzen',
+			'version' => '1.4',
+			'explanation' => 'Hier werden in Zukunft die Spenden- und Wirtschaftskonten der Zellen verwaltet werden können.'
+		));
+		$feech->output();
+		echo '</div>';
+	}
+
+	/**
 	 * Class Properties
 	 *
 	 * @since 1.4
@@ -1835,10 +1853,10 @@ class VCA_ASM_Admin_Finances
 
 		$output .= '<br />' . $button . '<br />';
 
-		$output .= '<h3>' . __( 'Expense Accounts' ) . '</h3>';
+		$output .= '<h3>' . __( 'Expense Accounts', 'vca-asm' ) . '</h3>';
 		$output .= $this->settings_list_ei_accs( 'expense' );
 
-		$output .= '<h3>' . __( 'Income Accounts' ) . '</h3>';
+		$output .= '<h3>' . __( 'Income Accounts', 'vca-asm' ) . '</h3>';
 		$output .= $this->settings_list_ei_accs( 'income' );
 
 		$output .= '<br />' . $button;

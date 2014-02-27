@@ -176,47 +176,67 @@ class VCA_ASM_Admin {
 		);
 
 		/* Finances Menu */
-		add_menu_page(
-			__( 'Finances', 'vca-asm' ),
-			__( 'Finances', 'vca-asm' ),
-			'vca_asm_view_finances',
-			'vca-asm-finances',
-			array( $vca_asm_admin_finances, 'overview_control' ),
-			VCA_ASM_RELPATH . 'img/icon-finances_32.png',
-			107
-		);
-		add_submenu_page(
-			'vca-asm-finances',
-			__( 'Overview', 'vca-asm' ),
-			__( 'Overview', 'vca-asm' ),
-			'vca_asm_view_finances',
-			'vca-asm-finances',
-			array( $vca_asm_admin_finances, 'overview_control' )
-		);
-		add_submenu_page(
-			'vca-asm-finances',
-			__( 'Donations', 'vca-asm' ),
-			__( 'Donations', 'vca-asm' ),
-			'vca_asm_view_finances',
-			'vca-asm-finances-accounts-donations',
-			array( $vca_asm_admin_finances, 'accounts_control' )
-		);
-		add_submenu_page(
-			'vca-asm-finances',
-			__( 'Structural Funds', 'vca-asm' ),
-			__( 'Structural Funds', 'vca-asm' ),
-			'vca_asm_view_finances',
-			'vca-asm-finances-accounts-econ',
-			array( $vca_asm_admin_finances, 'accounts_control' )
-		);
-		add_submenu_page(
-			'vca-asm-finances',
-			__( 'Settings', 'vca-asm' ),
-			__( 'Settings', 'vca-asm' ),
-			'vca_asm_view_finances_nation',
-			'vca-asm-finances-settings',
-			array( $vca_asm_admin_finances, 'settings_control' )
-		);
+		if ( in_array( 'city', $current_user->roles ) && ! in_array( $current_user->ID, array( 92, 98, 139 ) ) ) {
+			add_menu_page(
+				__( 'Finances', 'vca-asm' ),
+				__( 'Finances', 'vca-asm' ),
+				'vca_asm_view_finances',
+				'vca-asm-finances',
+				array( $vca_asm_admin_finances, 'ff_control' ),
+				VCA_ASM_RELPATH . 'img/icon-finances_32.png',
+				107
+			);
+			add_submenu_page(
+				'vca-asm-finances',
+				'',
+				'',
+				'vca_asm_view_finances',
+				'vca-asm-finances',
+				array( $vca_asm_admin_finances, 'ff_control' )
+			);
+		} else {
+			add_menu_page(
+				__( 'Finances', 'vca-asm' ),
+				__( 'Finances', 'vca-asm' ),
+				'vca_asm_view_finances',
+				'vca-asm-finances',
+				array( $vca_asm_admin_finances, 'overview_control' ),
+				VCA_ASM_RELPATH . 'img/icon-finances_32.png',
+				107
+			);
+			add_submenu_page(
+				'vca-asm-finances',
+				__( 'Overview', 'vca-asm' ),
+				__( 'Overview', 'vca-asm' ),
+				'vca_asm_view_finances',
+				'vca-asm-finances',
+				array( $vca_asm_admin_finances, 'overview_control' )
+			);
+			add_submenu_page(
+				'vca-asm-finances',
+				__( 'Donations', 'vca-asm' ),
+				__( 'Donations', 'vca-asm' ),
+				'vca_asm_view_finances',
+				'vca-asm-finances-accounts-donations',
+				array( $vca_asm_admin_finances, 'accounts_control' )
+			);
+			add_submenu_page(
+				'vca-asm-finances',
+				__( 'Structural Funds', 'vca-asm' ),
+				__( 'Structural Funds', 'vca-asm' ),
+				'vca_asm_view_finances',
+				'vca-asm-finances-accounts-econ',
+				array( $vca_asm_admin_finances, 'accounts_control' )
+			);
+			add_submenu_page(
+				'vca-asm-finances',
+				__( 'Settings', 'vca-asm' ),
+				__( 'Settings', 'vca-asm' ),
+				'vca_asm_view_finances_nation',
+				'vca-asm-finances-settings',
+				array( $vca_asm_admin_finances, 'settings_control' )
+			);
+		}
 
 		///* Blog Menu */
 		//add_menu_page(
