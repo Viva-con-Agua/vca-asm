@@ -811,12 +811,12 @@ class VCA_ASM_Admin_Table {
 								__( 'Edit', 'vca-asm' ) .
 							'</a></span>';
 					break;
-				
-					case 'edit':
+
+					case 'edit-ei':
 						$output .= '<span class="edit">' .
 							'<a title="' .
 								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
-								'" href="' . $url . '&amp;todo=edit&amp;id=' . $row['id'] . '">' .
+								'" href="' . $url . '&amp;todo=edit-ei&amp;id=' . $row['id'] . '">' .
 								__( 'Edit', 'vca-asm' ) .
 							'</a></span>';
 					break;

@@ -263,7 +263,7 @@ class VCA_ASM_Finances
 						'econ' === $type
 					)
 				) {
-					$balance += $transaction['sum'];
+					$balance += $transaction['amount'];
 				}
 			}
 
@@ -290,7 +290,7 @@ class VCA_ASM_Finances
 		global $wpdb;
 
 		$data = $wpdb->get_results(
-			"SELECT sum, transaction_date FROM " .
+			"SELECT amount, transaction_date FROM " .
 			$wpdb->prefix . "vca_asm_finances_transactions " .
 			"WHERE city_id = " . $city_id . " AND account_type = 'donations' AND transaction_type = 'donation' " .
 			"ORDER BY transaction_date DESC",
@@ -304,12 +304,12 @@ class VCA_ASM_Finances
 				if ( $with_years ) {
 					$year = strftime( '%Y', $transaction['transaction_date'] );
 					if ( ! array_key_exists( $year, $years ) ) {
-						$years[$year] = $transaction['sum'];
+						$years[$year] = $transaction['amount'];
 					} else {
-						$years[$year] += $transaction['sum'];
+						$years[$year] += $transaction['amount'];
 					}
 				}
-				$years['total'] += $transaction['sum'];
+				$years['total'] += $transaction['amount'];
 			}
 		}
 
@@ -324,16 +324,18 @@ class VCA_ASM_Finances
 	 * @since 1.5
 	 * @access public
 	 */
-	public function get_meta( $city_id = 0, $type = 'cost-center', $select = 'all' )
+	public function get_meta( $id = 0, $id_type = 'id', $type = '', $select = 'all' )
 	{
 		global $wpdb;
 
 		$select = 'all' === $select ? '*' : $select;
 
+		$where_type = ! empty( $type ) ? " AND type = '" . $type . "' " : " ";
+
 		$data = $wpdb->get_results(
 			"SELECT " . $select . " FROM " .
 			$wpdb->prefix . "vca_asm_finances_meta " .
-			"WHERE related_id = " . $city_id . " AND type = '" . $type . "' " .
+			"WHERE " . $id_type . " = " . $id . $where_type .
 			"LIMIT 1", ARRAY_A
 		);
 
@@ -380,7 +382,7 @@ class VCA_ASM_Finances
 	 */
 	public function get_cash_account( $city_id = 0 )
 	{
-		return $this->get_meta( $city_id, 'cash-acc', 'value' );
+		return $this->get_meta( $city_id, 'related_id', 'cash-acc', 'value' );
 	}
 
 	/**
@@ -391,7 +393,7 @@ class VCA_ASM_Finances
 	 */
 	public function get_cost_center( $id = 0, $data_type = 'all' )
 	{
-		return $this->get_meta( $city_id, 'cash-acc', $data_type );
+		return $this->get_meta( $id, 'id', 'cost-center', $data_type );
 	}
 
 	/**
@@ -411,9 +413,9 @@ class VCA_ASM_Finances
 	 * @since 1.5
 	 * @access public
 	 */
-	public function get_ei_account( $id = 0, $data_type = 'all' )
+	public function get_ei_account( $id = 0 )
 	{
-		return $this->get_meta( $city_id, 'cash-acc', $data_type );
+		return $this->get_meta( $id, 'id' );
 	}
 
 	/**
@@ -465,7 +467,7 @@ class VCA_ASM_Finances
 
 		foreach( $data as $account ) {
 			$options_array[] = array(
-				'label' => $account['name'],
+				'label' => $account['description'],
 				'value' => $account['id'],
 				'class' => $account['type']
 			);
@@ -593,9 +595,10 @@ class VCA_ASM_Finances
 			ARRAY_A
 		);
 
-		if ( ! empty( $data ) ) {
-			if ( $split ) {
-				$return = array( 'late' => array(), 'current' => array() );
+		$return = array();
+		if ( $split ) {
+			$return = array( 'late' => array(), 'current' => array() );
+			if ( ! empty( $data ) ) {
 				foreach ( $data as $transaction ) {
 					if ( $transaction['receipt_date'] >= date( 'm-01-Y 00:00:00' ) ) {
 						$return['current'][] = ! empty( $transaction[$data_type] ) ? $transaction[$data_type] : $transaction;
@@ -603,15 +606,16 @@ class VCA_ASM_Finances
 						$return['late'][] = ! empty( $transaction[$data_type] ) ? $transaction[$data_type] : $transaction;
 					}
 				}
-			} elseif( 'all' !== $data_type && ! empty( $data[0][$data_type] ) ) {
-				foreach ( $data as $transaction ) {
-					$return[] = ! empty( $transaction[$data_type] ) ? $transaction[$data_type] : $transaction;
-				}
 			}
-			$data = $return;
+		} elseif( 'all' !== $data_type && ! empty( $data[0][$data_type] ) ) {
+			foreach ( $data as $transaction ) {
+				$return[] = ! empty( $transaction[$data_type] ) ? $transaction[$data_type] : $transaction;
+			}
+		} else {
+			$return = $data;
 		}
 
-		return $data;
+		return $return;
 	}
 
 } // class

@@ -3,6 +3,14 @@
 var theErrors = new Object();
 
 $('input#publish').click( function () {
+	clickCallback();
+});
+
+$('input#submit-validate').click( function () {
+	clickCallback();
+});
+
+function clickCallback() {
 	validate();
 
 	var valid = true;
@@ -19,7 +27,7 @@ $('input#publish').click( function () {
 	}
 
 	return true;
-});
+}
 
 function required(el) {
 	var theVal = el.val();

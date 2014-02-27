@@ -26,7 +26,7 @@ class VCA_ASM_Admin_Finances
 			'<div id="icon-finances" class="icon32-pa"></div><h2>(Zellen-)Finanzen</h2>';
 		$feech = new VCA_ASM_Admin_Future_Feech( array(
 			'title' => '(Zellen-)Finanzen',
-			'version' => '1.4',
+			'version' => '1.5.1',
 			'explanation' => 'Hier werden in Zukunft die Spenden- und Wirtschaftskonten der Zellen verwaltet werden können.'
 		));
 		$feech->output();
@@ -701,8 +701,8 @@ class VCA_ASM_Admin_Finances
 				'sortable' => true
 			),
 			array(
-				'id' => 'sum',
-				'title' => __( 'Sum', 'vca-asm' ),
+				'id' => 'amount',
+				'title' => __( 'Amount', 'vca-asm' ),
 				'sortable' => true,
 				'link' => array(
 					'title' => __( 'Edit %s', 'vca-asm' ),
@@ -758,8 +758,8 @@ class VCA_ASM_Admin_Finances
 			$rows[$i]['entry_time'] = strftime( '%d.%m.%Y %H:%M', $transaction['entry_time'] );
 			$rows[$i]['transaction_date_plain'] = $transaction['transaction_date'];
 			$rows[$i]['transaction_date'] = strftime( '%d.%m.%Y', $transaction['transaction_date'] );
-			$rows[$i]['sum_palin'] = $transaction['sum'];
-			$rows[$i]['sum'] = number_format( $transaction['sum']/100, 2, ',', '.' );
+			$rows[$i]['amount_plain'] = $transaction['amount'];
+			$rows[$i]['amount'] = number_format( $transaction['amount']/100, 2, ',', '.' );
 			$i++;
 		}
 
@@ -792,6 +792,18 @@ class VCA_ASM_Admin_Finances
 			'page' => 'vca-asm-finances-accounts-donations'
 		);
 		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
+
+		wp_enqueue_script( 'vca-asm-admin-validation' );
+		$validation_params = array(
+			'errors' => array(
+				'required' => _x( 'You have not filled out all the required fields', 'Validation Error', 'vca-asm' ),
+				'numbers' => _x( 'Some fields only accept numeric values', 'Validation Error', 'vca-asm' ),
+				'phone' => _x( 'A phone number you have entered is not valid', 'Validation Error', 'vca-asm' ),
+				'end_app' => _x( 'The end of the application phase must come after its beginning', 'Validation Error', 'vca-asm' ),
+				'date' => _x( 'Some of the entered dates are in an invalid order', 'Validation Error', 'vca-asm' )
+			)
+		);
+		wp_localize_script( 'vca-asm-admin-validation', 'validationParams', $validation_params );
 
 		$url = 'admin.php?page=' . $page . '&acc_type=' . $account_type;
 		if ( ! empty( $id ) ) {
@@ -886,7 +898,7 @@ class VCA_ASM_Admin_Finances
 
 		$the_page->top();
 		if ( $has_cap ) {
-			$args = array(
+			$form_args = array(
 				'echo' => true,
 				'form' => true,
 				'metaboxes' => true,
@@ -894,9 +906,10 @@ class VCA_ASM_Admin_Finances
 				'id' => $id,
 				'back' => true,
 				'back_url' => $url . '&tab=' . $type,
+				'button_id' => 'submit-validate',
 				'fields' => $fields
 			);
-			$the_form = new VCA_ASM_Admin_Form( $args );
+			$the_form = new VCA_ASM_Admin_Form( $form_args );
 			$the_form->output();
 		}
 		$the_page->bottom();
@@ -927,7 +940,7 @@ class VCA_ASM_Admin_Finances
 							array(
 								'type' => 'cash_amount',
 								'label' => __( 'Amount', 'vca-asm' ),
-								'id' => 'sum',
+								'id' => 'amount',
 								'currency_major' => $currency_major,
 								'currency_minor' => $currency_minor,
 								'desc' => __( 'How much was gathered?', 'vca-asm' )
@@ -989,7 +1002,7 @@ class VCA_ASM_Admin_Finances
 							array(
 								'type' => 'cash_amount',
 								'label' => __( 'Amount', 'vca-asm' ),
-								'id' => 'sum',
+								'id' => 'amount',
 								'currency_major' => $currency_major,
 								'currency_minor' => $currency_minor,
 								'desc' => __( 'How much was gained?', 'vca-asm' )
@@ -1002,13 +1015,13 @@ class VCA_ASM_Admin_Finances
 							),
 							array(
 								'type' => 'radio',
-								'label' => __( 'Income Account', 'vca-asm' ),
+								'label' => __( 'Kind of revenue', 'vca-asm' ),//__( 'Income Account', 'vca-asm' ),
 								'id' => 'ei_account',
 								'options' => $vca_asm_finances->ei_options_array( array(
 									'type' => 'income',
 									'unclear' => true
 								)),
-								'desc' => __( 'Under what category should this revenue be booked?', 'vca-asm' )
+								'desc' => __( 'Of what category is this revenue?', 'vca-asm' )//__( 'Under what category should this revenue be booked?', 'vca-asm' )
 							),
 							array(
 								'type' => 'text',
@@ -1035,7 +1048,7 @@ class VCA_ASM_Admin_Finances
 							array(
 								'type' => 'cash_amount',
 								'label' => __( 'Amount', 'vca-asm' ),
-								'id' => 'sum',
+								'id' => 'amount',
 								'currency_major' => $currency_major,
 								'currency_minor' => $currency_minor,
 								'desc' => __( 'How much was spent?', 'vca-asm' )
@@ -1061,13 +1074,13 @@ class VCA_ASM_Admin_Finances
 							),
 							array(
 								'type' => 'radio',
-								'label' => __( 'Expense Account', 'vca-asm' ),
+								'label' => __( 'Kind of expense', 'vca-asm' ),//__( 'Expense Account', 'vca-asm' ),
 								'id' => 'ei_account',
 								'options' =>  $vca_asm_finances->ei_options_array( array(
 									'type' => 'expense',
 									'unclear' => true
 								)),
-								'desc' => __( 'Under what category should this expense be booked?', 'vca-asm' )
+								'desc' => __( 'Of what category is this expenditure?', 'vca-asm' )//__( 'Under what category should this expense be booked?', 'vca-asm' )
 							),
 							array(
 								'type' => 'text',
@@ -1094,7 +1107,7 @@ class VCA_ASM_Admin_Finances
 							array(
 								'type' => 'cash_amount',
 								'label' => __( 'Amount', 'vca-asm' ),
-								'id' => 'sum',
+								'id' => 'amount',
 								'currency_major' => $currency_major,
 								'currency_minor' => $currency_minor,
 								'desc' => __( 'How much did you transfer?', 'vca-asm' )
@@ -1118,7 +1131,7 @@ class VCA_ASM_Admin_Finances
 							array(
 								'type' => 'cash_amount',
 								'label' => __( 'Amount', 'vca-asm' ),
-								'id' => 'sum',
+								'id' => 'amount',
 								'currency_major' => $currency_major,
 								'currency_minor' => $currency_minor,
 								'desc' => __( 'How much did you transfer?', 'vca-asm' )
@@ -1189,7 +1202,7 @@ class VCA_ASM_Admin_Finances
 			for ( $j = 0; $j < $fcount; $j++ ) {
 				if ( empty( $_POST['submitted'] ) ) {
 					if ( 'direction' === $fields[$i]['fields'][$j]['id'] ) {
-						$fields[$i]['fields'][$j]['value'] = 0 > $data['sum'] ? 0 : 1;
+						$fields[$i]['fields'][$j]['value'] = 0 > $data['amount'] ? 0 : 1;
 					} else {
 						$fields[$i]['fields'][$j]['value'] = $data[$fields[$i]['fields'][$j]['id']];
 					}
@@ -1506,7 +1519,7 @@ class VCA_ASM_Admin_Finances
 			'active_tab' => $active_tab
 		));
 
-		$output .= $adminpage->top();
+		$output = $adminpage->top();
 
 		switch ( $active_tab ) {
 			case 'cash-accs':
@@ -1661,7 +1674,6 @@ class VCA_ASM_Admin_Finances
 
 	private function settings_cost_centers()
 	{
-
 		$button = '';
 		if ( $this->has_cap ) {
 			$button = '<form method="post" action="?page=vca-asm-finances-settings&tab=cost-centers&todo=edit-cc">' .
@@ -1669,7 +1681,7 @@ class VCA_ASM_Admin_Finances
 			'</form>';
 		}
 
-		$output .= '<br />' . $button . '<br />';
+		$output = '<br />' . $button . '<br />';
 
 		$output .= $this->settings_list_ccs();
 
@@ -1772,7 +1784,7 @@ class VCA_ASM_Admin_Finances
 						'label' => _x( 'Name', 'Cost Centers', 'vca-asm' ),
 						'id' => 'name',
 						'value' => ! empty( $data['name'] ) ? $data['name'] : '',
-						'desc' => __( 'The (short-)name of the cost center', 'vca-asm' )
+						'desc' => __( 'The (short-)name of the cost center', 'vca-asm' ) . ' ' . __( 'for the tax statement', 'vca-asm' )
 					),
 					array(
 						'type' => 'text',
@@ -1786,7 +1798,7 @@ class VCA_ASM_Admin_Finances
 						'label' => __( 'Description', 'vca-asm' ),
 						'id' => 'description',
 						'value' => ! empty( $data['description'] ) ? $data['description'] : '',
-						'desc' => __( 'A description of what all belongs in this category of costs', 'vca-asm' )
+						'desc' => __( 'A description of what all belongs in this category of costs', 'vca-asm' ) . ' ' . __( 'for city users', 'vca-asm' )
 					)
 				)
 			)
@@ -1851,7 +1863,7 @@ class VCA_ASM_Admin_Finances
 			'</form>';
 		}
 
-		$output .= '<br />' . $button . '<br />';
+		$output = '<br />' . $button . '<br />';
 
 		$output .= '<h3>' . __( 'Expense Accounts', 'vca-asm' ) . '</h3>';
 		$output .= $this->settings_list_ei_accs( 'expense' );
@@ -1886,7 +1898,7 @@ class VCA_ASM_Admin_Finances
 					'url' => '?page=vca-asm-finances-settings&todo=edit-ei&id=%d',
 					'url_row_data' => 'id'
 				),
-				'actions' => array( 'edit', 'delete' ),
+				'actions' => array( 'edit-ei', 'delete' ),
 				'cap' => 'finances'
 			),
 			array(
