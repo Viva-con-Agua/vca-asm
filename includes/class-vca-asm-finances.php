@@ -67,7 +67,9 @@ class VCA_ASM_Finances
 			'city_id' => 0,
 			'account_type' => 'donations',
 			'transaction_type' => 'donation',
-			'date_limit' => false
+			'date_limit' => false,
+			'orderby' => 'transaction_date',
+			'order' => 'DESC'
 		);
 		$args = wp_parse_args( $args, $default_args );
 		extract( $args );
@@ -94,7 +96,9 @@ class VCA_ASM_Finances
 		$transactions = $wpdb->get_results(
 			"SELECT * FROM " .
 			$wpdb->prefix . "vca_asm_finances_transactions " .
-			$where, ARRAY_A
+			$where . " " .
+			"ORDER BY " . $orderby . " " . $order,
+			ARRAY_A
 		);
 
 		return $transactions;
@@ -171,6 +175,42 @@ class VCA_ASM_Finances
 		$value = isset( $data[0] ) ? $data[0] : false;
 
 		return $value;
+	}
+
+
+	/**
+	 * ???
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	public function get_accounts( $type = 'econ', $nation_id = 0 )
+	{
+		global $wpdb,
+			$vca_asm_geography;
+
+		$where = "WHERE type = '" . $type . "'";
+		if ( ! empty( $nation_id ) ) {
+			$where .= " AND city_id IN (" .
+				$vca_asm_geography->get_descendants(
+					$nation_id,
+					array(
+						'data' => 'id',
+						'format' => 'string',
+						'concat' => ',',
+						'type' => 'city'
+					)
+				) .
+				")";
+		}
+		$data = $wpdb->get_results(
+			"SELECT * FROM " .
+			$wpdb->prefix . "vca_asm_finances_accounts " .
+			$where,
+			ARRAY_A
+		);
+
+		return $data;
 	}
 
 	/**

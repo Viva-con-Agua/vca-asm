@@ -428,7 +428,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<strong>';
 					}
 
-					if( ! empty( $column['link'] ) && $capable ) {
+					if( ! empty( $column['link'] ) && true /*$capable*/ ) {
 						$title = empty( $column['link']['title_row_data'] ) ? $column['link']['title'] : sprintf( $column['link']['title'], $row[$column['link']['title_row_data']] );
 						$url = empty( $column['link']['url_row_data'] ) ? $column['link']['url'] : sprintf( $column['link']['url'], $row[$column['link']['url_row_data']] );
 						$output .= '<a title="' . $title . '" href="' . $url . '">';
@@ -795,7 +795,7 @@ class VCA_ASM_Admin_Table {
 							$admin_city == 999 // need to pass email city
 						)
 					)
-				)
+				) || true
 			) {
 				if ( $i !== 0 && $i < $action_count ) {
 					$output .= $flipper ? ' | ' : '<br />';
@@ -818,6 +818,15 @@ class VCA_ASM_Admin_Table {
 								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
 								'" href="' . $url . '&amp;todo=edit-ei&amp;id=' . $row['id'] . '">' .
 								__( 'Edit', 'vca-asm' ) .
+							'</a></span>';
+					break;
+
+					case 'view-account':
+						$output .= '<span class="edit">' .
+							'<a title="' .
+								sprintf( __( 'View %s', 'vca-asm' ), $name ) .
+								'" href="' . $url . '&amp;todo=edit-ei&amp;id=' . $row['id'] . '">' .
+								__( 'View', 'vca-asm' ) .
 							'</a></span>';
 					break;
 
@@ -1041,13 +1050,29 @@ class VCA_ASM_Admin_Table {
 			break;
 
 			case 'membership':
-				if( isset( $row['membership_raw'] ) && 1 == $row['membership_raw'] ) {
+				if ( isset( $row['membership_raw'] ) && 1 == $row['membership_raw'] ) {
 					$output = '<strong style="color:#008fc1">' . $data . '</strong>';
 				}
 			break;
 
+			case 'balance':
+				if ( ! empty( $row['balance'] ) ) {
+					$output = '<span';
+					$output .= intval( $row['balance'] ) < 0 ? ' class="negative"' : '';
+					$output .= '>' . $data . '</span>';
+				}
+			break;
+
+			case 'amount':
+				if ( ! empty( $row['amount'] ) ) {
+					$output = '<span';
+					$output .= intval( $row['amount'] ) < 0 ? ' class="negative"' : ' class="positive"';
+					$output .= '>' . $data . '</span>';
+				}
+			break;
+
 			case 'pcc':
-				if( isset( $row['country_code'] ) && ! empty( $row['country_code'] ) ) {
+				if ( isset( $row['country_code'] ) && ! empty( $row['country_code'] ) ) {
 					$output = '+' . $data;
 				}
 			break;

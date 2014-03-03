@@ -768,6 +768,25 @@ body #pass-strength-result.strong {
 }
 
 
+/* SEMANTICS
+----------------------------------------- */
+.amount {
+	 font-weight: 700;
+}
+.donation {
+	color: #00586c;
+}
+.positive,
+.income,
+.revenue {
+	color: #03a63c;
+}
+.negative,
+.expenditure {
+	color: #f22233;
+}
+
+
 /* SMALL SCREENS
 ----------------------------------------- */
 

@@ -367,6 +367,61 @@ class VCA_ASM_Admin_Form {
 							'" id="' . $field['id'] . '_' . $option['value'] .
 							'" value="' . $option['value'] . '" ';
 
+						if( isset( $field['value'] ) && $field['value'] == $option['value'] ) {
+							$output .= ' checked="checked"';
+						}
+						if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
+							$output .= ' disabled="disabled"';
+						}
+						$output .= ' /><label for="' . $field['id'] . '_' . $option['value'] . '">' . $option['label'] . '</label>';
+
+						if( $cols !== 1 ) {
+							if( ( $i % $cols ) === 0 ) {
+								if( $i === $end ) {
+									$output .= '</td></tr></table>';
+								} else {
+									$output .= '</td></tr><tr><td>';
+								}
+							} elseif( $i === $end ) {
+								$empty_cell = '</td><td>';
+								for( $i = 0; $i < ( $i % $cols ); $i++ ) {
+									$output .= $empty_cell;
+								}
+								$output .= '</td></tr></table>';
+							} else {
+								$output .= '</td><td>';
+							}
+						} else {
+							$output .= '<br />';
+						}
+						$i++;
+					}
+				} else {
+					$output .= '<p>' . __( 'There is no data to select...', 'vca-asm' ) . '</p>';
+				}
+			break;
+
+			case 'manual_radio1':
+				if( isset( $field['cols'] ) ) {
+					$cols = $field['cols'];
+				} else {
+					$cols = 1;
+				}
+
+				if ( ! empty( $field['options'] ) ) {
+
+					if( $cols !== 1 ) {
+						$output .= '<table class="table-inside-table table-mobile-collapse subtable subtable-' . $field['id'] . '"><tr><td>';
+					}
+					$i = 1;
+					$end = count( $field['options'] );
+
+					foreach ( $field['options'] as $option ) {
+						$output .= '<input type="radio"' .
+							'name="' . $field['name'] .
+							'" id="' . $field['id'] . '_' . $option['value'] .
+							'" value="' . $option['value'] . '" ';
+
 						if( $field['value'] == $option['value'] ) {
 							$output .= ' checked="checked"';
 						}

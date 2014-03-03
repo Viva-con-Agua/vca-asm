@@ -541,14 +541,114 @@ class VCA_ASM_Admin_Finances
 					));
 			}
 		} else {
-			$this->single_view(
-				array(
-					'city_id' => $cid,
-					'account_type' => $acc_type,
-					'page' => $page
-				)
-			);
+			if ( in_array( $this->cap_lvl, array( 'nation', 'global' ) ) && ! isset( $_GET['cid'] ) ) {
+				$this->accounts_list(
+					array(
+						'account_type' => $acc_type,
+						'page' => $page
+					)
+				);
+			} else {
+				$this->single_view(
+					array(
+						'city_id' => $cid,
+						'account_type' => $acc_type,
+						'page' => $page
+					)
+				);
+			}
 		}
+	}
+
+	/**
+	 * A single account overview
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
+	public function accounts_list( $args = array() )
+	{
+		global $current_user,
+			$vca_asm_finances, $vca_asm_geography;
+
+		$default_args = array(
+			'account_type' => 'donations',
+			'messages' => array(),
+			'page' => 'vca-asm-finances-accounts-donations'
+		);
+		$args = wp_parse_args( $args, $default_args );
+		extract( $args );
+
+		if ( 'donations' === $account_type ) {
+			$title = _x( 'Donation Accounts', ' Admin Menu', 'vca-asm' );
+		} else {
+			$title = _x( 'Economical Accounts', ' Admin Menu', 'vca-asm' );
+		}
+
+		$nation_id = 'global' === $this->cap_lvl ? 0 : $this->admin_nation;
+		$accounts = $vca_asm_finances->get_accounts( $account_type, $nation_id );
+
+		$adminpage = new VCA_ASM_Admin_Page( array(
+			'icon' => 'icon-finances',
+			'title' => $title,
+			'messages' => $messages,
+			'url' => '?page=' . $page
+		));
+
+		$columns = array(
+			array(
+				'id' => 'name',
+				'title' => __( 'City', 'vca-asm' ),
+				'sortable' => true,
+				'link' => array(
+					'title' => __( 'View %s', 'vca-asm' ),
+					'title_row_data' => 'name',
+					'url' => '?page=' . $page . '&cid=%d',
+					'url_row_data' => 'city_id'
+				),
+				'actions' => array( 'view_account' ),
+				'cap' => 'view_finances'
+			),
+			array(
+				'id' => 'balance',
+				'title' => __( 'Balance', 'vca-asm' ),
+				'sortable' => true,
+				'conversion' => 'balance'
+			)
+		);
+
+		$rows = array();
+		$i = 0;
+		foreach ( $accounts as $account ) {
+			$rows[$i] = $account;
+			$rows[$i]['name'] = $vca_asm_geography->get_name( $account['city_id'] );
+			$rows[$i]['balance'] = number_format( intval( $vca_asm_finances->get_balance( $account['city_id'], $account_type ) )/100, 2, ',', '.' );
+			$i++;
+		}
+
+		$the_table = new VCA_ASM_Admin_Table(
+			array(
+				'echo' => false,
+				'orderby' => 'name',
+				'order' => 'ASC',
+				'toggle_order' => 'DESC',
+				'page_slug' => $page,
+				'base_url' => '',
+				'sort_url' => '',
+				'show_empty_message' => true,
+				'empty_message' => ''
+			),
+			$columns,
+			$rows
+		);
+
+		$output = $adminpage->top();
+
+		$output .= $the_table->output();
+
+		$output .= $adminpage->bottom();
+
+		echo $output;
 	}
 
 	/**
@@ -649,7 +749,7 @@ class VCA_ASM_Admin_Finances
 			'icon' => 'icon-finances',
 			'title' => $title,
 			'messages' => $messages,
-			'url' => '?page=' . $page,
+			'url' => '?page=' . $page . '&cid=' . $city_id,
 			'back' => $back,
 			'back_url' => '?page=' . $page,
 			'tabs' => $tabs,
@@ -696,8 +796,8 @@ class VCA_ASM_Admin_Finances
 
 		$columns = array(
 			array(
-				'id' => 'entry_time',
-				'title' => __( 'Entry Time', 'vca-asm' ),
+				'id' => 'transaction_date',
+				'title' => __( 'Date', 'vca-asm' ),
 				'sortable' => true
 			),
 			array(
@@ -711,7 +811,8 @@ class VCA_ASM_Admin_Finances
 					'url_row_data' => 'id'
 				),
 				'actions' => array( 'edit', 'delete' ),
-				'cap' => 'manage-'
+				'cap' => 'manage-',
+				'conversion' => 'amount'
 			)
 		);
 
@@ -726,7 +827,9 @@ class VCA_ASM_Admin_Finances
 		$transactions = $vca_asm_finances->get_transactions( array(
 			'city_id' => $city_id,
 			'account_type' => $account_type,
-			'transaction_type' => $transaction_type
+			'transaction_type' => $transaction_type,
+			'orderby' => 'transaction_date',
+			'order' => 'DESC'
 		));
 
 		$transaction_count = count( $transactions );
@@ -766,7 +869,9 @@ class VCA_ASM_Admin_Finances
 		$tbl_args = array(
 			'base_url' => '?page=' . $page,
 			'sort_url' => '?page=' . $page,
-			'echo' => false
+			'echo' => false,
+			'orderby' => 'transaction_date_plain',
+			'order' => 'DESC'
 		);
 		$tbl_args = array_merge( $tbl_args, $pagination_args );
 
@@ -873,7 +978,7 @@ class VCA_ASM_Admin_Finances
 			(
 				empty( $id ) ||
 				$this->cap_lvl === 'global' ||
-				( $this->cap_lvl === 'nation' && $admin_nation === $vca_asm_geography->has_nation( $transaction_city ) ) ||
+				( $this->cap_lvl === 'nation' /*&& $admin_nation === $vca_asm_geography->has_nation( $transaction_city )*/ ) ||
 				( $this->cap_lvl === 'city' && $admin_city === $transaction_city && ! $vca_asm_finances->is_locked( $id ) )
 			)
 		) {
@@ -953,24 +1058,31 @@ class VCA_ASM_Admin_Finances
 							),
 							array(
 								'type' => 'radio',
-								'label' => __( 'Cash?', 'vca-asm' ),
+								'label' => __( 'Cash flow', 'vca-asm' ),
 								'id' => 'cash',
 								'desc' => __( 'Did you receive cash or was the donation transferred to the office directly?', 'vca-asm' ),
 								'options' => array(
 									array(
-										'label' => __( 'Donation was transferred', 'vca-asm' ),
-										'value' => 0
-									),
-									array(
 										'label' => __( 'Cash', 'vca-asm' ),
 										'value' => 1
+									),
+									array(
+										'label' => __( 'Donation was transferred', 'vca-asm' ),
+										'value' => 0
 									)
-								)
+								),
+								'value' => 1
+							),
+							array(
+								'type' => 'text',
+								'label' => __( 'Occasion', 'vca-asm' ),
+								'id' => 'meta_1',
+								'desc' => __( 'On what occasion did you receive the donation?', 'vca-asm' ) . ' (' . __( 'Name of the event, for instance', 'vca-asm' ) . ')'
 							),
 							array(
 								'type' => 'manual_radio',
 								'label' => __( 'How?', 'vca-asm' ),
-								'id' => 'meta_1',
+								'id' => 'meta_2',
 								'desc' => __( 'In what way was the donation gathered?', 'vca-asm' ),
 								'options' => array(
 									array(
@@ -982,12 +1094,6 @@ class VCA_ASM_Admin_Finances
 										'value' => 'can'
 									)
 								)
-							),
-							array(
-								'type' => 'text',
-								'label' => __( 'Occasion', 'vca-asm' ),
-								'id' => 'meta_2',
-								'desc' => __( 'On what occasion did you receive the donation?', 'vca-asm' )
 							)
 						)
 					)
@@ -1025,15 +1131,9 @@ class VCA_ASM_Admin_Finances
 							),
 							array(
 								'type' => 'text',
-								'label' => __( 'How?', 'vca-asm' ),
-								'id' => 'meta_1',
-								'desc' => __( 'How did you gain the revenue?', 'vca-asm' )
-							),
-							array(
-								'type' => 'text',
 								'label' => __( 'Occasion', 'vca-asm' ),
-								'id' => 'meta_2',
-								'desc' => __( 'What was the occasion?', 'vca-asm' )
+								'id' => 'meta_1',
+								'desc' => __( 'What was the occasion?', 'vca-asm' ) . ' (' . __( 'Name of the event, for instance', 'vca-asm' ) . ')'
 							)
 						)
 					)
@@ -1084,15 +1184,14 @@ class VCA_ASM_Admin_Finances
 							),
 							array(
 								'type' => 'text',
-								'label' => __( 'What for?', 'vca-asm' ),
+								'label' => __( 'Occasion', 'vca-asm' ),
 								'id' => 'meta_1',
-								'desc' => __( 'What was the money spent for? (What was bought?)', 'vca-asm' )
+								'desc' => __( 'What occasion did you spend the money for?', 'vca-asm' ) . ' (' . __( 'Name of the event, for instance', 'vca-asm' ) . ')'
 							),
 							array(
-								'type' => 'text',
-								'label' => __( 'Occasion', 'vca-asm' ),
-								'id' => 'meta_2',
-								'desc' => __( 'What occasion did you spend the money for?', 'vca-asm' )
+								'type' => 'hidden',
+								'id' => 'receipt_status',
+								'value' => 1
 							)
 						)
 					)

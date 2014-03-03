@@ -915,7 +915,7 @@ class VCA_ASM_Admin_Geography {
 								'type' => 'text',
 								'label' => __( 'City Code', 'vca-asm' ),
 								'id' => 'alpha_code',
-								'desc' => __( 'A 2- to 3-letter abbreviation for this city. Choose something intuitive, such as a car number plate of the region.', 'vca-asm' )
+								'desc' => __( 'A 1- to 3-letter abbreviation for this city. Choose something intuitive, such as a car number plate of the region.', 'vca-asm' )
 							)
 						)
 					)
