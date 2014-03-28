@@ -19,11 +19,11 @@ class VCA_ASM_Validation {
 	 *
 	 * @since 1.3
 	 */
-	private $the_errors = array();
+	private $the_errors = array();		// holds localized error messages in string format
 
-	public $has_errors = false;
-	public $errors = array();
-	public $erroneous_fields = array();
+	public $has_errors = false;			// boolean, whether errors have been detected
+	public $errors = array();			// array of found errors, duplictes removed
+	public $erroneous_fields = array(); // IDs of fields that triggered an error
 	public $sanitized_val = '';
 
 	/**
@@ -44,8 +44,37 @@ class VCA_ASM_Validation {
 		);
 		extract( wp_parse_args( $args, $default_args ) );
 
+		$input = wp_kses_data( $input );
 
 		switch ( $type ) {
+
+			case 'date_conv':
+				$sanitized = $this->is_date( $input );
+				if ( false === $sanitized ) {
+					$this->has_errors = true;
+					if ( ! in_array( 'date_time', $this->errors ) ) {
+						$this->errors[] = 'date_time';
+					}
+					$this->erroneous_fields[] = $id;
+					$sanitized = time();
+				}
+				$this->sanitized_val = $sanitized;
+				$_POST[$id] = $sanitized;
+			break;
+
+			case 'date':
+				$sanitized = $this->is_date( $input, false );
+				if ( false === $sanitized ) {
+					$this->has_errors = true;
+					if ( ! in_array( 'date_time', $this->errors ) ) {
+						$this->errors[] = 'date_time';
+					}
+					$this->erroneous_fields[] = $id;
+					$sanitized = strftime( '%d.%m.%Y', time() );
+				}
+				$this->sanitized_val = $sanitized;
+				$_POST[$id] = $sanitized;
+			break;
 
 			case 'numbers':
 				if ( ! is_numeric( $input ) ) {
@@ -211,7 +240,7 @@ class VCA_ASM_Validation {
 
 			case 'required':
 			default:
-				if ( empty( $input ) && 0 != $input ) {
+				if ( empty( $input ) && 0 !== $input && '0' !== $input ) {
 					$this->has_errors = true;
 					if ( ! in_array( $type, $this->errors ) ) {
 						$this->errors[] = $type;
@@ -231,22 +260,35 @@ class VCA_ASM_Validation {
 	 * @since 1.3
 	 * @access public
 	 */
-	public function set_errors() {
+	public function set_errors( $as_transient = true, $force_errors = array() ) {
 		global $current_user;
 		get_currentuserinfo();
 
 		$errors = array();
+		if ( ! empty( $force_errors ) ) {
+			$this->has_errors = true;
+			$this->errors = $force_errors;
+		}
 		if ( $this->has_errors ) {
 			foreach ( $this->errors as $type ) {
+				if ( 'required' !== $type ) {
+					$append = '.<br />' . _x( 'The system attempted to automatically correct this. Please check again.', 'Validation Error', 'vca-asm' );
+				} else {
+					$append = '.';
+				}
 				$errors[] = array(
 					'type' => 'error',
-					'message' => $this->the_errors[$type] . '.<br />' . _x( 'The system attempted to automatically correct this. Please check again.', 'Validation Error', 'vca-asm' )
+					'message' => $this->the_errors[$type] . $append
 				);
 			}
 		}
 		if ( ! empty( $errors ) ) {
-			set_transient( 'admin_notices_'.$current_user->ID, $errors, 120 );
-			set_transient( 'admin_warnings_'.$current_user->ID, $this->erroneous_fields, 120 );
+			if ( $as_transient ) {
+				set_transient( 'admin_notices_'.$current_user->ID, $errors, 120 );
+				set_transient( 'admin_warnings_'.$current_user->ID, $this->erroneous_fields, 120 );
+			} else {
+				return $errors;
+			}
 		}
 	}
 
@@ -259,7 +301,7 @@ class VCA_ASM_Validation {
 	 * @since 1.3
 	 * @access public
 	 */
-	public function is_date( $input ) {
+	public function is_date( $input, $convert = true ) {
 		$date = explode( '.', $input );
 
 		if (
@@ -268,30 +310,24 @@ class VCA_ASM_Validation {
 			1 === preg_match( '/^\d\d$/', $date[1]) &&
 			1 === preg_match( '/^\d\d\d\d$/', $date[2])
 		) {
-			$stamp = mktime( 0, 0, 0,
-				intval( $date[1] ),
-				intval( $date[0] ),
-				intval( $date[2] )
-			);
-			return $stamp;
+			if ( $convert ) {
+				$stamp = mktime( 0, 0, 0,
+					intval( $date[1] ),
+					intval( $date[0] ),
+					intval( $date[2] )
+				);
+				return $stamp;
+			} else {
+				return $input;
+			}
 		}
 		return false;
 	}
 
 	/**
-	 * PHP4 style constructor
+	 * Constructor
 	 *
 	 * @since 1.3
-	 * @access public
-	 */
-	public function VCA_ASM_Validation() {
-		$this->__construct();
-	}
-
-	/**
-	 * PHP5 style constructor
-	 *
-	 * @since 1.0
 	 * @access public
 	 */
 	public function __construct() {

@@ -59,6 +59,20 @@ class VCA_ASM_Finances
 	 * @since 1.5
 	 * @access public
 	 */
+	public function get_annual( $args = array() )
+	{
+
+	}
+
+	/**
+	 * Returns the specified type of transactions of a city
+	 *
+	 * @param array $args
+	 * @return array $transactions
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
 	public function get_transactions( $args = array() )
 	{
 		global $wpdb;
@@ -67,9 +81,12 @@ class VCA_ASM_Finances
 			'city_id' => 0,
 			'account_type' => 'donations',
 			'transaction_type' => 'donation',
+			'annual' => false,
 			'date_limit' => false,
 			'orderby' => 'transaction_date',
-			'order' => 'DESC'
+			'order' => 'DESC',
+			'receipt_status' => false,
+			'sum' => false
 		);
 		$args = wp_parse_args( $args, $default_args );
 		extract( $args );
@@ -89,8 +106,13 @@ class VCA_ASM_Finances
 				$where .= " AND transaction_type = '" . $transaction_type . "'";
 			}
 		}
-		if ( is_numeric( $date_limit ) ) {
-			$where .= " AND entry_time > " . $date_limit;
+		if ( is_numeric( $annual ) ) {
+			$where .= " AND transaction_date > " . mktime( 0, 0, 1, 1, 1, $annual ) . " AND transaction_date < " . mktime( 23, 59, 59, 12, 31, $annual );
+		} elseif ( is_numeric( $date_limit ) ) {
+			$where .= " AND transaction_date > " . $date_limit;
+		}
+		if ( is_numeric( $receipt_status ) && in_array( $receipt_status, array( 0, 1, 2, 3 ) ) ) {
+			$where .= " AND receipt_status = " . $receipt_status;
 		}
 
 		$transactions = $wpdb->get_results(
@@ -100,6 +122,16 @@ class VCA_ASM_Finances
 			"ORDER BY " . $orderby . " " . $order,
 			ARRAY_A
 		);
+
+		$increment = 0;
+		if ( true === $sum ) {
+			if ( ! empty( $transactions ) ) {
+				foreach ( $transactions as $transaction ) {
+					$increment += abs( intval( $transaction['amount'] ) );
+				}
+			}
+			$transactions = $increment;
+		}
 
 		return $transactions;
 	}
@@ -184,7 +216,7 @@ class VCA_ASM_Finances
 	 * @since 1.5
 	 * @access public
 	 */
-	public function get_accounts( $type = 'econ', $nation_id = 0 )
+	public function get_accounts( $type = 'econ', $nation_id = 0, $with_extra_data = false, $sorted = false )
 	{
 		global $wpdb,
 			$vca_asm_geography;
@@ -209,6 +241,21 @@ class VCA_ASM_Finances
 			$where,
 			ARRAY_A
 		);
+
+		if ( $with_extra_data ) {
+			$i = 0;
+			foreach ( $data as $account ) {
+				$data[$i] = $account;
+				$data[$i]['name'] = $vca_asm_geography->get_name( $account['city_id'] );
+				$data[$i]['balance_raw'] = intval( $this->get_balance( $account['city_id'], $type ) );
+				$data[$i]['balance'] = number_format( $data[$i]['balance_raw']/100, 2, ',', '.' );
+				$i++;
+			}
+			if ( $sorted ) {
+				global $vca_asm_utilities;
+				$data = $vca_asm_utilities->sort_by_key( $data, 'name' );
+			}
+		}
 
 		return $data;
 	}
@@ -255,7 +302,7 @@ class VCA_ASM_Finances
 			"LIMIT 1", ARRAY_A
 		);
 
-		$value = isset( $data[0]['balanced_month'] ) ? $data[0]['balanced_month'] : strftime( '%Y-%m', strtotime( strftime( '%Y-%m', time() ) . ' -6 month' ) );
+		$value = isset( $data[0]['balanced_month'] ) ? $data[0]['balanced_month'] : strftime( '%Y-%m', strtotime( strftime( '%Y-%m', time() ) . ' -6 month' ) ); // ! isset condition for testing only
 
 		return $value;
 	}
@@ -380,7 +427,7 @@ class VCA_ASM_Finances
 		);
 
 		if ( isset( $data[0] ) ) {
-			$value = '*' === $select ? $data[0] : ( isset( $data[0]['select'] ) ? $data[0]['select'] : false );
+			$value = '*' === $select ? $data[0] : ( isset( $data[0][$select] ) ? $data[0][$select] : false );
 		} else {
 			$value = false;
 		}

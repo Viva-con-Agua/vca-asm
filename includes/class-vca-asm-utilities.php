@@ -204,10 +204,10 @@ class VcA_ASM_Utilities {
 	 */
 	public function sort_by_key( $arr, $key, $order = 'ASC' ) {
 		$this->sort_key = $key;
-		if( $order == 'DESC' ) {
-			usort( $arr, array(&$this, 'sbk_cmp_desc') );
+		if ( 'DESC' === $order ) {
+			usort( $arr, array( $this, 'sbk_cmp_desc' ) );
 		} else {
-			usort( $arr, array(&$this, 'sbk_cmp_asc') );
+			usort( $arr, array( $this, 'sbk_cmp_asc' ) );
 		}
 		return ( $arr );
 	}

@@ -3,11 +3,11 @@
 var theErrors = new Object();
 
 $('input#publish').click( function () {
-	clickCallback();
+	return clickCallback();
 });
 
 $('input#submit-validate').click( function () {
-	clickCallback();
+	return clickCallback();
 });
 
 function clickCallback() {

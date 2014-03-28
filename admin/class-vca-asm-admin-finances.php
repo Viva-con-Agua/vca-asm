@@ -108,7 +108,7 @@ class VCA_ASM_Admin_Finances
 		if ( 'city' === $this->cap_lvl ) {
 			$this->overview_city();
 		} else {
-			$this->overview_city();//$this->overview_global();
+			$this->overview_global();//overview_city();
 		}
 	}
 
@@ -122,20 +122,9 @@ class VCA_ASM_Admin_Finances
 
 		$the_city_finances = new VCA_ASM_City_Finances( $city );
 
-		$balanced_time_econ = explode( '-', $vca_asm_finances->get_balanced_month( $city, 'econ' ) );
-		$balanced_time_don = explode( '-', $vca_asm_finances->get_balanced_month( $city, 'donations' ) );
-		$balanced_year_econ = $balanced_time_econ[0];
-		$balanced_month_econ = $balanced_time_econ[1];
-		$balanced_year_don = $balanced_time_don[0];
-		$balanced_month_don = $balanced_time_don[1];
-		$balanced_stamp_econ = strtotime( $balanced_year_econ . '/' . $balanced_month_econ . '/01' );
-		$balanced_stamp_don = strtotime( $balanced_year_don . '/' . $balanced_month_don . '/01' );
-		$donations_total = $vca_asm_finances->get_donations( $city );
-		$donations_current_year = 0;//$vca_asm_finances->get_donations( $city, true );
-
 		$start_date = strtotime( strftime( '%Y' ) . '/' . strftime( '%m' ) . '/01 -1 month' );
-		$end_date_econ = strtotime( $balanced_year_econ . '/' . $balanced_month_econ . '/01' );
-		$end_date_don = strtotime( $balanced_year_don . '/' . $balanced_month_don . '/01' );
+		$end_date_econ = $the_city_finances->balanced_month_econ_threshold_stamp;
+		$end_date_don = $the_city_finances->balanced_month_don_threshold_stamp;
 
 		$fields = array();
 		$balanced = 0;
@@ -204,7 +193,7 @@ class VCA_ASM_Admin_Finances
 
 		$adminpage = new VCA_ASM_Admin_Page( array(
 			'icon' => 'icon-finances',
-			'title' => _x( 'Finances Overview', 'Admin Menu', 'vca-asm' ),
+			'title' => _x( 'Finances', 'Admin Menu', 'vca-asm' ) . ' | ' . _x( 'Overview', 'Admin Menu', 'vca-asm' ),
 			'messages' => $messages,
 			'url' => $url
 		));
@@ -247,47 +236,123 @@ class VCA_ASM_Admin_Finances
 
 		$output .= $mbs->mb_top();
 
-		$output .= '<p>' . __( 'Structural Account', 'vca-asm' ) . ': <strong>' . number_format( $the_city_finances->balance_econ/100, 2, ',', '.' ) . ' &euro;</strong></p>' .
-			'<p>' . __( 'Donations (Cash) Account', 'vca-asm' ) . ': <strong>' . number_format( $the_city_finances->balance_don/100, 2, ',', '.' ) . ' &euro;</strong></p>';
-		foreach ( $the_city_finances->donations_years as $year => $amount ) {
+		$output .= '<table>' .
+			'<tr>' .
+				'<td>' . __( 'Structural Account', 'vca-asm' ) . ':</td><td class="right-aligned-tcell"><strong>' . number_format( $the_city_finances->balance_econ/100, 2, ',', '.' ) . ' &euro;</strong></td>' .
+			'</tr>';
+
+		if ( $the_city_finances->has_econ_surplus ) {
+			$output .= '<tr>' .
+					'<td style="color:red;" colspan="2"><em>' . __( 'Attention: Surplus!', 'vca-asm' ) . '</em></td>' .
+				'</tr>';
+		}
+
+		$output .= '<tr><td>' . __( 'Donations (Cash) Account', 'vca-asm' ) . ':</td><td class="right-aligned-tcell"><strong>' . number_format( $the_city_finances->balance_don/100, 2, ',', '.' ) . ' &euro;</strong></td>';
+		foreach ( $the_city_finances->donations_by_years as $year => $amount ) {
 			if ( 'total' !== $year ) {
-				$output .= '<p>' . sprintf( _x( 'Donations in %s', 'Placeholder is a year', 'vca-asm' ), $year ) . ': <strong>' . number_format( $amount/100, 2, ',', '.' ) . ' &euro;</strong></p>';
+				$output .= '</tr><tr><td>' . sprintf( _x( 'Donations in %s', 'Placeholder is a year', 'vca-asm' ), $year ) . ':</td><td class="right-aligned-tcell"><strong>' . number_format( $amount/100, 2, ',', '.' ) . ' &euro;</strong></td>';
 			}
 		}
-		$output .= '<p>' . __( 'Donations, total', 'vca-asm' ) . ': <strong>' . number_format( $the_city_finances->donations_total/100, 2, ',', '.' ) . ' &euro;</strong></p>';
+		$output .= '</tr><tr><td>' . __( 'Donations, total', 'vca-asm' ) . ':</td><td class="right-aligned-tcell"><strong>' . number_format( $the_city_finances->donations_total/100, 2, ',', '.' ) . ' &euro;</strong></td>' .
+			'</tr></table>';
 		$output .= $mbs->mb_bottom();
 
+		if ( $the_city_finances->has_econ_surplus || $the_city_finances->balance_don > 0 ) {
+			$output .= $mbs->mb_top( array( 'title' => __( 'Necessary Transfers', 'vca-asm' ) ) );
+
+			if ( $the_city_finances->has_econ_surplus ) {
+				$output .= '<table><tr>' .
+						'<td colspan="2"><em>' .
+							sprintf(
+								__( 'You have a structural cash surplus of %1$d %2$s.', 'vca-asm' ),
+								$the_city_finances->econ_surplus,
+								'&euro;'
+							) .
+							' ' . __( 'Please transfer it to:', 'vca-asm' ) .
+						'</em></td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . __( 'Institute', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . 'Hamburger Sparkasse' . '</td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . _x( 'Account Number', 'short form / acronym', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . '1268 135 165' . '</td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . __( 'Bank ID', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . '200 505 50' . '</td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . __( 'IBAN', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . 'DE05200505501268135165' . '</td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . __( 'BIC', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . 'HASPDEHHXXX' . '</td>' .
+					'</tr>' .
+				'</table>';
+			}
+
+			if ( $the_city_finances->balance_don > 0 ) {
+				$output .= '<table><tr>' .
+						'<td colspan="2"><em>' .
+							sprintf(
+								__( '%1$d %2$s of donations are present in cash.', 'vca-asm' ),
+								$the_city_finances->balance_don,
+								'&euro;'
+							) .
+							' ' . __( 'Please transfer / deposit them to:', 'vca-asm' ) .
+						'</em></td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . __( 'Institute', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . 'Hamburger Sparkasse' . '</td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . _x( 'Account Number', 'short form / acronym', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . '1268 135 165' . '</td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . __( 'Bank ID', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . '200 505 50' . '</td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . __( 'IBAN', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . 'DE05200505501268135165' . '</td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . __( 'BIC', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . 'HASPDEHHXXX' . '</td>' .
+					'</tr>' .
+				'</table>';
+			}
+
+			$output .= $mbs->mb_bottom();
+		}
+
 		$output .= $mbs->mb_top( array( 'title' => __( 'Receipts', 'vca-asm' ) ) );
-		$output .= '<p>' . __( 'need to be sent', 'vca-asm' ) . ': ';
-		$output .= ! empty( $the_city_finances->late_receipts ) ? '<strong>' . implode( ', ', $the_city_finances->late_receipts ) . '</strong>' : '<em>' . __( 'No late receipts...', 'vca-asm' ) . '</em>';
-		$output .= '</p>';
-		$output .= '<p>' . __( 'this month', 'vca-asm' ) . ': ';
-		$output .= ! empty( $the_city_finances->current_receipts ) ? '<strong>' . implode( ', ', $the_city_finances->current_receipts ) . '</strong>' : '<em>' . __( 'No current receipts...', 'vca-asm' ) . '</em>';
-		$output .= '</p>';
-		$output .= '<p>' . __( 'have been sent', 'vca-asm' ) . ': ';
-		$output .= ! empty( $the_city_finances->sent_receipts ) ? '<strong>' . implode( ', ', $the_city_finances->sent_receipts ) . '</strong>' : '<em>' . __( 'No receipts waiting for confirmation...', 'vca-asm' ) . '</em>';
-		$output .= '</p>';
+		$output .= '<table><tr><td>' . __( 'need to be sent', 'vca-asm' ) . ':</td><td class="right-aligned-tcell">';
+		$output .= ! empty( $the_city_finances->late_receipts ) ? '<strong>' . implode( '<br />', $the_city_finances->late_receipts ) . '</strong>' : '<em>' . __( 'No late receipts...', 'vca-asm' ) . '</em>';
+		$output .= '</td></tr>';
+		$output .= '<tr><td>' . __( 'this month', 'vca-asm' ) . ':</td><td class="right-aligned-tcell">';
+		$output .= ! empty( $the_city_finances->current_receipts ) ? '<strong>' . implode( '<br />', $the_city_finances->current_receipts ) . '</strong>' : '<em>' . __( 'No current receipts...', 'vca-asm' ) . '</em>';
+		$output .= '</td></tr>';
+		$output .= '<tr><td>' . __( 'have been sent', 'vca-asm' ) . ':</td><td class="right-aligned-tcell">';
+		$output .= ! empty( $the_city_finances->sent_receipts ) ? '<strong>' . implode( '<br />', $the_city_finances->sent_receipts ) . '</strong>' : '<em>' . __( 'No receipts waiting for confirmation...', 'vca-asm' ) . '</em>';
+		$output .= '</td></tr></table>';
 
 		$output .= $mbs->mb_bottom();
 
 		$output .= $mbs->mb_top( array( 'title' => __( 'Monthly Balancing', 'vca-asm' ) ) );
-		$output .= '<p>' . __( 'Last balanced month, Structural', 'vca-asm' ) . ': <strong>' . strftime( '%B %Y', $balanced_stamp_econ );
+		$output .= '<table><tr><td>' . __( 'Last balanced month, Structural', 'vca-asm' ) . ':</td><td class="right-aligned-tcell"><strong>' . strftime( '%B %Y', $balanced_stamp_econ ) . '</strong>';
 		if ( ! $balanced_econ ) {
-			$output .= ' <span style="color:red">(' . __( 'Needs Balancing!', 'vca-asm' ) . ')</span>';
+			$output .= '</td><td class="right-aligned-tcell"><span style="color:red">(' . __( 'Needs Balancing!', 'vca-asm' ) . ')</span>';
 		}
-		$output .= '</strong></p>';
-		$output .= '<p>' . __( 'Last balanced month, Donations', 'vca-asm' ) . ': <strong>' . strftime( '%B %Y', $balanced_stamp_don );
+		$output .= '</td></tr>';
+		$output .= '<tr><td>' . __( 'Last balanced month, Donations', 'vca-asm' ) . ':</td><td class="right-aligned-tcell"><strong>' . strftime( '%B %Y', $balanced_stamp_don ) . '</strong>';
 		if ( ! $balanced_don ) {
-			$output .= ' <span style="color:red">(' . __( 'Needs Balancing!', 'vca-asm' ) . ')</span>';
+			$output .= '</td><td class="right-aligned-tcell"><span style="color:red">(' . __( 'Needs Balancing!', 'vca-asm' ) . ')</span>';
 		}
-		$output .= '</strong></p>';
+		$output .= '</td></tr>';
 		if ( $balanced !== 2 ) {
 			$output .= $form->output();
 		} else {
-			$output .= '<p><em>' .
+			$output .= '<tr><td><em>' .
 					__( 'The account is up to date!', 'vca-asm' ) .
-				'</em></p>';
+				'</em></td></tr>';
 		}
+		$output .= '</table>';
 
 		$output .= $mbs->mb_bottom();
 
@@ -300,13 +365,53 @@ class VCA_ASM_Admin_Finances
 
 	private function overview_global( $messages = array() )
 	{
+		$active_tab = 'summary';
+		if ( isset( $_GET['tab'] ) && in_array( $_GET['tab'], array( 'summary', 'cities' ) ) ) {
+			$active_tab = $_GET['tab'];
+		}
+
+		$tabs = array(
+			array(
+				'title' => _x( 'Summary', ' Admin Menu', 'vca-asm' ),
+				'value' => 'summary',
+				'icon' => 'icon-summary'
+			),
+			array(
+				'title' => _x( 'Cities', ' Admin Menu', 'vca-asm' ),
+				'value' => 'cities',
+				'icon' => 'icon-city'
+			)
+		);
+
 		$adminpage = new VCA_ASM_Admin_Page( array(
 			'icon' => 'icon-finances',
-			'title' => _x( 'Finances Overview', 'Admin Menu', 'vca-asm' ),
+			'title' => _x( 'Finances', 'Admin Menu', 'vca-asm' ) . ' | ' . _x( 'Overview', 'Admin Menu', 'vca-asm' ),
 			'messages' => $messages,
-			'url' => '?page=vca-asm-finances'
+			'url' => '?page=vca-asm-finances',
+			'tabs' => $tabs,
+			'active_tab' => $active_tab
 		));
 
+		$output = $adminpage->top();
+
+		switch ( $active_tab ) {
+			case 'cities':
+				$output .= $this->overview_global_cities( $messages );
+			break;
+
+			case 'summary':
+			default:
+				$output .= $this->overview_global_summary( $messages );
+			break;
+		}
+
+		$output .= $adminpage->bottom();
+
+		echo $output;
+	}
+
+	private function overview_global_summary( $messages = array() )
+	{
 		$mbs = new VCA_ASM_Admin_Metaboxes( array(
 			'echo' => false,
 			'columns' => 1,
@@ -316,19 +421,162 @@ class VCA_ASM_Admin_Finances
 			'js' => false
 		));
 
-		$output = $adminpage->top();
-
 		$output .= $mbs->mb_top();
 		$output .= '<p>Whatever indeed.</p>';
 		$output .= $mbs->mb_bottom();
 
 		$output .= $mbs->bottom();
 
-		$output .= $adminpage->bottom();
-
-		echo $output;
+		return $output;
 	}
 
+	private function overview_global_cities( $messages = array() )
+	{
+		global $vca_asm_finances, $vca_asm_geography;
+
+		if ( 'gobal' === $this->cap_lvl ) {
+			$cities = $vca_asm_geography->get_all( 'name', 'ASC', 'city' );
+		} else {
+			$cities = $vca_asm_geography->get_descendants(
+				$this->admin_nation,
+				array(
+					'data' => 'all',
+					'sorted' => true,
+					'type' => 'city'
+				)
+			);
+		}
+
+		$output = '';
+
+		$mbs = new VCA_ASM_Admin_Metaboxes( array(
+			'echo' => false,
+			'columns' => 1,
+			'running' => 1,
+			'id' => '',
+			'title' => __( 'Whatever', 'vca-asm' ),
+			'js' => true
+		));
+
+		$output .= $mbs->top();
+		foreach ( $cities as $city ) {
+			$the_city_finances = new VCA_ASM_City_Finances( $city['id'] );
+
+			//if (15 == $city['id']) {
+			//	print '<pre>$objvars = '
+			//		. htmlspecialchars( print_r( get_object_vars( $the_city_finances ), TRUE ), ENT_QUOTES, 'utf-8', FALSE )
+			//		. "</pre>\n";
+			//}
+
+			$attention = ' &nbsp;<span class="tbl-icon tbl-icon-warning"></span>';
+			$title_spot = '';
+			$econ_spot = '';
+			$don_spot = '';
+			if (
+				'city' === $this->cap_lvl && $the_city_finances->action_required_city ||
+				$the_city_finances->action_required_office
+			) {
+				$title_spot = $attention;
+			}
+			if (
+				'city' === $this->cap_lvl && $the_city_finances->action_required_econ_city ||
+				$the_city_finances->action_required_econ_office
+			) {
+				$econ_spot = $attention;
+			}
+			if (
+				'city' === $this->cap_lvl && $the_city_finances->action_required_don_city ||
+				$the_city_finances->action_required_don_office
+			) {
+				$don_spot = $attention;
+			}
+
+			$output .= $mbs->mb_top( array( 'title' => $city['name'] . $title_spot, 'id' => 'city-' . $city['id'] ) );
+
+			$output .= '<h4><span style="text-decoration:underline;">' . __( 'Structural Funds', 'vca-asm' ) . '</span>' . $econ_spot . '</h4>' .
+				'<table>' .
+					'<tr>' .
+						'<td colspan="2"><a style="text-decoration:none;" title="' . __( 'Further Details', 'vca-asm' ) . '" href="admin.php?page=vca-asm-finances-accounts-donations&cid=' . $city['id'] . '">&rarr; ' . __( 'View Transactions', 'vca-asm' ) . '</a></td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . __( 'Account Balance', 'vca-asm' ) . ':</td><td class="right-aligned-tcell"><strong>' . $the_city_finances->balance_econ_formatted . '</strong></td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . __( 'Revenue this year', 'vca-asm' ) . ':</td><td class="right-aligned-tcell"><strong>' . $the_city_finances->econ_annual_revenue_formatted . '</strong></td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . __( 'Expenses this year', 'vca-asm' ) . ':</td><td class="right-aligned-tcell"><strong>' . $the_city_finances->econ_annual_expenses_formatted . '</strong></td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . __( 'Account balanced until the end of', 'vca-asm' ) . ':</td><td class="right-aligned-tcell"><strong>' . $the_city_finances->balanced_month_econ_name . '</strong></td>' .
+					'</tr>';
+
+			if ( $the_city_finances->action_required_econ_balance ) {
+				$output .= '<tr>' .
+					'<td colspan="2" class="warning">' . __( 'The city needs to balance a previous month', 'vca-asm' ) . '...</td>' .
+				'</tr>';
+			}
+
+			if ( $the_city_finances->action_required_econ_send_receipts ) {
+				$output .= '<tr>' .
+					'<td colspan="2" class="warning">' . __( 'The city needs to send receipts from last month', 'vca-asm' ) . '...</td>' .
+				'</tr>';
+			}
+
+			if ( $the_city_finances->action_required_econ_confirm_receipts ) {
+				$output .= '<tr>' .
+					'<td colspan="2" class="warning">' . __( 'The reception of sent receipts needs to be confirmed by the office', 'vca-asm' ) . '!</td>' .
+				'</tr>';
+			}
+
+			$output .= '</table>' .
+				'<h4 style="margin-top:1em;"><span style="text-decoration:underline;">' . __( 'Donations', 'vca-asm' ) . '</span>' . $don_spot . '</h4>' .
+				'<table>' .
+					'<tr>' .
+						'<td colspan="2"><a style="text-decoration:none;" title="' . __( 'Further Details', 'vca-asm' ) . '" href="admin.php?page=vca-asm-finances-accounts-econ&cid=' . $city['id'] . '">&rarr; ' . __( 'View Transactions', 'vca-asm' ) . '</a></td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . __( 'Cash money', 'vca-asm' ) . ':</td><td class="right-aligned-tcell"><strong>' . $the_city_finances->balance_don_formatted . '</strong></td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . __( 'Total Donations this year', 'vca-asm' ) . ':</td><td class="right-aligned-tcell"><strong>' . $the_city_finances->donations_current_year_formatted . '</strong></td>' .
+					'</tr>' .
+					'<tr>' .
+						'<td>' . __( 'Account balanced until the end of', 'vca-asm' ) . ':</td><td class="right-aligned-tcell"><strong>' . $the_city_finances->balanced_month_don_name . '</strong></td>' .
+					'</tr>';
+
+			if ( $the_city_finances->action_required_don_balance ) {
+				$output .= '<tr>' .
+					'<td colspan="2" class="warning">' . __( 'The city needs to balance a previous month', 'vca-asm' ) . '...</td>' .
+				'</tr>';
+			}
+
+			if ( $the_city_finances->action_required_don_transfer ) {
+				$output .= '<tr>' .
+					'<td colspan="2" class="warning">' . __( 'The city needs to transfer donations it gathered in cash', 'vca-asm' ) . '...</td>' .
+				'</tr>';
+			}
+
+			if ( $the_city_finances->action_required_don_confirm_transfer ) {
+				$output .= '<tr>' .
+					'<td colspan="2" class="warning">' . __( 'The reception of transfer(s) from the city itsself needs confirmation', 'vca-asm' ) . '!</td>' .
+				'</tr>';
+			}
+
+			if ( $the_city_finances->action_required_don_confirm_external_transfer ) {
+				$output .= '<tr>' .
+					'<td colspan="2" class="warning">' . __( 'The reception of donations transferred to the office directly by third parties needs confirmation', 'vca-asm' ) . '!</td>' .
+				'</tr>';
+			}
+
+			$output .= '</table>';
+
+			$output .= $mbs->mb_bottom();
+		}
+		$output .= $mbs->bottom();
+
+		return $output;
+	}
 
 	/******************** ACCOUNTS ********************/
 
@@ -340,7 +588,7 @@ class VCA_ASM_Admin_Finances
 	 */
 	public function accounts_control()
 	{
-		global $wpdb,
+		global $current_user, $wpdb,
 			$vca_asm_finances, $vca_asm_geography;
 
 		$validation = new VCA_ASM_Validation();
@@ -349,8 +597,29 @@ class VCA_ASM_Admin_Finances
 		$page = isset( $_GET['page'] ) ? $_GET['page'] : 'vca-asm-finances-accounts-donations';
 		$acc_type = array_pop( explode( '-', $page ) );
 		$acc_type = isset( $_GET['acc_type'] ) ? $_GET['acc_type'] : $acc_type;
-		$type = isset( $_GET['type'] ) ? $_GET['type'] : 'donation';
+		$type = isset( $_GET['type'] ) ? $_GET['type'] : '';
 		$cid = isset( $_GET['cid'] ) ? $_GET['cid'] : $this->admin_city;
+		$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'all';
+
+		//print '<pre>$_GET["tab"] = '
+		//. htmlspecialchars( print_r( $_GET["tab"], TRUE ), ENT_QUOTES, 'utf-8', FALSE )
+		//. "</pre>\n";
+		//
+		//print '<pre>$active_tab = '
+		//. htmlspecialchars( print_r( $active_tab, TRUE ), ENT_QUOTES, 'utf-8', FALSE )
+		//. "</pre>\n";
+		//
+		//print '<pre>$_GET["type"] = '
+		//. htmlspecialchars( print_r( $_GET["type"], TRUE ), ENT_QUOTES, 'utf-8', FALSE )
+		//. "</pre>\n";
+		//
+		//print '<pre>$type = '
+		//. htmlspecialchars( print_r( $type, TRUE ), ENT_QUOTES, 'utf-8', FALSE )
+		//. "</pre>\n";
+		//
+		//print '<pre>$cid = '
+		//. htmlspecialchars( print_r( $cid, TRUE ), ENT_QUOTES, 'utf-8', FALSE )
+		//. "</pre>\n";
 
 		if ( isset( $_GET['todo'] ) ) {
 
@@ -413,13 +682,14 @@ class VCA_ASM_Admin_Finances
 						'messages' => $messages,
 						'account_type' => $acc_type,
 						'city_id' => $cid,
-						'page' => $page
+						'page' => $page,
+						'active_tab' => $active_tab
 					));
 				break;
 
 				case "save":
 					$insert = isset( $_GET['id'] ) && ! empty( $_GET['id'] ) ? false : true;
-					$fields = $this->create_fields( $acc_type.'-'.$type );
+					$fields = $this->create_fields( $acc_type.'-'.$type, 0, $cid );
 					if ( $insert ) {
 						$data = array(
 							'account_type' => $acc_type,
@@ -446,10 +716,13 @@ class VCA_ASM_Admin_Finances
 									}
 									$data[$field['id']] = $sum;
 									$format[] = '%d';
+									$validation->is_valid( $_POST[$field['id'].'_major'], array( 'type' => 'numbers' ) );
+									$validation->is_valid( $_POST[$field['id'].'_minor'], array( 'type' => 'numbers' ) );
 								break;
 
 								case 'date':
-									$data[$field['id']] = $validation->is_date( $_POST[$field['id']] );
+									$sanitized = $validation->is_date( $_POST[$field['id']] );
+									$data[$field['id']] = false === $sanitized ? strftime( '%d.%m.%Y', time() ) : $sanitized;
 									$format[] = '%d';
 								break;
 
@@ -467,58 +740,211 @@ class VCA_ASM_Admin_Finances
 									// do nothing
 								break;
 
+								case 'hidden':
+									if ( 'receipt_status' === $field['id'] ) {
+										if ( $insert ) {
+											if (
+												'city' === $this->cap_lvl &&
+												(
+													'transfer' === $type ||
+													(
+														'donation' === $type &&
+														isset( $_POST['cash'] ) &&
+														0 === $_POST['cash']
+													)
+												)
+											) {
+												$data[$field['id']] = 2;
+											} elseif (
+												'city' !== $this->cap_lvl &&
+												(
+													(
+														'transfer' === $type &&
+														isset( $_POST['direction'] ) &&
+														0 == $_POST['direction']
+													)
+													||
+													(
+														'donation' === $type &&
+														isset( $_POST['cash'] ) &&
+														0 == $_POST['cash']
+													)
+												)
+											) {
+												$data[$field['id']] = 3;
+												$format[] = '%d';
+											};
+										}
+									} else{
+										$data[$field['id']] = $_POST[$field['id']];
+										$format[] = '%d';
+									}
+								break;
+
 								default:
 									$data[$field['id']] = $_POST[$field['id']];
 									$format[] = '%s';
 							}
+							if ( $field['type'] !== 'cash_amount' && isset( $field['validation'] ) ) {
+								$validation->is_valid( $_POST[$field['id']], array( 'type' => $field['validation'], 'id' => $field['id'] ) );
+							}
 						}
 					}
 
-
-					if ( $insert ) {
-						$id = $wpdb->insert(
-							$wpdb->prefix . 'vca_asm_finances_transactions',
-							$data,
-							$format
-						);
-						if ( ! empty( $_POST['receipt_id'] ) ) {
+					if ( ! $validation->has_errors ) {
+						if ( $insert ) {
+							$id = $wpdb->insert(
+								$wpdb->prefix . 'vca_asm_finances_transactions',
+								$data,
+								$format
+							);
+							if ( ! empty( $_POST['receipt_id'] ) ) {
+								$wpdb->update(
+									$wpdb->prefix . 'vca_asm_finances_accounts',
+									array( 'last_receipt' => $_POST['receipt_id'] ),
+									array( 'city_id' => $cid, 'type' => $acc_type ),
+									array( '%s' ),
+									array( '%d', '%s' )
+								);
+							}
+						} else {
+							$id = $_GET['id'];
 							$wpdb->update(
-								$wpdb->prefix . 'vca_asm_finances_accounts',
-								array( 'last_receipt' => $_POST['receipt_id'] ),
-								array( 'city_id' => $cid, 'type' => $acc_type ),
-								array( '%s' ),
-								array( '%d', '%s' )
+								$wpdb->prefix . 'vca_asm_finances_transactions',
+								$data,
+								array( 'id' => $id ),
+								$format,
+								array( '%d' )
 							);
 						}
+						header( 'Location: ' . strtok( $_SERVER['REQUEST_URI'], '?' ) . '?page=' . $page . '&todo=saved&id=' . $id . '&type=' . $type . '&tab=' . $active_tab . '&cid=' . $cid );
 					} else {
 						$id = $_GET['id'];
-						$wpdb->update(
-							$wpdb->prefix . 'vca_asm_finances_transactions',
-							$data,
-							array( 'id' => $id ),
-							$format,
-							array( '%d' )
-						);
+						$_SESSION['the_post'] = array_merge( $_POST );
+						header( 'Location: ' . strtok( $_SERVER['REQUEST_URI'], '?' ) . '?page=' . $page . '&todo=errors&id=' . $id . '&type=' . $type . '&tab=' . $active_tab . '&cid=' . $cid . '&errors=' . serialize( $validation->errors ) );
 					}
-					header( 'Location: ' . strtok( $_SERVER['REQUEST_URI'], '?' ) . '?page=' . $page . '&todo=saved&id=' . $id );
+				break;
+
+				case "errors":
+						$_POST = isset( $_SESSION['the_post'] ) ? array_merge( $_POST, $_SESSION['the_post'] ) : $_POST;
+						$messages = array_merge( $messages, $validation->set_errors( false, unserialize( stripslashes( $_GET['errors'] ) ) ) );
+						unset( $_SESSION['the_post'] );
+						$this->edit( array(
+							'id' => $id,
+							'active_tab' => $active_tab,
+							'type' => $type,
+							'city_id' => $cid,
+							'account_type' => $acc_type,
+							'page' => $page,
+							'messages' => $messages,
+							'populate' => true
+						));
 				break;
 
 				case "saved":
 					$messages[] = array(
 						'type' => 'message',
-						'message' => __( 'Entry booked.', 'vca-asm' )
+						'message' => sprintf( __( '%s saved.', 'vca-asm' ), $vca_asm_finances->types_to_nicenames[$type] )
 					);
 					$this->single_view( array(
 						'messages' => $messages,
 						'account_type' => $acc_type,
 						'city_id' => $cid,
-						'page' => $page
+						'page' => $page,
+						'type' => $type,
+						'active_tab' => $active_tab
+					));
+				break;
+
+				case "confirm-receipt":
+					if ( isset( $_GET['step'] ) ) {
+						switch ( $_GET['step'] ) {
+							case 1:
+								$wpdb->update(
+									$wpdb->prefix . 'vca_asm_finances_transactions',
+									array( 'receipt_status' => 2 ),
+									array( 'id' => $_GET['id'] ),
+									array( '%d' ),
+									array( '%d' )
+								);
+								$messages[] = array(
+									'type' => 'message',
+									'message' => __( 'Receipt sent to the office.', 'vca-asm' )
+								);
+							break;
+
+							case 2:
+								$wpdb->update(
+									$wpdb->prefix . 'vca_asm_finances_transactions',
+									array( 'receipt_status' => 3 ),
+									array( 'id' => $_GET['id'] ),
+									array( '%d' ),
+									array( '%d' )
+								);
+								$messages[] = array(
+									'type' => 'message',
+									'message' => __( 'Reception confirmed.', 'vca-asm' )
+								);
+							break;
+						}
+					}
+					$this->single_view( array(
+						'messages' => $messages,
+						'account_type' => $acc_type,
+						'city_id' => $cid,
+						'page' => $page,
+						'type' => $type,
+						'active_tab' => $active_tab
+					));
+				break;
+
+				case "unconfirm-receipt":
+					if ( isset( $_GET['step'] ) ) {
+						switch ( $_GET['step'] ) {
+							case 2:
+								$wpdb->update(
+									$wpdb->prefix . 'vca_asm_finances_transactions',
+									array( 'receipt_status' => 1 ),
+									array( 'id' => $_GET['id'] ),
+									array( '%d' ),
+									array( '%d' )
+								);
+								$messages[] = array(
+									'type' => 'message',
+									'message' => __( 'Receipt was not sent yet.', 'vca-asm' )
+								);
+							break;
+
+							case 3:
+								$wpdb->update(
+									$wpdb->prefix . 'vca_asm_finances_transactions',
+									array( 'receipt_status' => 2 ),
+									array( 'id' => $_GET['id'] ),
+									array( '%d' ),
+									array( '%d' )
+								);
+								$messages[] = array(
+									'type' => 'message',
+									'message' => __( 'Reception confirmation canceled.', 'vca-asm' )
+								);
+							break;
+						}
+					}
+					$this->single_view( array(
+						'messages' => $messages,
+						'account_type' => $acc_type,
+						'city_id' => $cid,
+						'page' => $page,
+						'type' => $type,
+						'active_tab' => $active_tab
 					));
 				break;
 
 				case "edit":
 					$this->edit( array(
 						'id' => $_GET['id'],
+						'active_tab' => $active_tab,
+						'city_id' => $cid,
 						'account_type' => $acc_type,
 						'page' => $page
 					));
@@ -526,6 +952,8 @@ class VCA_ASM_Admin_Finances
 
 				case "new":
 					$this->edit( array(
+						'city_id' => $cid,
+						'active_tab' => $active_tab,
 						'account_type' => $acc_type,
 						'type' => $type,
 						'page' => $page
@@ -537,7 +965,9 @@ class VCA_ASM_Admin_Finances
 						'messages' => $messages,
 						'account_type' => $acc_type,
 						'city_id' => $cid,
-						'page' => $page
+						'page' => $page,
+						'type' => $type,
+						'active_tab' => $active_tab
 					));
 			}
 		} else {
@@ -553,6 +983,7 @@ class VCA_ASM_Admin_Finances
 					array(
 						'city_id' => $cid,
 						'account_type' => $acc_type,
+						'type' => $type,
 						'page' => $page
 					)
 				);
@@ -580,13 +1011,13 @@ class VCA_ASM_Admin_Finances
 		extract( $args );
 
 		if ( 'donations' === $account_type ) {
-			$title = _x( 'Donation Accounts', ' Admin Menu', 'vca-asm' );
+			$title = _x( 'Finances', 'Admin Menu', 'vca-asm' ) . ' | ' . _x( 'Donation Accounts', ' Admin Menu', 'vca-asm' );
 		} else {
-			$title = _x( 'Economical Accounts', ' Admin Menu', 'vca-asm' );
+			$title = _x( 'Finances', 'Admin Menu', 'vca-asm' ) . ' | ' . _x( 'Economical Accounts', ' Admin Menu', 'vca-asm' );
 		}
 
 		$nation_id = 'global' === $this->cap_lvl ? 0 : $this->admin_nation;
-		$accounts = $vca_asm_finances->get_accounts( $account_type, $nation_id );
+		$accounts = $vca_asm_finances->get_accounts( $account_type, $nation_id, true, true );
 
 		$adminpage = new VCA_ASM_Admin_Page( array(
 			'icon' => 'icon-finances',
@@ -617,15 +1048,6 @@ class VCA_ASM_Admin_Finances
 			)
 		);
 
-		$rows = array();
-		$i = 0;
-		foreach ( $accounts as $account ) {
-			$rows[$i] = $account;
-			$rows[$i]['name'] = $vca_asm_geography->get_name( $account['city_id'] );
-			$rows[$i]['balance'] = number_format( intval( $vca_asm_finances->get_balance( $account['city_id'], $account_type ) )/100, 2, ',', '.' );
-			$i++;
-		}
-
 		$the_table = new VCA_ASM_Admin_Table(
 			array(
 				'echo' => false,
@@ -639,7 +1061,7 @@ class VCA_ASM_Admin_Finances
 				'empty_message' => ''
 			),
 			$columns,
-			$rows
+			$accounts
 		);
 
 		$output = $adminpage->top();
@@ -665,6 +1087,7 @@ class VCA_ASM_Admin_Finances
 		$default_args = array(
 			'city_id' => 0,
 			'account_type' => 'donations',
+			'type' => 'donation',
 			'messages' => array(),
 			'active_tab' => 'all',
 			'page' => 'vca-asm-finances-accounts-donations'
@@ -690,7 +1113,7 @@ class VCA_ASM_Admin_Finances
 			array(
 				'title' => _x( 'All entries', ' Admin Menu', 'vca-asm' ),
 				'value' => 'all',
-				'icon' => 'icon-finances'
+				'icon' => 'icon-summary'
 			)
 		);
 		if ( 'donations' === $account_type ) {
@@ -705,31 +1128,31 @@ class VCA_ASM_Admin_Finances
 			$tabs[] = array(
 				'title' => _x( 'Revenues', ' Admin Menu', 'vca-asm' ),
 				'value' => 'revenue',
-				'icon' => 'icon-plus'
+				'icon' => 'icon-revenue'
 			);
 			$tabs[] = array(
 				'title' => _x( 'Expenditures', ' Admin Menu', 'vca-asm' ),
 				'value' => 'expenditure',
-				'icon' => 'icon-minus'
+				'icon' => 'icon-expenditure'
 			);
 		}
 		$tabs[] = array(
 			'title' => _x( 'Transfers', ' Admin Menu', 'vca-asm' ),
 			'value' => 'transfer',
-			'icon' => 'icon-transfers'
+			'icon' => 'icon-transfer'
 		);
-
 		$button = '';
+
 		if ( $this->has_cap ) {
 			if ( $active_tab !== 'all' ) {
-				$button .= '<form method="post" action="admin.php?page=' . $page . '&todo=new&type=' . $active_tab . '&acc_type=' . $account_type . '">' .
+				$button .= '<form method="post" action="admin.php?page=' . $page . '&todo=new&tab=' . $active_tab . '&type=' . $active_tab . '&acc_type=' . $account_type . '&cid=' . $city_id . '">' .
 					'<input type="submit" class="button-secondary" value="+ ' . sprintf( __( 'add %s', 'vca-asm' ), $vca_asm_finances->types_to_nicenames[$tab] ) . '" />' .
 				'</form>';
 			} else {
 				$button .= '<div>';
 				foreach ( $possible_tabs as $tab ) {
 					if ( 'all' !== $tab ) {
-						$button .= '<form method="post" style="display:inline" action="admin.php?page=' . $page . '&todo=new&type=' . $tab . '&acc_type=' . $account_type . '">' .
+						$button .= '<form method="post" style="display:inline" action="admin.php?page=' . $page . '&todo=new&tab=' . $active_tab . '&type=' . $tab . '&acc_type=' . $account_type . '&cid=' . $city_id . '">' .
 							'<input type="submit" class="button-secondary margin" value="+ ' . sprintf( __( 'add %s', 'vca-asm' ), $vca_asm_finances->types_to_nicenames[$tab] ) . '" />' .
 						'</form>';
 					}
@@ -742,7 +1165,8 @@ class VCA_ASM_Admin_Finances
 			'city_id' => $city_id,
 			'account_type' => $account_type,
 			'transaction_type' => $active_tab,
-			'page' => $page
+			'page' => $page,
+			'active_tab' => $active_tab
 		);
 
 		$adminpage = new VCA_ASM_Admin_Page( array(
@@ -783,7 +1207,8 @@ class VCA_ASM_Admin_Finances
 			'city_id' => 0,
 			'account_type' => 'donations',
 			'transaction_type' => 'all',
-			'page' => 'vca-asm-finances-accounts-donations'
+			'page' => 'vca-asm-finances-accounts-donations',
+			'active_tab' => 'all'
 		);
 		$args = wp_parse_args( $args, $default_args );
 		extract( $args );
@@ -798,29 +1223,57 @@ class VCA_ASM_Admin_Finances
 			array(
 				'id' => 'transaction_date',
 				'title' => __( 'Date', 'vca-asm' ),
-				'sortable' => true
+				'sortable' => false,//true
 			),
 			array(
 				'id' => 'amount',
 				'title' => __( 'Amount', 'vca-asm' ),
-				'sortable' => true,
+				'sortable' => false,//true,
 				'link' => array(
 					'title' => __( 'Edit %s', 'vca-asm' ),
 					'title_row_data' => 'name',
 					'url' => '?page=' . $page . '&todo=edit&id=%d',
 					'url_row_data' => 'id'
 				),
-				'actions' => array( 'edit', 'delete' ),
-				'cap' => 'manage-',
+				'actions' => array( 'edit-transaction', 'delete-transaction' ),
+				'cap' => 'edit-transaction',
 				'conversion' => 'amount'
 			)
 		);
 
-		if ( ! in_array( $transaction_type, $vca_asm_finances->donations_transactions ) && ! in_array( $transaction_type, $vca_asm_finances->econ_transactions ) ) {
+		if ( ! in_array( $transaction_type, $vca_asm_finances->donations_transactions ) && ! in_array( $transaction_type, $vca_asm_finances->econ_transactions ) || 'donation' === $transaction_type ) {
 			$columns[] = array(
 				'id' => 'transaction_type',
 				'title' => __( 'Type', 'vca-asm' ),
-				'sortable' => true
+				'sortable' => false//true
+			);
+		}
+
+		if ( 'expenditure' === $transaction_type ) {
+			$columns[] = array(
+				'id' => 'receipt',
+				'title' => __( 'Receipt', 'vca-asm' ),
+				'sortable' => false,//true,
+				'conversion' => 'receipt'
+			);
+		}
+
+		if ( in_array( $transaction_type, array( 'expenditure', 'transfer', 'donation' ) ) || 'donations' === $account_type ) {
+			$columns[] = array(
+				'id' => 'status',
+				'title' => __( 'Status', 'vca-asm' ),
+				'sortable' => false,//true,
+				'actions' => array( 'confirm-receipt', 'unconfirm-receipt' ),
+				'cap' => array( 'confirm-receipt', 'unconfirm-receipt' ),
+				'conversion' => 'receipt-status'
+			);
+		}
+
+		if ( in_array( $transaction_type, array( 'expenditure', 'revenue', 'donation' ) ) ) {
+			$columns[] = array(
+				'id' => 'meta_1',
+				'title' => __( 'Occasion', 'vca-asm' ),
+				'sortable' => false
 			);
 		}
 
@@ -851,24 +1304,69 @@ class VCA_ASM_Admin_Finances
 			$pagination_args = array( 'pagination' => false );
 		}
 
+		$the_city_finances = new VCA_ASM_City_Finances( $city_id );
 		$rows = array();
 		$i = 0;
 		foreach ( $transactions as $transaction ) {
 			$rows[$i] = $transaction;
 			$rows[$i]['transaction_type_plain'] = $transaction['transaction_type'];
-			$rows[$i]['transaction_type'] = $vca_asm_finances->types_to_nicenames[$rows[$i]['transaction_type_plain']];
+
+			$rows[$i]['editable'] = ( $the_city_finances->{'balanced_month_'. ( $account_type === 'donations' ? 'don' : $account_type ) .'_threshold_stamp'} < $transaction['transaction_date'] ) ? 1 : 0;
+
+			if ( 'donation' !== $transaction_type ) {
+				$rows[$i]['transaction_type'] = $vca_asm_finances->types_to_nicenames[$transaction['transaction_type']];
+				$rows[$i]['transaction_type'] .= ( 1 == $transaction['cash'] ) ? ' (' . __( 'cash', 'vca-asm' ) . ')' : '';
+				$rows[$i]['transaction_type'] .= ( 'transfer' === $transaction['transaction_type'] && 'econ' === $account_type ) ? ( 0 < $transaction['amount'] ? ' (' . __( 'to city', 'vca-asm' ) . ')' : ' (' . __( 'to office', 'vca-asm' ) . ')' ) : '';
+			} else {
+				$rows[$i]['transaction_type'] = ( 1 == $transaction['cash'] ) ? __( 'Cash money', 'vca-asm' ) : __( 'Direct Transfer', 'vca-asm' );
+			}
+
 			$rows[$i]['entry_time_plain'] = $transaction['entry_time'];
 			$rows[$i]['entry_time'] = strftime( '%d.%m.%Y %H:%M', $transaction['entry_time'] );
+
 			$rows[$i]['transaction_date_plain'] = $transaction['transaction_date'];
 			$rows[$i]['transaction_date'] = strftime( '%d.%m.%Y', $transaction['transaction_date'] );
+
 			$rows[$i]['amount_plain'] = $transaction['amount'];
 			$rows[$i]['amount'] = number_format( $transaction['amount']/100, 2, ',', '.' );
+			$rows[$i]['receipt'] = ! empty( $transaction['receipt_id'] ) ? $transaction['receipt_id'] : '---';
+
+			switch ( $transaction['receipt_status'] ) {
+				case 1:
+				case '1':
+					if ( 'expenditure' === $transaction['transaction_type'] ) {
+						$rows[$i]['status'] = __( 'Receipt not sent', 'vca-asm' );
+					} else {
+						$rows[$i]['status'] = __( 'Unconfirmed', 'vca-asm' );
+					}
+				break;
+
+				case 2:
+				case '2':
+					if ( 'expenditure' === $transaction['transaction_type'] ) {
+						$rows[$i]['status'] = __( 'Receipt sent', 'vca-asm' );
+					} else {
+						$rows[$i]['status'] = __( 'Unconfirmed', 'vca-asm' );
+					}
+				break;
+
+				case 3:
+				case '3':
+					$rows[$i]['status'] = __( 'Confirmed', 'vca-asm' );
+				break;
+
+				case 0:
+				case '0':
+				default:
+					$rows[$i]['status'] = '---';
+				break;
+			}
 			$i++;
 		}
 
 		$tbl_args = array(
-			'base_url' => '?page=' . $page,
-			'sort_url' => '?page=' . $page,
+			'base_url' => '?page=' . $page . '&tab=' . $active_tab,
+			'sort_url' => '?page=' . $page . '&tab=' . $active_tab,
 			'echo' => false,
 			'orderby' => 'transaction_date_plain',
 			'order' => 'DESC'
@@ -892,9 +1390,12 @@ class VCA_ASM_Admin_Finances
 		$default_args = array(
 			'id' => NULL,
 			'type' => 'donation',
+			'active_tab' => 'all',
+			'city_id' =>  0,
 			'account_type' => 'donations',
 			'messages' => array(),
-			'page' => 'vca-asm-finances-accounts-donations'
+			'page' => 'vca-asm-finances-accounts-donations',
+			'populate' => false
 		);
 		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
 
@@ -912,21 +1413,27 @@ class VCA_ASM_Admin_Finances
 
 		$url = 'admin.php?page=' . $page . '&acc_type=' . $account_type;
 		if ( ! empty( $id ) ) {
-			$form_action = $url . '&todo=save&noheader=true&id=' . $id;
 			$type = $vca_asm_finances->get_transaction_type( $id );
+			$form_action = $url . '&todo=save&noheader=true&id=' . $id . '&type=' . $type . '&tab=' . $active_tab . '&cid=' . $city_id;
 		} else {
-			$form_action = $url . '&todo=save&noheader=true&type=' . $type;
+			$form_action = $url . '&todo=save&noheader=true&type=' . $type . '&tab=' . $active_tab . '&cid=' . $city_id;
 		}
 
-		if( empty( $id ) ) {
-			$fields = $this->create_fields( $account_type.'-'.$type );
+		if( empty( $id ) && ! $populate ) {
+			$fields = $this->create_fields( $account_type.'-'.$type, 0, $city_id );
 			$title = sprintf( __( 'Add New %s', 'vca-asm' ), $vca_asm_finances->types_to_nicenames[$type] );
-			$transaction_city = 0;
+			$transaction_city = ! empty( $_GET['cid'] ) ? $_GET['cid'] : 0;
 		} else {
-			$fields = $this->populate_fields( $id );
-			$title = sprintf( __( 'Edit %s', 'vca-asm' ), $vca_asm_finances->types_to_nicenames[$type] );
-			$type = $vca_asm_finances->get_transaction_type( $id, false );
-			$transaction_city = $vca_asm_finances->get_transaction_city( $id );
+			if( ! empty( $id ) ) {
+				$fields = $this->populate_fields( $id );
+				$title = sprintf( __( 'Edit %s', 'vca-asm' ), $vca_asm_finances->types_to_nicenames[$type] );
+				$type = $vca_asm_finances->get_transaction_type( $id, false );
+				$transaction_city = $vca_asm_finances->get_transaction_city( $id );
+			} else {
+				$fields = $this->populate_fields( false, $account_type.'-'.$type );
+				$title = sprintf( __( 'Add New %s', 'vca-asm' ), $vca_asm_finances->types_to_nicenames[$type] );
+				$transaction_city = ! empty( $_GET['cid'] ) ? $_GET['cid'] : 0;
+			}
 		}
 
 		if( empty( $id ) && $this->has_cap ) {
@@ -996,7 +1503,7 @@ class VCA_ASM_Admin_Finances
 			'icon' => 'icon-finances',
 			'title' => $title,
 			'url' => $url,
-			'extra_head_html' => $this->has_cap ? $extra_html : '',
+			'extra_head_html' => '',//$this->has_cap ? $extra_html : '', <-- Feature "unrequested". Motherfuckers.
 			'messages' => $messages,
 			'back' => false
 		));
@@ -1010,7 +1517,7 @@ class VCA_ASM_Admin_Finances
 				'action' => $form_action,
 				'id' => $id,
 				'back' => true,
-				'back_url' => $url . '&tab=' . $type,
+				'back_url' => $url . '&tab=' . $active_tab . '&cid=' . $transaction_city,
 				'button_id' => 'submit-validate',
 				'fields' => $fields
 			);
@@ -1038,6 +1545,7 @@ class VCA_ASM_Admin_Finances
 
 		switch ( $type ) {
 			case 'donations-donation':
+				wp_enqueue_script( 'vca-asm-admin-finances' );
 				$fields = array(
 					array(
 						'title' => __( 'The Donation', 'vca-asm' ),
@@ -1048,13 +1556,34 @@ class VCA_ASM_Admin_Finances
 								'id' => 'amount',
 								'currency_major' => $currency_major,
 								'currency_minor' => $currency_minor,
-								'desc' => __( 'How much was gathered?', 'vca-asm' )
+								'desc' => __( 'How much was gathered?', 'vca-asm' ),
+								'validation' => 'cash_amount',
+								'required' => true
 							),
 							array(
 								'type' => 'date',
 								'label' => __( 'Date', 'vca-asm' ),
 								'id' => 'transaction_date',
-								'desc' => __( 'When did you receive the donation?', 'vca-asm' )
+								'desc' => __( 'When did you receive the donation?', 'vca-asm' ),
+								'validation' => 'date',
+								'required' => true
+							),
+							array(
+								'type' => 'text',
+								'label' => __( 'Occasion', 'vca-asm' ),
+								'id' => 'meta_1',
+								'desc' => __( 'On what occasion did you receive the donation?', 'vca-asm' ) . ' (' . __( 'Name of the concert, festival or party, for instance', 'vca-asm' ) . ')',
+								'validation' => 'required',
+								'class' => 'required',
+								'required' => true
+							),
+							array(
+								'type' => 'text',
+								'label' => __( 'Category of occasion', 'vca-asm' ),
+								'id' => 'meta_2',
+								'desc' => __( 'How can the occasion be categorized?', 'vca-asm' ) . ' (' . __( 'Enter the name of the transferring party: The company name of a venue for instance.', 'vca-asm' ) . ')',
+								'class' => 'required',
+								'required' => true
 							),
 							array(
 								'type' => 'radio',
@@ -1071,29 +1600,22 @@ class VCA_ASM_Admin_Finances
 										'value' => 0
 									)
 								),
-								'value' => 1
+								'value' => 1,
+								'validation' => 'required',
+								'required' => true
 							),
 							array(
 								'type' => 'text',
-								'label' => __( 'Occasion', 'vca-asm' ),
-								'id' => 'meta_1',
-								'desc' => __( 'On what occasion did you receive the donation?', 'vca-asm' ) . ' (' . __( 'Name of the event, for instance', 'vca-asm' ) . ')'
+								'label' => __( 'From whom?', 'vca-asm' ),
+								'id' => 'meta_3',
+								'desc' => __( 'Who will transder the donation?', 'vca-asm' ) . ' (' . __( 'Enter the name of the transferring party: The company name of a venue for instance.', 'vca-asm' ) . ')',
+								'class' => 'required',
+								'required' => true
 							),
 							array(
-								'type' => 'manual_radio',
-								'label' => __( 'How?', 'vca-asm' ),
-								'id' => 'meta_2',
-								'desc' => __( 'In what way was the donation gathered?', 'vca-asm' ),
-								'options' => array(
-									array(
-										'label' => __( 'Cup Deposits', 'vca-asm' ),
-										'value' => 'cups'
-									),
-									array(
-										'label' => __( 'Donation Box', 'vca-asm' ),
-										'value' => 'can'
-									)
-								)
+								'type' => 'hidden',
+								'id' => 'receipt_status',
+								'value' => 2
 							)
 						)
 					)
@@ -1111,13 +1633,17 @@ class VCA_ASM_Admin_Finances
 								'id' => 'amount',
 								'currency_major' => $currency_major,
 								'currency_minor' => $currency_minor,
-								'desc' => __( 'How much was gained?', 'vca-asm' )
+								'desc' => __( 'How much was gained?', 'vca-asm' ),
+								'validation' => 'cash_amount',
+								'required' => true
 							),
 							array(
 								'type' => 'date',
 								'label' => __( 'Date', 'vca-asm' ),
 								'id' => 'transaction_date',
-								'desc' => __( 'When did you gain the revenue?', 'vca-asm' )
+								'desc' => __( 'When did you gain the revenue?', 'vca-asm' ),
+								'validation' => 'date',
+								'required' => true
 							),
 							array(
 								'type' => 'radio',
@@ -1127,13 +1653,17 @@ class VCA_ASM_Admin_Finances
 									'type' => 'income',
 									'unclear' => true
 								)),
+								'required' => true,
 								'desc' => __( 'Of what category is this revenue?', 'vca-asm' )//__( 'Under what category should this revenue be booked?', 'vca-asm' )
 							),
 							array(
 								'type' => 'text',
 								'label' => __( 'Occasion', 'vca-asm' ),
 								'id' => 'meta_1',
-								'desc' => __( 'What was the occasion?', 'vca-asm' ) . ' (' . __( 'Name of the event, for instance', 'vca-asm' ) . ')'
+								'desc' => __( 'What was the occasion?', 'vca-asm' ) . ' (' . __( 'Name of the event, for instance', 'vca-asm' ) . ')',
+								'validation' => 'required',
+								'class' => 'required',
+								'required' => true
 							)
 						)
 					)
@@ -1151,19 +1681,25 @@ class VCA_ASM_Admin_Finances
 								'id' => 'amount',
 								'currency_major' => $currency_major,
 								'currency_minor' => $currency_minor,
-								'desc' => __( 'How much was spent?', 'vca-asm' )
+								'desc' => __( 'How much was spent?', 'vca-asm' ),
+								'validation' => 'cash_amount',
+								'required' => true
 							),
 							array(
 								'type' => 'date',
 								'label' => __( 'Date', 'vca-asm' ),
 								'id' => 'transaction_date',
-								'desc' => __( 'When did you take the money from your cities structural account?', 'vca-asm' )
+								'desc' => __( 'When did you take the money from your cities structural account?', 'vca-asm' ),
+								'validation' => 'date',
+								'required' => true
 							),
 							array(
 								'type' => 'date',
 								'label' => __( 'Date of Receipt', 'vca-asm' ),
 								'id' => 'receipt_date',
-								'desc' => __( 'When was the money spent? (What is the date on the rerceipt?)', 'vca-asm' )
+								'desc' => __( 'When was the money spent? (What is the date on the rerceipt?)', 'vca-asm' ),
+								'validation' => 'date',
+								'required' => true
 							),
 							array(
 								'type' => 'note_hidden',
@@ -1180,13 +1716,17 @@ class VCA_ASM_Admin_Finances
 									'type' => 'expense',
 									'unclear' => true
 								)),
+								'required' => true,
 								'desc' => __( 'Of what category is this expenditure?', 'vca-asm' )//__( 'Under what category should this expense be booked?', 'vca-asm' )
 							),
 							array(
 								'type' => 'text',
 								'label' => __( 'Occasion', 'vca-asm' ),
 								'id' => 'meta_1',
-								'desc' => __( 'What occasion did you spend the money for?', 'vca-asm' ) . ' (' . __( 'Name of the event, for instance', 'vca-asm' ) . ')'
+								'desc' => __( 'What occasion did you spend the money for?', 'vca-asm' ) . ' (' . __( 'Name of the event, for instance', 'vca-asm' ) . ')',
+								'validation' => 'required',
+								'class' => 'required',
+								'required' => true
 							),
 							array(
 								'type' => 'hidden',
@@ -1209,13 +1749,22 @@ class VCA_ASM_Admin_Finances
 								'id' => 'amount',
 								'currency_major' => $currency_major,
 								'currency_minor' => $currency_minor,
-								'desc' => __( 'How much did you transfer?', 'vca-asm' )
+								'desc' => __( 'How much did you transfer?', 'vca-asm' ),
+								'validation' => 'cash_amount',
+								'required' => true
 							),
 							array(
 								'type' => 'date',
 								'label' => __( 'Date', 'vca-asm' ),
 								'id' => 'transaction_date',
-								'desc' => __( 'When did you make the transfer?', 'vca-asm' )
+								'desc' => __( 'When did you make the transfer?', 'vca-asm' ),
+								'validation' => 'date',
+								'required' => true
+							),
+							array(
+								'type' => 'hidden',
+								'id' => 'receipt_status',
+								'value' => 2
 							)
 						)
 					)
@@ -1233,13 +1782,22 @@ class VCA_ASM_Admin_Finances
 								'id' => 'amount',
 								'currency_major' => $currency_major,
 								'currency_minor' => $currency_minor,
-								'desc' => __( 'How much did you transfer?', 'vca-asm' )
+								'desc' => __( 'How much did you transfer?', 'vca-asm' ),
+								'validation' => 'cash_amount',
+								'required' => true
 							),
 							array(
 								'type' => 'date',
 								'label' => __( 'Date', 'vca-asm' ),
 								'id' => 'transaction_date',
-								'desc' => __( 'When did you make the transfer?', 'vca-asm' )
+								'desc' => __( 'When did you make the transfer?', 'vca-asm' ),
+								'validation' => 'date',
+								'required' => true
+							),
+							array(
+								'type' => 'hidden',
+								'id' => 'receipt_status',
+								'value' => 2
 							)
 						)
 					)
@@ -1259,13 +1817,14 @@ class VCA_ASM_Admin_Finances
 								'label' => __( 'from office to city', 'vca-asm' ),
 								'value' => 1
 							)
-						)
+						),
+						'required' => true
 					);
 				} else {
 					$fields[0]['fields'][] = array(
 						'type' => 'hidden',
 						'id' => 'direction',
-						'value' => 'office'
+						'value' => 0
 					);
 				}
 			break;
@@ -1280,33 +1839,44 @@ class VCA_ASM_Admin_Finances
 	 * @since 1.0
 	 * @access private
 	 */
-	private function populate_fields( $id ) {
+	private function populate_fields( $id = false, $type = 'donations-donation' ) {
 		global $current_user, $wpdb, $vca_asm_finances;
 
-		$type = $vca_asm_finances->get_transaction_type( $id, true );
+		if ( is_numeric( $id ) ) {
+			$type = $vca_asm_finances->get_transaction_type( $id, true );
+			/* fill fields with existing data */
+			$data = $wpdb->get_results(
+				"SELECT * FROM " .
+				$wpdb->prefix . "vca_asm_finances_transactions " .
+				"WHERE id = " . $id . " LIMIT 1", ARRAY_A
+			);
+
+			$data = $data[0];
+		}
+
 		$fields = $this->create_fields( $type );
-
-		/* fill fields with existing data */
-		$data = $wpdb->get_results(
-			"SELECT * FROM " .
-			$wpdb->prefix . "vca_asm_finances_transactions " .
-			"WHERE id = " . $id . " LIMIT 1", ARRAY_A
-		);
-
-		$data = $data[0];
 
 		$bcount = count( $fields );
 		for ( $i = 0; $i < $bcount; $i++ ) {
 			$fcount = count( $fields[$i]['fields'] );
 			for ( $j = 0; $j < $fcount; $j++ ) {
-				if ( empty( $_POST['submitted'] ) ) {
+				if ( empty( $_POST['submitted'] ) && is_numeric( $id ) ) {
 					if ( 'direction' === $fields[$i]['fields'][$j]['id'] ) {
 						$fields[$i]['fields'][$j]['value'] = 0 > $data['amount'] ? 0 : 1;
 					} else {
 						$fields[$i]['fields'][$j]['value'] = $data[$fields[$i]['fields'][$j]['id']];
 					}
 				} else {
-					$fields[$i]['fields'][$j]['value'] = $_POST[$fields[$i]['fields'][$j]['id']];
+					if ( 'cash_amount' === $fields[$i]['fields'][$j]['type'] ) {
+						$fields[$i]['fields'][$j]['value'] = isset( $_POST[$fields[$i]['fields'][$j]['id'].'_major'] ) ? intval( $_POST[$fields[$i]['fields'][$j]['id'].'_major'] ) * 100 : 0;
+						if ( isset( $_POST[$fields[$i]['fields'][$j]['id'].'_minor'] ) ) {
+							$fields[$i]['fields'][$j]['value'] += intval( $_POST[$fields[$i]['fields'][$j]['id'].'_minor'] );
+						}
+					} else {
+						if ( isset( $_POST[$fields[$i]['fields'][$j]['id']] ) || ! empty( $fields[$i]['fields'][$j]['value'] ) ) {
+							$fields[$i]['fields'][$j]['value'] = isset( $_POST[$fields[$i]['fields'][$j]['id']] ) ? $_POST[$fields[$i]['fields'][$j]['id']] : $fields[$i]['fields'][$j]['value'];
+						}
+					}
 				}
 			}
 		}
@@ -1589,7 +2159,7 @@ class VCA_ASM_Admin_Finances
 		$url = '?page=vca-asm-finances-settings';
 		$adminpage = new VCA_ASM_Admin_Page( array(
 			'icon' => 'icon-finances',
-			'title' => __( 'Finances Settings' , 'vca-asm' ),
+			'title' => _x( 'Finances', 'Admin Menu', 'vca-asm' ) . ' | ' . __( 'Settings' , 'vca-asm' ),
 			'messages' => $messages,
 			'url' => $url,
 			'back' => false,
@@ -1811,7 +2381,7 @@ class VCA_ASM_Admin_Finances
 					'url' => '?page=vca-asm-finances-settings&todo=edit-cc&id=%d',
 					'url_row_data' => 'id'
 				),
-				'actions' => array( 'edit', 'delete' ),
+				'actions' => array( 'edit-cc', 'delete-transaction' ),
 				'cap' => 'finances'
 			),
 			array(

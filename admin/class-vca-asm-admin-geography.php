@@ -22,7 +22,8 @@ class VCA_ASM_Admin_Geography {
 	 * @access public
 	 */
 	public function control() {
-		global $current_user, $wpdb, $vca_asm_geography;
+		global $current_user, $wpdb,
+			$vca_asm_finances, $vca_asm_geography;
 
 		$messages = array();
 
@@ -160,7 +161,7 @@ class VCA_ASM_Admin_Geography {
 								return;
 							} elseif ( isset( $region_user ) && is_array( $region_user ) && 1 == $region_user['has_user'] ) {
 								if ( ! empty( $region_user['pass'] ) ) {
-									$old_pass = rtrim(mcrypt_decrypt(MCRYPT_RIJNDAEL_256, md5(REGION_KEY), base64_decode($region_user['pass']), MCRYPT_MODE_CBC, md5(md5(REGION_KEY))), "\0");
+									$old_pass = rtrim( mcrypt_decrypt( MCRYPT_RIJNDAEL_256, md5(REGION_KEY), base64_decode($region_user['pass']), MCRYPT_MODE_CBC, md5(md5(REGION_KEY) ) ), "\0");
 									if ( $old_pass != $_POST['pass'] ) {
 										wp_update_user(
 											array(
@@ -348,6 +349,11 @@ class VCA_ASM_Admin_Geography {
 							);
 							$region_id = $wpdb->insert_id;
 
+							if ( in_array( $_POST['type'], array( 'lc', 'cell' ) ) ) {
+								$vca_asm_finances->create_account( $region_id, 'econ' );
+								$vca_asm_finances->create_account( $region_id, 'donations' );
+							}
+
 							if ( ! empty( $_POST['parent_nation'] ) && is_numeric( $_POST['parent_nation'] ) ) {
 								$wpdb->insert(
 									$wpdb->prefix.'vca_asm_geography_hierarchy',
@@ -379,7 +385,7 @@ class VCA_ASM_Admin_Geography {
 								'message' => sprintf( __( '%s successfully added!', 'vca-asm' ), $_POST['name'] )
 							);
 						}
-						/* Set Head Of's region ID */
+						/* Set City User's region ID */
 						if ( $has_user == 1 ) {
 							update_user_meta( $region_user_id, 'region', $region_id );
 							update_user_meta( $region_user_id, 'city', $region_id );

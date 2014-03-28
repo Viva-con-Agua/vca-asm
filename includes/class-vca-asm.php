@@ -190,6 +190,7 @@ class VCA_ASM {
 
 		wp_register_script( 'vca-asm-admin-email-preview', VCA_ASM_RELPATH . 'js/admin-email-preview.js', array( 'jquery' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-admin-email-compose', VCA_ASM_RELPATH . 'js/admin-email-compose.js', array( 'jquery' ), '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-admin-finances', VCA_ASM_RELPATH . 'js/admin-finances.js', array( 'jquery' ), '2013.11.6.993', true );
 		wp_register_script( 'vca-asm-admin-generic', VCA_ASM_RELPATH . 'js/admin-generic.js', array( 'jquery' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-admin-repeatable-custom-fields', VCA_ASM_RELPATH . 'js/admin-repeatable-custom-fields.js',
 			array( 'jquery', 'jquery-ui-slider', 'jquery-ui-datepicker' ), '2013.11.6.1', true );
@@ -200,7 +201,7 @@ class VCA_ASM {
 			array( 'jquery', 'jquery-ui-slider' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-admin-settings', VCA_ASM_RELPATH . 'js/admin-settings.js', array( 'jquery', 'jquery-ui-slider' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-admin-supporter-filter', VCA_ASM_RELPATH . 'js/admin-supporter-filter.js', array( 'jquery' ), '2013.11.6.1', true );
-		wp_register_script( 'vca-asm-admin-validation', VCA_ASM_RELPATH . 'js/admin-validation.js', array( 'jquery' ), '2013.11.6.3', true );
+		wp_register_script( 'vca-asm-admin-validation', VCA_ASM_RELPATH . 'js/admin-validation.js', array( 'jquery' ), '2013.11.6.19', true );
 		wp_register_script( 'vca-asm-excel-export', VCA_ASM_RELPATH . 'js/excel-export.js', array( 'jquery' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-tooltip', VCA_ASM_RELPATH . 'js/tooltip.js', array( 'jquery' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-ctr-to-cty', VCA_ASM_RELPATH . 'js/ctr-to-cty.js', array( 'jquery' ), '2013.11.6.1', true );
@@ -229,7 +230,7 @@ class VCA_ASM {
 
 		wp_register_style( 'jquery-ui-framework', VCA_ASM_RELPATH . 'css/jquery-ui-framework.css' );
 		wp_register_style( 'jquery-ui-custom', VCA_ASM_RELPATH . 'css/jquery-ui-custom.css' );
-		wp_register_style( 'vca-asm-admin-generic-style', VCA_ASM_RELPATH . 'css/admin-generic.css', false, '2013.11.15.8' );
+		wp_register_style( 'vca-asm-admin-generic-style', VCA_ASM_RELPATH . 'css/admin-generic.css', false, '2014.03.17.15' );
 
 		wp_register_style( 'vca-asm-tooltips', VCA_ASM_RELPATH . 'css/admin-tooltips.css', false, '2013.11.6.1' );
 
@@ -277,6 +278,16 @@ class VCA_ASM {
 		}
 	}
 
+	public function start_session() {
+		if( ! session_id() ) {
+			session_start();
+		}
+	}
+
+	function end_session() {
+		session_destroy ();
+	}
+
 	/**
 	 * Constructor
 	 *
@@ -288,6 +299,9 @@ class VCA_ASM {
 		add_action( 'wp_enqueue_scripts', array( $this, 'vca_asm_frontend_enqueue' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'vca_asm_admin_enqueue' ) );
 		add_action( 'admin_init', array( $this, 'clean_unwanted_caps' ) );
+		add_action( 'init', array( $this, 'start_session' ), 1 );
+		add_action( 'wp_logout', array( $this, 'end_session' ) );
+		add_action( 'wp_login', array( $this, 'end_session' ) );
 	}
 } // class
 

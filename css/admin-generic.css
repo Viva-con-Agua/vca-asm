@@ -272,8 +272,14 @@ div.message-secondary p {
 	margin: .5em 0;
 	padding: 2px;
 }
-span.required.empty {
+span.required.empty,
+span.warning,
+td.warning {
 	 color: #e2007a;
+}
+span.warning,
+td.warning {
+	 font-style: italic;
 }
 input.warning,
 select.warning {
@@ -362,6 +368,9 @@ div.alignleft h3.table-headline {
 	 padding-top: .4em;
 	 margin: 0;
 }
+.row-actions {
+	 color: #555555;
+}
 
 @media handheld, only screen and (min-width: 1599px) {
 	.widefat .column-age {
@@ -374,6 +383,12 @@ div.alignleft h3.table-headline {
 	.widefat .column-user_email {
 		width: auto;
 	}
+}
+
+/*-----Tables inside Metaboxes-----*/
+td.right-aligned-tcell {
+	 padding-left: .5em;
+	 text-align: right;
 }
 
 
@@ -420,7 +435,18 @@ input[type="text"].wide-text {
 	width: 16px;
 	height: 16px;
 	margin: 0 .6em 0 0;
-	background-size: 592px 32px;
+	background-size: 768px 32px;
+}
+.icon32dpxd,
+.icon32retina {
+	background: transparent;
+	background-image: url(../img/icons64.png);
+	background-repeat: no-repeat;
+	display: inline-block;
+	width: 32px;
+	height: 32px;
+	margin: 0 .6em 0 0;
+	background-size: 1536px 64px;
 }
 .nav-tab-icon {
 	filter: alpha(opacity=60);
@@ -495,7 +521,6 @@ a:hover .nt-icon-mail {
 a:hover .nt-icon-applications {
 	background-position: -96px -16px;
 }
-#icon-warning,
 #icon-accepted-applications {
 	background-position: -224px 0px;
 }
@@ -562,6 +587,14 @@ a:hover .nt-icon-education {
 #icon-finances {
 	background-position: -480px 0px;
 }
+.nt-icon-donations,
+.nt-icon-finances {
+	background-position: -240px 0px;
+}
+a:hover .nt-icon-donations,
+a:hover .nt-icon-finances {
+	background-position: -240px -16px;
+}
 #icon-cars {
 	background-position: -512px 0px;
 }
@@ -590,17 +623,20 @@ a:hover .nt-icon-education {
 	background-position: -736px 0px;
 }
 .nt-icon-data,
-.nt-icon-file {
+.nt-icon-file,
+.nt-icon-summary {
 	background-position: -368px 0px;
 }
 a:hover .nt-icon-data,
-a:hover .nt-icon-file {
+a:hover .nt-icon-file,
+a:hover .nt-icon-summary {
 	background-position: -368px -16px;
 }
 #icon-love {
 	background-position: -768px 0px;
 }
-#icon-star {
+#icon-star,
+.icon32-posts-miscactions {
 	background-position: -800px 0px;
 }
 #icon-cups {
@@ -721,8 +757,131 @@ a:hover .nt-icon-nation-group,
 a:hover .nt-icon-nation-groups {
 	background-position: -560px -16px;
 }
-.icon32-posts-miscactions {
-	background-position: -800px 0px;
+#icon-football {
+	background-position: -1152px 0px;
+}
+.nt-icon-football {
+	background-position: -576px 0px;
+}
+a:hover .nt-icon-football {
+	background-position: -576px -16px;
+}
+#icon-plus {
+	background-position: -1184px 0px;
+}
+.nt-icon-plus {
+	background-position: -592px 0px;
+}
+a:hover .nt-icon-plus {
+	background-position: -592px -16px;
+}
+#icon-minus {
+	background-position: -1216px 0px;
+}
+.nt-icon-minus {
+	background-position: -608px 0px;
+}
+a:hover .nt-icon-minus {
+	background-position: -608px -16px;
+}
+#icon-cross {
+	background-position: -1248px 0px;
+}
+.nt-icon-cross {
+	background-position: -624px 0px;
+}
+a:hover .nt-icon-cross {
+	background-position: -624px -16px;
+}
+#icon-transfer {
+	background-position: -1280px 0px;
+}
+.nt-icon-transfer {
+	background-position: -640px 0px;
+}
+a:hover .nt-icon-transfer {
+	background-position: -640px -16px;
+}
+#icon-outbound-2 {
+	background-position: -1312px 0px;
+}
+.nt-icon-outbound-2 {
+	background-position: -656px 0px;
+}
+a:hover .nt-icon-outbound-2 {
+	background-position: -656px -16px;
+}
+#icon-inbound-2 {
+	background-position: -1344px 0px;
+}
+.nt-icon-inbound-2 {
+	background-position: -672px 0px;
+}
+a:hover .nt-icon-inbound-2 {
+	background-position: -672px -16px;
+}
+#icon-outbound,
+#icon-outbound-1,
+#icon-expenditure,
+#icon-expense {
+	background-position: -1376px 0px;
+}
+.nt-icon-outbound,
+.nt-icon-outbound-1,
+.nt-icon-expenditure,
+.nt-icon-expense {
+	background-position: -688px 0px;
+}
+a:hover .nt-icon-outbound,
+a:hover .nt-icon-outbound-1,
+a:hover .nt-icon-expenditure,
+a:hover .nt-icon-expense {
+	background-position: -688px -16px;
+}
+#icon-inbound,
+#icon-inbound-1,
+#icon-income,
+#icon-revenue {
+	background-position: -1408px 0px;
+}
+.nt-icon-inbound,
+.nt-icon-inbound-1,
+.nt-icon-income,
+.nt-icon-revenue {
+	background-position: -704px 0px;
+}
+a:hover .nt-icon-inbound,
+a:hover .nt-icon-inbound-1,
+a:hover .nt-icon-income,
+a:hover .nt-icon-revenue {
+	background-position: -704px -16px;
+}
+#icon-warning {
+	background-position: -1440px 0px;
+}
+.nt-icon-warning {
+	background-position: -720px 0px;
+}
+a:hover .nt-icon-warning {
+	background-position: -720px -16px;
+}
+#icon-exclamation {
+	background-position: -1472px 0px;
+}
+.nt-icon-exclamation {
+	background-position: -736px 0px;
+}
+a:hover .nt-icon-exclamation {
+	background-position: -736px -16px;
+}
+#icon-warning-baligned {
+	background-position: -1504px 0px;
+}
+.tbl-icon-warning {
+	background-position: -752px -16px;
+}
+a:hover .tbl-icon-warning {
+	background-position: -752px -16px;
 }
 
 
@@ -773,17 +932,29 @@ body #pass-strength-result.strong {
 .amount {
 	 font-weight: 700;
 }
-.donation {
-	color: #00586c;
+.cash-donation,
+.blue-alert,
+.receipt-2 {
+	color: #857043;
 }
 .positive,
 .income,
-.revenue {
+.revenue,
+.donation,
+.green-alert {
 	color: #03a63c;
 }
 .negative,
-.expenditure {
+.expenditure,
+.red-alert {
 	color: #f22233;
+}
+.transfer,
+.receipt-3 {
+	color: #000000;
+}
+.receipt-1 {
+	color: #e2007a;
 }
 
 

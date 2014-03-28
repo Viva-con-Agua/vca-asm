@@ -153,6 +153,7 @@ class VCA_ASM_Geography
 	 * @param string $order
 	 * @param string $orderby
 	 * @param string $type
+	 *
 	 * @return array $regions
 	 *
 	 * @since 1.0
@@ -455,12 +456,12 @@ class VCA_ASM_Geography
 		global $wpdb;
 
 		$default_args = array(
-			'data' => 'name',
-			'format' => 'array',
-			'concat' => ', ',
-			'type' => 'all',
-			'grouped' => true,
-			'sorted'=> false
+			'data' => 'name',		// what type of data to return per geo-unit
+			'format' => 'array',	// whether to return an array or a concatenated string
+			'concat' => ', ',		// what string to concatenate by
+			'type' => 'all',		// what type of descendant to return
+			'grouped' => true,		// whether type should be 'city' or split into 'cell' & 'lc', if applicable
+			'sorted'=> false		// whether to sort the output array by name of geographical unit
 		);
 		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
 
@@ -1015,16 +1016,6 @@ class VCA_ASM_Geography
 		}
 
 		return $options_array;
-	}
-
-	/**
-	 * PHP4 style constructor
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function VCA_ASM_Geography() {
-		$this->__construct();
 	}
 
 	/**

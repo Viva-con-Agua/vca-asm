@@ -690,82 +690,94 @@ class VCA_ASM_Admin_Table {
 				(
 					'slots-actions' === $cur_cap &&
 					(
-						$current_user->has_cap( 'vca_asm_manage_actions_global' )
-					) ||
-					(
-						$current_user->has_cap( 'vca_asm_manage_actions_nation' )
-					) ||
-					(
-						$current_user->has_cap( 'vca_asm_manage_actions' )
+						(
+							$current_user->has_cap( 'vca_asm_manage_actions_global' )
+						) ||
+						(
+							$current_user->has_cap( 'vca_asm_manage_actions_nation' )
+						) ||
+						(
+							$current_user->has_cap( 'vca_asm_manage_actions' )
+						)
 					)
 				) ||
 				(
 					'slots-education' === $cur_cap &&
 					(
-						$current_user->has_cap( 'vca_asm_manage_education_global' )
-					) ||
-					(
-						$current_user->has_cap( 'vca_asm_manage_education_nation' )
-					) ||
-					(
-						$current_user->has_cap( 'vca_asm_manage_education' )
+						(
+							$current_user->has_cap( 'vca_asm_manage_education_global' )
+						) ||
+						(
+							$current_user->has_cap( 'vca_asm_manage_education_nation' )
+						) ||
+						(
+							$current_user->has_cap( 'vca_asm_manage_education' )
+						)
 					)
 				) ||
 				(
 					'slots-network' === $cur_cap &&
 					(
-						$current_user->has_cap( 'vca_asm_manage_network_global' )
-					) ||
-					(
-						$current_user->has_cap( 'vca_asm_manage_network_nation' )
-					) ||
-					(
-						$current_user->has_cap( 'vca_asm_manage_network' )
+						(
+							$current_user->has_cap( 'vca_asm_manage_network_global' )
+						) ||
+						(
+							$current_user->has_cap( 'vca_asm_manage_network_nation' )
+						) ||
+						(
+							$current_user->has_cap( 'vca_asm_manage_network' )
+						)
 					)
 				) ||
 				(
 					'edit-act-actions' === $cur_cap &&
 					(
-						$current_user->has_cap( 'vca_asm_manage_actions_global' )
-					) ||
-					(
-						$current_user->has_cap( 'vca_asm_manage_actions_nation' ) &&
-						$admin_nation === get_post_meta( $row['id'], 'nation', true )
-					) ||
-					(
-						$current_user->has_cap( 'vca_asm_manage_actions' ) &&
-						$admin_city === get_post_meta( $row['id'], 'city', true ) &&
-						'delegate' === get_post_meta( $row['id'], 'delegate', true )
+						(
+							$current_user->has_cap( 'vca_asm_manage_actions_global' )
+						) ||
+						(
+							$current_user->has_cap( 'vca_asm_manage_actions_nation' ) &&
+							$admin_nation === get_post_meta( $row['id'], 'nation', true )
+						) ||
+						(
+							$current_user->has_cap( 'vca_asm_manage_actions' ) &&
+							$admin_city === get_post_meta( $row['id'], 'city', true ) &&
+							'delegate' === get_post_meta( $row['id'], 'delegate', true )
+						)
 					)
 				) ||
 				(
 					'edit-act-education' === $cur_cap &&
 					(
-						$current_user->has_cap( 'vca_asm_manage_education_global' )
-					) ||
-					(
-						$current_user->has_cap( 'vca_asm_manage_actions_nation' ) &&
-						$admin_nation === get_post_meta( $row['id'], 'nation', true )
-					) ||
-					(
-						$current_user->has_cap( 'vca_asm_manage_actions' ) &&
-						$admin_city === get_post_meta( $row['id'], 'city', true ) &&
-						'delegate' === get_post_meta( $row['id'], 'delegate', true )
+						(
+							$current_user->has_cap( 'vca_asm_manage_education_global' )
+						) ||
+						(
+							$current_user->has_cap( 'vca_asm_manage_actions_nation' ) &&
+							$admin_nation === get_post_meta( $row['id'], 'nation', true )
+						) ||
+						(
+							$current_user->has_cap( 'vca_asm_manage_actions' ) &&
+							$admin_city === get_post_meta( $row['id'], 'city', true ) &&
+							'delegate' === get_post_meta( $row['id'], 'delegate', true )
+						)
 					)
 				) ||
 				(
 					'edit-act-network' === $cur_cap &&
 					(
-						$current_user->has_cap( 'vca_asm_manage_network_global' )
-					) ||
-					(
-						$current_user->has_cap( 'vca_asm_manage_actions_nation' ) &&
-						$admin_nation === get_post_meta( $row['id'], 'nation', true )
-					) ||
-					(
-						$current_user->has_cap( 'vca_asm_manage_actions' ) &&
-						$admin_city === get_post_meta( $row['id'], 'city', true ) &&
-						'delegate' === get_post_meta( $row['id'], 'delegate', true )
+						(
+							$current_user->has_cap( 'vca_asm_manage_network_global' )
+						) ||
+						(
+							$current_user->has_cap( 'vca_asm_manage_actions_nation' ) &&
+							$admin_nation === get_post_meta( $row['id'], 'nation', true )
+						) ||
+						(
+							$current_user->has_cap( 'vca_asm_manage_actions' ) &&
+							$admin_city === get_post_meta( $row['id'], 'city', true ) &&
+							'delegate' === get_post_meta( $row['id'], 'delegate', true )
+						)
 					)
 				) ||
 				(
@@ -781,7 +793,7 @@ class VCA_ASM_Admin_Table {
 					true
 				) ||
 				(
-					( 'view_emails' === $cur_cap ) &&
+					'view_emails' === $cur_cap &&
 					(
 						$current_user->has_cap( 'vca_asm_view_emails_global' ) ||
 						(
@@ -793,21 +805,113 @@ class VCA_ASM_Admin_Table {
 							$current_user->has_cap( 'vca_asm_view_emails' ) &&
 							$admin_city &&
 							$admin_city == 999 // need to pass email city
+						) || true
+					)
+				) ||
+				(
+					'edit-transaction' === $cur_cap &&
+					(
+						$current_user->has_cap( 'vca_asm_manage_finances_global' ) ||
+						(
+							$current_user->has_cap( 'vca_asm_manage_finances_nation' ) &&
+							(
+								(
+									$admin_nation &&
+									$admin_nation  === 999 // pass transaction nation
+								) ||
+								true
+							)
+						) ||
+						(
+							$current_user->has_cap( 'vca_asm_manage_finances' ) &&
+							isset( $row['editable'] ) && 1 === $row['editable'] &&
+							(
+								(
+									$admin_city &&
+									$admin_city  === 999 // pass transaction city
+								) ||
+								true
+							)
 						)
 					)
-				) || true
+				) ||
+				(
+					( 'set-receipt-status' === $cur_cap || 'confirm-receipt' === $cur_cap ) &&
+					(
+						( 'confirm-receipt' === $cur_cap && ( 1 == $row['receipt_status'] || 2 == $row['receipt_status'] ) ) &&
+						(
+							(
+								$current_user->has_cap( 'vca_asm_manage_finances_global' )
+							) ||
+							(
+								$current_user->has_cap( 'vca_asm_manage_finances_nation' ) &&
+								(
+									(
+										$admin_nation &&
+										$admin_nation  === 999 // pass transaction nation
+									) ||
+									true
+								)
+							) ||
+							(
+								$current_user->has_cap( 'vca_asm_manage_finances' ) &&
+								1 == $row['receipt_status'] &&
+								(
+									(
+										$admin_city &&
+										$admin_city  === 999 // pass transaction city
+									) ||
+									true
+								)
+							)
+						)
+					)
+				) ||
+				(
+					'unconfirm-receipt' === $cur_cap &&
+					(
+						( 2 == $row['receipt_status'] || 3 == $row['receipt_status'] ) &&
+						(
+							(
+								$current_user->has_cap( 'vca_asm_manage_finances_global' )
+							) ||
+							(
+								$current_user->has_cap( 'vca_asm_manage_finances_nation' ) &&
+								(
+									(
+										$admin_nation &&
+										$admin_nation  === 999 // pass transaction nation
+									) ||
+									true
+								)
+							) ||
+							(
+								$current_user->has_cap( 'vca_asm_manage_finances' ) &&
+								2 == $row['receipt_status'] &&
+								(
+									(
+										$admin_city &&
+										$admin_city  === 999 // pass transaction city
+									) ||
+									true
+								)
+							)
+						)
+					)
+				)
 			) {
 				if ( $i !== 0 && $i < $action_count ) {
-					$output .= $flipper ? ' | ' : '<br />';
+					$output .= ( ! $override ) ? ( $flipper ? ' | ' : '<br />' ) : '';
 					$flipper = ! $flipper;
 				}
+				$override = false;
 
 				switch( $actions[$i] ) {
 					case 'edit':
 						$output .= '<span class="edit">' .
 							'<a title="' .
 								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
-								'" href="' . $url . '&amp;todo=edit&amp;id=' . $row['id'] . '">' .
+								'" href="' . $url . '&todo=edit&amp;id=' . $row['id'] . '">' .
 								__( 'Edit', 'vca-asm' ) .
 							'</a></span>';
 					break;
@@ -816,7 +920,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<span class="edit">' .
 							'<a title="' .
 								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
-								'" href="' . $url . '&amp;todo=edit-ei&amp;id=' . $row['id'] . '">' .
+								'" href="' . $url . '&todo=edit-ei&amp;id=' . $row['id'] . '">' .
 								__( 'Edit', 'vca-asm' ) .
 							'</a></span>';
 					break;
@@ -825,7 +929,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<span class="edit">' .
 							'<a title="' .
 								sprintf( __( 'View %s', 'vca-asm' ), $name ) .
-								'" href="' . $url . '&amp;todo=edit-ei&amp;id=' . $row['id'] . '">' .
+								'" href="' . $url . '&todo=edit-ei&amp;id=' . $row['id'] . '">' .
 								__( 'View', 'vca-asm' ) .
 							'</a></span>';
 					break;
@@ -838,10 +942,51 @@ class VCA_ASM_Admin_Table {
 							'" onclick="if ( confirm(\'' .
 									ucfirst( sprintf( __( 'Really delete &quot;%s&quot;?', 'vca-asm' ), $name ) ) .
 								'\') ) { return true; } return false;" ' .
-								'href="' . $url . '&amp;todo=delete&amp;id=' .
+								'href="' . $url . '&todo=delete&amp;id=' .
 								$row['id'] . '" class="submitdelete">' .
 								__( 'Delete', 'vca-asm' ) .
 							'</a></span>';
+					break;
+
+					case 'edit-transaction':
+						$output .= '<span class="edit">' .
+							'<a title="' .
+								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
+								'" href="' . $url . '&todo=edit&amp;id=' . $row['id'] . '">' .
+								__( 'Edit', 'vca-asm' ) .
+							'</a></span>';
+					break;
+
+					case 'delete-donation':
+					case 'delete-transaction':
+						$output .= '<span class="delete">' .
+							'<a title="' .
+								__( 'Delete this transaction', 'vca-asm' ) .
+							'" onclick="if ( confirm(\'' .
+									ucfirst( __( 'Really delete this transaction?', 'vca-asm' ) ) .
+								'\') ) { return true; } return false;" ' .
+								'href="' . $url . '&todo=delete&amp;id=' .
+								$row['id'] . '" class="submitdelete">' .
+								__( 'Delete', 'vca-asm' ) .
+							'</a></span>';
+					break;
+
+					case 'confirm-receipt':
+						$output .= '<span class="edit">' .
+							'<a title="';
+							$output .= ( 1 == $row['receipt_status'] ) ? __( 'Has been sent', 'vca-asm' ) : __( 'Confirm reception', 'vca-asm' );
+						$output .= '" href="' . $url . '&todo=confirm-receipt&id=' . $row['id'] . '&step=' . $row['receipt_status'] . '">';
+							$output .= ( 1 == $row['receipt_status'] ) ? __( 'Sent!', 'vca-asm' ) : __( 'Received!', 'vca-asm' );
+						$output .= '</a></span>';
+					break;
+
+					case 'unconfirm-receipt':
+						$output .= '<span class="edit">' .
+							'<a title="';
+							$output .= ( 2 == $row['receipt_status'] ) ? __( 'Ooops. Has not been sent', 'vca-asm' ) : __( 'Ooops. Has not been received', 'vca-asm' );
+						$output .= '" href="' . $url . '&todo=unconfirm-receipt&amp;id=' . $row['id'] . '&step=' . $row['receipt_status'] . '">';
+							$output .= ( 2 == $row['receipt_status'] ) ? __( 'Not sent...', 'vca-asm' ) : __( 'Not received...', 'vca-asm' );
+						$output .= '</a></span>';
 					break;
 
 					case 'profile':
@@ -880,13 +1025,13 @@ class VCA_ASM_Admin_Table {
 									'" onclick="if ( confirm(\'' .
 											sprintf( __( 'Promote %s, even though he or she has not applied?', 'vca-asm' ), $name ) .
 										'\') ) { return true; } return false;" ' .
-									'" href="' . $url . '&amp;todo=promote&amp;id=' . $row['id'] . '">' .
+									'" href="' . $url . '&todo=promote&amp;id=' . $row['id'] . '">' .
 									__( 'Promote', 'vca-asm' ) .
 								'</a></span>';
 						} elseif( 1 == $row['membership_raw'] ) {
 							$output .= '<span class="edit"><a title="' .
 									sprintf( __( 'Accept the application of %s', 'vca-asm' ), $name ) .
-									'" href="' . $url . '&amp;todo=accept&amp;id=' . $row['id'] . '">' .
+									'" href="' . $url . '&todo=accept&amp;id=' . $row['id'] . '">' .
 									__( 'Accept', 'vca-asm' ) .
 								'</a></span>';
 							$output .= $flipper ? ' | ' : '<br />';
@@ -896,7 +1041,7 @@ class VCA_ASM_Admin_Table {
 									'" onclick="if ( confirm(\'' .
 											sprintf( __( 'Really deny the application of %s?', 'vca-asm' ), $name ) .
 										'\') ) { return true; } return false;" ' .
-									'" href="' . $url . '&amp;todo=deny&amp;id=' . $row['id'] . '">' .
+									'" href="' . $url . '&todo=deny&amp;id=' . $row['id'] . '">' .
 									__( 'Deny', 'vca-asm' ) .
 								'</a></span>';
 						} elseif( 2 == $row['membership_raw'] ) {
@@ -905,7 +1050,7 @@ class VCA_ASM_Admin_Table {
 									'" onclick="if ( confirm(\'' .
 											sprintf( __( 'Really remove %s from the active members?', 'vca-asm' ), $name ) .
 										'\') ) { return true; } return false;" ' .
-									'" href="' . $url . '&amp;todo=remove&amp;id=' . $row['id'] . '">' .
+									'" href="' . $url . '&todo=remove&amp;id=' . $row['id'] . '">' .
 									__( 'End membership', 'vca-asm' ) .
 								'</a></span>';
 						} else {
@@ -916,7 +1061,7 @@ class VCA_ASM_Admin_Table {
 					case 'app_accept':
 						$output .= '<span class="edit"><a title="' .
 								sprintf( __( 'Accept the application by %s', 'vca-asm' ), $name ) .
-								'" href="' . $url . '&amp;todo=accept&amp;id=' . $row['id'] . '">' .
+								'" href="' . $url . '&todo=accept&amp;id=' . $row['id'] . '">' .
 								__( 'Accept', 'vca-asm' ) .
 							'</a></span>';
 					break;
@@ -928,7 +1073,7 @@ class VCA_ASM_Admin_Table {
 							'" onclick="if ( confirm(\'' .
 									ucfirst( sprintf( __( 'Deny the application by %s and move him/her to the waiting list?', 'vca-asm' ), $name ) ) .
 								'\') ) { return true; } return false;" ' .
-								'href="' . $url . '&amp;todo=deny&amp;id=' .
+								'href="' . $url . '&todo=deny&amp;id=' .
 								$row['id'] . '" class="submitdelete">' .
 								__( 'Deny', 'vca-asm' ) .
 							'</a></span>';
@@ -937,7 +1082,7 @@ class VCA_ASM_Admin_Table {
 					case 'waitinglist_accept':
 						$output .= '<span class="edit"><a title="' .
 								sprintf( __( 'Accept the application retrospectively and move %s to the participants', 'vca-asm' ), $name ) .
-								'" href="' . $url . '&amp;todo=accept&amp;id=' . $row['id'] . '">' .
+								'" href="' . $url . '&todo=accept&amp;id=' . $row['id'] . '">' .
 								__( 'Accept', 'vca-asm' ) .
 							'</a></span>';
 					break;
@@ -951,7 +1096,7 @@ class VCA_ASM_Admin_Table {
 									'\\n\\n' .
 									__( 'Attention: This does not move the supporter to the waiting list - it removes him/her from the participants entirely!', 'vca-asm' ) .
 								'\') ) { return true; } return false;" ' .
-								'href="' . $url . '&amp;todo=revoke&amp;id=' .
+								'href="' . $url . '&todo=revoke&amp;id=' .
 								$row['id'] . '" class="submitdelete">' .
 								__( 'Remove', 'vca-asm' ) .
 							'</a></span>';
@@ -1019,7 +1164,9 @@ class VCA_ASM_Admin_Table {
 					break;
 				}
 			} else {
-				$output .= '&nbsp;';
+				$override = true;
+				$flipper = ! $flipper;
+				$output .= $i === ( $action_count - 1 ) ? '&nbsp;' : '';
 			}
 		}
 
@@ -1065,9 +1212,25 @@ class VCA_ASM_Admin_Table {
 
 			case 'amount':
 				if ( ! empty( $row['amount'] ) ) {
-					$output = '<span';
-					$output .= intval( $row['amount'] ) < 0 ? ' class="negative"' : ' class="positive"';
+					$output = '<span class="amount';
+					$output .= 'transfer' === $row['transaction_type_plain'] ? ' transfer"' : ( 'donation' === $row['transaction_type_plain'] ? ( ( 1 == $row['cash'] ) ? ' cash-donation"' : ' donation"' ) : ( intval( $row['amount'] ) < 0 ? ' negative"' : ' positive"' ) );
 					$output .= '>' . $data . '</span>';
+				}
+			break;
+
+			case 'receipt':
+				if ( ! empty( $row['receipt'] ) && '---' !== $row['receipt'] && 0 != $row['receipt_status'] ) {
+					$output = '<span class="';
+					$output .= 'receipt-' . $row['receipt_status'];
+					$output .= '">' . $data . '</span>';
+				}
+			break;
+
+			case 'receipt-status':
+				if ( 0 != $row['receipt_status'] ) {
+					$output = '<span class="';
+					$output .= 'receipt-' . $row['receipt_status'];
+					$output .= '">' . $data . '</span>';
 				}
 			break;
 

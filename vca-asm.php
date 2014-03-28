@@ -133,6 +133,8 @@ function vca_asm_set_locale( $locale ) {
 	global $current_user;
 	get_currentuserinfo();
 
+	setlocale( LC_TIME, "" );
+
 	if ( 'en' === get_user_meta( $current_user->ID, 'pool_lang', true ) ) {
 		setlocale ( LC_ALL , 'en_US' );
 		setlocale( LC_MESSAGES, 'en_US' );
