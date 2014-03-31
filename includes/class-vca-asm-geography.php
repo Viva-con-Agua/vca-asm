@@ -1001,7 +1001,7 @@ class VCA_ASM_Geography
 		if ( ! empty( $global_option ) ) {
 			$first[] = array_shift( $options_array );
 		}
-
+		
 		$options_array = $vca_asm_utilities->sort_by_key( $options_array, 'label' );
 		if ( ! empty( $first ) ) {
 			$options_array = array_merge( $first, $options_array );

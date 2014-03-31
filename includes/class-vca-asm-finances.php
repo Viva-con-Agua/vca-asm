@@ -489,6 +489,50 @@ class VCA_ASM_Finances
 	 * @since 1.5
 	 * @access public
 	 */
+	public function get_tax_rates( $orderby = 'value', $order = 'ASC', $nation = 0 )
+	{
+		return $this->get_metas( $orderby, $order, 'tax-rate', $nation );
+	}
+
+	/**
+	 * ???
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	public function get_tax_rate( $id = 0 )
+	{
+		return $this->get_meta( $id, 'id' );
+	}
+
+	/**
+	 * ???
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	public function get_occasions( $orderby = 'value', $order = 'ASC', $nation = 0 )
+	{
+		return $this->get_metas( $orderby, $order, 'occasion', $nation );
+	}
+
+	/**
+	 * ???
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	public function get_occasion( $id = 0 )
+	{
+		return $this->get_meta( $id, 'id' );
+	}
+
+	/**
+	 * ???
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
 	public function get_cost_centers( $orderby = 'value', $order = 'ASC', $nation = 0 )
 	{
 		return $this->get_metas( $orderby, $order, 'cost-center', $nation );
@@ -517,10 +561,9 @@ class VCA_ASM_Finances
 	}
 
 	/**
-	 * Returns an array of region data
-	 * to be used in either a dropdown menu or a checkbox group
+	 * ???
 	 *
-	 * @since 1.0 (modified for 1.3)
+	 * @since 1.5
 	 * @access public
 	 */
 	public function ei_options_array( $args ) {
@@ -565,6 +608,114 @@ class VCA_ASM_Finances
 				'label' => $unclear_text,
 				'value' => $unclear_value,
 				'class' => 'dunno'
+			);
+		}
+
+		return $options_array;
+	}
+
+	/**
+	 * ???
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	public function occasions_options_array( $args ) {
+		global $vca_asm_utilities;
+
+		$default_args = array(
+			'orderby' => 'name',
+			'order' => 'ASC',
+			'please_select' => false,
+			'please_select_value' => 'please_select',
+			'please_select_text' => __( 'Please select...', 'vca-asm' ),
+			'nocat' => false,
+			'nocat_value' => 'uncategorized',
+			'nocat_text' => __( 'Uncategorized', 'vca-asm' ),
+			'nation' => 0
+		);
+		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
+
+		$data = $this->get_occasions( $orderby, $order, $type, $nation );
+
+		$options_array = array();
+
+		if( true === $please_select ) {
+			$options_array[0] = array(
+				'label' => $please_select_text,
+				'value' => $please_select_value,
+				'class' => 'please-select'
+			);
+		}
+
+		$i = count( $options_array );
+		foreach( $data as $occasion ) {
+			$options_array[$i] = array(
+				'label' => $occasion['name'],
+				'value' => $occasion['id']
+			);
+			$options_array[$i]['label'] .= ! empty( $occasion['description'] ) ? ' (' . $occasion['description'] . ')' : '';
+			$i++;
+		}
+
+		if( true === $nocat ) {
+			$options_array[] = array(
+				'label' => $nocat_text,
+				'value' => $nocat_value
+			);
+		}
+
+		return $options_array;
+	}
+
+	/**
+	 * ???
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	public function tax_options_array( $args ) {
+		global $vca_asm_utilities;
+
+		$default_args = array(
+			'orderby' => 'name',
+			'order' => 'ASC',
+			'please_select' => false,
+			'please_select_value' => 'please_select',
+			'please_select_text' => __( 'Please select...', 'vca-asm' ),
+			'notax' => false,
+			'notax_value' => 0,
+			'notax_text' => '0',
+			'nation' => 0
+		);
+		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
+
+		$data = $this->get_tax_rates( $orderby, $order, $type, $nation );
+
+		$options_array = array();
+
+		if( true === $please_select ) {
+			$options_array[0] = array(
+				'label' => $please_select_text,
+				'value' => $please_select_value,
+				'class' => 'please-select'
+			);
+		}
+
+		$i = count( $options_array );
+		foreach( $data as $occasion ) {
+			$options_array[$i] = array(
+				'label' => $occasion['value'] . ' %',
+				'value' => $occasion['id']
+			);
+			$options_array[$i]['label'] .= ! empty( $occasion['name'] ) ? ' (' . $occasion['name'] . ')' : '';
+			$i++;
+		}
+
+		if( true === $notax ) {
+			$options_array[] = array(
+				'label' => $notax_text . ' %',
+				'value' => $notax_value
 			);
 		}
 

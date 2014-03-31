@@ -219,6 +219,14 @@ class VcA_ASM_Utilities {
 		$encoding = mb_internal_encoding();
 		return strcmp( mb_strtolower( $a[$this->sort_key], $encoding ), mb_strtolower( $b[$this->sort_key], $encoding ) );
 	}
+	//private function sbk_cmp_asc( $a, $b ) {
+	//	$encoding = mb_internal_encoding();
+	//	return strcmp( iconv( 'utf-8', 'ascii//TRANSLIT', mb_strtolower( $a[$this->sort_key], $encoding ) ), iconv( 'utf-8', 'ascii//TRANSLIT', mb_strtolower( $b[$this->sort_key], $encoding ) ) );
+	//}
+	//private function sbk_cmp_desc( $b, $a ) {
+	//	$encoding = mb_internal_encoding();
+	//	return strcmp( iconv( 'utf-8', 'ascii//TRANSLIT', mb_strtolower( $a[$this->sort_key], $encoding ) ), iconv( 'utf-8', 'ascii//TRANSLIT', mb_strtolower( $b[$this->sort_key], $encoding ) ) );
+	//}
 
 	/**
 	 * Custom do_settings_sections (originally WP-core function)

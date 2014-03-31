@@ -604,6 +604,12 @@ a:hover .nt-icon-finances {
 #icon-settings {
 	background-position: -576px 0px;
 }
+.nt-icon-settings {
+	background-position: -288px 0px;
+}
+a:hover .nt-icon-settings {
+	background-position: -288px -16px;
+}
 #icon-print {
 	background-position: -608px 0px;
 }

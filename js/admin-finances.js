@@ -10,9 +10,9 @@ $('input:radio[name=cash]').change(function() {
 
 function toggleMetaThree( theVal ) {
 	if ( 0 == theVal ) {
-		$('input#meta_3').prop( 'disabled', false ).closest('tr').show( 400 );
+		$('input#meta_3').prop( 'disabled', false ).addClass('required').closest('tr').show( 400 );
 	} else {
-		$('input#meta_3').prop( 'disabled', true ).closest('tr').hide( 400 );
+		$('input#meta_3').prop( 'disabled', true ).removeClass('required').closest('tr').hide( 400 );
 	}
 }
 
