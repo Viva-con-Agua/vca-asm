@@ -365,7 +365,7 @@ class VCA_ASM_Admin_Finances
 
 	private function overview_global( $messages = array() )
 	{
-		$active_tab = 'summary';
+		$active_tab = 'cities';
 		if ( isset( $_GET['tab'] ) && in_array( $_GET['tab'], array( 'summary', 'cities' ) ) ) {
 			$active_tab = $_GET['tab'];
 		}
@@ -461,12 +461,6 @@ class VCA_ASM_Admin_Finances
 		$output .= $mbs->top();
 		foreach ( $cities as $city ) {
 			$the_city_finances = new VCA_ASM_City_Finances( $city['id'] );
-
-			//if (15 == $city['id']) {
-			//	print '<pre>$objvars = '
-			//		. htmlspecialchars( print_r( get_object_vars( $the_city_finances ), TRUE ), ENT_QUOTES, 'utf-8', FALSE )
-			//		. "</pre>\n";
-			//}
 
 			$attention = ' &nbsp;<span class="tbl-icon tbl-icon-warning"></span>';
 			$title_spot = '';
@@ -1026,6 +1020,17 @@ class VCA_ASM_Admin_Finances
 			'url' => '?page=' . $page
 		));
 
+		$i = 0;
+		$rows = array();
+		foreach ( $accounts as $account ) {
+			$the_city_finances = new VCA_ASM_City_Finances( $account['city_id'] );
+			$rows[$i] = $account;
+			$rows[$i]['balanced_month'] = $the_city_finances->{'balanced_month_' . ( 'donations' === $account_type ? 'don' : 'econ' ) . '_name'};
+			$rows[$i]['annual_out'] = 'donations' === $account_type ? 0 : $the_city_finances->econ_annual_expenses_formatted;
+			$rows[$i]['annual_in'] = 'donations' === $account_type ? $the_city_finances->donations_current_year_formatted : $the_city_finances->econ_annual_revenue_formatted;
+			$i++;
+		}
+
 		$columns = array(
 			array(
 				'id' => 'name',
@@ -1043,10 +1048,34 @@ class VCA_ASM_Admin_Finances
 			array(
 				'id' => 'balance',
 				'title' => __( 'Balance', 'vca-asm' ),
-				'sortable' => true,
+				'sortable' => false,//true,
 				'conversion' => 'balance'
+			),
+			array(
+				'id' => 'balanced_month',
+				'title' => __( 'Balanced until', 'vca-asm' ),
+				'sortable' => false//true
 			)
 		);
+
+		if ( 'donations' === $account_type ) {
+			$columns[] = array(
+				'id' => 'annual_in',
+				'title' => sprintf( __( 'Donations', 'vca-asm' ) . '  %d', date( 'Y' ) ),
+				'sortable' => false//true
+			);
+		} else {
+			$columns[] = array(
+				'id' => 'annual_in',
+				'title' => sprintf( __( 'Revenues', 'vca-asm' ) . '  %d', date( 'Y' ) ),
+				'sortable' => false//true
+			);
+			$columns[] = array(
+				'id' => 'annual_out',
+				'title' => sprintf( __( 'Expenditures', 'vca-asm' ) . '  %d', date( 'Y' ) ),
+				'sortable' => false//true
+			);
+		}
 
 		$the_table = new VCA_ASM_Admin_Table(
 			array(
@@ -1061,7 +1090,7 @@ class VCA_ASM_Admin_Finances
 				'empty_message' => ''
 			),
 			$columns,
-			$accounts
+			$rows
 		);
 
 		$output = $adminpage->top();
