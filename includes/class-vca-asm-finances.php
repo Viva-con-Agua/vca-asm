@@ -313,9 +313,26 @@ class VCA_ASM_Finances
 	 * @since 1.5
 	 * @access public
 	 */
+	public function get_balanced_threshold_stamp( $city_id, $type = 'econ' )
+	{
+		$string = $this->get_balanced_month( $city_id, $type );
+		$arr = explode( '-', $string );
+		$stamp = mktime( 23, 59, 59, ltrim( $arr[1], '0' ), date( 't', mktime( 12, 0, 0, ltrim( $arr[1], '0' ), 15, $arr[0] ) ), $arr[0] );
+
+		return $stamp;
+	}
+
+	/**
+	 * ???
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
 	public function get_balance( $city_id, $type = 'econ' )
 	{
 		global $wpdb;
+
+		/* TODO: Make more efficient!
 
 		$data = $wpdb->get_results(
 			"SELECT balance, last_updated FROM " .
@@ -327,7 +344,10 @@ class VCA_ASM_Finances
 		$balance = isset( $data[0]['balance'] ) ? $data[0]['balance'] : 0;
 
 		$where = "WHERE city_id = " . $city_id . " AND account_type = '" . $type . "' AND entry_time > ";
-		$where .= isset( $data[0]['last_updated'] ) ? $data[0]['last_updated'] : 0;
+		$where .= isset( $data[0]['last_updated'] ) ? $data[0]['last_updated'] : 0; */
+
+		$balance = 0;
+		$where = "WHERE city_id = " . $city_id . " AND account_type = '" . $type . "'";
 
 		$data = $wpdb->get_results(
 			"SELECT * FROM " .
@@ -354,13 +374,13 @@ class VCA_ASM_Finances
 				}
 			}
 
-			$wpdb->update(
+			/* $wpdb->update(
 				$wpdb->prefix . "vca_asm_finances_accounts",
 				array( 'last_updated' => time(), 'balance' => $balance ),
 				array( 'city_id' => $city_id, 'type' => $type ),
 				array( '%d', '%d' ),
 				array( '%d', '%s' )
-			);
+			); */
 		}
 
 		return $balance;
@@ -630,8 +650,8 @@ class VCA_ASM_Finances
 			'please_select_value' => 'please_select',
 			'please_select_text' => __( 'Please select...', 'vca-asm' ),
 			'nocat' => false,
-			'nocat_value' => 'uncategorized',
-			'nocat_text' => __( 'Uncategorized', 'vca-asm' ),
+			'nocat_value' => 'misc',
+			'nocat_text' => _x( 'Miscellaneous', 'Occasions', 'vca-asm' ),
 			'nation' => 0
 		);
 		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
@@ -703,12 +723,12 @@ class VCA_ASM_Finances
 		}
 
 		$i = count( $options_array );
-		foreach( $data as $occasion ) {
+		foreach( $data as $tax_rate ) {
 			$options_array[$i] = array(
-				'label' => $occasion['value'] . ' %',
-				'value' => $occasion['id']
+				'label' => $tax_rate['value'] . ' %',
+				'value' => $tax_rate['id']
 			);
-			$options_array[$i]['label'] .= ! empty( $occasion['name'] ) ? ' (' . $occasion['name'] . ')' : '';
+			//$options_array[$i]['label'] .= ! empty( $tax_rate['name'] ) ? ' (' . $tax_rate['name'] . ')' : '';
 			$i++;
 		}
 
@@ -818,6 +838,7 @@ class VCA_ASM_Finances
 		$default_args = array(
 			'status' => 1,
 			'type' => 'econ',
+			'transaction_type' => 'expenditure',
 			'split' => false,
 			'data_type' => 'all'
 		);
@@ -829,7 +850,7 @@ class VCA_ASM_Finances
 		$data = $wpdb->get_results(
 			"SELECT * " .
 			"FROM " . $wpdb->prefix . "vca_asm_finances_transactions " .
-			"WHERE city_id = " . $city_id . " AND account_type = '" . $type . "' AND receipt_status = " . $status,
+			"WHERE city_id = " . $city_id . " AND transaction_type = '" . $transaction_type . "' AND account_type = '" . $type . "' AND receipt_status = " . $status,
 			ARRAY_A
 		);
 
@@ -847,7 +868,7 @@ class VCA_ASM_Finances
 			}
 		} elseif( 'all' !== $data_type && ! empty( $data[0][$data_type] ) ) {
 			foreach ( $data as $transaction ) {
-				$return[] = ! empty( $transaction[$data_type] ) ? $transaction[$data_type] : $transaction;
+				$return[] = ! empty( $transaction[$data_type] ) ? $transaction[$data_type] : '';
 			}
 		} else {
 			$return = $data;

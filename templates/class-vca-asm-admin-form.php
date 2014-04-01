@@ -591,10 +591,22 @@ class VCA_ASM_Admin_Form {
 				if ( isset( $field['required'] ) ) {
 					$output .= ' required';
 				}
+				if ( isset( $field['mindate'] ) ) {
+					$output .= ' mindate';
+				}
+				if ( isset( $field['maxdate'] ) ) {
+					$output .= ' maxdate';
+				}
 				$output .= '" name="' . $field['id'] .
 					'" id="' . $field['id'] .
 					'" value="' . $value .
 					'" size="30"';
+				if ( isset( $field['mindate'] ) ) {
+					$output .= ' data-min="' . intval( $field['mindate'] ) * 1000 . '"';
+				}
+				if ( isset( $field['maxdate'] ) ) {
+					$output .= ' data-max="' . intval( $field['maxdate'] ) * 1000 . '"';
+				}
 				if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
 					$output .= ' disabled="disabled"';
 				}

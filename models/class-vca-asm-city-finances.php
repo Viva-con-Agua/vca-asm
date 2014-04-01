@@ -108,7 +108,7 @@ class VCA_ASM_City_Finances {
 		$this->currency_symbol = '&euro;';
 
 		$this->donations_by_years = $vca_asm_finances->get_donations( $id, true );
-		$this->donations_total = $this->donations_years['total'];
+		$this->donations_total = $this->donations_by_years['total'];
 		$this->donations_current_year = ! empty( $this->donations_by_years[date('Y')] ) ? $this->donations_by_years[date('Y')] : 0;
 
 		$this->balance_econ = $vca_asm_finances->get_balance( $id, 'econ' );
@@ -125,6 +125,7 @@ class VCA_ASM_City_Finances {
 		$this->max_econ = intval( $vca_asm_finances->get_meta( $this->nation_id, 'related_id', 'limit-'.$this->type , 'value' ) ) * 100;
 		$this->econ_surplus = $this->balance_econ - $this->max_econ;
 		$this->has_econ_surplus = ( $this->econ_surplus > 0 );
+		$this->econ_surplus_formatted = number_format( $this->econ_surplus/100, 2, ',', '.' ) . ' ' . $this->currency_symbol;
 
 		$this->receipts = $vca_asm_finances->get_receipts( $id, array( 'status' => 1, 'data_type' => 'receipt_id', 'split' => true ) );
 		$this->late_receipts = $this->receipts['late'];
@@ -137,15 +138,8 @@ class VCA_ASM_City_Finances {
 		$this->balanced_month_econ_string = $vca_asm_finances->get_balanced_month( $id, 'econ' );
 		$this->balanced_month_don_string = $vca_asm_finances->get_balanced_month( $id, 'donations' );
 
-		$balanced_arr_econ = explode( '-', $this->balanced_month_econ_string );
-		$balanced_arr_don = explode( '-', $this->balanced_month_don_string );
-		$balanced_year_econ = $balanced_arr_econ[0];
-		$balanced_month_econ = $balanced_arr_econ[1];
-		$balanced_year_don = $balanced_arr_don[0];
-		$balanced_month_don = $balanced_arr_don[1];
-
-		$this->balanced_month_econ_threshold_stamp = mktime( 23, 59, 59, ltrim( $balanced_month_econ, '0' ), date( 't', mktime( 12, 0, 0, ltrim( $balanced_month_econ, '0' ), 15, $balanced_year_econ ) ), $balanced_year_econ );
-		$this->balanced_month_don_threshold_stamp = mktime( 23, 59, 59, ltrim( $balanced_month_don, '0' ), date( 't', mktime( 12, 0, 0, ltrim( $balanced_month_don, '0' ), 15, $balanced_year_don ) ), $balanced_year_don );
+		$this->balanced_month_econ_threshold_stamp = $vca_asm_finances->get_balanced_threshold_stamp( $id, 'econ' );
+		$this->balanced_month_don_threshold_stamp = $vca_asm_finances->get_balanced_threshold_stamp( $id, 'donations' );
 		$this->balanced_month_econ_name = strftime( '%B %Y', $this->balanced_month_econ_threshold_stamp );
 		$this->balanced_month_don_name = strftime( '%B %Y', $this->balanced_month_don_threshold_stamp );
 

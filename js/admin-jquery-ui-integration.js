@@ -1,9 +1,34 @@
 (function($){
 $(function() {
-	$( '.datepicker' ).datepicker({
+	$('.datepicker').not('.mindate').not('.maxdate').datepicker({
 		dateFormat: 'dd.mm.yy',
 		monthNames: jquiParams.monthNames,
 		dayNamesMin: jquiParams.dayNamesMin
+	});
+	$('.datepicker.maxdate').not('.mindate').each( function() {
+		$(this).datepicker({
+			dateFormat: 'dd.mm.yy',
+			monthNames: jquiParams.monthNames,
+			dayNamesMin: jquiParams.dayNamesMin,
+			maxDate: new Date( parseInt( $(this).attr('data-max') ) )
+		});
+	});
+	$('.datepicker.mindate').not('.maxdate').each( function() {
+		$(this).datepicker({
+			dateFormat: 'dd.mm.yy',
+			monthNames: jquiParams.monthNames,
+			dayNamesMin: jquiParams.dayNamesMin,
+			minDate: new Date( parseInt( $(this).attr('data-min') ) )
+		});
+	});
+	$('.datepicker.mindate.maxdate').each( function() {
+		$(this).datepicker({
+			dateFormat: 'dd.mm.yy',
+			monthNames: jquiParams.monthNames,
+			dayNamesMin: jquiParams.dayNamesMin,
+			minDate: new Date( parseInt( $(this).attr('data-min') ) ),
+			maxDate: new Date( parseInt( $(this).attr('data-max') ) )
+		});
 	});
 });
 

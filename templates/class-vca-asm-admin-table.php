@@ -870,7 +870,11 @@ class VCA_ASM_Admin_Table {
 				(
 					'unconfirm-receipt' === $cur_cap &&
 					(
-						( 2 == $row['receipt_status'] || 3 == $row['receipt_status'] ) &&
+						(
+							(
+								2 == $row['receipt_status'] && 'expenditure' === $row['transaction_type_plain']
+							) || 3 == $row['receipt_status']
+						) &&
 						(
 							(
 								$current_user->has_cap( 'vca_asm_manage_finances_global' )

@@ -938,8 +938,6 @@ body #pass-strength-result.strong {
 .amount {
 	 font-weight: 700;
 }
-.cash-donation,
-.blue-alert,
 .receipt-2 {
 	color: #857043;
 }
@@ -947,6 +945,7 @@ body #pass-strength-result.strong {
 .income,
 .revenue,
 .donation,
+.cash-donation,
 .green-alert {
 	color: #03a63c;
 }

@@ -176,7 +176,7 @@ class VCA_ASM_Admin {
 		);
 
 		/* Finances Menu */
-		if ( in_array( 'city', $current_user->roles ) && ! in_array( $current_user->ID, array( 92, 98, 139 ) ) ) {
+		if ( in_array( 'city', $current_user->roles ) && ! in_array( $current_user->ID, array( 92, 98, 96, 139 ) ) ) {
 			add_menu_page(
 				__( 'Finances', 'vca-asm' ),
 				__( 'Finances', 'vca-asm' ),
