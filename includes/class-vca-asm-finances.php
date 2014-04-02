@@ -808,17 +808,13 @@ class VCA_ASM_Finances
 
 		$alpha_code = $vca_asm_geography->get_alpha_code( $city_id );
 
-		$current_year = strftime( '%Y' );
-		$current_month = strftime( '%m' );
 		$next_running = 1;
 		if ( isset( $data[0]['last_receipt'] ) ) {
-			list( $bullshit, $year, $month, $running_number ) = explode( '-', $data[0]['last_receipt'] );
-			if ( $current_year === $year && $current_month === $month ) {
-				$next_running = intval( $running_number ) + 1;
-			}
+			list( $bullshit, $running_number ) = explode( '-', $data[0]['last_receipt'] );
+			$next_running = intval( $running_number ) + 1;
 		}
 
-		$next_receipt = $alpha_code . '-' . $current_year . '-' . $current_month . '-' . str_pad( $next_running, 3, '0', STR_PAD_LEFT );
+		$next_receipt = $alpha_code . '-' . str_pad( $next_running, 4, '0', STR_PAD_LEFT );
 
 		return $next_receipt;
 	}

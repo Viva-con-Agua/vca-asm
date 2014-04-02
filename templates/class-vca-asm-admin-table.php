@@ -437,7 +437,7 @@ class VCA_ASM_Admin_Table {
 					if( ! isset( $column['conversion'] ) ) {
 						$output .= $row[$column['id']];
 					} else {
-						$output .= $this->convert_data( $row[$column['id']], $column['conversion'], $row );
+						$output .= $this->convert_data( $row[$column['id']], $column['conversion'], $row, $column['id'] );
 					}
 
 					if( ! empty( $column['link'] ) && $capable ) {
@@ -979,7 +979,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<span class="edit">' .
 							'<a title="';
 							$output .= ( 1 == $row['receipt_status'] ) ? __( 'Has been sent', 'vca-asm' ) : __( 'Confirm reception', 'vca-asm' );
-						$output .= '" href="' . $url . '&todo=confirm-receipt&id=' . $row['id'] . '&step=' . $row['receipt_status'] . '">';
+						$output .= '" href="' . $url . '&todo=confirm-receipt&id=' . $row['id'] . '&step=' . $row['receipt_status'] . '&cid=' . $row['city_id'] . '">';
 							$output .= ( 1 == $row['receipt_status'] ) ? __( 'Sent!', 'vca-asm' ) : __( 'Received!', 'vca-asm' );
 						$output .= '</a></span>';
 					break;
@@ -988,7 +988,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<span class="edit">' .
 							'<a title="';
 							$output .= ( 2 == $row['receipt_status'] ) ? __( 'Ooops. Has not been sent', 'vca-asm' ) : __( 'Ooops. Has not been received', 'vca-asm' );
-						$output .= '" href="' . $url . '&todo=unconfirm-receipt&amp;id=' . $row['id'] . '&step=' . $row['receipt_status'] . '">';
+						$output .= '" href="' . $url . '&todo=unconfirm-receipt&amp;id=' . $row['id'] . '&step=' . $row['receipt_status'] . '&cid=' . $row['city_id'] . '">';
 							$output .= ( 2 == $row['receipt_status'] ) ? __( 'Not sent...', 'vca-asm' ) : __( 'Not received...', 'vca-asm' );
 						$output .= '</a></span>';
 					break;
@@ -1186,9 +1186,15 @@ class VCA_ASM_Admin_Table {
 	 * @since 1.3
 	 * @access private
 	 */
-	private function convert_data( $data, $conversion_type, $row ) {
+	private function convert_data( $data, $conversion_type, $row, $column ) {
 		$output = $data;
 		switch( $conversion_type ) {
+			case 'empty-to-dashes':
+				if ( empty( $row[$column] ) && 0 !== $row[$column] && '0' !== $row[$column] ) {
+					$output = '---';
+				}
+			break;
+
 			case 'region-status':
 			case 'geo-type':
 				if( 'cell' === $data ) {
