@@ -262,18 +262,12 @@ class VCA_ASM {
 
 	function clean_unwanted_caps(){
 		$delete_caps = array(
-			'vca_asm_view_all_finances',
-			'vdu_admin_edit_others',
-			'vdu_admin_delete_plumbing',
-			'vdu_admin_delete_others',
-			'vdu_admin_edit_plumbing',
-			'vdu_admin_publish',
-			'vdu_admin_read_private'
+			'vca_asm_view_all_finances'
 		);
 		global $wp_roles;
 		foreach ($delete_caps as $cap) {
-			foreach (array_keys($wp_roles->roles) as $role) {
-				$wp_roles->remove_cap($role, $cap);
+			foreach ( array_keys($wp_roles->roles) as $role ) {
+				$wp_roles->remove_cap( $role, $cap );
 			}
 		}
 	}
@@ -295,7 +289,7 @@ class VCA_ASM {
 	 * @access public
 	 */
 	public function __construct() {
-		add_action( 'init', array( $this, 'init' ) );
+		add_action( 'wp_loaded', array( $this, 'init' ) );
 		add_action( 'wp_enqueue_scripts', array( $this, 'vca_asm_frontend_enqueue' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'vca_asm_admin_enqueue' ) );
 		add_action( 'admin_init', array( $this, 'clean_unwanted_caps' ) );
