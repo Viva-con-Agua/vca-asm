@@ -20,14 +20,26 @@ class VCA_ASM_City_Finances
 	 * @since 1.5
 	 */
 
-	/* geography */
+	/* initial */
 	public $id = 0;
-	public $nation_id = '';
+	public $default_args = array(
+		'url' => '?page=vca-asm-finances',
+		'link_title' => 'Do something about it!',
+		'referrer' => '0',
+		'short' => false,
+		'formatted' => false,
+		'linked' => false
+	);
+	public $args = array();
+	public $url = '?page=vca-asm-finances';
+	public $link_title = '';
+	public $referrer = '';
 
-	/* meta geography */
+	/* geography */
 	public $name = '';
 	public $type = '';
 	public $type_nice = '';
+	public $nation_id = '';
 
 	public $currency_name = 'Euro';
 	public $currency_minor = 'Cent';
@@ -65,6 +77,10 @@ class VCA_ASM_City_Finances
 	public $current_receipts = array();
 	public $sendable_receipts = array();
 	public $sent_receipts = array();
+	public $late_receipts_full = array();
+	public $current_receipts_full = array();
+	public $sendable_receipts_full = array();
+	public $sent_receipts_full = array();
 
 	public $confirmable_don_transfers = array();
 	public $confirmable_econ_transfers = array();
@@ -226,11 +242,16 @@ class VCA_ASM_City_Finances
 		$this->has_econ_surplus = ( $this->econ_surplus > 0 );
 		$this->econ_surplus_formatted = number_format( $this->econ_surplus/100, 2, ',', '.' ) . ' ' . $this->currency_symbol;
 
-		$this->receipts = $vca_asm_finances->get_receipts( $id, array( 'status' => 1, 'data_type' => 'receipt_id', 'split' => true ) );
-		$this->late_receipts = $this->receipts['late'];
-		$this->current_receipts = $this->receipts['current'];
+		$receipts = $vca_asm_finances->get_receipts( $id, array( 'status' => 1, 'data_type' => 'receipt_id', 'split' => true ) );
+		$this->late_receipts = $receipts['late'];
+		$this->current_receipts = $receipts['current'];
 		$this->sendable_receipts = array_merge( $this->late_receipts, $this->current_receipts );
 		$this->sent_receipts = $vca_asm_finances->get_receipts( $id, array( 'status' => 2, 'data_type' => 'receipt_id' ) );
+		$receipts_full = $vca_asm_finances->get_receipts( $id, array( 'status' => 1, 'data_type' => 'all', 'split' => true ) );
+		$this->late_receipts_full = $receipts['late'];
+		$this->current_receipts_full = $receipts['current'];
+		$this->sendable_receipts_full = array_merge( $this->late_receipts, $this->current_receipts );
+		$this->sent_receipts_full = $vca_asm_finances->get_receipts( $id, array( 'status' => 2, 'data_type' => 'all' ) );
 
 		$this->balanced_month_econ_string = $vca_asm_finances->get_balanced_month( $id, 'econ' );
 		$this->balanced_month_don_string = $vca_asm_finances->get_balanced_month( $id, 'donations' );
@@ -247,6 +268,7 @@ class VCA_ASM_City_Finances
 			'date_limit' => false,
 			'receipt_status' => 2
 		));
+
 		$this->confirmable_external_transfers = $vca_asm_finances->get_transactions(array(
 			'city_id' => $id,
 			'account_type' => 'donations',
@@ -254,6 +276,7 @@ class VCA_ASM_City_Finances
 			'date_limit' => false,
 			'receipt_status' => 2
 		));
+
 		$this->confirmable_econ_transfers = $vca_asm_finances->get_transactions(array(
 			'city_id' => $id,
 			'account_type' => 'econ',
@@ -320,118 +343,130 @@ class VCA_ASM_City_Finances
 	 * @since 1.5
 	 * @access private
 	 */
-	private function set_messages( $short = false )
+	public function set_messages( $short = false, $formatted = false, $linked = false )
 	{
-		$append = true === $short ? '_short' : '';
+		$append_key = true === $short ? '_short' : '';
+
+		$span_warning = true === $formatted ? '<span class="warning">' : '';
+		$span_neutral = true === $formatted ? '<span class="neutral-msg">' : '';
+		$span_close = true === $formatted ? '</span>' : '';
+
+		$anchor_city_overview = true === $formatted ? '<a title="' . $this->link_title . '" href="' . $this->url . '&cid=' . $this->id . '&referrer=' . $this->referrer . '">' : '';
+		$anchor_econ_revenue = true === $formatted ? '<a title="' . $this->link_title . '" href="' . $this->url . '-accounts-econ&acc_type=econ&tab=revenue&cid=' . $this->id . '&referrer=' . $this->referrer . '">' : '';
+		$anchor_econ_expenditure = true === $formatted ? '<a title="' . $this->link_title . '" href="' . $this->url . '-accounts-econ&acc_type=econ&tab=expenditure&cid=' . $this->id . '&referrer=' . $this->referrer . '">' : '';
+		$anchor_econ_transfer = true === $formatted ? '<a title="' . $this->link_title . '" href="' . $this->url . '-accounts-econ&acc_type=econ&tab=transfer&cid=' . $this->id . '&referrer=' . $this->referrer . '">' : '';
+		$anchor_don_donation = true === $formatted ? '<a title="' . $this->link_title . '" href="' . $this->url . '-accounts-donations&acc_type=donations&tab=donation&cid=' . $this->id . '&referrer=' . $this->referrer . '">' : '';
+		$anchor_don_transfer = true === $formatted ? '<a title="' . $this->link_title . '" href="' . $this->url . '-accounts-donations&acc_type=donations&tab=transfer&cid=' . $this->id . '&referrer=' . $this->referrer . '">' : '';
+		$anchor_close = true === $formatted ? '</a>' : '';
 
 		if ( $this->action_required ) {
-			$this->messages_meta['action_required'] = $this->{'message_strings'.$short}['action_required'];
+			$this->messages_meta['action_required'] = $span_warning . $this->{'message_strings'.$append_key}['action_required']  . $span_close;
 		}
 
 		if ( $this->action_required_city ) {
-			$this->messages_meta['city'] = $this->{'message_strings'.$short}['city'];
+			$this->messages_meta['city'] = $span_warning . $this->{'message_strings'.$append_key}['city']  . $span_close;
 		}
 
 		if ( $this->action_required_office ) {
-			$this->messages_meta['office'] = $this->{'message_strings'.$short}['office'];
+			$this->messages_meta['office'] = $span_warning . $this->{'message_strings'.$append_key}['office']  . $span_close;
 		}
 
 		if ( $this->action_required_econ_city ) {
-			$this->messages_meta['econ_city'] = $this->{'message_strings'.$short}['econ_city'];
-			$this->messages_meta_city['econ'] = $this->{'message_strings'.$short}['econ'];
+			$this->messages_meta['econ_city'] = $span_warning . $this->{'message_strings'.$append_key}['econ_city']  . $span_close;
+			$this->messages_meta_city['econ'] = $span_warning . $this->{'message_strings'.$append_key}['econ']  . $span_close;
 		}
 
 		if ( $this->action_required_don_city ) {
-			$this->messages_meta['don_city'] = $this->{'message_strings'.$short}['don_city'];
-			$this->messages_meta_city['don'] = $this->{'message_strings'.$short}['don'];
+			$this->messages_meta['don_city'] = $span_warning . $this->{'message_strings'.$append_key}['don_city']  . $span_close;
+			$this->messages_meta_city['don'] = $span_warning . $this->{'message_strings'.$append_key}['don']  . $span_close;
 		}
 
 		if ( $this->action_required_econ_office ) {
-			$this->messages_meta['econ_office'] = $this->{'message_strings'.$short}['econ_office'];
-			$this->messages_meta_office['econ'] = $this->{'message_strings'.$short}['econ'];
+			$this->messages_meta['econ_office'] = $span_warning . $this->{'message_strings'.$append_key}['econ_office']  . $span_close;
+			$this->messages_meta_office['econ'] = $span_warning . $this->{'message_strings'.$append_key}['econ']  . $span_close;
 		}
 
 		if ( $this->action_required_don_office ) {
-			$this->messages_meta['don_office'] = $this->{'message_strings'.$short}['don_office'];
-			$this->messages_meta_office['don'] = $this->{'message_strings'.$short}['don'];
+			$this->messages_meta['don_office'] = $span_warning . $this->{'message_strings'.$append_key}['don_office']  . $span_close;
+			$this->messages_meta_office['don'] = $span_warning . $this->{'message_strings'.$append_key}['don']  . $span_close;
 		}
 
 		if ( $this->action_required_econ_balance_several ) {
-			$this->messages['econ_balance'] = $this->{'message_strings'.$short}['econ_balance_several'];
-			$this->messages_city['econ_balance'] = $this->{'message_strings'.$short}['econ_balance_several'];
-			$this->messages_econ['econ_balance'] = $this->{'message_strings'.$short}['econ_balance_several'];
-			$this->messages_econ_city['econ_balance'] = $this->{'message_strings'.$short}['econ_balance_several'];
+			$this->messages['econ_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['econ_balance_several'] . $anchor_close . $span_close;
+			$this->messages_city['econ_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['econ_balance_several'] . $anchor_close . $span_close;
+			$this->messages_econ['econ_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['econ_balance_several'] . $anchor_close . $span_close;
+			$this->messages_econ_city['econ_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['econ_balance_several'] . $anchor_close . $span_close;
 		} elseif ( $this->action_required_econ_balance ) {
-			$this->messages['econ_balance'] = $this->{'message_strings'.$short}['econ_balance'];
-			$this->messages_city['econ_balance'] = $this->{'message_strings'.$short}['econ_balance'];
-			$this->messages_econ['econ_balance'] = $this->{'message_strings'.$short}['econ_balance'];
-			$this->messages_econ_city['econ_balance'] = $this->{'message_strings'.$short}['econ_balance'];
+			$this->messages['econ_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['econ_balance'] . $anchor_close . $span_close;
+			$this->messages_city['econ_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['econ_balance'] . $anchor_close . $span_close;
+			$this->messages_econ['econ_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['econ_balance'] . $anchor_close . $span_close;
+			$this->messages_econ_city['econ_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['econ_balance'] . $anchor_close . $span_close;
 		}
 
 		if ( $this->action_required_don_balance_several ) {
-			$this->messages['don_balance'] = $this->{'message_strings'.$short}['don_balance_several'];
-			$this->messages_city['don_balance'] = $this->{'message_strings'.$short}['don_balance_several'];
-			$this->messages_don['don_balance'] = $this->{'message_strings'.$short}['don_balance_several'];
-			$this->messages_don_city['don_balance'] = $this->{'message_strings'.$short}['don_balance_several'];
+			$this->messages['don_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['don_balance_several'] . $anchor_close . $span_close;
+			$this->messages_city['don_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['don_balance_several'] . $anchor_close . $span_close;
+			$this->messages_don['don_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['don_balance_several'] . $anchor_close . $span_close;
+			$this->messages_don_city['don_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['don_balance_several'] . $anchor_close . $span_close;
 		} elseif ( $this->action_required_don_balance ) {
-			$this->messages['don_balance'] = $this->{'message_strings'.$short}['don_balance'];
-			$this->messages_city['don_balance'] = $this->{'message_strings'.$short}['don_balance'];
-			$this->messages_don['don_balance'] = $this->{'message_strings'.$short}['don_balance'];
-			$this->messages_don_city['don_balance'] = $this->{'message_strings'.$short}['don_balance'];
+			$this->messages['don_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['don_balance'] . $anchor_close . $span_close;
+			$this->messages_city['don_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['don_balance'] . $anchor_close . $span_close;
+			$this->messages_don['don_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['don_balance'] . $anchor_close . $span_close;
+			$this->messages_don_city['don_balance'] = $span_warning . $anchor_city_overview . $this->{'message_strings'.$append_key}['don_balance'] . $anchor_close . $span_close;
 		}
 
 		if ( $this->action_required_econ_transfer ) {
-			$this->messages['econ_transfer'] = $this->{'message_strings'.$short}['econ_transfer'];
-			$this->messages_city['econ_transfer'] = $this->{'message_strings'.$short}['econ_transfer'];
-			$this->messages_econ['econ_transfer'] = $this->{'message_strings'.$short}['econ_transfer'];
-			$this->messages_econ_city['econ_transfer'] = $this->{'message_strings'.$short}['econ_transfer'];
+			$this->messages['econ_transfer'] = $span_warning . $anchor_econ_transfer . $this->{'message_strings'.$append_key}['econ_transfer'] . $anchor_close . $span_close;
+			$this->messages_city['econ_transfer'] = $span_warning . $anchor_econ_transfer . $this->{'message_strings'.$append_key}['econ_transfer'] . $anchor_close . $span_close;
+			$this->messages_econ['econ_transfer'] = $span_warning . $anchor_econ_transfer . $this->{'message_strings'.$append_key}['econ_transfer'] . $anchor_close . $span_close;
+			$this->messages_econ_city['econ_transfer'] = $span_warning . $anchor_econ_transfer . $this->{'message_strings'.$append_key}['econ_transfer'] . $anchor_close . $span_close;
 		}
 
 		if ( $this->action_required_don_transfer ) {
-			$this->messages['don_transfer'] = $this->{'message_strings'.$short}['don_transfer'];
-			$this->messages_city['don_transfer'] = $this->{'message_strings'.$short}['don_transfer'];
-			$this->messages_don['don_transfer'] = $this->{'message_strings'.$short}['don_transfer'];
-			$this->messages_don_city['don_transfer'] = $this->{'message_strings'.$short}['don_transfer'];
+			$this->messages['don_transfer'] = $span_warning . $anchor_don_transfer . $this->{'message_strings'.$append_key}['don_transfer'] . $anchor_close . $span_close;
+			$this->messages_city['don_transfer'] = $span_warning . $anchor_don_transfer . $this->{'message_strings'.$append_key}['don_transfer'] . $anchor_close . $span_close;
+			$this->messages_don['don_transfer'] = $span_warning . $anchor_don_transfer . $this->{'message_strings'.$append_key}['don_transfer'] . $anchor_close . $span_close;
+			$this->messages_don_city['don_transfer'] = $span_warning . $anchor_don_transfer . $this->{'message_strings'.$append_key}['don_transfer'] . $anchor_close . $span_close;
 		}
 
 		if ( $this->action_required_econ_confirm_transfer ) {
-			$this->messages['econ_confirm_transfer'] = $this->{'message_strings'.$short}['econ_confirm_transfer'];
-			$this->messages_office['econ_confirm_transfer'] = $this->{'message_strings'.$short}['econ_confirm_transfer'];
-			$this->messages_econ['econ_confirm_transfer'] = $this->{'message_strings'.$short}['econ_confirm_transfer'];
-			$this->messages_econ_office['econ_confirm_transfer'] = $this->{'message_strings'.$short}['econ_confirm_transfer'];
+			$this->messages['econ_confirm_transfer'] = $span_warning . $anchor_econ_transfer . $this->{'message_strings'.$append_key}['econ_confirm_transfer'] . $anchor_close . $span_close;
+			$this->messages_office['econ_confirm_transfer'] = $span_warning . $anchor_econ_transfer . $this->{'message_strings'.$append_key}['econ_confirm_transfer'] . $anchor_close . $span_close;
+			$this->messages_econ['econ_confirm_transfer'] = $span_warning . $anchor_econ_transfer . $this->{'message_strings'.$append_key}['econ_confirm_transfer'] . $anchor_close . $span_close;
+			$this->messages_econ_office['econ_confirm_transfer'] = $span_warning . $anchor_econ_transfer . $this->{'message_strings'.$append_key}['econ_confirm_transfer'] . $anchor_close . $span_close;
 		}
 
 		if ( $this->action_required_don_confirm_transfer ) {
-			$this->messages['don_confirm_transfer'] = $this->{'message_strings'.$short}['don_confirm_transfer'];
-			$this->messages_office['don_confirm_transfer'] = $this->{'message_strings'.$short}['don_confirm_transfer'];
-			$this->messages_don['don_confirm_transfer'] = $this->{'message_strings'.$short}['don_confirm_transfer'];
-			$this->messages_don_office['don_confirm_transfer'] = $this->{'message_strings'.$short}['don_confirm_transfer'];
+			$this->messages['don_confirm_transfer'] = $span_warning . $anchor_don_transfer . $this->{'message_strings'.$append_key}['don_confirm_transfer'] . $anchor_close . $span_close;
+			$this->messages_office['don_confirm_transfer'] = $span_warning . $anchor_don_transfer . $this->{'message_strings'.$append_key}['don_confirm_transfer'] . $anchor_close . $span_close;
+			$this->messages_don['don_confirm_transfer'] = $span_warning . $anchor_don_transfer . $this->{'message_strings'.$append_key}['don_confirm_transfer'] . $anchor_close . $span_close;
+			$this->messages_don_office['don_confirm_transfer'] = $span_warning . $anchor_don_transfer . $this->{'message_strings'.$append_key}['don_confirm_transfer'] . $anchor_close . $span_close;
 		}
 
 		if ( $this->action_required_don_confirm_external_transfer ) {
-			$this->messages['don_confirm_external_transfer'] = $this->{'message_strings'.$short}['don_confirm_external_transfer'];
-			$this->messages_office['don_confirm_external_transfer'] = $this->{'message_strings'.$short}['don_confirm_external_transfer'];
-			$this->messages_don['don_confirm_external_transfer'] = $this->{'message_strings'.$short}['don_confirm_external_transfer'];
-			$this->messages_don_office['don_confirm_external_transfer'] = $this->{'message_strings'.$short}['don_confirm_external_transfer'];
+			$this->messages['don_confirm_external_transfer'] = $span_warning . $anchor_don_transfer . $this->{'message_strings'.$append_key}['don_confirm_external_transfer'] . $anchor_close . $span_close;
+			$this->messages_office['don_confirm_external_transfer'] = $span_warning . $anchor_don_transfer . $this->{'message_strings'.$append_key}['don_confirm_external_transfer'] . $anchor_close . $span_close;
+			$this->messages_don['don_confirm_external_transfer'] = $span_warning . $anchor_don_transfer . $this->{'message_strings'.$append_key}['don_confirm_external_transfer'] . $anchor_close . $span_close;
+			$this->messages_don_office['don_confirm_external_transfer'] = $span_warning . $anchor_don_transfer . $this->{'message_strings'.$append_key}['don_confirm_external_transfer'] . $anchor_close . $span_close;
 		}
 
 		if ( $this->action_required_econ_send_receipts_late ) {
-			$this->messages['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts_late'];
-			$this->messages_city['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts_late'];
-			$this->messages_econ['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts_late'];
-			$this->messages_econ_city['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts_late'];
+			$this->messages['econ_send_receipts'] = $span_warning . $anchor_econ_expenditure . $this->{'message_strings'.$append_key}['econ_send_receipts_late'] . $anchor_close . $span_close;
+			$this->messages_city['econ_send_receipts'] = $span_warning . $anchor_econ_expenditure . $this->{'message_strings'.$append_key}['econ_send_receipts_late'] . $anchor_close . $span_close;
+			$this->messages_econ['econ_send_receipts'] = $span_warning . $anchor_econ_expenditure . $this->{'message_strings'.$append_key}['econ_send_receipts_late'] . $anchor_close . $span_close;
+			$this->messages_econ_city['econ_send_receipts'] = $span_warning . $anchor_econ_expenditure . $this->{'message_strings'.$append_key}['econ_send_receipts_late'] . $anchor_close . $span_close;
 		} elseif ( $this->action_required_econ_send_receipts ) {
-			$this->messages['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts'];
-			$this->messages_city['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts'];
-			$this->messages_econ['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts'];
-			$this->messages_econ_city['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts'];
+			$this->messages['econ_send_receipts'] = $span_neutral . $anchor_econ_expenditure . $this->{'message_strings'.$append_key}['econ_send_receipts'] . $anchor_close . $span_close;
+			$this->messages_city['econ_send_receipts'] = $span_neutral . $anchor_econ_expenditure . $this->{'message_strings'.$append_key}['econ_send_receipts'] . $anchor_close . $span_close;
+			$this->messages_econ['econ_send_receipts'] = $span_neutral . $anchor_econ_expenditure . $this->{'message_strings'.$append_key}['econ_send_receipts'] . $anchor_close . $span_close;
+			$this->messages_econ_city['econ_send_receipts'] = $span_neutral . $anchor_econ_expenditure . $this->{'message_strings'.$append_key}['econ_send_receipts'] . $anchor_close . $span_close;
 		}
 
 		if ( $this->action_required_econ_confirm_receipts ) {
-			$this->messages['econ_confirm_receipts'] = $this->{'message_strings'.$short}['econ_confirm_receipts'];
-			$this->messages_office['econ_confirm_receipts'] = $this->{'message_strings'.$short}['econ_confirm_receipts'];
-			$this->messages_econ['econ_confirm_receipts'] = $this->{'message_strings'.$short}['econ_confirm_receipts'];
-			$this->messages_econ_office['econ_confirm_receipts'] = $this->{'message_strings'.$short}['econ_confirm_receipts'];
+			$this->messages['econ_confirm_receipts'] = $span_warning . $anchor_econ_expenditure . $this->{'message_strings'.$append_key}['econ_confirm_receipts'] . $anchor_close . $span_close;
+			$this->messages_office['econ_confirm_receipts'] = $span_warning . $anchor_econ_expenditure . $this->{'message_strings'.$append_key}['econ_confirm_receipts'] . $anchor_close . $span_close;
+			$this->messages_econ['econ_confirm_receipts'] = $span_warning . $anchor_econ_expenditure . $this->{'message_strings'.$append_key}['econ_confirm_receipts'] . $anchor_close . $span_close;
+			$this->messages_econ_office['econ_confirm_receipts'] = $span_warning . $anchor_econ_expenditure . $this->{'message_strings'.$append_key}['econ_confirm_receipts'] . $anchor_close . $span_close;
 		}
 	}
 
@@ -441,13 +476,26 @@ class VCA_ASM_City_Finances
 	 * @since 1.5
 	 * @access public
 	 */
-	public function __construct( $city_id )
+	public function __construct( $city_id, $args = array() )
 	{
 		$this->id = $city_id;
+
+		$this->default_args['link_title'] = __( 'Do something about it!', 'vca-asm' );
+		$this->args = wp_parse_args( $args, $this->default_args );
+		extract( $this->args );
+
+		if ( true === $this->args['js'] ) {
+			wp_enqueue_script( 'postbox' );
+			add_action( 'admin_footer', array( $this, 'print_script' ) );
+		}
+
+		$this->url = $url;
+		$this->link_title = $link_title;
+		$this->referrer = $referrer;
 		$this->translatable_messages();
 		$this->gather_meta( $this->id );
 		$this->set_action_flags();
-		$this->set_messages();
+		$this->set_messages( $short, $formatted, $linked );
 	}
 
 } // class

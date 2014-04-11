@@ -61,6 +61,9 @@ class VCA_ASM_Admin_Table {
 	public $columns = array();
 	public $rows = array();
 
+	/* state */
+	public $has_data = false;
+
 	/**
 	 * Constructor
 	 *
@@ -172,6 +175,8 @@ class VCA_ASM_Admin_Table {
 			}
 
 		} else {
+
+			$this->has_data = true;
 
 			/* BEGIN: Table Header */
 
@@ -323,8 +328,9 @@ class VCA_ASM_Admin_Table {
 			/* BEGIN: Rows */
 
 			foreach ( $rows as $row ) {
+				$row_id = ! empty( $row['id'] ) ? ' id="row-' . $row['id'] . '"' : '';
 
-				$output .= '<tr valign="middle" class="alternate">';
+				$output .= '<tr valign="middle" class="alternate"' . $row_id . '>';
 				if ( $with_bulk && is_array( $bulk_actions ) && ! empty( $bulk_actions ) ) {
 					$bulk_val = isset( $row['bulk'] ) ? $row['bulk'] : ( isset( $row['id'] ) ? $row['id'] : 0 );
 					$output .= '<th class="check-column" scope="row">' .
@@ -902,6 +908,22 @@ class VCA_ASM_Admin_Table {
 							)
 						)
 					)
+				) ||
+				(
+					'finances-meta' === $cur_cap &&
+					(
+						$current_user->has_cap( 'vca_asm_manage_finances_global' ) ||
+						(
+							$current_user->has_cap( 'vca_asm_manage_finances_nation' ) &&
+							(
+								(
+									$admin_nation &&
+									$admin_nation  === 999 // pass transaction nation
+								) ||
+								true
+							)
+						)
+					)
 				)
 			) {
 				if ( $i !== 0 && $i < $action_count ) {
@@ -925,6 +947,33 @@ class VCA_ASM_Admin_Table {
 							'<a title="' .
 								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
 								'" href="' . $url . '&todo=edit-ei&amp;id=' . $row['id'] . '">' .
+								__( 'Edit', 'vca-asm' ) .
+							'</a></span>';
+					break;
+
+					case 'edit-occ':
+						$output .= '<span class="edit">' .
+							'<a title="' .
+								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
+								'" href="' . $url . '&todo=edit-occ&amp;id=' . $row['id'] . '">' .
+								__( 'Edit', 'vca-asm' ) .
+							'</a></span>';
+					break;
+
+					case 'edit-cc':
+						$output .= '<span class="edit">' .
+							'<a title="' .
+								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
+								'" href="' . $url . '&todo=edit-cc&amp;id=' . $row['id'] . '">' .
+								__( 'Edit', 'vca-asm' ) .
+							'</a></span>';
+					break;
+
+					case 'edit-tax':
+						$output .= '<span class="edit">' .
+							'<a title="' .
+								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
+								'" href="' . $url . '&todo=edit-tax&amp;id=' . $row['id'] . '">' .
 								__( 'Edit', 'vca-asm' ) .
 							'</a></span>';
 					break;
@@ -1247,6 +1296,12 @@ class VCA_ASM_Admin_Table {
 			case 'pcc':
 				if ( isset( $row['country_code'] ) && ! empty( $row['country_code'] ) ) {
 					$output = '+' . $data;
+				}
+			break;
+
+			case 'city-finances-link':
+				if ( ! empty( $row['id'] ) ) {
+					$output = '<a title="' . __( 'This is, what the Finances-SPOC sees.', 'vca-asm' ) . '" href="?page=vca-asm-finances&cid=' . $row['id'] . '">' . $data . '</a>';
 				}
 			break;
 		}

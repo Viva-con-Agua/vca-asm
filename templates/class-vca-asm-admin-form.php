@@ -43,17 +43,7 @@ class VCA_ASM_Admin_Form {
 	private $args = array();
 
 	/**
-	 * PHP4 style constructor
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
-	public function VCA_ASM_Admin_Form( $args ) {
-		$this->__construct( $args );
-	}
-
-	/**
-	 * PHP5 style constructor
+	 * Constructor
 	 *
 	 * @since 1.3
 	 * @access public
@@ -340,7 +330,31 @@ class VCA_ASM_Admin_Form {
 
 				foreach ($field['options'] as $option) {
 					$output .= '<option';
-					if ( ( $field['value'] == $option['value'] && $option['value'] != 0 ) || $field['value'] === $option['value'] ) {
+					if (
+						(
+							isset( $field['value'] ) &&
+							(
+								(
+									$field['value'] == $option['value'] &&
+									$option['value'] != 0
+								) ||
+								$field['value'] === $option['value']
+							)
+						) || (
+							(
+								(
+									! isset( $field['value'] ) ||
+									(
+										empty( $field['value'] ) &&
+										0 !== $field['value'] &&
+										'0' !== $field['value']
+									)
+								) &&
+								! empty( $field['default'] ) &&
+								$field['default'] == $option['value']
+							)
+						)
+					) {
 						$output .= ' selected="selected"';
 					}
 					if ( ! empty( $option['class'] ) ) {
@@ -384,8 +398,31 @@ class VCA_ASM_Admin_Form {
 							'name="' . $field['name'] .
 							'" id="' . $field['id'] . '_' . $option['value'] .
 							'" value="' . $option['value'] . '" ';
-
-						if( isset( $field['value'] ) && $field['value'] == $option['value'] ) {
+					if (
+						(
+							isset( $field['value'] ) &&
+							(
+								(
+									$field['value'] == $option['value'] &&
+									$option['value'] != 0
+								) ||
+								$field['value'] === $option['value']
+							)
+						) || (
+							(
+								(
+									! isset( $field['value'] ) ||
+									(
+										empty( $field['value'] ) &&
+										0 !== $field['value'] &&
+										'0' !== $field['value']
+									)
+								) &&
+								! empty( $field['default'] ) &&
+								$field['default'] == $option['value']
+							)
+						)
+					) {
 							$output .= ' checked="checked"';
 						}
 						if( isset( $field['disabled'] ) && $field['disabled'] === true ) {

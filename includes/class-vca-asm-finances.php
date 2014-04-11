@@ -531,6 +531,17 @@ class VCA_ASM_Finances
 	 * @since 1.5
 	 * @access public
 	 */
+	public function get_default_tax_rate( $id = 0 )
+	{
+		return $this->get_meta( $id, 'related_id', 'default-tax-rate', 'value' );
+	}
+
+	/**
+	 * ???
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
 	public function get_occasions( $orderby = 'value', $order = 'ASC', $nation = 0 )
 	{
 		return $this->get_metas( $orderby, $order, 'occasion', $nation );
@@ -652,7 +663,8 @@ class VCA_ASM_Finances
 			'nocat' => false,
 			'nocat_value' => 'misc',
 			'nocat_text' => _x( 'Miscellaneous', 'Occasions', 'vca-asm' ),
-			'nation' => 0
+			'nation' => 0,
+			'appended_id' => 'description'
 		);
 		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
 
@@ -674,7 +686,7 @@ class VCA_ASM_Finances
 				'label' => $occasion['name'],
 				'value' => $occasion['id']
 			);
-			$options_array[$i]['label'] .= ! empty( $occasion['description'] ) ? ' (' . $occasion['description'] . ')' : '';
+			$options_array[$i]['label'] .= ! empty( $occasion[$appended_id] ) ? ' <span class="brackets">(' . $occasion[$appended_id] . ')</span>' : '';
 			$i++;
 		}
 
@@ -706,7 +718,8 @@ class VCA_ASM_Finances
 			'notax' => false,
 			'notax_value' => 0,
 			'notax_text' => '0',
-			'nation' => 0
+			'nation' => 0,
+			'option_value' => 'id'
 		);
 		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
 
@@ -726,7 +739,7 @@ class VCA_ASM_Finances
 		foreach( $data as $tax_rate ) {
 			$options_array[$i] = array(
 				'label' => $tax_rate['value'] . ' %',
-				'value' => $tax_rate['id']
+				'value' => $tax_rate[$option_value]
 			);
 			//$options_array[$i]['label'] .= ! empty( $tax_rate['name'] ) ? ' (' . $tax_rate['name'] . ')' : '';
 			$i++;

@@ -21,8 +21,20 @@ class VCA_ASM_Admin_Home {
 	 * @access public
 	 */
 	public function home() {
+		global $current_user,
+			$vca_asm_geography;
 
-		$has_tasks = false; // TODO implement that shit!
+		$has_tasks = false;
+
+		$admin_city = get_user_meta( $current_user->ID, 'city', true );
+
+		if ( ( in_array( 'city', $current_user->roles ) && in_array( $current_user->ID, array( 86, 92, 139 ) ) ) || 1 === $current_user->ID ) {
+			$the_city_finances = new VCA_ASM_City_Finances( $admin_city );
+			if ( $the_city_finances->action_required_city ) {
+				$has_tasks = count( $the_city_finances->messages_city );
+			}
+		}
+
 		$num_tasks_str = '';
 
 		if( $has_tasks ) {
@@ -57,7 +69,7 @@ class VCA_ASM_Admin_Home {
 				array(
 					'value' => 'tasks',
 					'icon' => 'icon-tasks',
-					'title' => _x( 'Tasks', 'Home Admin Menu', 'vca-asm' )
+					'title' => _x( 'Tasks', 'Home Admin Menu', 'vca-asm' ) . $num_tasks_str
 				),
 				array(
 					'value' => 'log',
@@ -88,12 +100,11 @@ class VCA_ASM_Admin_Home {
 	 */
 	public function view_stats() {
 		global $current_user, $wpdb, $vca_asm_geography;
-		get_currentuserinfo();
 
 		$stats = new VCA_ASM_Stats();
-		$admin_region = get_user_meta( $current_user->ID, 'city', true );
-		$admin_region_name = $vca_asm_geography->get_name( $admin_region );
-		$admin_region_status = $vca_asm_geography->get_status( $admin_region );
+		$admin_city = get_user_meta( $current_user->ID, 'city', true );
+		$admin_city_name = $vca_asm_geography->get_name( $admin_city );
+		$admin_city_status = $vca_asm_geography->get_status( $admin_city );
 
 		$output = '<div id="poststuff">' .
 			'<div id="post-body" class="metabox-holder columns-1">' .
@@ -105,27 +116,27 @@ class VCA_ASM_Admin_Home {
 						sprintf( _x( '%1$s registered supporters, %2$s of which are from your %3$s', 'Statistics', 'vca-asm' ),
 							'<strong>' . $stats->supporters_total_total . '</strong>',
 							'<strong>' . $stats->supporters_total_city . '</strong>',
-							$admin_region_status
+							$admin_city_status
 						) . '<br />' .
 						sprintf( _x( '&quot;Active Members&quot;: %1$s (your %3$s: %2$s)', 'Statistics', 'vca-asm' ),
 							'<strong>' . $stats->supporters_active_total . '</strong>',
 							'<strong>' . $stats->supporters_active_city . '</strong>',
-							$admin_region_status
+							$admin_city_status
 						) . '<br />' .
 						sprintf( _x( 'Current pending membership applications: %1$s (your %3$s: %2$s)', 'Statistics', 'vca-asm' ),
 							'<strong>' . $stats->supporters_applied_total . '</strong>',
 							'<strong>' . $stats->supporters_applied_city . '</strong>',
-							$admin_region_status
+							$admin_city_status
 						) . '<br />' .
 						sprintf( _x( 'The remaining %1$s (your %3$s: %2$s) have not applied for active membership.', 'Statistics', 'vca-asm' ),
 							'<strong>' . $stats->supporters_inactive_total . '</strong>',
 							'<strong>' . $stats->supporters_inactive_city . '</strong>',
-							$admin_region_status
+							$admin_city_status
 						) . '<br />' .
 						sprintf( _x( '%1$s of those (your %3$s: %2$s) only have very incomplete (not even a name submitted) profiles.', 'Statistics', 'vca-asm' ),
 							'<strong>' . $stats->supporters_incomplete_total . '</strong>',
 							'<strong>' . $stats->supporters_incomplete_city . '</strong>',
-							$admin_region_status
+							$admin_city_status
 						) . '<br />' .
 						sprintf( _x( 'The average age of all supporters (%1$s) is %2$s, %3$s are under 25 years old and %4$s are 25 or older', 'Statistics', 'vca-asm' ),
 							'<strong>' . $stats->supporters_complete_total . '</strong>',
@@ -138,7 +149,7 @@ class VCA_ASM_Admin_Home {
 						sprintf( _x( '%1$s administrative users, %2$s of which are from your %3$s', 'Statistics', 'vca-asm' ),
 							'<strong>' . $stats->admins_total . '</strong>',
 							'<strong>' . $stats->admins_city . '</strong>',
-							$admin_region_status
+							$admin_city_status
 						) .
 					'</p>' .
 				'</div>' .
@@ -212,12 +223,52 @@ class VCA_ASM_Admin_Home {
 	 * @access public
 	 */
 	public function view_tasks() {
-		$feech = new VCA_ASM_Admin_Future_Feech( array(
-			'title' => 'Aufgaben',
-			'version' => '1.4',
-			'explanation' => 'Wenn ein Verwaltungsbenutzer sich einloggt, wird geprüft, ob es in seiner Stadt unerledigte Aufgaben (Aktivitätsbewerbungen, Überweisungen, Kontingente) gibt. Ist dem so, ist dieser Tab aktiv.'
+		global $current_user,
+			$vca_asm_geography;
+
+		$has_tasks = false;
+
+		$admin_city = get_user_meta( $current_user->ID, 'city', true );
+
+		if ( ( in_array( 'city', $current_user->roles ) && in_array( $current_user->ID, array( 86, 92, 139 ) ) ) || 1 === $current_user->ID ) {
+			$the_city_finances = new VCA_ASM_City_Finances(
+				$admin_city,
+				array(
+					'short' => false,
+					'formatted' => true,
+					'linked' => true,
+					'referrer' => 'tasks'
+				)
+			);
+			if ( $the_city_finances->action_required_city ) {
+				$has_tasks = count( $the_city_finances->messages_city );
+			}
+		}
+
+		$mbs = new VCA_ASM_Admin_Metaboxes( array(
+			'echo' => false,
+			'columns' => 1,
+			'running' => 1,
+			'id' => '',
+			'title' => $has_tasks ? __( 'Financial Tasks', 'vca-asm' ) : __( 'Tasks', 'vca-asm' ),
+			'js' => false
 		));
-		$feech->output();
+
+		$output = $mbs->top();
+		$output .= $mbs->mb_top();
+
+		if ( $has_tasks ) {
+			foreach ( $the_city_finances->messages_city as $message ) {
+				$output .= '<p>' . $message . '</p>';
+			}
+		} else {
+			$output .= '<p>' . __( 'None', 'Tasks', 'vca-asm' ) . '...</p>';
+		}
+
+		$output .= $mbs->mb_bottom();
+		$output .= $mbs->bottom();
+
+		echo $output;
 	}
 
 	/**

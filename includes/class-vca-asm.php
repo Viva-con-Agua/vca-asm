@@ -230,7 +230,7 @@ class VCA_ASM {
 
 		wp_register_style( 'jquery-ui-framework', VCA_ASM_RELPATH . 'css/jquery-ui-framework.css' );
 		wp_register_style( 'jquery-ui-custom', VCA_ASM_RELPATH . 'css/jquery-ui-custom.css' );
-		wp_register_style( 'vca-asm-admin-generic-style', VCA_ASM_RELPATH . 'css/admin-generic.css', false, '2014.04.01.1' );
+		wp_register_style( 'vca-asm-admin-generic-style', VCA_ASM_RELPATH . 'css/admin-generic.css', false, '2014.04.12.4' );
 
 		wp_register_style( 'vca-asm-tooltips', VCA_ASM_RELPATH . 'css/admin-tooltips.css', false, '2013.11.6.1' );
 
@@ -262,7 +262,7 @@ class VCA_ASM {
 
 	function clean_unwanted_caps(){
 		$delete_caps = array(
-			'vca_asm_view_all_finances'
+			'vca_asm_submit_finances'
 		);
 		global $wp_roles;
 		foreach ($delete_caps as $cap) {
