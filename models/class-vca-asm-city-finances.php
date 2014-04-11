@@ -19,9 +19,12 @@ class VCA_ASM_City_Finances
 	 *
 	 * @since 1.5
 	 */
+
+	/* geography */
 	public $id = 0;
 	public $nation_id = '';
 
+	/* meta geography */
 	public $name = '';
 	public $type = '';
 	public $type_nice = '';
@@ -30,6 +33,7 @@ class VCA_ASM_City_Finances
 	public $currency_minor = 'Cent';
 	public $currency_symbol = '&euro;';
 
+	/* financial data */
 	public $donations_total = 0;
 	public $donations_by_years = array();
 	public $donations_current_year = 0;
@@ -57,9 +61,6 @@ class VCA_ASM_City_Finances
 	public $balanced_month_econ_threshold_stamp = 0;
 	public $balanced_month_don_threshold_stamp = 0;
 
-	public $late_donations = array();
-	public $current_donations = array();
-
 	public $late_receipts = array();
 	public $current_receipts = array();
 	public $sendable_receipts = array();
@@ -69,6 +70,7 @@ class VCA_ASM_City_Finances
 	public $confirmable_econ_transfers = array();
 	public $confirmable_external_transfers = array();
 
+	/* (boolean) attention flags */
 	public $action_required = false;
 
 	public $action_required_city = false;
@@ -86,19 +88,32 @@ class VCA_ASM_City_Finances
 	public $action_required_don_confirm_transfer = false;
 	public $action_required_don_confirm_external_transfer = false;
 	public $action_required_don_balance = false;
+	public $action_required_don_balance_several = false;
 
 	public $action_required_econ_transfer = false;
 	public $action_required_econ_confirm_transfer = false;
 	public $action_required_econ_balance = false;
+	public $action_required_econ_balance_several = false;
 	public $action_required_econ_send_receipts = false;
+	public $action_required_econ_send_receipts_late = false;
 	public $action_required_econ_confirm_receipts = false;
 
+	/* messages */
 	public $message_strings = array();
 	public $message_strings_short = array();
 
 	public $messages = array();
+	public $messages_meta = array();
+	public $messages_meta_office = array();
+	public $messages_meta_city = array();
+	public $messages_city = array();
+	public $messages_office = array();
 	public $messages_don = array();
 	public $messages_econ = array();
+	public $messages_don_city = array();
+	public $messages_econ_city = array();
+	public $messages_don_office = array();
+	public $messages_econ_office = array();
 
 	/**
 	 * Assigns values to $message_strings property
@@ -109,25 +124,61 @@ class VCA_ASM_City_Finances
 	 */
 	private function translatable_messages()
 	{
+		/**
+		 * Messages as clearly formulated as possible
+		 * with punctuation
+		 */
 		$this->message_strings = array(
-			'action_required' => __( '', 'vca-asm' ),
-			'city' => __( '', 'vca-asm' ),
-			'office' => __( '', 'vca-asm' ),
-			'econ' => __( '', 'vca-asm' ),
-			'don' => __( '', 'vca-asm' ),
-			'econ_city' => __( '', 'vca-asm' ),
-			'don_city' => __( '', 'vca-asm' ),
-			'econ_office' => __( '', 'vca-asm' ),
-			'don_office' => __( '', 'vca-asm' ),
-			'econ_balance' => __( '', 'vca-asm' ),
-			'don_balance' => __( '', 'vca-asm' ),
-			'econ_transfer' => __( '', 'vca-asm' ),
-			'don_transfer' => __( '', 'vca-asm' ),
-			'econ_confirm_transfer' => __( '', 'vca-asm' ),
-			'don_confirm_transfer' => __( '', 'vca-asm' ),
-			'econ_send_receipts' => __( '', 'vca-asm' ),
-			'econ_confirm_receipts' => __( '', 'vca-asm' ),
-			'don_confirm_external_transfer' => __( '', 'vca-asm' )
+			'action_required' => __( 'There are financial tasks to be executed in this city.', 'vca-asm' ),
+			'city' => __( 'The city&apos;s SPOCs need to execute tasks.', 'vca-asm' ),
+			'office' => __( 'The central office needs to execute tasks.', 'vca-asm' ),
+			'econ' => __( 'The structural account requires attention.', 'vca-asm' ),
+			'don' => __( 'The donations account requires attention.', 'vca-asm' ),
+			'econ_city' => __( 'The structural account requires attention by the city&apos;s SPOCs.', 'vca-asm' ),
+			'don_city' => __( 'The donations account requires attention by the city&apos;s SPOCs.', 'vca-asm' ),
+			'econ_office' => __( 'The structural account requires attention by the central office.', 'vca-asm' ),
+			'don_office' => __( 'The donations account requires attention by the central office.', 'vca-asm' ),
+			'econ_balance' => __( 'Last month is not yet balanced (Structural account).', 'vca-asm' ),
+			'don_balance' => __( 'Last month is not yet balanced (Donations account).', 'vca-asm' ),
+			'econ_balance_several' => __( 'The Structural account is more than one month behind in balancing!', 'vca-asm' ) . ' ' . __( 'Please do so as soon as possible!', 'vca-asm' ),
+			'don_balance_several' => __( 'The Donations account is more than one month behind in balancing!', 'vca-asm' ) . ' ' . __( 'Please do so as soon as possible!', 'vca-asm' ),
+			'econ_transfer' => __( 'The city needs to transfer structural funds to the central office.', 'vca-asm' ),
+			'don_transfer' => __( 'The city needs to transfer donations to the central office.', 'vca-asm' ),
+			'econ_confirm_transfer' => __( 'The central office needs to confirm the reception of the transfer of structural funds.', 'vca-asm' ),
+			'don_confirm_transfer' => __( 'The central office needs to confirm the reception of the transfer of donations from the city.', 'vca-asm' ),
+			'econ_send_receipts' => __( 'Receipts for structural expenditures need to be sent to the central office.', 'vca-asm' ),
+			'econ_send_receipts_late' => __( 'Receipts for structural expenditures from the previous month need to be sent to the central office.', 'vca-asm' ) . ' ' . __( 'Please do so as soon as possible!', 'vca-asm' ),
+			'econ_confirm_receipts' => __( 'The central office needs to confirm the reception of receipts.', 'vca-asm' ),
+			'don_confirm_external_transfer' => __( 'The central office needs to confirm the reception of the transfer of donations from external sources', 'vca-asm' )
+		);
+
+		/**
+		 * Messages as short as possible
+		 * without losing meaning
+		 * without (final) punctuation
+		 */
+		$this->message_strings_short = array(
+			'action_required' => __( 'Attention required', 'vca-asm' ),
+			'city' => __( 'Attention required by city', 'vca-asm' ),
+			'office' => __( 'Attention required by office', 'vca-asm' ),
+			'econ' => __( 'Structural account requires attention', 'vca-asm' ),
+			'don' => __( 'Donations account requires attention', 'vca-asm' ),
+			'econ_city' => __( 'Structural account: Tasks for the city', 'vca-asm' ),
+			'don_city' => __( 'Donations account: Tasks for the city', 'vca-asm' ),
+			'econ_office' => __( 'Structural account: Tasks for the office', 'vca-asm' ),
+			'don_office' => __( 'Donations account: Tasks for the office', 'vca-asm' ),
+			'econ_balance' => __( 'Last month not balanced (Structural)', 'vca-asm' ),
+			'don_balance' => __( 'Last month not balanced (Donations)', 'vca-asm' ),
+			'econ_balance_several' => __( 'Structural account: more than a month behind', 'vca-asm' ),
+			'don_balance_several' => __( 'Donations account: more than a month behind', 'vca-asm' ),
+			'econ_transfer' => __( 'Structural account: transfer from city required', 'vca-asm' ),
+			'don_transfer' => __( 'Donations account: transfer from city required', 'vca-asm' ),
+			'econ_confirm_transfer' => __( 'Structural account: transfers need confirmation', 'vca-asm' ),
+			'don_confirm_transfer' => __( 'Donations account: transfers need confirmation', 'vca-asm' ),
+			'econ_send_receipts' => __( 'Structural account: Receipts need to be sent', 'vca-asm' ),
+			'econ_send_receipts' => __( 'Structural account: Receipts from last month (!) need to be sent', 'vca-asm' ),
+			'econ_confirm_receipts' => __( 'Structural account: Receipts need to be confirmed', 'vca-asm' ),
+			'don_confirm_external_transfer' => __( 'Donations account: External transfers need confirmation', 'vca-asm' )
 		);
 	}
 
@@ -181,9 +232,6 @@ class VCA_ASM_City_Finances
 		$this->sendable_receipts = array_merge( $this->late_receipts, $this->current_receipts );
 		$this->sent_receipts = $vca_asm_finances->get_receipts( $id, array( 'status' => 2, 'data_type' => 'receipt_id' ) );
 
-		$this->late_donations = array(); /* ATTENTION */
-		$this->current_donations = array(); /* ATTENTION */
-
 		$this->balanced_month_econ_string = $vca_asm_finances->get_balanced_month( $id, 'econ' );
 		$this->balanced_month_don_string = $vca_asm_finances->get_balanced_month( $id, 'donations' );
 
@@ -231,9 +279,12 @@ class VCA_ASM_City_Finances
 		$this->action_required_econ_confirm_transfer = ! empty( $this->confirmable_econ_transfers );
 
 		$this->action_required_don_balance = ( 12 * intval( date( 'Y' ) ) + intval( date( 'n' ) ) > 12 * intval( date( 'Y', $this->balanced_month_don_threshold_stamp ) ) + intval( date( 'n', $this->balanced_month_don_threshold_stamp ) ) + 1 );
+		$this->action_required_don_balance_several = ( 12 * intval( date( 'Y' ) ) + intval( date( 'n' ) ) > 12 * intval( date( 'Y', $this->balanced_month_don_threshold_stamp ) ) + intval( date( 'n', $this->balanced_month_don_threshold_stamp ) ) + 2 );
 		$this->action_required_econ_balance = ( 12 * intval( date( 'Y' ) ) + intval( date( 'n' ) ) > 12 * intval( date( 'Y', $this->balanced_month_econ_threshold_stamp ) ) + intval( date( 'n', $this->balanced_month_econ_threshold_stamp ) ) + 1 );
+		$this->action_required_econ_balance_several = ( 12 * intval( date( 'Y' ) ) + intval( date( 'n' ) ) > 12 * intval( date( 'Y', $this->balanced_month_econ_threshold_stamp ) ) + intval( date( 'n', $this->balanced_month_econ_threshold_stamp ) ) + 2 );
 
-		$this->action_required_econ_send_receipts = ! empty( $this->late_receipts );
+		$this->action_required_econ_send_receipts = ! empty( $this->sendable_receipts );
+		$this->action_required_econ_send_receipts_late = ! empty( $this->late_receipts );
 		$this->action_required_econ_confirm_receipts = ! empty( $this->sent_receipts );
 
 		$this->action_required_don_city = (
@@ -269,9 +320,119 @@ class VCA_ASM_City_Finances
 	 * @since 1.5
 	 * @access private
 	 */
-	private function set_messages()
+	private function set_messages( $short = false )
 	{
-		return false;
+		$append = true === $short ? '_short' : '';
+
+		if ( $this->action_required ) {
+			$this->messages_meta['action_required'] = $this->{'message_strings'.$short}['action_required'];
+		}
+
+		if ( $this->action_required_city ) {
+			$this->messages_meta['city'] = $this->{'message_strings'.$short}['city'];
+		}
+
+		if ( $this->action_required_office ) {
+			$this->messages_meta['office'] = $this->{'message_strings'.$short}['office'];
+		}
+
+		if ( $this->action_required_econ_city ) {
+			$this->messages_meta['econ_city'] = $this->{'message_strings'.$short}['econ_city'];
+			$this->messages_meta_city['econ'] = $this->{'message_strings'.$short}['econ'];
+		}
+
+		if ( $this->action_required_don_city ) {
+			$this->messages_meta['don_city'] = $this->{'message_strings'.$short}['don_city'];
+			$this->messages_meta_city['don'] = $this->{'message_strings'.$short}['don'];
+		}
+
+		if ( $this->action_required_econ_office ) {
+			$this->messages_meta['econ_office'] = $this->{'message_strings'.$short}['econ_office'];
+			$this->messages_meta_office['econ'] = $this->{'message_strings'.$short}['econ'];
+		}
+
+		if ( $this->action_required_don_office ) {
+			$this->messages_meta['don_office'] = $this->{'message_strings'.$short}['don_office'];
+			$this->messages_meta_office['don'] = $this->{'message_strings'.$short}['don'];
+		}
+
+		if ( $this->action_required_econ_balance_several ) {
+			$this->messages['econ_balance'] = $this->{'message_strings'.$short}['econ_balance_several'];
+			$this->messages_city['econ_balance'] = $this->{'message_strings'.$short}['econ_balance_several'];
+			$this->messages_econ['econ_balance'] = $this->{'message_strings'.$short}['econ_balance_several'];
+			$this->messages_econ_city['econ_balance'] = $this->{'message_strings'.$short}['econ_balance_several'];
+		} elseif ( $this->action_required_econ_balance ) {
+			$this->messages['econ_balance'] = $this->{'message_strings'.$short}['econ_balance'];
+			$this->messages_city['econ_balance'] = $this->{'message_strings'.$short}['econ_balance'];
+			$this->messages_econ['econ_balance'] = $this->{'message_strings'.$short}['econ_balance'];
+			$this->messages_econ_city['econ_balance'] = $this->{'message_strings'.$short}['econ_balance'];
+		}
+
+		if ( $this->action_required_don_balance_several ) {
+			$this->messages['don_balance'] = $this->{'message_strings'.$short}['don_balance_several'];
+			$this->messages_city['don_balance'] = $this->{'message_strings'.$short}['don_balance_several'];
+			$this->messages_don['don_balance'] = $this->{'message_strings'.$short}['don_balance_several'];
+			$this->messages_don_city['don_balance'] = $this->{'message_strings'.$short}['don_balance_several'];
+		} elseif ( $this->action_required_don_balance ) {
+			$this->messages['don_balance'] = $this->{'message_strings'.$short}['don_balance'];
+			$this->messages_city['don_balance'] = $this->{'message_strings'.$short}['don_balance'];
+			$this->messages_don['don_balance'] = $this->{'message_strings'.$short}['don_balance'];
+			$this->messages_don_city['don_balance'] = $this->{'message_strings'.$short}['don_balance'];
+		}
+
+		if ( $this->action_required_econ_transfer ) {
+			$this->messages['econ_transfer'] = $this->{'message_strings'.$short}['econ_transfer'];
+			$this->messages_city['econ_transfer'] = $this->{'message_strings'.$short}['econ_transfer'];
+			$this->messages_econ['econ_transfer'] = $this->{'message_strings'.$short}['econ_transfer'];
+			$this->messages_econ_city['econ_transfer'] = $this->{'message_strings'.$short}['econ_transfer'];
+		}
+
+		if ( $this->action_required_don_transfer ) {
+			$this->messages['don_transfer'] = $this->{'message_strings'.$short}['don_transfer'];
+			$this->messages_city['don_transfer'] = $this->{'message_strings'.$short}['don_transfer'];
+			$this->messages_don['don_transfer'] = $this->{'message_strings'.$short}['don_transfer'];
+			$this->messages_don_city['don_transfer'] = $this->{'message_strings'.$short}['don_transfer'];
+		}
+
+		if ( $this->action_required_econ_confirm_transfer ) {
+			$this->messages['econ_confirm_transfer'] = $this->{'message_strings'.$short}['econ_confirm_transfer'];
+			$this->messages_office['econ_confirm_transfer'] = $this->{'message_strings'.$short}['econ_confirm_transfer'];
+			$this->messages_econ['econ_confirm_transfer'] = $this->{'message_strings'.$short}['econ_confirm_transfer'];
+			$this->messages_econ_office['econ_confirm_transfer'] = $this->{'message_strings'.$short}['econ_confirm_transfer'];
+		}
+
+		if ( $this->action_required_don_confirm_transfer ) {
+			$this->messages['don_confirm_transfer'] = $this->{'message_strings'.$short}['don_confirm_transfer'];
+			$this->messages_office['don_confirm_transfer'] = $this->{'message_strings'.$short}['don_confirm_transfer'];
+			$this->messages_don['don_confirm_transfer'] = $this->{'message_strings'.$short}['don_confirm_transfer'];
+			$this->messages_don_office['don_confirm_transfer'] = $this->{'message_strings'.$short}['don_confirm_transfer'];
+		}
+
+		if ( $this->action_required_don_confirm_external_transfer ) {
+			$this->messages['don_confirm_external_transfer'] = $this->{'message_strings'.$short}['don_confirm_external_transfer'];
+			$this->messages_office['don_confirm_external_transfer'] = $this->{'message_strings'.$short}['don_confirm_external_transfer'];
+			$this->messages_don['don_confirm_external_transfer'] = $this->{'message_strings'.$short}['don_confirm_external_transfer'];
+			$this->messages_don_office['don_confirm_external_transfer'] = $this->{'message_strings'.$short}['don_confirm_external_transfer'];
+		}
+
+		if ( $this->action_required_econ_send_receipts_late ) {
+			$this->messages['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts_late'];
+			$this->messages_city['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts_late'];
+			$this->messages_econ['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts_late'];
+			$this->messages_econ_city['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts_late'];
+		} elseif ( $this->action_required_econ_send_receipts ) {
+			$this->messages['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts'];
+			$this->messages_city['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts'];
+			$this->messages_econ['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts'];
+			$this->messages_econ_city['econ_send_receipts'] = $this->{'message_strings'.$short}['econ_send_receipts'];
+		}
+
+		if ( $this->action_required_econ_confirm_receipts ) {
+			$this->messages['econ_confirm_receipts'] = $this->{'message_strings'.$short}['econ_confirm_receipts'];
+			$this->messages_office['econ_confirm_receipts'] = $this->{'message_strings'.$short}['econ_confirm_receipts'];
+			$this->messages_econ['econ_confirm_receipts'] = $this->{'message_strings'.$short}['econ_confirm_receipts'];
+			$this->messages_econ_office['econ_confirm_receipts'] = $this->{'message_strings'.$short}['econ_confirm_receipts'];
+		}
 	}
 
 	/**
