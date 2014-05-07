@@ -77,8 +77,12 @@ require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-activity.php' );
 require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-city-finances.php' );
 require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-stats.php' );
 require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-supporter.php' );
-/* foreign code */
+/* 2nd party code */
+require_once( VCA_ASM_ABSPATH . '/lib/PHPExcel.php' );
 require_once( VCA_ASM_ABSPATH . '/lib/class-php2excel.php' );
+/* Download Generators */
+require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-workbook.php' );
+require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-finances-workbook.php' );
 /* template classes (non-OOP templates are included on the spot) */
 if ( ! is_admin() ) {
 	require_once( VCA_ASM_ABSPATH . '/templates/class-vca-asm-frontend-activities.php' );

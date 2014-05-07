@@ -83,25 +83,43 @@ class VCA_ASM_Admin_Finances
 		global $wpdb,
 			$vca_asm_finances;
 
-		if ( isset( $_GET['todo'] ) && 'balance' === $_GET['todo'] ) {
-			$city = ! empty( $_POST['city'] ) ? $_POST['city'] : $this->admin_city;
-			if ( isset( $_POST['month_econ'] ) ) {
-				$wpdb->update(
-					$wpdb->prefix . 'vca_asm_finances_accounts',
-					array( 'balanced_month' => $_POST['month_econ'] ),
-					array( 'city_id' => $city, 'type' => 'econ' ),
-					array( '%s' ),
-					array( '%d', '%s' )
-				);
-			}
-			if ( isset( $_POST['month_don'] ) ) {
-				$wpdb->update(
-					$wpdb->prefix . 'vca_asm_finances_accounts',
-					array( 'balanced_month' => $_POST['month_don'] ),
-					array( 'city_id' => $city, 'type' => 'donations' ),
-					array( '%s' ),
-					array( '%d', '%s' )
-				);
+		if ( isset( $_GET['todo'] ) ) {
+			switch ( $_GET['todo'] ) {
+				case 'balance':
+					$city = ! empty( $_POST['city'] ) ? $_POST['city'] : $this->admin_city;
+					if ( isset( $_POST['month_econ'] ) ) {
+						$wpdb->update(
+							$wpdb->prefix . 'vca_asm_finances_accounts',
+							array( 'balanced_month' => $_POST['month_econ'] ),
+							array( 'city_id' => $city, 'type' => 'econ' ),
+							array( '%s' ),
+							array( '%d', '%s' )
+						);
+					}
+					if ( isset( $_POST['month_don'] ) ) {
+						$wpdb->update(
+							$wpdb->prefix . 'vca_asm_finances_accounts',
+							array( 'balanced_month' => $_POST['month_don'] ),
+							array( 'city_id' => $city, 'type' => 'donations' ),
+							array( '%s' ),
+							array( '%d', '%s' )
+						);
+					}
+				break;
+
+				case 'download-data':
+					$data = new VCA_ASM_Finances_Workbook(
+						array(
+							'format' => isset( $_POST['format'] ) ? $_POST['format'] : 'month',
+							'year' => isset( $_POST['year'] ) ? $_POST['year'] : date( 'Y' ),
+							'month' => isset( $_POST['month'] ) ? $_POST['month'] : date( 'm' ),
+							'type' => isset( $_POST['type'] ) ? $_POST['type'] : 'city',
+							'format' => isset( $_POST['format'] ) ? $_POST['format'] : 'xlsx',
+							'gridlines' => ( isset( $_POST['gridlines'] ) && 2 == $_POST['gridlines'] ) ? false : true
+						)
+					);
+					$data->output();
+				break;
 			}
 		}
 
@@ -448,7 +466,7 @@ class VCA_ASM_Admin_Finances
 	private function overview_global( $messages = array() )
 	{
 		$active_tab = 'tabular';
-		if ( isset( $_GET['tab'] ) && in_array( $_GET['tab'], array( 'summary', 'tabular', 'cities' ) ) ) {
+		if ( isset( $_GET['tab'] ) && in_array( $_GET['tab'], array( 'summary', 'tabular', 'cities', 'download' ) ) ) {
 			$active_tab = $_GET['tab'];
 		}
 
@@ -462,6 +480,11 @@ class VCA_ASM_Admin_Finances
 				'title' => _x( 'Cities', ' Admin Menu', 'vca-asm' ) . ' (' . _x( 'tabular', ' Admin Menu', 'vca-asm' ) . ')',
 				'value' => 'tabular',
 				'icon' => 'icon-city'
+			),
+			array(
+				'title' => _x( 'Download Data', ' Admin Menu', 'vca-asm' ),
+				'value' => 'download',
+				'icon' => 'icon-print'
 			)
 			//,
 			//array(
@@ -491,6 +514,10 @@ class VCA_ASM_Admin_Finances
 				$output .= $this->overview_global_tabular( $messages );
 			break;
 
+			case 'download':
+				$output .= $this->overview_global_download( $messages );
+			break;
+
 			case 'summary':
 			default:
 				$output .= $this->overview_global_summary( $messages );
@@ -500,6 +527,163 @@ class VCA_ASM_Admin_Finances
 		$output .= $adminpage->bottom();
 
 		echo $output;
+	}
+
+	private function overview_global_download( $messages = array() )
+	{
+		$url = '?page=vca-asm-finances&tab=download';
+
+		$output = '';
+
+		$mbs = new VCA_ASM_Admin_Metaboxes( array(
+			'echo' => false,
+			'columns' => 1,
+			'running' => 1,
+			'id' => '',
+			'title' => __( 'Structural Accounts for Tax Accounting', 'vca-asm' ),
+			'js' => true
+		));
+
+		$years = array();
+		for ( $y = date( 'Y' ); $y >= 2014; $y-- ) {
+			$years[] = array(
+				'value' => $y,
+				'label' => $y
+			);
+		}
+		$months = array();
+		for ( $m = 1; $m <= 12; $m++ ) {
+			$months[] = array(
+				'value' => $m,
+				'label' => strftime( '%B', strtotime( '01.' . $m . '.2014' ) )
+			);
+		}
+
+		$fields = array(
+			array(
+				'type' => 'select',
+				'id' => 'timeframe',
+				'options' => array(
+					array(
+						'label' => __( 'Monthly', 'vca-asm' ),
+						'value' => 'month'
+					),
+					array(
+						'label' => __( 'Annually', 'vca-asm' ),
+						'value' => 'year'
+					),
+					array(
+						'label' => __( 'Total', 'vca-asm' ),
+						'value' => 'total'
+					)
+				),
+				'label' => __( 'Timeframe', 'vca-asm' ),
+				'desc' => __( 'Output of structural revenues and expenditures in this kind of timeframe.', 'vca-asm' )
+			),
+			array(
+				'type' => 'select',
+				'id' => 'year',
+				'options' => $years,
+				'label' => __( 'Year', 'vca-asm' ),
+				'desc' => __( 'Data from this year.', 'vca-asm' ),
+				'default' => date( 'Y' )
+			),
+			array(
+				'type' => 'select',
+				'id' => 'month',
+				'options' => $months,
+				'label' => __( 'Month', 'vca-asm' ),
+				'desc' => __( 'Data from this month.', 'vca-asm' ),
+				'default' => date( 'm', mktime( 0, 0, 1, ( date( 'n' ) - 1 ), 1, '2014' ) )
+			),
+			array(
+				'type' => 'select',
+				'id' => 'type',
+				'options' => array(
+					array(
+						'label' => __( 'City', 'vca-asm' ),
+						'value' => 'city'
+					),
+					array(
+						'label' => __( 'Country', 'vca-asm' ),
+						'value' => 'nation'
+					)
+				),
+				'label' => __( 'Type', 'vca-asm' ),
+				'desc' => __( 'Group data by geography.', 'vca-asm' )
+			),
+			array(
+				'type' => 'select',
+				'id' => 'format',
+				'options' => array(
+					array(
+						'value' => 'xlsx',
+						'label' => __( 'Office 2007 (.xlsx)', 'vca-asm' )
+					),
+					array(
+						'value' => 'xlsx2003',
+						'label' => __( 'Office 2003, (.xlsx)', 'vca-asm' )
+					),
+					array(
+						'value' => 'xls',
+						'label' => __( 'Office 95 to XP (.xls)', 'vca-asm' )
+					),
+					array(
+						'value' => 'csv',
+						'label' => __( 'Plain text, single sheet (.csv)', 'vca-asm' )
+					)
+				),
+				'label' => _x( 'Format', 'Excel File Format', 'vca-asm' ),
+				'desc' => __( 'Download as this kind of file format.', 'vca-asm' ) . '<br />' .
+					__( 'Choose &quot;Office 2007&quot; for best results.', 'vca-asm' ) . '<br />' .
+					__( 'Note that &quot;.csv&quot; files do not support sheets/tabs.', 'vca-asm' )
+			),
+			array(
+				'type' => 'radio',
+				'id' => 'gridlines',
+				'options' => array(
+					array(
+						'value' => 1,
+						'label' => __( 'Show', 'vca-asm' )
+					),
+					array(
+						'value' => 2,
+						'label' => __( 'Hide', 'vca-asm' )
+					)
+				),
+				'default' => 1,
+				'label' => __( 'Gridlines', 'vca-asm' ),
+				'desc' => __( 'Do you want the file to show gridlines?', 'vca-asm' )
+			)
+		);
+
+		$form_args = array(
+			'echo' => false,
+			'form' => true,
+			'method' => 'post',
+			'metaboxes' => false,
+			'js' => false,
+			'url' => $url,
+			'action' => $url . '&todo=download-data',//&noheader=true',
+			'top_button' => false,
+			'button' => __( 'Download Spreadsheet', 'vca-asm' ),
+			'back' => false,
+			'button_id' => 'submit',
+			'fields' => $fields
+		);
+
+		$output .= $mbs->top();
+
+		$output .= $mbs->mb_top();
+
+		$the_form = new VCA_ASM_Admin_Form( $form_args );
+		$output .= $the_form->output();
+
+		$output .= $mbs->mb_bottom();
+
+		$output .= $mbs->bottom();
+
+		return $output;
 	}
 
 	private function overview_global_summary( $messages = array() )
@@ -1092,7 +1276,10 @@ class VCA_ASM_Admin_Finances
 													(
 														'donation' === $type &&
 														isset( $_POST['cash'] ) &&
-														0 === $_POST['cash']
+														(
+															0 === $_POST['cash'] ||
+															'0' === $_POST['cash']
+														)
 													)
 												)
 											) {
@@ -1109,12 +1296,6 @@ class VCA_ASM_Admin_Finances
 															) ||
 															'donations' === $acc_type
 														)
-													)
-													||
-													(
-														'donation' === $type &&
-														isset( $_POST['cash'] ) &&
-														0 == $_POST['cash']
 													)
 													||
 													'expenditure' === $type
@@ -2105,7 +2286,7 @@ class VCA_ASM_Admin_Finances
 							),
 							array(
 								'type' => 'radio',
-								'label' => __( 'Kind of revenue', 'vca-asm' ),//__( 'Income Account', 'vca-asm' ),
+								'label' => __( 'Kind of revenue', 'vca-asm' ),
 								'id' => 'ei_account',
 								'options' => $vca_asm_finances->ei_options_array( array(
 									'type' => 'income',
@@ -2113,7 +2294,8 @@ class VCA_ASM_Admin_Finances
 									'nation' => $nation
 								)),
 								'required' => true,
-								'desc' => __( 'Of what category is this revenue?', 'vca-asm' )//__( 'Under what category should this revenue be booked?', 'vca-asm' )
+								'desc' => __( 'Of what category is this revenue?', 'vca-asm' ),
+								'validation' => 'required'
 							),
 							array(
 								'type' => 'radio',
@@ -2124,7 +2306,8 @@ class VCA_ASM_Admin_Finances
 									'nation' => $nation
 								)),
 								'required' => true,
-								'desc' => __( 'How can the activity be categorized?', 'vca-asm' )
+								'desc' => __( 'How can the activity be categorized?', 'vca-asm' ),
+								'validation' => 'required'
 							),
 							array(
 								'type' => 'text',

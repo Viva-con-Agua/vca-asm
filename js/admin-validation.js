@@ -31,7 +31,24 @@ function clickCallback() {
 
 function required(el) {
 	var theVal = el.val();
-	if ( ! el.val() ) {
+	if ( 'radio' === el.attr('type') ) {
+		var theName = el.attr('name');
+		var isEmpty = true;
+		$('input[name="'+theName+'"]').each( function() {
+			if ( $(this).is(':checked') ) {
+				isEmpty = false;
+			}
+		});
+		if ( isEmpty ) {
+			el.closest('tr#row-'+theName).find('span.required').addClass('empty');
+			el.addClass('warning');
+			return false;
+		} else {
+			el.closest('tr#row-'+theName).find('span.required').removeClass('empty');
+			el.closest('tr#row-'+theName).find('input[name="'+theName+'"]').removeClass('warning');
+			return true;
+		}
+	} else if ( ! el.val() ) {
 		el.closest('tr').find('span.required').addClass('empty');
 		el.addClass('warning');
 		return false;

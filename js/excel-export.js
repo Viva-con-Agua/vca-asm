@@ -9,7 +9,6 @@ function p1exportExcel( theType ) {
 	if ( 'applicants' !== theType && 'waiting' !== theType ) {
 		theType = 'participants';
 	}
-	alert( theType );
 	jQuery('#excel-frame').attr( 'src', excelParams.relpath + 'ajax/export-excel.php?activity=' + excelParams.pID + '&type=' + theType );
 	return false;
 }

@@ -336,7 +336,10 @@ class VCA_ASM_Admin_Form {
 							(
 								(
 									$field['value'] == $option['value'] &&
-									$option['value'] != 0
+									(
+										$option['value'] === 0 ||
+										$option['value'] === '0'
+									)
 								) ||
 								$field['value'] === $option['value']
 							)
@@ -397,14 +400,21 @@ class VCA_ASM_Admin_Form {
 						$output .= '<input type="radio"' .
 							'name="' . $field['name'] .
 							'" id="' . $field['id'] . '_' . $option['value'] .
-							'" value="' . $option['value'] . '" ';
+							'" class="' . $field['id'];
+							if ( isset( $field['required'] ) ) {
+								$output .= ' required';
+							}
+							$output .= '" value="' . $option['value'] . '" ';
 					if (
 						(
 							isset( $field['value'] ) &&
 							(
 								(
 									$field['value'] == $option['value'] &&
-									$option['value'] != 0
+									(
+										$option['value'] === 0 ||
+										$option['value'] === '0'
+									)
 								) ||
 								$field['value'] === $option['value']
 							)

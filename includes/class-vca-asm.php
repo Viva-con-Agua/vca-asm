@@ -201,7 +201,7 @@ class VCA_ASM {
 			array( 'jquery', 'jquery-ui-slider' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-admin-settings', VCA_ASM_RELPATH . 'js/admin-settings.js', array( 'jquery', 'jquery-ui-slider' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-admin-supporter-filter', VCA_ASM_RELPATH . 'js/admin-supporter-filter.js', array( 'jquery' ), '2013.11.6.1', true );
-		wp_register_script( 'vca-asm-admin-validation', VCA_ASM_RELPATH . 'js/admin-validation.js', array( 'jquery' ), '2013.11.6.19', true );
+		wp_register_script( 'vca-asm-admin-validation', VCA_ASM_RELPATH . 'js/admin-validation.js', array( 'jquery' ), '2014.04.22.5', true );
 		wp_register_script( 'vca-asm-excel-export', VCA_ASM_RELPATH . 'js/excel-export.js', array( 'jquery' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-tooltip', VCA_ASM_RELPATH . 'js/tooltip.js', array( 'jquery' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-ctr-to-cty', VCA_ASM_RELPATH . 'js/ctr-to-cty.js', array( 'jquery' ), '2013.11.6.1', true );

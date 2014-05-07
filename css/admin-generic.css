@@ -639,6 +639,12 @@ a:hover .nt-icon-settings {
 #icon-print {
 	background-position: -608px 0px;
 }
+.nt-icon-print {
+	background-position: -304px 0px;
+}
+a:hover .nt-icon-print {
+	background-position: -304px -16px;
+}
 #icon-speech,
 #icon-bubble {
 	background-position: -640px 0px;

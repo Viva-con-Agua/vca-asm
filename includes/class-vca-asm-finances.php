@@ -81,7 +81,9 @@ class VCA_ASM_Finances
 			'city_id' => 0,
 			'account_type' => 'donations',
 			'transaction_type' => 'donation',
-			'annual' => false,
+			'annual' => false, //deprecated
+			'year' => false,
+			'month' => false,
 			'date_limit' => false,
 			'orderby' => 'transaction_date',
 			'order' => 'DESC',
@@ -90,6 +92,10 @@ class VCA_ASM_Finances
 		);
 		$args = wp_parse_args( $args, $default_args );
 		extract( $args );
+
+		if ( false === $year && ! empty( $annual ) ) {
+			$year = $annual;
+		}
 
 		$where = "WHERE city_id = " . $city_id . " AND account_type = '" . $account_type . "'";
 		if ( 'donations' === $account_type )
@@ -106,8 +112,10 @@ class VCA_ASM_Finances
 				$where .= " AND transaction_type = '" . $transaction_type . "'";
 			}
 		}
-		if ( is_numeric( $annual ) ) {
-			$where .= " AND transaction_date > " . mktime( 0, 0, 1, 1, 1, $annual ) . " AND transaction_date < " . mktime( 23, 59, 59, 12, 31, $annual );
+		if ( is_numeric( $year ) && is_numeric( $month ) ) {
+			$where .= " AND transaction_date > " . mktime( 0, 0, 1, $month, 1, $year ) . " AND transaction_date < " . mktime( 23, 59, 59, $month, date('t', mktime( 0, 0, 1, $month, 1, $year ) ), $year );
+		} elseif ( is_numeric( $year ) ) {
+			$where .= " AND transaction_date > " . mktime( 0, 0, 1, 1, 1, $year ) . " AND transaction_date < " . mktime( 23, 59, 59, 12, 31, $year );
 		} elseif ( is_numeric( $date_limit ) ) {
 			$where .= " AND transaction_date > " . $date_limit;
 		}
@@ -575,8 +583,11 @@ class VCA_ASM_Finances
 	 * @since 1.5
 	 * @access public
 	 */
-	public function get_ei_account( $id = 0 )
+	public function get_ei_account( $id = 0, $number = false )
 	{
+		if ( $number ) {
+			return $this->get_meta( $id, 'id', '', 'value' );
+		}
 		return $this->get_meta( $id, 'id' );
 	}
 
