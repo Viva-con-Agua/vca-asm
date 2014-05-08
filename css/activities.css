@@ -4,6 +4,8 @@ This stylesheet is responsible for
 how activities are displayed in the front-end
 */
 
+
+
 .activities-container-wrap {
 	width: 103.8%;
 	margin: 0 -1.9%;
@@ -80,6 +82,10 @@ how activities are displayed in the front-end
 	box-sizing: border-box;
 }
 
+.activity.activity-goldeimerfestival.single-activity {
+	background: #c4f3e2;
+}
+
 .activity-island {
 	padding: 1.2em 1.3em .9em;
 	border-radius: 1em;
@@ -88,6 +94,10 @@ how activities are displayed in the front-end
 	-webkit-box-sizing: border-box; /* add modernizr test and polyfill this shit! */
 	-moz-box-sizing: border-box;
 	box-sizing: border-box;
+}
+
+.activity-goldeimerfestival .activity-island {
+	background: #c4f3e2;
 }
 
 .activity a {
@@ -120,18 +130,53 @@ how activities are displayed in the front-end
 	text-shadow: 0 0 3px #008fc1;
 	text-decoration: none;
 }
+
+.activity-goldeimerfestival a {
+	border-color: #a44732;
+}
+.no-touch .activity.activity-goldeimerfestival a:focus,
+.activity.activity-goldeimerfestival a:active,
+.activity.activity-goldeimerfestival a:hover {
+	color: #a44732;
+	text-shadow: 0 0 1px #a44732;
+	border-color: #a44732;
+}
+.activity.activity-goldeimerfestival h4 {
+	color: #a44732;
+}
+.activity.activity-goldeimerfestival h4 a {
+	color: #a44732;
+	border-bottom: 0;
+}
+.no-touch .activity.activity-goldeimerfestival h4 a:hover,
+.activity.activity-goldeimerfestival h4 a:focus,
+.activity h4 a:active {
+	color: #714d45;
+	text-shadow: 0 0 3px #a44732;
+}
+
 .activity p.type {
 	color: #008fc1 !important;
 	font-size: 1em;
 	line-height: 1;
 	margin: 0 0 1.1em;
 }
+.activity.activity-goldeimerfestival p.type {
+	color: #a44732 !important;
+	font-size: 1em;
+	line-height: 1;
+	margin: 0 0 1.1em;
+}
+
 .activity h5 {
 	font-size: 1.4em;
 	font-weight: 700;
 	line-height: 1.5;
 	margin-top: 1em;
 	color: #584619;
+}
+.activity.activity-goldeimerfestival h5 {
+	color: #365a4d;
 }
 /*.no-touch .activity:hover,
 .activity:active {
@@ -159,9 +204,33 @@ how activities are displayed in the front-end
 	filter: none;
 	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Q5Y2RiOCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
 }
+
+.activity.activity-goldeimerfestival input,
+.activity.activity-goldeimerfestival textarea,
+.activity.activity-goldeimerfestival select {
+	border-color: #365a4d;
+	background: #aad3c4; /* Old browsers */
+	background: -moz-linear-gradient(top, #aad3c4 0%, #ffffff 100%); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#aad3c4), color-stop(100%,#ffffff)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(top, #aad3c4 0%,#ffffff 100%); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(top, #aad3c4 0%,#ffffff 100%); /* Opera 11.10+ */
+	background: -ms-linear-gradient(top, #aad3c4 0%,#ffffff 100%); /* IE10+ */
+	background: linear-gradient(to bottom, #aad3c4 0%,#ffffff 100%); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#aad3c4', endColorstr='#ffffff',GradientType=0 ); /* IE6-8 */
+}
+.ie9 .activity.activity-goldeimerfestival input,
+.ie9 .activity.activity-goldeimerfestival textarea,
+.ie9 .activity.activity-goldeimerfestival select {
+	filter: none;
+	background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2FhZDNjNCIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmZmZmZmYiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+}
+
 .activity input:focus,
 .activity textarea:focus,
-.activity select:focus {
+.activity select:focus,
+.activity.activity-goldeimerfestival input:focus,
+.activity.activity-goldeimerfestival textarea:focus,
+.activity.activity-goldeimerfestival select:focus {
 	background: #ffffff;
 }
 .activity input[type=submit] {
@@ -189,6 +258,30 @@ how activities are displayed in the front-end
 						0 1px 2px #ddd0ac;
     box-shadow: inset 0 1px 2px #584619,
 						0 1px 2px #ddd0ac;
+}
+.activity.activity-goldeimerfestival input[type=submit] {
+	color: #ffffff;
+	background: #42d9a3;
+    -webkit-box-shadow: inset 0 1px 2px #c4f3e2,
+						0 1px 2px #365a4d;
+    -moz-box-shadow: inset 0 1px 2px #c4f3e2,
+						0 1px 2px #365a4d;
+    box-shadow: inset 0 1px 2px #aad3c4,
+						0 1px 2px #365a4d;
+}
+.no-touch .activity.activity-goldeimerfestival input[type=submit]:hover  {
+    text-shadow: 0 0 3px #aad3c4;
+
+}
+.activity.activity-goldeimerfestival input[type=submit]:active  {
+	color: #ffffff;
+	background: #365a4d;
+    -webkit-box-shadow: inset 0 2px 4px #4c5a55,
+						0 1px 0 #aad3c4;
+    -moz-box-shadow: inset 0 1px 2px #4c5a55,
+						0 1px 2px #aad3c4;
+    box-shadow: inset 0 1px 2px #4c5a55,
+						0 1px 2px #aad3c4;
 }
 img.activity-icon {
 	margin: 0 0 0 1.6em;

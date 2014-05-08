@@ -53,6 +53,7 @@ class VCA_ASM {
 			$GLOBALS['vca_asm_admin_emails'] = new VCA_ASM_Admin_Emails();
 			$GLOBALS['vca_asm_admin_finances'] = new VCA_ASM_Admin_Finances();
 			$GLOBALS['vca_asm_admin_geography'] = new VCA_ASM_Admin_Geography();
+			$GLOBALS['vca_asm_admin_goldeimer'] = new VCA_ASM_Admin_Goldeimer();
 			$GLOBALS['vca_asm_admin_home'] = new VCA_ASM_Admin_Home();
 			$GLOBALS['vca_asm_admin_network'] = new VCA_ASM_Admin_Network();
 			$GLOBALS['vca_asm_admin_settings'] = new VCA_ASM_Admin_Settings();
@@ -100,6 +101,13 @@ class VCA_ASM {
 		$caps[] = 'vca_asm_manage_network_nation';
 		$caps[] = 'vca_asm_manage_network_global';
 
+		$caps[] = 'vca_asm_view_goldeimer';
+		$caps[] = 'vca_asm_view_goldeimer_nation';
+		$caps[] = 'vca_asm_view_goldeimer_global';
+		$caps[] = 'vca_asm_manage_goldeimer';
+		$caps[] = 'vca_asm_manage_goldeimer_nation';
+		$caps[] = 'vca_asm_manage_goldeimer_global';
+
 		$caps[] = 'vca_asm_view_supporters';
 		$caps[] = 'vca_asm_view_supporters_nation';
 		$caps[] = 'vca_asm_view_supporters_global';
@@ -144,6 +152,13 @@ class VCA_ASM {
 		$caps[] = 'vca_asm_delete_network_activities';
 		$caps[] = 'vca_asm_delete_others_network_activities';
 		$caps[] = 'vca_asm_read_private_network_activities';
+
+		$caps[] = 'vca_asm_publish_goldeimer_activities';
+		$caps[] = 'vca_asm_edit_goldeimer_activities';
+		$caps[] = 'vca_asm_edit_others_goldeimer_activities';
+		$caps[] = 'vca_asm_delete_goldeimer_activities';
+		$caps[] = 'vca_asm_delete_others_goldeimer_activities';
+		$caps[] = 'vca_asm_read_private_goldeimer_activities';
 
 		return $caps;
 	}
@@ -230,7 +245,7 @@ class VCA_ASM {
 
 		wp_register_style( 'jquery-ui-framework', VCA_ASM_RELPATH . 'css/jquery-ui-framework.css' );
 		wp_register_style( 'jquery-ui-custom', VCA_ASM_RELPATH . 'css/jquery-ui-custom.css' );
-		wp_register_style( 'vca-asm-admin-generic-style', VCA_ASM_RELPATH . 'css/admin-generic.css', false, '2014.04.12.4' );
+		wp_register_style( 'vca-asm-admin-generic-style', VCA_ASM_RELPATH . 'css/admin-generic.css', false, '2014.5.7.2' );
 
 		wp_register_style( 'vca-asm-tooltips', VCA_ASM_RELPATH . 'css/admin-tooltips.css', false, '2013.11.6.1' );
 
@@ -252,7 +267,7 @@ class VCA_ASM {
 
 		wp_enqueue_script( 'vca-asm-profile' );
 
-		wp_register_style( 'vca-asm-activities-style', VCA_ASM_RELPATH . 'css/activities.css', false, '2013.11.15.4' );
+		wp_register_style( 'vca-asm-activities-style', VCA_ASM_RELPATH . 'css/activities.css', false, '2014.5.7.15' );
 		wp_register_style( 'vca-asm-isotope-style', VCA_ASM_RELPATH . 'css/isotope.css', false, '2013.11.6.3' );
 
 		if ( is_singular( $vca_asm_activities->activity_types ) ) {

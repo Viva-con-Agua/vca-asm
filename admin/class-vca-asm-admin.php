@@ -23,7 +23,7 @@ class VCA_ASM_Admin {
 	 */
 	public function high_priority_admin_menu() {
 		global $wpdb, $current_user,
-			$vca_asm_registrations, $vca_asm_admin_actions, $vca_asm_admin_emails, $vca_asm_admin_education, $vca_asm_admin_finances, $vca_asm_admin_geography, $vca_asm_admin_home, $vca_asm_admin_network, $vca_asm_admin_settings, $vca_asm_admin_slot_allocation, $vca_asm_admin_supporters;
+			$vca_asm_registrations, $vca_asm_admin_actions, $vca_asm_admin_emails, $vca_asm_admin_education, $vca_asm_admin_finances, $vca_asm_admin_geography, $vca_asm_admin_goldeimer, $vca_asm_admin_home, $vca_asm_admin_network, $vca_asm_admin_settings, $vca_asm_admin_slot_allocation, $vca_asm_admin_supporters;
 
 		//sleep(60);
 
@@ -132,6 +132,25 @@ class VCA_ASM_Admin {
 			array( $vca_asm_admin_geography, 'control' )
 		);
 
+		/* Network Menu */
+		add_menu_page(
+			__( 'Goldeimer', 'vca-asm' ),
+			__( 'Goldeimer', 'vca-asm' ),
+			'vca_asm_view_goldeimer',
+			'vca-asm-goldeimer',
+			array( $vca_asm_admin_goldeimer, 'goldeimer_overview' ),
+			VCA_ASM_RELPATH . 'img/icon-goldeimer_32.png',
+			106
+		);
+		add_submenu_page(
+			'vca-asm-goldeimer',
+			'',
+			'',
+			'vca_asm_view_goldeimer',
+			'vca-asm-goldeimer',
+			array( $vca_asm_admin_goldeimer, 'goldeimer_overview' )
+		);
+
 		/* Emails Menu */
 		add_menu_page(
 			__( 'Emails', 'vca-asm' ),
@@ -140,7 +159,7 @@ class VCA_ASM_Admin {
 			'vca-asm-emails',
 			array( $vca_asm_admin_emails, 'sent_control' ),
 			VCA_ASM_RELPATH . 'img/icon-mail_32.png',
-			106
+			107
 		);
 		add_submenu_page(
 			'vca-asm-emails',
@@ -184,7 +203,7 @@ class VCA_ASM_Admin {
 				'vca-asm-finances',
 				array( $vca_asm_admin_finances, 'ff_control' ),
 				VCA_ASM_RELPATH . 'img/icon-finances_32.png',
-				107
+				108
 			);
 			add_submenu_page(
 				'vca-asm-finances',
@@ -202,7 +221,7 @@ class VCA_ASM_Admin {
 				'vca-asm-finances',
 				array( $vca_asm_admin_finances, 'overview_control' ),
 				VCA_ASM_RELPATH . 'img/icon-finances_32.png',
-				107
+				109
 			);
 			add_submenu_page(
 				'vca-asm-finances',
@@ -257,7 +276,7 @@ class VCA_ASM_Admin {
 			'vca-asm-settings',
 			array( $vca_asm_admin_settings, 'control' ),
 			VCA_ASM_RELPATH . 'img/icon-settings_32.png',
-			109
+			111
 		);
 		add_submenu_page(
 			'vca-asm-settings',
@@ -316,6 +335,14 @@ class VCA_ASM_Admin {
 			__( 'Slots &amp; Participants', 'vca-asm' ),
 			'vca_asm_view_network',
 			'vca-asm-network-slot-allocation',
+			array( $vca_asm_admin_slot_allocation, 'control' )
+		);
+		add_submenu_page(
+			'vca-asm-goldeimer',
+			__( 'Slots &amp; Participants', 'vca-asm' ),
+			__( 'Slots &amp; Participants', 'vca-asm' ),
+			'vca_asm_view_goldeimer',
+			'vca-asm-goldeimer-slot-allocation',
 			array( $vca_asm_admin_slot_allocation, 'control' )
 		);
 	}

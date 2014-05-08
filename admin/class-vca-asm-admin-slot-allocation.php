@@ -23,7 +23,8 @@ class VCA_ASM_Admin_Slot_Allocation {
 	private $departments = array(
 		'actions' => 'Actions',
 		'education' => 'Education',
-		'network' => 'Network'
+		'network' => 'Network',
+		'goldeimer' => 'Goldeimer'
 	);
 	private $active_tab = 'apps';
 
@@ -49,6 +50,9 @@ class VCA_ASM_Admin_Slot_Allocation {
 					break;
 					case 'network':
 						$this->department = 'network';
+					break;
+					case 'goldeimer':
+						$this->department = 'goldeimer';
 					break;
 				}
 			}
@@ -1495,7 +1499,8 @@ class VCA_ASM_Admin_Slot_Allocation {
 		$this->departments = array(
 			'actions' => _x( 'Actions', 'Department Name', 'vca-asm' ),
 			'education' => _x( 'Education', 'Department Name', 'vca-asm' ),
-			'network' => _x( 'Network', 'Department Name', 'vca-asm' )
+			'network' => _x( 'Network', 'Department Name', 'vca-asm' ),
+			'goldeimer' => _x( 'Goldeimer Compost-Toilets', 'Department Name', 'vca-asm' )
 		);
 	}
 

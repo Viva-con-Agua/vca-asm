@@ -158,7 +158,10 @@ class VCA_ASM_Frontend_Activities {
 			$geo_qs = '';
 			$default_switch = true;
 			if ( $with_filter ) {
-				if ( isset( $_GET['mnth'] ) && is_numeric( $_GET['mnth'] ) ) {
+				if ( isset( $_GET['selection'] ) && 'goldeimer' === $_GET['selection'] ) {
+					$mnth_filter = 0;
+					$mnth_qs = '&mnth=' . $mnth_filter;
+				} elseif ( isset( $_GET['mnth'] ) && is_numeric( $_GET['mnth'] ) ) {
 					$mnth_filter = $_GET['mnth'];
 					$mnth_qs = '&mnth=' . $mnth_filter;
 					$default_switch = false;
@@ -166,7 +169,10 @@ class VCA_ASM_Frontend_Activities {
 					$mnth_filter = date( 'n' );
 					$mnth_qs = '&mnth=' . $mnth_filter;
 				}
-				if ( isset( $_GET['ctr'] ) && ( is_numeric( $_GET['ctr'] ) ) ) {
+				if ( isset( $_GET['selection'] ) && 'goldeimer' === $_GET['selection'] ) {
+					$geo_filter = 'all';
+					$geo_qs = '&ctr=' . 0;
+				} elseif ( isset( $_GET['ctr'] ) && ( is_numeric( $_GET['ctr'] ) ) ) {
 					$default_switch = false;
 					$geo_filter = $_GET['ctr'];
 					$geo_qs = '&ctr=' . $geo_filter;
@@ -192,7 +198,10 @@ class VCA_ASM_Frontend_Activities {
 						$geo_qs = '&ctr=' . $geo_filter;
 					}
 				}
-				if ( isset( $_GET['type'] ) ) {
+				if ( isset( $_GET['selection'] ) && 'goldeimer' === $_GET['selection'] ) {
+					$type_filter = 'goldeimerfestival';
+					$type_qs = '&type=' . $type_filter;
+				} elseif ( isset( $_GET['type'] ) ) {
 					$type_filter = $_GET['type'];
 					$type_qs = '&type=' . $type_filter;
 					$default_switch = false;
@@ -234,7 +243,10 @@ class VCA_ASM_Frontend_Activities {
 				$this->sort_terms['type'] = __( 'Type', 'vca-asm' );
 			}
 
-			if ( ! isset( $mnth_filter ) || ! in_array( $mnth_filter, $this->months ) ) {
+			if (
+				( ! isset( $_GET['selection'] ) || 'goldeimer' !== $_GET['selection'] ) &&
+				( ! isset( $mnth_filter ) || ! in_array( $mnth_filter, $this->months ) )
+			) {
 				$mnth_filter = ! empty( $this->months ) ? $this->months[0] : 0;
 				$mnth_qs = '&mnth=' . $mnth_filter;
 			}
@@ -355,7 +367,7 @@ class VCA_ASM_Frontend_Activities {
 
 					$type_addition = ! empty( $the_activity->nation_name ) ? ' (' . $the_activity->nation_name . ')' : '';
 
-					$output .= '<div class="activity month-' . $cur_month . ' ctr-' . $cur_nat . ' type-' . $cur_type;
+					$output .= '<div class="activity activity-' . $the_activity->type . ' month-' . $cur_month . ' ctr-' . $cur_nat . ' type-' . $cur_type;
 					$output .= $cur_cg === $user_cg ? ' own-cg' : '';
 					$output .= $cur_city === $user_city ? ' own-cty' : '';
 
@@ -518,7 +530,13 @@ class VCA_ASM_Frontend_Activities {
 									_x( 'If you wish to send a message with your application, do so here.', 'Frontend: Application Process', 'vca-asm' ) .
 								'</span>' .
 							'</div><div class="form-row">' .
-								'<input type="submit" id="submit_form" name="submit_form" value="' . __( 'Apply', 'vca-asm' ) . '" />' .
+								'<input type="submit" id="submit_form" name="submit_form" value="';
+								if ( 'goldeimerfestival' === $the_activity->type ) {
+									$output .= __( 'Apply', 'vca-asm' );
+								} else {
+									$output .= __( 'Apply', 'vca-asm' );
+								}
+								$output .= '" />' .
 							'</div></form>';
 					}
 
@@ -593,7 +611,7 @@ class VCA_ASM_Frontend_Activities {
 							$anchors .= '<a ';
 							if ( isset( $mnth_filter ) && $month == $mnth_filter && ( ! $user_cg_has_activity || in_array( $month, $user_cg_month ) ) ) {
 								$anchors .= 'class="active-option" ';
-								$dropdown .= 'class="active-option" selected="selected" ';
+								$dropdown .= 'class="active-option" selected="elected" ';
 							}
 							$dropdown .= 'value="' . $month . '" data-filter=".month-' . $month . '">' . strftime( '%B', mktime( 0, 0, 0, $month, 13 ) ) . '</option>';
 							$anchors .= 'title="' . __( 'Filter by month', 'vca-asm' ) . '" href="' . get_bloginfo( 'url' ) . '?mnth=' . $month . $geo_qs . $type_qs . $sort_qs . '" data-filter=".month-' . $month . '">' . strftime( '%B', mktime( 0, 0, 0, $month, 13 ) ) . '</a>';
@@ -835,7 +853,7 @@ class VCA_ASM_Frontend_Activities {
 				$the_activity = new VCA_ASM_Activity( get_the_ID() );
 
 				$output .= '<li>' .
-						'<div class="activity minimalistic-activity activity-full-width"><div class="activity-island">' .
+						'<div class="activity activity-' . $the_activity->type . ' minimalistic-activity activity-full-width"><div class="activity-island">' .
 
 							'<img class="activity-icon" alt="' . $the_activity->nice_type . '" src="' . $the_activity->icon_url . '" />' .
 
