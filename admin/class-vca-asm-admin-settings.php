@@ -474,7 +474,7 @@ class VCA_ASM_Admin_Settings {
 								array( '%s' ),
 								array( '%s' )
 						);
-					} elseif( $fields[$i]['fields'][$j]['type'] == 'checkbox' && isset( $_POST[$fields[$i]['fields'][$j]['id']] ) ) {
+					} elseif ( $fields[$i]['fields'][$j]['type'] == 'checkbox' && isset( $_POST[$fields[$i]['fields'][$j]['id']] ) ) {
 						$wpdb->update(
 							$wpdb->prefix . 'vca_asm_auto_responses',
 							array(
@@ -484,7 +484,7 @@ class VCA_ASM_Admin_Settings {
 								array( '%d' ),
 								array( '%s' )
 						);
-					} elseif( $fields[$i]['fields'][$j]['type'] == 'checkbox' ) {
+					} elseif ( $fields[$i]['fields'][$j]['type'] == 'checkbox' ) {
 						$wpdb->update(
 							$wpdb->prefix . 'vca_asm_auto_responses',
 							array(

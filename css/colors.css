@@ -1,3 +1,35 @@
+/*
+ * NEW
+ */
+
+blue100: #009ac7
+blue75: #00acd2
+blue50: #6ac2de
+blue25: #c7d8de
+blue10: #ddeff6
+
+darkblue100: #0e6c8f
+darkblue75: #5586a4
+darkblue50: #86a4bc
+darkblue25: #9eabb6
+darkblue10: #e0e5eb
+
+brown100: #9c6d3e
+brown75: #b38a62
+brown50: #caac8c
+brown25: #e2d0bd
+brown10: #f1e8df
+
+grey100: #414042
+grey75: #727476
+grey50: #9d9fa2
+grey25: #cccecf
+grey10: #e9e9ea
+
+/*
+ * OLD
+ *
+
 blue100: #008fc1
 blue75: #00a8cf
 blue50: #7ec5e0
@@ -32,3 +64,5 @@ beige100: #e3cf9a
 beige75: #ebdbb3
 beige50: #f1e6cc
 beige25: #f9f3e6
+
+ */

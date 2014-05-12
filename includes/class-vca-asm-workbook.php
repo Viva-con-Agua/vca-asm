@@ -38,19 +38,51 @@ class VCA_ASM_Workbook
 				'name'  => 'Gill Sans MT'
 			)
 		),
-		'header1' => array(
+		'headline' => array(
+			'font' => array(
+				'bold'  => false,
+				'color' => array( 'rgb' => '009ac7' ),
+				'size'  => 16,
+				'name'  => 'Museo Slab 500'
+			),
+			'alignment' => array(
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_CENTER
+			)
+		),
+		'header' => array(
+			'fill' => array(
+				'type' => PHPExcel_Style_Fill::FILL_SOLID,
+				'color' => array( 'rgb' => 'cccecf' )
+			),
+			'alignment' => array(
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT
+			)
+		),
+		'tableheader' => array(
+			'fill' => array(
+				'type' => PHPExcel_Style_Fill::FILL_SOLID,
+				'color' => array( 'rgb' => '414042' )
+			),
 			'font' => array(
 				'bold'  => true,
-				'color' => array( 'rgb' => '008fc1' ),
-				'size'  => 16,
+				'color' => array( 'rgb' => 'ffffff' ),
+				'size'  => 10,
 				'name'  => 'Gill Sans MT'
 			)
 		),
-		array(
+		'bold' => array(
 			'font' => array(
-				'bold'  => true,
-				'size'  => 14,
-				'name'  => 'Calibri'
+				'bold'  => true
+			)
+		),
+		'leftbound' => array(
+			'alignment' => array(
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT
+			)
+		),
+		'positive' => array(
+			'font' => array(
+				'color' => array( 'rgb' => 'ff0000' )
 			)
 		)
 	);
@@ -61,7 +93,7 @@ class VCA_ASM_Workbook
 	public $col_range = 1;
 	public $row_range = 1;
 
-	public $output_method = 'downloa';
+	public $output_method = 'download';
 
 	/**
 	 * Constructor
@@ -87,13 +119,14 @@ class VCA_ASM_Workbook
 			'gridlines' => true,
 			'creator' => 'Viva con Agua de Sankt Pauli e.V.',
 			'title' => 'Document',
-			'subject' => __( 'Accounting', 'vca-asm' )
+			'subject' => __( 'Accounting', 'vca-asm' ),
+			'filename' => 'Document'
 		);
 		$args = wp_parse_args( $args, $default_args );
 		$this->args = $args;
 		extract( $args );
 		$this->title = empty( $this->title ) ? $title : $this->title;
-		$this->filename = empty( $this->filename ) ? str_replace( ' ', '_', $title ) : $this->filename;
+		$this->filename = empty( $this->filename ) ? str_replace( ' ', '_', $filename ) : $this->filename;
 
 		$this->workbook = new PHPExcel();
 
@@ -112,7 +145,7 @@ class VCA_ASM_Workbook
 
 		$valid_locale = PHPExcel_Settings::setLocale( _x( 'en_us', 'Excel Locale', 'vca-asm' ) );
 
-		$this->workbook->getDefaultStyle()->getAlignment()->setHorizontal( PHPExcel_Style_Alignment::VERTICAL_CENTER )
+		$this->workbook->getDefaultStyle()->getAlignment()->setVertical( PHPExcel_Style_Alignment::VERTICAL_CENTER )
 			->setHorizontal( PHPExcel_Style_Alignment::HORIZONTAL_CENTER );
 
 		$this->workbook->getDefaultStyle()->getFont()
@@ -157,6 +190,7 @@ class VCA_ASM_Workbook
 	/**
 	 * Takes a number and converts it to a-z,aa-zz,aaa-zzz, etc with uppercase option
 	 *
+	 * @since 1.5
 	 * @access public
 	 * @param int number to convert
 	 * @param bool upper case the letter on return?
@@ -166,7 +200,7 @@ class VCA_ASM_Workbook
 	public function num_to_letter( $num, $uppercase = true )
 	{
 		$num -= 1;
-		$letter = chr( ( $num % 26) + 97 );
+		$letter = chr( ( $num % 26 ) + 97 );
 		$letter .= ( floor( $num / 26 ) > 0) ? str_repeat( $letter, floor( $num / 26 ) ) : '';
 		return ( $uppercase ? strtoupper( $letter ) : $letter );
 	}
@@ -195,41 +229,48 @@ class VCA_ASM_Workbook
 				$this->workbook->getActiveSheet()->getColumnDimension( $this->num_to_letter( $c, true ) )->setWidth( ( $width + 7 ) * .75 );
 			}
 			for ( $r = 1; $r <= $this->row_range; $r++ ) {
-				$this->workbook->getActiveSheet()->getRowDimension( $r )->setRowHeight( -1 );
+				if ( ! in_array( $r, array( 1, 4 ) ) ) {
+					$this->workbook->getActiveSheet()->getRowDimension( $r )->setRowHeight( -1 );
+				}
 			}
 		}
 
-		$this->workbook->setActiveSheetIndex( 11 );
+		$this->workbook->setActiveSheetIndex( 1 );
+		$this->workbook->getActiveSheet()->setSelectedCells('A1');
 
 		switch ( $this->format ) {
 			case 'xls':
 				$writer = new PHPExcel_Writer_Excel5( $this->workbook );
 				$extension = '.xls';
+				$mime_type = 'application/vnd.ms-excel';
 			break;
 
 			case 'xlsx2003':
 				$writer = new PHPExcel_Writer_Excel2007( $this->workbook );
 				$writer->setOffice2003Compatibility( true );
 				$extension = '.xlsx';
+				$mime_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 			break;
 
 			case 'xlsx':
 			default:
 				$writer = new PHPExcel_Writer_Excel2007( $this->workbook );
 				$extension = '.xlsx';
+				$mime_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 			break;
 		}
 
 		if ( 'download' === $this->output_method ) {
-			header( "Content-Type: application/vnd.ms-excel");
-			header( "Content-Disposition: attachment; filename=\"" . $this->filename . $extension . "\"" );
-			header( "Cache-Control: max-age=0" );
+			header( 'Content-Type: ' . $mime_type );
+			header( 'Content-Disposition: attachment; filename="' . $this->filename . $extension . '"' );
+			header( 'Cache-Control: max-age=0' );
 			$save_param = 'php://output';
 		} else {
 			$save_param = VCA_ASM_ABSPATH . '/' . $this->filename . $extension;
 		}
 
 		$writer->save( $save_param );
+		exit; // VERY important! (5h of Bug-Searching resulted in this line...)
 	}
 
 } // class

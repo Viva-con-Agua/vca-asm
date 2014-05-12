@@ -59,26 +59,15 @@ class VCA_ASM_Finances
 	 * @since 1.5
 	 * @access public
 	 */
-	public function get_annual( $args = array() )
-	{
-
-	}
-
-	/**
-	 * Returns the specified type of transactions of a city
-	 *
-	 * @param array $args
-	 * @return array $transactions
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
 	public function get_transactions( $args = array() )
 	{
-		global $wpdb;
+		global $wpdb,
+			$vca_asm_geography;
 
 		$default_args = array(
+			'id' => 0,
 			'city_id' => 0,
+			'scope' => 'city',
 			'account_type' => 'donations',
 			'transaction_type' => 'donation',
 			'annual' => false, //deprecated
@@ -93,11 +82,33 @@ class VCA_ASM_Finances
 		$args = wp_parse_args( $args, $default_args );
 		extract( $args );
 
+		/* backwards compatibility */
+		$id = ( empty( $id ) && ! empty( $city_id ) ) ? $city_id : $id;
+
 		if ( false === $year && ! empty( $annual ) ) {
 			$year = $annual;
 		}
 
-		$where = "WHERE city_id = " . $city_id . " AND account_type = '" . $account_type . "'";
+		$where = "WHERE ";
+
+		switch ( $scope ) {
+			case 'global':
+			case 'total':
+				$where .= "";
+			break;
+
+			case 'nation':
+				$where .= "city_id IN  (" . $vca_asm_geography->get_descendants( $id, array( 'data' => 'id', 'format' => 'string', 'concat' => ',', 'sorted'=> false ) ) . ") AND ";
+			break;
+
+			case 'city':
+			default:
+				$where .= "city_id = " . $id . " AND ";
+			break;
+		}
+
+		$where .= "account_type = '" . $account_type . "'";
+
 		if ( 'donations' === $account_type )
 		{
 			if ( ! in_array( $transaction_type, $this->donations_transactions ) ) {

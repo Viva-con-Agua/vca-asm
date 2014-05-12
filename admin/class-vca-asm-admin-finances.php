@@ -110,6 +110,8 @@ class VCA_ASM_Admin_Finances
 				case 'download-data':
 					$data = new VCA_ASM_Finances_Workbook(
 						array(
+							'scope' => $this->cap_lvl,
+							'id' => $this->admin_nation,
 							'format' => isset( $_POST['format'] ) ? $_POST['format'] : 'month',
 							'year' => isset( $_POST['year'] ) ? $_POST['year'] : date( 'Y' ),
 							'month' => isset( $_POST['month'] ) ? $_POST['month'] : date( 'm' ),
@@ -465,7 +467,7 @@ class VCA_ASM_Admin_Finances
 
 	private function overview_global( $messages = array() )
 	{
-		$active_tab = 'tabular';
+		$active_tab = 'summary';
 		if ( isset( $_GET['tab'] ) && in_array( $_GET['tab'], array( 'summary', 'tabular', 'cities', 'download' ) ) ) {
 			$active_tab = $_GET['tab'];
 		}
@@ -664,7 +666,7 @@ class VCA_ASM_Admin_Finances
 			'metaboxes' => false,
 			'js' => false,
 			'url' => $url,
-			'action' => $url . '&todo=download-data',//&noheader=true',
+			'action' => $url . '&todo=download-data&noheader=true',
 			'top_button' => false,
 			'button' => __( 'Download Spreadsheet', 'vca-asm' ),
 			'back' => false,
@@ -1844,7 +1846,8 @@ class VCA_ASM_Admin_Finances
 				! in_array( $transaction_type, $vca_asm_finances->donations_transactions ) &&
 				! in_array( $transaction_type, $vca_asm_finances->econ_transactions )
 			) ||
-			'donation' === $transaction_type
+			'donation' === $transaction_type ||
+			( 'transfer' === $transaction_type && 'donations' === $account_type )
 		) {
 			$columns[] = array(
 				'id' => 'transaction_type',
@@ -1869,12 +1872,15 @@ class VCA_ASM_Admin_Finances
 		}
 
 		if (
-			in_array( $transaction_type, array( 'expenditure', 'transfer', 'donation' ) ) ||
+			in_array( $transaction_type, array( 'expenditure', 'transfer' ) ) ||
 			(
 				! in_array( $transaction_type, $vca_asm_finances->econ_transactions ) &&
 				'econ' === $account_type
 			) ||
-			'donations' === $account_type
+			(
+				'all' === $transaction_type &&
+				'donations' === $account_type
+			)
 		) {
 			$columns[] = array(
 				'id' => 'status',
@@ -1901,7 +1907,8 @@ class VCA_ASM_Admin_Finances
 		}
 
 		if (
-			'donation' === $transaction_type
+			'donation' === $transaction_type ||
+			( 'transfer' === $transaction_type && 'donations' === $account_type )
 		) {
 			$columns[] = array(
 				'id' => 'meta_3',
@@ -1918,6 +1925,24 @@ class VCA_ASM_Admin_Finances
 			'orderby' => 'transaction_date',
 			'order' => 'DESC'
 		));
+
+		if ( 'transfer' === $transaction_type && 'donations' === $account_type ) {
+			$more_transactions = $vca_asm_finances->get_transactions( array(
+				'city_id' => $city_id,
+				'account_type' => $account_type,
+				'transaction_type' => 'donation',
+				'orderby' => 'transaction_date',
+				'order' => 'DESC'
+			));
+			$to_merge_transactions = array();
+			foreach ( $more_transactions as $more_transaction ) {
+				if ( 0 === $more_transaction['cash'] || '0' === $more_transaction['cash'] ) {
+					$to_merge_transactions[] = $more_transaction;
+				}
+			}
+			$merged_transactions = array_merge( $transactions, $to_merge_transactions );
+			$transactions = $vca_asm_utilities->sort_by_key( $merged_transactions, 'transaction_date', 'DESC' );
+		}
 
 		$transaction_count = count( $transactions );
 		if ( $transaction_count > $this->per_page ) {
@@ -1949,10 +1974,10 @@ class VCA_ASM_Admin_Finances
 
 			if ( 'donation' !== $transaction_type ) {
 				$rows[$i]['transaction_type'] = $vca_asm_finances->types_to_nicenames[$transaction['transaction_type']];
-				$rows[$i]['transaction_type'] .= ( 1 == $transaction['cash'] ) ? ' (' . __( 'cash', 'vca-asm' ) . ')' : ( ( 'donation' == $transaction['transaction_type'] ) ? ' (' . __( 'Direct Transfer', 'vca-asm' ) . ')' : '' );
+				$rows[$i]['transaction_type'] .= ( 1 == $transaction['cash'] ) ? ' (' . __( 'cash', 'vca-asm' ) . ')' : ( ( 'donation' == $transaction['transaction_type'] ) ? ' (' . __( 'external transfer', 'vca-asm' ) . ')' : '' );
 				$rows[$i]['transaction_type'] .= ( 'transfer' === $transaction['transaction_type'] && 'econ' === $account_type ) ? ( 0 < $transaction['amount'] ? ' (' . __( 'to city', 'vca-asm' ) . ')' : ' (' . __( 'to office', 'vca-asm' ) . ')' ) : '';
 			} else {
-				$rows[$i]['transaction_type'] = ( 1 == $transaction['cash'] ) ? __( 'Cash money', 'vca-asm' ) : __( 'Direct Transfer', 'vca-asm' );
+				$rows[$i]['transaction_type'] = ( 1 == $transaction['cash'] ) ? __( 'Cash money', 'vca-asm' ) : __( 'external transfer', 'vca-asm' );
 			}
 
 			$rows[$i]['entry_time_plain'] = $transaction['entry_time'];
