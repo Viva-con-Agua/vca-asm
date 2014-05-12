@@ -102,6 +102,7 @@ if ( is_admin() ) {
 	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-home.php' );
 	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-finances.php' );
 	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-geography.php' );
+	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-goldeimer.php' );
 	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-network.php' );
 	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-settings.php' );
 	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-slot-allocation.php' );

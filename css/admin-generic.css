@@ -461,7 +461,7 @@ input[type="text"].wide-text {
 	width: 16px;
 	height: 16px;
 	margin: 0 .6em 0 0;
-	background-size: 768px 32px;
+	background-size: 784px 32px;
 }
 .icon32dpxd,
 .icon32retina {
@@ -919,6 +919,15 @@ a:hover .nt-icon-exclamation {
 	background-position: -752px -16px;
 }
 a:hover .tbl-icon-warning {
+	background-position: -752px -16px;
+}
+#icon-goldeimer {
+	background-position: -1536px 0px;
+}
+.nt-icon-goldeimer {
+	background-position: -752px -16px;
+}
+a:hover .nt-icon-goldeimer {
 	background-position: -752px -16px;
 }
 

@@ -37,7 +37,7 @@ class VCA_ASM_Activity {
 
 	public $type = 'festival';
 	public $nice_type = 'Festival';
-	public $icon_url = 'http://vivaconagua.org/wp-content/plugins/vca-asm/img/icon-festivals_32.png';
+	public $icon_url = 'http://vivaconagua.org/wp-content/plugins/vca-asm/img/icon-festival_32.png';
 
 	public $nation = 0;
 	public $nation_name = '';
@@ -132,6 +132,9 @@ class VCA_ASM_Activity {
 		} elseif ( 'miscactions' === $this->type ) {
 			$this->nice_type = __( 'Miscellaneous', 'vca-asm' );
 			$this->icon_url = VCA_ASM_RELPATH . 'img/icon-miscaction_32.png';
+		} elseif ( 'goldeimerfestival' === $this->type ) {
+			$this->nice_type = __( 'Goldeimer Compost-Toilets @ Festivals', 'vca-asm' );
+			$this->icon_url = VCA_ASM_RELPATH . 'img/icon-goldeimer_32.png';
 		}
 
 		$this->membership_required = ( 1 == get_post_meta( $id, 'membership_required', true ) ) ? true : false;
@@ -623,7 +626,7 @@ class VCA_ASM_Activity {
 
 		return get_object_vars( $this );
 	}
-	
+
 	/**
 	 * PHP5 style constructor
 	 *

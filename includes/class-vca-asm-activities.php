@@ -11,7 +11,8 @@
 
 if ( ! class_exists( 'VCA_ASM_Activities' ) ) :
 
-class VCA_ASM_Activities {
+class VCA_ASM_Activities
+{
 
 	/**
 	 * Class Properties
@@ -24,7 +25,8 @@ class VCA_ASM_Activities {
 		'concert',
 		'festival',
 		'miscactions',
-		'nwgathering'
+		'nwgathering',
+		'goldeimerfestival'
 	);
 	public $departments_by_activity = array(
 		'concert' => 'actions',
@@ -32,7 +34,8 @@ class VCA_ASM_Activities {
 		'miscactions' => 'actions',
 		'misceducation' => 'education',
 		'miscnetwork' => 'network',
-		'nwgathering' => 'network'
+		'nwgathering' => 'network',
+		'goldeimerfestival' => 'goldeimer'
 	);
 	public $activities_by_department = array();
 	public $to_nicename = array();
@@ -50,7 +53,8 @@ class VCA_ASM_Activities {
 	 * @since 1.0
 	 * @access private
 	 */
-	private function custom_fields( $group = 'all' ) {
+	private function custom_fields( $group = 'all' )
+	{
 		global $current_user, $post_type, $vca_asm_geography;
 		get_currentuserinfo();
 
@@ -391,7 +395,8 @@ class VCA_ASM_Activities {
 	 * @since 1.0
 	 * @access public
 	 */
-	public function setup_activities() {
+	public function setup_activities()
+	{
 
 		$actions_capabilities = array(
 			'publish_posts' => 'vca_asm_publish_actions_activities',
@@ -425,6 +430,17 @@ class VCA_ASM_Activities {
 			'edit_post' => 'vca_asm_edit_network_activity',
 			'delete_post' => 'vca_asm_delete_network_activity',
 			'read_post' => 'vca_asm_read_network_activity'
+		);
+		$goldeimer_capabilities = array(
+			'publish_posts' => 'vca_asm_publish_goldeimer_activities',
+			'edit_posts' => 'vca_asm_edit_goldeimer_activities',
+			'edit_others_posts' => 'vca_asm_edit_others_goldeimer_activities',
+			'delete_posts' => 'vca_asm_delete_goldeimer_activities',
+			'delete_others_posts' => 'vca_asm_delete_others_goldeimer_activities',
+			'read_private_posts' => 'vca_asm_read_private_goldeimer_activities',
+			'edit_post' => 'vca_asm_edit_goldeimer_activity',
+			'delete_post' => 'vca_asm_delete_goldeimer_activity',
+			'read_post' => 'vca_asm_read_goldeimer_activity'
 		);
 
 		$actions_concert_labels = array(
@@ -479,12 +495,27 @@ class VCA_ASM_Activities {
 			'add_new' => _x( 'Add New', 'activity', 'vca-asm' ),
 			'add_new_item' => __( 'Add New Network Gathering', 'vca-asm' ),
 			'edit_item' => __( 'Edit Network Gathering', 'vca-asm' ),
-			'new_item' => __( 'New Festival', 'vca-asm' ),
+			'new_item' => __( 'New Network Gathering', 'vca-asm' ),
 			'all_items' => __( 'Network Gatherings', 'vca-asm' ),
 			'view_item' => __( 'View Network Gathering', 'vca-asm' ),
 			'search_items' => __( 'Search Network Gatherings', 'vca-asm' ),
 			'not_found' =>  __( 'No Network Gatherings found', 'vca-asm' ),
 			'not_found_in_trash' => __( 'No Network Gatherings found in Trash', 'vca-asm' ),
+			'parent_item_colon' => ''
+		);
+		$goldeimer_festival_labels = array(
+			'name' => _x( 'Goldeimer Festivals', 'post type general name', 'vca-asm' ),
+			'singular_name' => _x( 'Goldeimer Festival', 'post type singular name', 'vca-asm' ),
+			'menu_name' => _x( 'Goldeimer Festival', 'post type general name', 'vca-asm' ),
+			'add_new' => _x( 'Add New', 'activity', 'vca-asm' ),
+			'add_new_item' => __( 'Add New Goldeimer Festival', 'vca-asm' ),
+			'edit_item' => __( 'Edit Goldeimer Festival', 'vca-asm' ),
+			'new_item' => __( 'New Goldeimer Festival', 'vca-asm' ),
+			'all_items' => __( 'Goldeimer Festivals', 'vca-asm' ),
+			'view_item' => __( 'View Goldeimer Festival', 'vca-asm' ),
+			'search_items' => __( 'Search Goldeimer Festivals', 'vca-asm' ),
+			'not_found' =>  __( 'No Goldeimer Festivals found', 'vca-asm' ),
+			'not_found_in_trash' => __( 'No Goldeimer Festivals found in Trash', 'vca-asm' ),
 			'parent_item_colon' => ''
 		);
 
@@ -517,7 +548,7 @@ class VCA_ASM_Activities {
 			'has_archive' => true,
 			'hierarchical' => false,
 			'menu_position' => 1,
-			'menu_icon' => VCA_ASM_RELPATH . 'admin/img/icon-actions_32.png',
+			'menu_icon' => VCA_ASM_RELPATH . 'img/icon-actions_32.png',
 			'supports' => array( 'title' )
 		);
 		$miscactions_args = array(
@@ -533,7 +564,7 @@ class VCA_ASM_Activities {
 			'has_archive' => true,
 			'hierarchical' => false,
 			'menu_position' => 3,
-			'menu_icon' => VCA_ASM_RELPATH . 'admin/img/icon-actions_32.png',
+			'menu_icon' => VCA_ASM_RELPATH . 'img/icon-actions_32.png',
 			'supports' => array( 'title' )
 		);
 		$nwgathering_args = array(
@@ -549,7 +580,23 @@ class VCA_ASM_Activities {
 			'has_archive' => true,
 			'hierarchical' => false,
 			'menu_position' => 1,
-			'menu_icon' => VCA_ASM_RELPATH . 'admin/img/icon-actions_32.png',
+			'menu_icon' => VCA_ASM_RELPATH . 'img/icon-actions_32.png',
+			'supports' => array( 'title' )
+		);
+		$goldeimer_festival_args = array(
+			'labels' => $goldeimer_festival_labels,
+			'public' => true,
+			'publicly_queryable' => true,
+			'show_ui' => true,
+			'show_in_menu' => 'vca-asm-goldeimer',
+			'query_var' => true,
+			'rewrite' => true,
+			'capability_type' => 'vca_asm_goldeimer',
+			'capabilities' => $goldeimer_capabilities,
+			'has_archive' => true,
+			'hierarchical' => false,
+			'menu_position' => 2,
+			'menu_icon' => VCA_ASM_RELPATH . 'img/icon-actions_32.png',
 			'supports' => array( 'title' )
 		);
 
@@ -562,6 +609,8 @@ class VCA_ASM_Activities {
 
 		register_post_type( 'nwgathering', $nwgathering_args );
 
+		register_post_type( 'goldeimerfestival', $goldeimer_festival_args );
+
 		add_action( 'add_meta_boxes', array( $this, 'meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_meta' ), 10, 2 );
 
@@ -569,6 +618,7 @@ class VCA_ASM_Activities {
 		add_filter( 'manage_edit-festival_columns', array( $this, 'festival_columns' ) );
 		add_filter( 'manage_edit-miscactions_columns', array( $this, 'miscactions_columns' ) );
 		add_filter( 'manage_edit-nwgathering_columns', array( $this, 'nwgathering_columns' ) );
+		add_filter( 'manage_edit-goldeimerfestival_columns', array( $this, 'goldeimerfestival_columns' ) );
 
 		add_action( 'manage_posts_custom_column',  array( $this, 'custom_column' ) );
 		add_filter( 'gettext', array( $this, 'admin_ui_text_alterations' ), 10, 2 );
@@ -583,7 +633,8 @@ class VCA_ASM_Activities {
 	 * @since 1.1
 	 * @access public
 	 */
-	public function admin_ui_text_alterations( $translation, $text ) {
+	public function admin_ui_text_alterations( $translation, $text )
+	{
 		global $post_type;
 
 		if ( is_admin() && in_array( $post_type, $this->activity_types ) ) {
@@ -630,6 +681,17 @@ class VCA_ASM_Activities {
 					}
 					if( 'Publish' == $text ) {
 						return __( 'Publish Network Gathering', 'vca-asm' );
+					}
+				break;
+				case 'goldeimerfestival':
+					if( 'Enter title here' == $text ) {
+						return __( 'Name of Festival', 'vca-asm' );
+					}
+					if( 'Update' == $text ) {
+						return __( 'Update Goldeimer Festival', 'vca-asm' );
+					}
+					if( 'Publish' == $text ) {
+						return __( 'Publish Goldeimer Festival', 'vca-asm' );
 					}
 				break;
 			}
@@ -710,6 +772,21 @@ class VCA_ASM_Activities {
 			9 => sprintf( __( 'Network Gathering scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview Network Gathering</a>', 'vca-asm' ),
 			date_i18n( get_option( 'date_format' ), strtotime( $post->post_date ) ), esc_url( get_permalink($post_ID) ) ),
 			10 => sprintf( __( 'Network Gathering draft updated. <a target="_blank" href="%s">Preview Network Gathering</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) )
+		);
+
+		$messages['goldeimerfestival'] = array(
+			0 => '', // Unused. Messages start at index 1.
+			1 => sprintf( __( 'Festival updated. <a href="%s">View Festival</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
+			2 => __( 'Custom field updated.', 'vca-asm' ),
+			3 => __( 'Custom field deleted.', 'vca-asm' ),
+			4 => __( 'Festival updated.', 'vca-asm' ),
+			5 => isset($_GET['revision']) ? sprintf( __( 'Festival restored to revision from %s', 'vca-asm' ), wp_post_revision_title( (int) $_GET['revision'], false ) ) : false,
+			6 => sprintf( __( 'Festival published. <a href="%s">View Festival</a>', 'vca-asm' ), esc_url( get_permalink($post_ID) ) ),
+			7 => __( 'Festival saved.', 'vca-asm' ),
+			8 => sprintf( __( 'Festival submitted. <a target="_blank" href="%s">Preview Festival</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) ),
+			9 => sprintf( __( 'Festival scheduled for: <strong>%1$s</strong>. <a target="_blank" href="%2$s">Preview Festival</a>', 'vca-asm' ),
+			date_i18n( get_option( 'date_format' ), strtotime( $post->post_date ) ), esc_url( get_permalink($post_ID) ) ),
+			10 => sprintf( __( 'Festival draft updated. <a target="_blank" href="%s">Preview Festival</a>', 'vca-asm' ), esc_url( add_query_arg( 'preview', 'true', get_permalink($post_ID) ) ) )
 		);
 
 		return $messages;
@@ -846,7 +923,8 @@ class VCA_ASM_Activities {
 	 * @since 1.0
 	 * @access public
 	 */
-	public function concert_columns( $columns ) {
+	public function concert_columns( $columns )
+	{
 		$columns = array(
 			'cb' => '<input type="checkbox" />',
 			'title' => __( 'Concert', 'vca-asm' ),
@@ -858,7 +936,8 @@ class VCA_ASM_Activities {
 		);
 		return $columns;
 	}
-	public function festival_columns( $columns ) {
+	public function festival_columns( $columns )
+	{
 		$columns = array(
 			'cb' => '<input type="checkbox" />',
 			'title' => __( 'Festival', 'vca-asm' ),
@@ -870,7 +949,8 @@ class VCA_ASM_Activities {
 		);
 		return $columns;
 	}
-	public function miscactions_columns( $columns ) {
+	public function miscactions_columns( $columns )
+	{
 		$columns = array(
 			'cb' => '<input type="checkbox" />',
 			'title' => __( 'Activity', 'vca-asm' ),
@@ -882,10 +962,24 @@ class VCA_ASM_Activities {
 		);
 		return $columns;
 	}
-	public function nwgathering_columns( $columns ) {
+	public function nwgathering_columns( $columns )
+	{
 		$columns = array(
 			'cb' => '<input type="checkbox" />',
 			'title' => __( 'Network Gathering', 'vca-asm' ),
+			'location' => __( 'Location', 'vca-asm' ),
+			'timeframe' => __( 'Timeframe', 'vca-asm' ),
+			'phase' => __( 'Application Phase', 'vca-asm' ),
+			'slots' => __( 'Slots (Apps)', 'vca-asm' ),
+			'registrations' => __( 'Accepted Applications', 'vca-asm' )
+		);
+		return $columns;
+	}
+	public function goldeimerfestival_columns( $columns )
+	{
+		$columns = array(
+			'cb' => '<input type="checkbox" />',
+			'title' => __( 'Festival', 'vca-asm' ),
 			'location' => __( 'Location', 'vca-asm' ),
 			'timeframe' => __( 'Timeframe', 'vca-asm' ),
 			'phase' => __( 'Application Phase', 'vca-asm' ),
@@ -979,6 +1073,14 @@ class VCA_ASM_Activities {
 			'normal',
 			'high'
 		);
+		add_meta_box(
+			'vca-asm-meta',
+			_x( 'The Festival', 'meta box title, festival', 'vca-asm' ),
+			array( $this, 'box_meta' ),
+			'goldeimerfestival',
+			'normal',
+			'high'
+		);
 
 		foreach ( $this->activity_types as $activity_type ) {
 			add_meta_box(
@@ -1005,14 +1107,16 @@ class VCA_ASM_Activities {
 				'normal',
 				'low'
 			);
-			add_meta_box(
-				'vca-asm-tools',
-				_x( 'Tools', 'meta box title, festival', 'vca-asm' ),
-				array( $this, 'box_tools' ),
-				$activity_type,
-				'normal',
-				'low'
-			);
+			if ( 'goldeimerfestival' !== $activity_type ) {
+				add_meta_box(
+					'vca-asm-tools',
+					_x( 'Tools', 'meta box title, festival', 'vca-asm' ),
+					array( $this, 'box_tools' ),
+					$activity_type,
+					'normal',
+					'low'
+				);
+			}
 			add_meta_box(
 				'vca-asm-applications',
 				_x( 'Application Phase', 'meta box title, festival', 'vca-asm' ),
@@ -1060,54 +1164,63 @@ class VCA_ASM_Activities {
 	 * @since 1.0
 	 * @access public
 	 */
-	public function box_tools() {
+	public function box_tools()
+	{
 		$fields = $this->custom_fields('tools');
 		require( VCA_ASM_ABSPATH . '/templates/admin-custom-fields.php' );
 		echo $output;
 	}
 
-	public function box_slots_settings() {
+	public function box_slots_settings()
+	{
 		$fields = $this->custom_fields( 'slots-settings' );
 		require( VCA_ASM_ABSPATH . '/templates/admin-custom-fields.php' );
 		echo $output;
 	}
-	public function box_slots_settings_nwgathering() {
+	public function box_slots_settings_nwgathering()
+	{
 		$fields = $this->custom_fields( 'slots-settings' );
 		require( VCA_ASM_ABSPATH . '/templates/admin-custom-fields.php' );
 		echo $output;
 	}
 
-	public function box_application_phase() {
+	public function box_application_phase()
+	{
 		$fields = $this->custom_fields( 'applications' );
 		require( VCA_ASM_ABSPATH . '/templates/admin-custom-fields.php' );
 		echo $output;
 	}
 
-	public function box_participants() {
+	public function box_participants()
+	{
 		$fields = $this->custom_fields( 'participants' );
 		require( VCA_ASM_ABSPATH . '/templates/admin-custom-fields.php' );
 		echo $output;
 	}
 
-	public function box_date() {
+	public function box_date()
+	{
 		$fields = $this->custom_fields( 'date' );
 		require( VCA_ASM_ABSPATH . '/templates/admin-custom-fields.php' );
 		echo $output;
 	}
 
-	public function box_meta() {
+	public function box_meta()
+	{
 		$fields = $this->custom_fields( 'meta' );
 		require( VCA_ASM_ABSPATH . '/templates/admin-custom-fields.php' );
 		echo $output;
 	}
 
-	public function box_geo() {
+	public function box_geo()
+	{
 		$fields = $this->custom_fields( 'geo' );
 		require( VCA_ASM_ABSPATH . '/templates/admin-custom-fields.php' );
 		echo $output;
 	}
 
-	public function box_contact() {
+	public function box_contact()
+	{
 		$fields = $this->custom_fields( 'contact' );
 
 		require( VCA_ASM_ABSPATH . '/templates/admin-custom-fields.php' );
@@ -1124,7 +1237,8 @@ class VCA_ASM_Activities {
 	 * @since 1.0
 	 * @access public
 	 */
-	public function vca_asm_map_meta_cap( $caps, $cap, $user_id, $args ) {
+	public function vca_asm_map_meta_cap( $caps, $cap, $user_id, $args )
+	{
 
 		/* If editing, deleting, or reading an activity, get the post and post type object. */
 		if (
@@ -1136,7 +1250,10 @@ class VCA_ASM_Activities {
 			'vca_asm_read_education_activity' == $cap ||
 			'vca_asm_edit_network_activity' == $cap ||
 			'vca_asm_delete_network_activity' == $cap ||
-			'vca_asm_read_network_activity' == $cap
+			'vca_asm_read_network_activity' == $cap ||
+			'vca_asm_edit_goldeimer_activity' == $cap ||
+			'vca_asm_delete_goldeimer_activity' == $cap ||
+			'vca_asm_read_goldeimer_activity' == $cap
 		) {
 			$post = get_post( $args[0] );
 			$post_type = get_post_type_object( $post->post_type );
@@ -1149,7 +1266,8 @@ class VCA_ASM_Activities {
 		if (
 			'vca_asm_edit_actions_activity' == $cap ||
 			'vca_asm_edit_education_activity' == $cap ||
-			'vca_asm_edit_network_activity' == $cap
+			'vca_asm_edit_network_activity' == $cap ||
+			'vca_asm_edit_goldeimer_activity' == $cap
 		) {
 			if ( $user_id == $post->post_author ) {
 				$caps[] = $post_type->cap->edit_posts;
@@ -1162,7 +1280,8 @@ class VCA_ASM_Activities {
 		elseif (
 			'vca_asm_delete_actions_activity' == $cap ||
 			'vca_asm_delete_education_activity' == $cap ||
-			'vca_asm_delete_network_activity' == $cap
+			'vca_asm_delete_network_activity' == $cap ||
+			'vca_asm_delete_goldeimer_activity' == $cap
 		) {
 			if ( $user_id == $post->post_author ) {
 				$caps[] = $post_type->cap->delete_posts;
@@ -1175,7 +1294,8 @@ class VCA_ASM_Activities {
 		elseif (
 			'vca_asm_read_actions_activity' == $cap ||
 			'vca_asm_read_education_activity' == $cap ||
-			'vca_asm_read_network_activity' == $cap
+			'vca_asm_read_network_activity' == $cap ||
+			'vca_asm_read_goldeimer_activity' == $cap
 		) {
 			if ( 'private' != $post->post_status ) {
 				$caps[] = 'read';
@@ -1196,7 +1316,8 @@ class VCA_ASM_Activities {
 	 * @since 1.0
 	 * @access public
 	 */
-	public function save_meta( $ID = false, $post = false ) {
+	public function save_meta( $ID = false, $post = false )
+	{
 	    global $current_user, $pagenow, $wpdb, $vca_asm_geography, $vca_asm_registrations;
 		get_currentuserinfo();
 
@@ -1414,7 +1535,8 @@ class VCA_ASM_Activities {
 	 * @since 1.3
 	 * @access public
 	 */
-	public function notice_handler() {
+	public function notice_handler()
+	{
 		global $current_user, $vca_asm_admin;
 
 		$notices = get_transient( 'admin_notices_'.$current_user->ID );
@@ -1439,7 +1561,8 @@ class VCA_ASM_Activities {
 	 * @since 1.3
 	 * @access public
 	 */
-	public function clear_notices() {
+	public function clear_notices()
+	{
 		global $current_user;
 
 		delete_transient( 'admin_notices_'.$current_user->ID );
@@ -1453,7 +1576,8 @@ class VCA_ASM_Activities {
 	 * @since 1.3
 	 * @access public
 	 */
-	public function query_activities( $args = array() ) {
+	public function query_activities( $args = array() )
+	{
 		$default_args = array(
 			'phase' => 'all',
 			'type' => 'all'
@@ -1547,7 +1671,8 @@ class VCA_ASM_Activities {
 	 * @since 1.3
 	 * @access public
 	 */
-	public function options_array_activities( $args = array() ) {
+	public function options_array_activities( $args = array() )
+	{
 		global $current_user;
 
 		$default_args = array(
@@ -1606,7 +1731,8 @@ class VCA_ASM_Activities {
 	 *
 	 * @return string $phase
 	 */
-	public function get_phase( $id ) {
+	public function get_phase( $id )
+	{
 
 		$start_app = get_post_meta( $id, 'start_app', true );
 		$end_app = get_post_meta( $id, 'end_app', true );
@@ -1634,7 +1760,8 @@ class VCA_ASM_Activities {
 	 * @since 1.0
 	 * @access public
 	 */
-	public function __construct() {
+	public function __construct()
+	{
 		global $post, $vca_asm_utilities;
 
 		$this->activities_by_department = array(
@@ -1658,6 +1785,12 @@ class VCA_ASM_Activities {
 					'slug' => 'nwgathering',
 					'name' => __( 'Network Gathering', 'vca-asm' )
 				)
+			),
+			'goldeimer' => array(
+				array(
+					'slug' => 'goldeimerfestival',
+					'name' => __( 'Goldeimer Festival', 'vca-asm' )
+				)
 			)
 		);
 
@@ -1667,7 +1800,8 @@ class VCA_ASM_Activities {
 			'miscactions' => __( 'Miscellaneous action', 'vca-asm' ),
 			'misceducation' => __( 'Miscellaneous education activity', 'vca-asm' ),
 			'miscnetwork' => __( 'Miscellaneous network activity', 'vca-asm' ),
-			'nwgathering' => __( 'Network Gathering', 'vca-asm' )
+			'nwgathering' => __( 'Network Gathering', 'vca-asm' ),
+			'goldeimerfestival' => __( 'Goldeimer Festival', 'vca-asm' )
 		);
 		asort( $this->to_nicename );
 		$this->activities_to_nicename = $this->to_nicename;
@@ -1678,7 +1812,8 @@ class VCA_ASM_Activities {
 			'miscactions' => __( 'Miscellaneous activities', 'vca-asm' ),
 			'misceducation' => __( 'Miscellaneous activities', 'vca-asm' ),
 			'miscnetwork' => __( 'Miscellaneous activities', 'vca-asm' ),
-			'nwgathering' => __( 'Network Gatherings', 'vca-asm' )
+			'nwgathering' => __( 'Network Gatherings', 'vca-asm' ),
+			'goldeimerfestival' => __( 'Goldeimer Festivals', 'vca-asm' )
 		);
 		asort( $this->to_plural_nicename );
 		$this->activities_to_plural_nicename = $this->to_plural_nicename;
