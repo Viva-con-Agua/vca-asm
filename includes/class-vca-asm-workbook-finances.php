@@ -1,18 +1,18 @@
 <?php
 
 /**
- * VCA_ASM_Finances_Workbook class.
+ * VCA_ASM_Workbook_Finances class.
  *
  * This class contains properties and methods for
- * the handling of financial data
+ * the output of financial account statements as M$ Excel Spreadsheets
  *
  * @package VcA Activity & Supporter Management
  * @since 1.5
  */
 
-if ( ! class_exists( 'VCA_ASM_Finances_Workbook' ) ) :
+if ( ! class_exists( 'VCA_ASM_Workbook_Finances' ) ) :
 
-class VCA_ASM_Finances_Workbook extends VCA_ASM_Workbook
+class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 {
 
 	/**
@@ -31,6 +31,8 @@ class VCA_ASM_Finances_Workbook extends VCA_ASM_Workbook
 		'gridlines' => true
 	);
 	public $args = array();
+
+	private $initial_time = NULL;
 
 	public $nation_name = 'Germany';
 
@@ -68,11 +70,13 @@ class VCA_ASM_Finances_Workbook extends VCA_ASM_Workbook
 			case 'month':
 				$this->title_frame_name = __( 'Month', 'vca-asm' );
 				$this->title_frame_data = iconv( 'UTF-8', 'ASCII//TRANSLIT', strftime( '%B %Y', strtotime( '01.' . $month . '.' . $year ) ) );
+				$this->initial_time = mktime( 23, 59, 59, ($month - 1), date( 't', mktime( 0, 0, 0, ($month - 1), 15, $year ) ), $year );
 			break;
 
 			case 'year':
 				$this->title_frame_name = __( 'Year', 'vca-asm' );
 				$this->title_frame_data = $year;
+				$this->initial_time = mktime( 23, 59, 59, 12, 31, ($year - 1) );
 			break;
 
 			case 'total':
@@ -97,7 +101,6 @@ class VCA_ASM_Finances_Workbook extends VCA_ASM_Workbook
 		$this->args['filename'] = str_replace( ' ', '_', str_replace( array( ',', ':', ';', '?', '.', '!' ), '', $this->args['title'] ) );
 		$this->args['subject'] = __( 'Accounting', 'vca-asm' );
 
-		// parent::__construct();
 		$this->init( $this->args );
 
 		$this->customize_template();
@@ -119,9 +122,9 @@ class VCA_ASM_Finances_Workbook extends VCA_ASM_Workbook
 
 		$this->template->getPageSetup()->setOrientation( PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE );
 
-		$this->template->mergeCells( 'A1:P1' )
-				->freezePane( 'B6' )
-				->setCellValue( 'A1', 'Kassenbuch: Einnahmen und Ausgaben aus WIRTSCHAFTSGELD' );
+		$this->template->mergeCells( 'A1:O1' )
+				->freezePane( 'B5' )
+				->setCellValue( 'A1', strtoupper( __( 'Account Statement', 'vca-asm' ) . ': ' . __( 'Revenues & Expenses', 'vca-asm' ) . ', ' . __( 'Structural Funds', 'vca-asm' ) ) );
 
 		$this->template->setCellValue( 'B2', __( 'City', 'vca-asm' ) )
 			->setCellValue( 'B3', __( 'Country', 'vca-asm' ) )
@@ -134,29 +137,29 @@ class VCA_ASM_Finances_Workbook extends VCA_ASM_Workbook
 
 		$cur_row = 4;
 
-		$this->template->setCellValue( 'B'.$cur_row, 'Beleg Nummer' )
-			->setCellValue( 'C'.$cur_row, 'Kassenkonto' )
-			->setCellValue( 'D'.$cur_row, 'Datum Buchung' )
-			->setCellValue( 'E'.$cur_row, 'Datum Eingabe' )
-			->setCellValue( 'F'.$cur_row, 'Datum Beleg' )
-			->setCellValue( 'G'.$cur_row, 'Quelle (was gekauft wurde)' )
-			->setCellValue( 'H'.$cur_row, 'Aufwands-/Ertragskonto' )
-			->setCellValue( 'J'.$cur_row, 'KOST1' )
-			->setCellValue( 'K'.$cur_row, 'KOST2' )
-			->setCellValue( 'L'.$cur_row, 'Belegfeld1' )
-			->setCellValue( 'M'.$cur_row, 'EinZ AusZ' )
-			->setCellValue( 'N'.$cur_row, 'BU-Schlüssel' )
-			->setCellValue( 'O'.$cur_row, 'Ust Satz' )
-			->setCellValue( 'P'.$cur_row, 'Saldo' );
+		$this->template->setCellValue( 'B'.$cur_row, __( 'Receipt No.', 'vca-asm' ) )
+			->setCellValue( 'C'.$cur_row, __( 'Cash Account', 'vca-asm' ) )
+			->setCellValue( 'D'.$cur_row, __( 'Booking Date', 'vca-asm' ) )
+			->setCellValue( 'E'.$cur_row, __( 'Entry Date', 'vca-asm' ) )
+			->setCellValue( 'F'.$cur_row, __( 'Receipt Date', 'vca-asm' ) )
+			->setCellValue( 'G'.$cur_row, __( 'Source', 'vca-asm' ) . "\n" . __( '(what was bought)', 'vca-asm' ) )
+			->setCellValue( 'H'.$cur_row, _x( 'Expense- /', 'Expense-Account', 'vca-asm' ) . "\n" . __( 'Income-Account', 'vca-asm' ) )
+			->setCellValue( 'I'.$cur_row, __( 'COST1', 'vca-asm' ) )
+			->setCellValue( 'J'.$cur_row, __( 'COST2', 'vca-asm' ) )
+			->setCellValue( 'K'.$cur_row, __( 'Receiptfield1', 'vca-asm' ) )
+			->setCellValue( 'L'.$cur_row, __( 'BU-Key', 'vca-asm' ) )
+			->setCellValue( 'M'.$cur_row, __( 'Deposit / Withdrawal', 'vca-asm' ) )
+			->setCellValue( 'N'.$cur_row, __( 'Revenue Tax', 'vca-asm' ) )
+			->setCellValue( 'O'.$cur_row, _x( 'Balance', 'Saldo', 'vca-asm' ) );
 
 		$this->top_row_range = $cur_row;
 
-		$this->template->setCellValue( 'A'.($cur_row+1), 'Bestand Vorher' );
+		$this->template->setCellValue( 'A'.($cur_row+1), __( 'Previous Stock', 'vca-asm' ) );
 		$this->top_row_range++;
 		$this->template_row_range = $this->top_row_range;
 
-		$this->template->setCellValue( 'A'.($cur_row+2), 'Summe' )
-			->setCellValue( 'A'.($cur_row+3), 'Saldo' );
+		$this->template->setCellValue( 'A'.($cur_row+2), __( 'Sum', 'vca-asm' ) )
+			->setCellValue( 'A'.($cur_row+3), _x( 'Balance', 'Saldo', 'vca-asm' ) );
 		$this->template_row_range = $this->template_row_range + 2;
 
 		$this->template_col_range = 15;
@@ -183,8 +186,6 @@ class VCA_ASM_Finances_Workbook extends VCA_ASM_Workbook
 			$city_id = $city['id'];
 			$current_parent = $vca_asm_geography->has_nation( $city_id );
 
-			$the_city_finances = new VCA_ASM_City_Finances( $city_id );
-
 			if ( 'global' === $scope || empty( $parent ) || $parent == $current_parent ) {
 				$nation_name = $current_parent ? $vca_asm_geography->get_name( $current_parent ) : __( 'No Country', 'vca-asm' );
 
@@ -203,6 +204,7 @@ class VCA_ASM_Finances_Workbook extends VCA_ASM_Workbook
 					default:
 						$key = $city['name'];
 						$id = $city_id;
+						$city_type = $vca_asm_geography->get_type( $city_id, true, false, true );
 					break;
 				}
 
@@ -210,8 +212,8 @@ class VCA_ASM_Finances_Workbook extends VCA_ASM_Workbook
 					$sheets[$key] = array();
 
 					$sheets[$key]['id'] = $id;
-					$sheets[$key]['name'] = $key;
-					$sheets[$key]['city_name'] = 'city' === $type ? $city['name'] : '---';
+					$sheets[$key]['name'] = $key . ( 'city' === $type ? ' (' . $city_type . ')' : '' );
+					$sheets[$key]['city_name'] = 'city' === $type ? $city['name'] . ' (' . $city_type . ')' : '---';
 					$sheets[$key]['nation_name'] = 'total' === $type ? '---' : $nation_name;
 
 					if ( ! isset( $sheets[$key]['city_ids'] ) ) {
@@ -219,10 +221,7 @@ class VCA_ASM_Finances_Workbook extends VCA_ASM_Workbook
 					}
 					$sheets[$key]['city_ids'][] = $city_id;
 
-					if ( ! isset( $sheets[$key]['balance'] ) ) {
-						$sheets[$key]['balance'] = 0;
-					}
-					$sheets[$key]['balance'] += $the_city_finances->balance_econ;
+					$sheets[$key]['initial_balance'] = $vca_asm_finances->get_balance( $city_id, 'econ', $this->initial_time );
 				}
 			}
 		}
@@ -275,28 +274,45 @@ class VCA_ASM_Finances_Workbook extends VCA_ASM_Workbook
 
 				$sheet->insertNewRowBefore( $cur_row, 1 );
 
+				$tax_rate = ! empty( $transaction['meta_3'] ) ? $vca_asm_finances->get_tax_rate( $transaction['meta_3'] ) : NULL;
+
+				if ( 'revenue' === $transaction['transaction_type'] ) {
+					$cost2 = '4';
+					if ( 7 == $tax_rate ) {
+						$bu_key = '2';
+					} elseif ( 19 == $tax_rate ) {
+						$bu_key = '3';
+					}
+				} else {
+					$cost2 = '1';
+					$bu_key = '';
+				}
+
 				$sheet->setCellValue( 'B'.$cur_row, $transaction['receipt_id'] )
 					->setCellValue( 'C'.$cur_row, $vca_asm_finances->get_cash_account( $transaction['city_id'] ) )
 					->setCellValue( 'D'.$cur_row, strftime( '%d.%m.%Y', intval( $transaction['transaction_date'] ) ) )
 					->setCellValue( 'E'.$cur_row, strftime( '%d.%m.%Y', intval( $transaction['entry_time'] ) ) )
 					->setCellValue( 'F'.$cur_row, ! empty( $transaction['receipt_date'] ) && is_numeric( $transaction['receipt_date'] ) ? strftime( '%d.%m.%Y', intval( $transaction['receipt_date'] ) ) : '' )
-					->setCellValue( 'G'.$cur_row, '' )
+					->setCellValue( 'G'.$cur_row, ! empty( $transaction['meta_4'] ) ? $transaction['meta_4'] : '' )
 					->setCellValue( 'H'.$cur_row, ! empty( $transaction['ei_account'] ) ? $vca_asm_finances->get_ei_account( $transaction['ei_account'], true ) : '' )
-					->setCellValue( 'I'.$cur_row, '' )
-					->setCellValue( 'J'.$cur_row, '210' )
-					->setCellValue( 'K'.$cur_row, '4' )
-					->setCellValue( 'L'.$cur_row, number_format( $transaction['amount']/100, 2, ',', '.' ) )
-					->setCellValue( 'M'.$cur_row, $transaction['tax_rate'] )
-					->setCellValue( 'N'.$cur_row, ! empty( $transaction['meta_3'] ) ? $vca_asm_finances->get_tax_rate( $transaction['meta_3'] ) : '' )
+					->setCellValue( 'I'.$cur_row, '210' )
+					->setCellValue( 'J'.$cur_row, $cost2 )
+					->setCellValue( 'K'.$cur_row, '' )
+					->setCellValue( 'L'.$cur_row, '=IF(AND(J'.$cur_row.'=4,N'.$cur_row.'=19),"3",IF(AND(J'.$cur_row.'=4,N'.$cur_row.'=7),"2",""))' )
+					->setCellValue( 'M'.$cur_row, $transaction['amount']/100 )
+					->setCellValue( 'N'.$cur_row, is_numeric( $tax_rate ) ? $tax_rate : '' )
 					->setCellValue( 'O'.$cur_row, '' );
 
 					$cur_row++;
 			}
 
-			$sheet->setCellValue( 'P'.($cur_row), number_format( $sum/100, 2, ',', '.' ) )
-				->setCellValue( 'P'.($cur_row+1), number_format( ( $sheet_params['balance'] )/100, 2, ',', '.' ) )
-				->setCellValue( 'P'.$this->top_row_range, number_format( ( $sheet_params['balance'] - $sum )/100, 2, ',', '.' ) )
-				->freezePane( 'B' . $this->top_row_range ); // hack
+			$sheet->setCellValue( 'O' . $this->top_row_range, number_format( $sheet_params['initial_balance']/100, 2, '.', ',' ) )
+				/* Static Values */
+				//->setCellValue( 'O'.($cur_row), number_format( $sum/100, 2, '.', ',' ) )
+				//->setCellValue( 'O'.($cur_row+1), number_format( ( $sheet_params['initial_balance'] + $sum )/100, 2, '.', ',' ) );
+				/* Excel Formulae */
+				->setCellValue( 'O' . $cur_row, '=SUM(M' . $this->top_row_range . ':M' . ( $cur_row - 1 ) . ')' )
+				->setCellValue( 'O' . ( $cur_row + 1 ), '=O' . $this->top_row_range . '+O' . $cur_row );
 
 			$sheet->setSelectedCells('A1');
 
@@ -328,7 +344,7 @@ class VCA_ASM_Finances_Workbook extends VCA_ASM_Workbook
 		$this->workbook->getActiveSheet()->getStyle('A1')->applyFromArray( $this->styles['headline'] );
 
 		$this->workbook->getActiveSheet()->getStyle('A4:' . $this->workbook->getActiveSheet()->getHighestColumn() . '4')->applyFromArray( $this->styles['tableheader'] );
-		$this->workbook->getActiveSheet()->getRowDimension( '4' )->setRowHeight( 16 );
+		$this->workbook->getActiveSheet()->getRowDimension( '4' )->setRowHeight( 24 );
 
 		$this->workbook->getActiveSheet()->getStyle(
 		    'A4:A' .
@@ -340,12 +356,20 @@ class VCA_ASM_Finances_Workbook extends VCA_ASM_Workbook
 		)->applyFromArray( $this->styles['leftbound'] );
 
 		$this->workbook->getActiveSheet()->getStyle(
+			'M5:M' .
+			$this->workbook->getActiveSheet()->getHighestRow()
+		)->applyFromArray( $this->styles['rightbound'] )
+			->getNumberFormat()->setFormatCode('[Black][>=0]#,##0.00;[Red][<0]-#,##0.00;');
+
+		$this->workbook->getActiveSheet()->getStyle(
 			$this->workbook->getActiveSheet()->getHighestColumn() .
-		    '4:' .
+		    '5:' .
 			$this->workbook->getActiveSheet()->getHighestColumn() .
 			$this->workbook->getActiveSheet()->getHighestRow()
-		)->applyFromArray( $this->styles['leftbound'] )
-			->applyFromArray( $this->styles['bold'] );
+		)->applyFromArray( $this->styles['rightbound'] )
+			->applyFromArray( $this->styles['bold'] )
+			->getNumberFormat()->setFormatCode('[Black][>=0]#,##0.00;[Red][<0]-#,##0.00;');
+;
 	}
 
 } // class

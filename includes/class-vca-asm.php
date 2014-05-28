@@ -206,6 +206,7 @@ class VCA_ASM {
 		wp_register_script( 'vca-asm-admin-email-preview', VCA_ASM_RELPATH . 'js/admin-email-preview.js', array( 'jquery' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-admin-email-compose', VCA_ASM_RELPATH . 'js/admin-email-compose.js', array( 'jquery' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-admin-finances', VCA_ASM_RELPATH . 'js/admin-finances.js', array( 'jquery' ), '2014.04.02.3', true );
+		wp_register_script( 'vca-asm-admin-finances-spreadsheet-form', VCA_ASM_RELPATH . 'js/admin-finances-spreadsheet-form.js', array( 'jquery' ), '2014.04.02.3', true );
 		wp_register_script( 'vca-asm-admin-generic', VCA_ASM_RELPATH . 'js/admin-generic.js', array( 'jquery' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-admin-repeatable-custom-fields', VCA_ASM_RELPATH . 'js/admin-repeatable-custom-fields.js',
 			array( 'jquery', 'jquery-ui-slider', 'jquery-ui-datepicker' ), '2013.11.6.1', true );
@@ -217,7 +218,6 @@ class VCA_ASM {
 		wp_register_script( 'vca-asm-admin-settings', VCA_ASM_RELPATH . 'js/admin-settings.js', array( 'jquery', 'jquery-ui-slider' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-admin-supporter-filter', VCA_ASM_RELPATH . 'js/admin-supporter-filter.js', array( 'jquery' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-admin-validation', VCA_ASM_RELPATH . 'js/admin-validation.js', array( 'jquery' ), '2014.04.22.5', true );
-		wp_register_script( 'vca-asm-excel-export', VCA_ASM_RELPATH . 'js/excel-export.js', array( 'jquery' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-tooltip', VCA_ASM_RELPATH . 'js/tooltip.js', array( 'jquery' ), '2013.11.6.1', true );
 		wp_register_script( 'vca-asm-ctr-to-cty', VCA_ASM_RELPATH . 'js/ctr-to-cty.js', array( 'jquery' ), '2013.11.6.1', true );
 
@@ -241,7 +241,6 @@ class VCA_ASM {
 
 		/* conditional (context) based enqueue as well ? */
 		wp_enqueue_script( 'vca-asm-admin-profile' );
-		wp_enqueue_script( 'vca-asm-excel-export' );
 
 		wp_register_style( 'jquery-ui-framework', VCA_ASM_RELPATH . 'css/jquery-ui-framework.css' );
 		wp_register_style( 'jquery-ui-custom', VCA_ASM_RELPATH . 'css/jquery-ui-custom.css' );

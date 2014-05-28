@@ -26,6 +26,7 @@ class VCA_ASM_Workbook
 	public $filename = '';
 
 	public $workbook = object;
+	public $template = object;
 
 	public $format = 'xlsx';
 
@@ -34,15 +35,15 @@ class VCA_ASM_Workbook
 			'font' => array(
 				'bold'  => false,
 				'color' => array( 'rgb' => '000000' ),
-				'size'  => 10,
-				'name'  => 'Gill Sans MT'
+				'size'  => 9,
+				'name'  => 'Museo Sans 300'
 			)
 		),
 		'headline' => array(
 			'font' => array(
 				'bold'  => false,
 				'color' => array( 'rgb' => '009ac7' ),
-				'size'  => 16,
+				'size'  => 14,
 				'name'  => 'Museo Slab 500'
 			),
 			'alignment' => array(
@@ -64,10 +65,13 @@ class VCA_ASM_Workbook
 				'color' => array( 'rgb' => '414042' )
 			),
 			'font' => array(
-				'bold'  => true,
+				'bold'  => false,
 				'color' => array( 'rgb' => 'ffffff' ),
-				'size'  => 10,
-				'name'  => 'Gill Sans MT'
+				'size'  => 9,
+				'name'  => 'Museo Slab 500'
+			),
+			'alignment' => array(
+				'wrap' => true
 			)
 		),
 		'bold' => array(
@@ -80,9 +84,19 @@ class VCA_ASM_Workbook
 				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_LEFT
 			)
 		),
+		'rightbound' => array(
+			'alignment' => array(
+				'horizontal' => PHPExcel_Style_Alignment::HORIZONTAL_RIGHT
+			)
+		),
 		'positive' => array(
 			'font' => array(
 				'color' => array( 'rgb' => 'ff0000' )
+			)
+		),
+		'negative' => array(
+			'font' => array(
+				'color' => array( 'rgb' => '00ff00' )
 			)
 		)
 	);
@@ -149,10 +163,10 @@ class VCA_ASM_Workbook
 			->setHorizontal( PHPExcel_Style_Alignment::HORIZONTAL_CENTER );
 
 		$this->workbook->getDefaultStyle()->getFont()
-			->setName( 'Gill Sans MT' )
-			->setSize( 10 );
+			->setName( 'Museo Sans 300' )
+			->setSize( 9 );
 
-		$this->template = $this->template( array( 'gridlines' => $gridlines ) );
+		$this->template = $this->template();
 	}
 
 	/**
@@ -164,7 +178,8 @@ class VCA_ASM_Workbook
 	private function template( $args = array() )
 	{
 		$default_args = array(
-			'gridlines' => true
+			'gridlines' => true,
+			'orientation' => 'portrait'		// unused
 		);
 		$args = wp_parse_args( $args, $default_args );
 		extract( $args );
@@ -173,9 +188,8 @@ class VCA_ASM_Workbook
 
 		$template->getPageSetup()->setOrientation( PHPExcel_Worksheet_PageSetup::ORIENTATION_PORTRAIT )
 			->setPaperSize( PHPExcel_Worksheet_PageSetup::PAPERSIZE_A4 )
-			->setHorizontalCentered(false)
-			->setVerticalCentered(true);
-
+			->setHorizontalCentered( false )
+			->setVerticalCentered( true );
 
 		$template->getPageMargins()->setTop( 0.75 )
 					->setRight( 0.75 )
@@ -226,7 +240,7 @@ class VCA_ASM_Workbook
 			for ( $c = 1; $c <= $this->col_range; $c++ ) {
 				$this->workbook->getActiveSheet()->getColumnDimension( $this->num_to_letter( $c, true ) )->setAutoSize( false );
 				$width = $this->workbook->getActiveSheet()->getColumnDimension( $this->num_to_letter( $c, true ) )->getWidth();
-				$this->workbook->getActiveSheet()->getColumnDimension( $this->num_to_letter( $c, true ) )->setWidth( ( $width + 7 ) * .75 );
+				$this->workbook->getActiveSheet()->getColumnDimension( $this->num_to_letter( $c, true ) )->setWidth( ( $width + 7 ) * .65 );
 			}
 			for ( $r = 1; $r <= $this->row_range; $r++ ) {
 				if ( ! in_array( $r, array( 1, 4 ) ) ) {
@@ -235,7 +249,7 @@ class VCA_ASM_Workbook
 			}
 		}
 
-		$this->workbook->setActiveSheetIndex( 1 );
+		$this->workbook->setActiveSheetIndex( 0 );
 		$this->workbook->getActiveSheet()->setSelectedCells('A1');
 
 		switch ( $this->format ) {

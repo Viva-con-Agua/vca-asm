@@ -347,11 +347,11 @@ class VCA_ASM_Finances
 	 * @since 1.5
 	 * @access public
 	 */
-	public function get_balance( $city_id, $type = 'econ' )
+	public function get_balance( $city_id, $type = 'econ', $time = NULL )
 	{
 		global $wpdb;
 
-		/* TODO: Make more efficient!
+		/* ----- TODO: Make more efficient! -----
 
 		$data = $wpdb->get_results(
 			"SELECT balance, last_updated FROM " .
@@ -366,7 +366,12 @@ class VCA_ASM_Finances
 		$where .= isset( $data[0]['last_updated'] ) ? $data[0]['last_updated'] : 0; */
 
 		$balance = 0;
+
 		$where = "WHERE city_id = " . $city_id . " AND account_type = '" . $type . "'";
+
+		if ( is_numeric( $time ) ) {
+			$where .= " AND transaction_date <= " . $time;
+		}
 
 		$data = $wpdb->get_results(
 			"SELECT * FROM " .

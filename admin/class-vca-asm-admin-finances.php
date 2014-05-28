@@ -108,7 +108,7 @@ class VCA_ASM_Admin_Finances
 				break;
 
 				case 'download-data':
-					$data = new VCA_ASM_Finances_Workbook(
+					$data = new VCA_ASM_Workbook_Finances(
 						array(
 							'scope' => $this->cap_lvl,
 							'id' => $this->admin_nation,
@@ -533,6 +533,8 @@ class VCA_ASM_Admin_Finances
 
 	private function overview_global_download( $messages = array() )
 	{
+		wp_enqueue_script( 'vca-asm-admin-finances-spreadsheet-form' );
+
 		$url = '?page=vca-asm-finances&tab=download';
 
 		$output = '';
@@ -629,16 +631,16 @@ class VCA_ASM_Admin_Finances
 					array(
 						'value' => 'xls',
 						'label' => __( 'Office 95 to XP (.xls)', 'vca-asm' )
-					),
+					)/*,
 					array(
 						'value' => 'csv',
 						'label' => __( 'Plain text, single sheet (.csv)', 'vca-asm' )
-					)
+					)*/
 				),
 				'label' => _x( 'Format', 'Excel File Format', 'vca-asm' ),
 				'desc' => __( 'Download as this kind of file format.', 'vca-asm' ) . '<br />' .
-					__( 'Choose &quot;Office 2007&quot; for best results.', 'vca-asm' ) . '<br />' .
-					__( 'Note that &quot;.csv&quot; files do not support sheets/tabs.', 'vca-asm' )
+					__( 'Choose &quot;Office 2007&quot; for best results.', 'vca-asm' )/* . '<br />' .
+					__( 'Note that &quot;.csv&quot; files do not support sheets/tabs.', 'vca-asm' )*/
 			),
 			array(
 				'type' => 'radio',
@@ -2399,6 +2401,15 @@ class VCA_ASM_Admin_Finances
 								)),
 								'required' => true,
 								'desc' => __( 'Of what category is this expenditure?', 'vca-asm' )//__( 'Under what category should this expense be booked?', 'vca-asm' )
+							),
+							array(
+								'type' => 'text',
+								'label' => __( 'Item(s)', 'vca-asm' ),
+								'id' => 'meta_4',
+								'desc' => __( 'What did you buy?', 'vca-asm' ),
+								'validation' => 'required',
+								'class' => 'required',
+								'required' => true
 							),
 							array(
 								'type' => 'radio',

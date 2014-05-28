@@ -534,13 +534,13 @@ class VCA_ASM_Geography
 	 * @since 1.0
 	 * @access public
 	 */
-	public function convert_type( $type ) {
+	public function convert_type( $type, $short = false ) {
 		switch( $type ) {
 			case 'cell':
 				return __( 'Cell', 'vca-asm' );
 			break;
 			case 'lc':
-				return __( 'Local Crew', 'vca-asm' );
+				return $short ? __( 'LC', 'vca-asm' ) : __( 'Local Crew', 'vca-asm' );
 			break;
 			case 'cg':
 				return __( 'City Group', 'vca-asm' );
@@ -596,7 +596,7 @@ class VCA_ASM_Geography
 	public function get_status( $id ) {
 		return $this->get_type( $id );
 	}
-	public function get_type( $id, $converted = true, $grouped = false ) {
+	public function get_type( $id, $converted = true, $grouped = false, $short = false ) {
 		global $wpdb;
 
 		$type_query = $wpdb->get_results(
@@ -612,7 +612,7 @@ class VCA_ASM_Geography
 		}
 
 		if ( $converted ) {
-			return $this->convert_type( $type );
+			return $this->convert_type( $type, $short );
 		} else {
 			return $type;
 		}
@@ -1001,7 +1001,7 @@ class VCA_ASM_Geography
 		if ( ! empty( $global_option ) ) {
 			$first[] = array_shift( $options_array );
 		}
-		
+
 		$options_array = $vca_asm_utilities->sort_by_key( $options_array, 'label' );
 		if ( ! empty( $first ) ) {
 			$options_array = array_merge( $first, $options_array );

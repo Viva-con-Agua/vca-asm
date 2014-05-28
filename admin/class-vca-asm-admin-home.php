@@ -262,7 +262,7 @@ class VCA_ASM_Admin_Home {
 				$output .= '<p>' . $message . '</p>';
 			}
 		} else {
-			$output .= '<p>' . __( 'None', 'Tasks', 'vca-asm' ) . '...</p>';
+			$output .= '<p>' . _x( 'None', 'Tasks', 'vca-asm' ) . '...</p>';
 		}
 
 		$output .= $mbs->mb_bottom();

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: VcA Activity & Supporter Management v1.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-05-12 18:22:23+0200\n"
+"PO-Revision-Date: 2014-05-27 09:10:13+0200\n"
 "Last-Translator: Johannes Pilkahn <johannes@pilkahn.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -928,10 +928,8 @@ msgstr "Nur allgemeine News"
 msgid "Only regional news"
 msgstr "Nur regionale News"
 
-#: admin/class-vca-asm-admin-home.php:265
 #: admin/class-vca-asm-admin-slot-allocation.php:1419
 #: includes/class-vca-asm-profile.php:121
-#@ Tasks
 #@ vca-asm
 msgid "None"
 msgstr "Keine"
@@ -6431,6 +6429,7 @@ msgstr "Spenden"
 #: admin/class-vca-asm-admin-finances.php:1021
 #: admin/class-vca-asm-admin.php:244
 #: admin/class-vca-asm-admin.php:245
+#: includes/class-vca-asm-finances-workbook.php:124
 #@ vca-asm
 msgid "Structural Funds"
 msgstr "Wirtschaftsgeld"
@@ -7874,6 +7873,7 @@ msgid "ASCII Cells LC"
 msgstr "ASCII Zellen LC"
 
 #: includes/class-vca-asm-finances-workbook.php:66
+#: includes/class-vca-asm-finances-workbook.php:124
 #@ vca-asm
 msgid "Account Statement"
 msgstr "Kontoauszug"
@@ -7889,7 +7889,7 @@ msgid "by city"
 msgstr "nach Stadt"
 
 #: includes/class-vca-asm-finances-workbook.php:98
-#: includes/class-vca-asm-workbook.php:117
+#: includes/class-vca-asm-workbook.php:135
 #@ vca-asm
 msgid "Accounting"
 msgstr "Buchführung"
@@ -7904,9 +7904,118 @@ msgstr "Stand"
 msgid "No Country"
 msgstr "Kein Land"
 
-#: includes/class-vca-asm-workbook.php:141
+#: includes/class-vca-asm-workbook.php:159
 #@ vca-asm
 msgctxt "Excel Locale"
 msgid "en_us"
 msgstr "de_de"
+
+#: includes/class-vca-asm-finances-workbook.php:124
+#@ vca-asm
+msgid "Revenues & Expenses"
+msgstr "Einnahmen & Ausgaben"
+
+#: includes/class-vca-asm-finances-workbook.php:137
+#@ vca-asm
+msgid "Receipt No."
+msgstr "Beleg Nr."
+
+#: includes/class-vca-asm-finances-workbook.php:138
+#@ vca-asm
+msgid "Cash Account"
+msgstr "Kassenkonto"
+
+#: includes/class-vca-asm-finances-workbook.php:139
+#@ vca-asm
+msgid "Booking Date"
+msgstr "Datum Buchung"
+
+#: includes/class-vca-asm-finances-workbook.php:140
+#@ vca-asm
+msgid "Entry Date"
+msgstr "Datum Eintrag"
+
+#: includes/class-vca-asm-finances-workbook.php:141
+#@ vca-asm
+msgid "Receipt Date"
+msgstr "Datum Beleg"
+
+#: includes/class-vca-asm-finances-workbook.php:142
+#@ vca-asm
+msgid "Source"
+msgstr "Quelle"
+
+#: includes/class-vca-asm-finances-workbook.php:142
+#@ vca-asm
+msgid "(what was bought)"
+msgstr "(was wurde gekauft)"
+
+#: includes/class-vca-asm-finances-workbook.php:143
+#@ vca-asm
+msgctxt "Expense-Account"
+msgid "Expense- /"
+msgstr "Aufwands-/"
+
+#: includes/class-vca-asm-finances-workbook.php:143
+#@ vca-asm
+msgid "Income-Account"
+msgstr "Ertragskonto"
+
+#: includes/class-vca-asm-finances-workbook.php:144
+#@ vca-asm
+msgid "COST1"
+msgstr "KOST1"
+
+#: includes/class-vca-asm-finances-workbook.php:145
+#@ vca-asm
+msgid "COST2"
+msgstr "KOST2"
+
+#: includes/class-vca-asm-finances-workbook.php:146
+#@ vca-asm
+msgid "Receiptfield1"
+msgstr "Belegfeld1"
+
+#: includes/class-vca-asm-finances-workbook.php:147
+#@ vca-asm
+msgid "Deposit / Withdrawal"
+msgstr "EinZ AusZ"
+
+#: includes/class-vca-asm-finances-workbook.php:148
+#@ vca-asm
+msgid "BU-Key"
+msgstr "BU-Schlüssel"
+
+#: includes/class-vca-asm-finances-workbook.php:149
+#@ vca-asm
+msgid "Revenue Tax"
+msgstr "USt Satz"
+
+#: includes/class-vca-asm-finances-workbook.php:150
+#: includes/class-vca-asm-finances-workbook.php:159
+#@ vca-asm
+msgctxt "Saldo"
+msgid "Balance"
+msgstr "Saldo"
+
+#: includes/class-vca-asm-finances-workbook.php:154
+#@ vca-asm
+msgid "Previous Stock"
+msgstr "Bestand, Vorher"
+
+#: includes/class-vca-asm-finances-workbook.php:158
+#@ vca-asm
+msgid "Sum"
+msgstr "Summe"
+
+#: includes/class-vca-asm-geography.php:543
+#@ vca-asm
+msgid "LC"
+msgstr "LC"
+
+#: admin/class-vca-asm-admin-home.php:265
+#@ vca-asm
+msgctxt "Tasks"
+msgid "None"
+msgstr "Keine"
 

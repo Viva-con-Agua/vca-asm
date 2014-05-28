@@ -526,7 +526,8 @@ class VCA_ASM_Activity {
 	 * @since 1.3
 	 * @access public
 	 */
-	public function is_eligible( $supporter_id ) {
+	public function is_eligible( $supporter_id )
+	{
 		global $vca_asm_geography;
 
 		$membership_status = get_user_meta( $supporter_id, 'membership', true );

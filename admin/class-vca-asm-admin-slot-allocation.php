@@ -516,7 +516,8 @@ class VCA_ASM_Admin_Slot_Allocation {
 
 		$title = sprintf( __( 'Supporter Management for &quot;%s&quot;', 'vca-asm' ), $the_activity->name );
 
-		$profile_url = 'admin.php?page=vca-asm-' . $this->department . '-slot-allocation&activity=' . $activity_id . '&tab=' . $active_tab;
+		$url = 'admin.php?page=vca-asm-' . $this->department . '-slot-allocation&activity=' . $activity_id . '&tab=' . $active_tab;
+		$profile_url = $url;
 		if( isset( $_GET['orderby'] ) ) {
 			$profile_url .= '&orderby=' . $_GET['orderby'];
 		}
@@ -719,6 +720,18 @@ class VCA_ASM_Admin_Slot_Allocation {
 					$active_tab = 'accepted';
 					$the_activity->reset();
 				break;
+
+				case 'download-data':
+					$data = new VCA_ASM_Workbook_Participants(
+						array(
+							'scope' => isset( $_POST['scope'] ) ? $_POST['scope'] : 'public',
+							'id' => isset( $_GET['activity'] ) ? $_GET['activity'] : 0,
+							'format' => isset( $_POST['format'] ) ? $_POST['format'] : 'xlsx',
+							'group' => isset( $_POST['group'] ) ? $_POST['group'] : 'participants'
+						)
+					);
+					$data->output();
+				break;
 			}
 		}
 
@@ -793,7 +806,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 			break;
 
 			case "data":
-				$this->data_links( $the_activity );
+				$this->data_links( $the_activity, $url );
 			break;
 
 			default:
@@ -811,7 +824,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 	 * @since 1.3
 	 * @access private
 	 */
-	private function data_links( $the_activity ) {
+	private function data_links( $the_activity, $url ) {
 		global $current_user, $vca_asm_registrations;
 		get_currentuserinfo();
 
@@ -825,12 +838,6 @@ class VCA_ASM_Admin_Slot_Allocation {
 		$applicants = array();
 		$waiting = array();
 		$participants = array();
-
-		$excel_params = array(
-			'relpath' => VCA_ASM_RELPATH,
-			'pID' => $the_activity->ID
-		);
-		wp_localize_script( 'vca-asm-excel-export', 'excelParams', $excel_params );
 
 		if (
 			$current_user->has_cap( 'vca_asm_manage_' . $department . '_global' ) ||
@@ -892,8 +899,113 @@ class VCA_ASM_Admin_Slot_Allocation {
 			}
 		}
 
+		$available_groups = array();
+		if ( ! empty( $participants ) ) {
+			$available_groups[] = array(
+				'label' => __( 'Participants', 'vca-asm' ),
+				'value' => 'participants'
+			);
+		}
+		if ( ! empty( $applicants ) ) {
+			$available_groups[] = array(
+				'label' => __( 'Applicants', 'vca-asm' ),
+				'value' => 'applicants'
+			);
+		}
+		if ( $the_activity->upcoming && ! empty( $waiting ) ) {
+			$available_groups[] = array(
+				'label' => __( 'Waiting List', 'vca-asm' ),
+				'value' => 'waiting'
+			);
+		}
+
+		$fields = array(
+			array(
+				'type' => 'select',
+				'id' => 'group',
+				'options' => $available_groups,
+				'label' => __( 'Group', 'vca-asm' ),
+				'desc' => __( 'Which group of supporters is supposed to appear on this list?', 'vca-asm' ) . '<br />' .
+					__( 'The pre-selected &quot;Participants&quot; is what you&apos;d usually want.', 'vca-asm' )
+			),
+			array(
+				'type' => 'select',
+				'id' => 'scope',
+				'options' => array(
+					array(
+						'label' => _x( 'safe to forward', 'non-sensitive data', 'vca-asm' ),
+						'value' => 'public'
+					),
+					array(
+						'label' => _x( 'including sensitive data, never (!) forward', 'non-sensitive data', 'vca-asm' ),
+						'value' => 'private'
+					)
+				),
+				'label' => __( 'Data Types', 'vca-asm' ),
+				'desc' => __( 'Whether to include personal data such as phone numbers, age and the like.', 'vca-asm' )
+			),
+			array(
+				'type' => 'select',
+				'id' => 'format',
+				'options' => array(
+					array(
+						'value' => 'xlsx',
+						'label' => __( 'Office 2007 (.xlsx)', 'vca-asm' )
+					),
+					array(
+						'value' => 'xlsx2003',
+						'label' => __( 'Office 2003, (.xlsx)', 'vca-asm' )
+					),
+					array(
+						'value' => 'xls',
+						'label' => __( 'Office 95 to XP (.xls)', 'vca-asm' )
+					)/*,
+					array(
+						'value' => 'csv',
+						'label' => __( 'Plain text, single sheet (.csv)', 'vca-asm' )
+					)*/
+				),
+				'label' => _x( 'Format', 'Excel File Format', 'vca-asm' ),
+				'desc' => __( 'Download as this kind of file format.', 'vca-asm' ) . '<br />' .
+					__( 'Choose &quot;Office 2007&quot; for best results.', 'vca-asm' )/* . '<br />' .
+					__( 'Note that &quot;.csv&quot; files do not support sheets/tabs.', 'vca-asm' )*/
+			)/*,
+			array(
+				'type' => 'radio',
+				'id' => 'gridlines',
+				'options' => array(
+					array(
+						'value' => 1,
+						'label' => __( 'Show', 'vca-asm' )
+					),
+					array(
+						'value' => 2,
+						'label' => __( 'Hide', 'vca-asm' )
+					)
+				),
+				'default' => 1,
+				'label' => __( 'Gridlines', 'vca-asm' ),
+				'desc' => __( 'Do you want the file to show gridlines?', 'vca-asm' )
+			) */
+		);
+
+		$form_args = array(
+			'echo' => false,
+			'form' => true,
+			'method' => 'post',
+			'metaboxes' => false,
+			'js' => false,
+			'url' => $url,
+			'action' => $url . '&todo=download-data&noheader=true',
+			'top_button' => false,
+			'button' => __( 'Download Spreadsheet', 'vca-asm' ),
+			'back' => false,
+			'button_id' => 'submit',
+			'fields' => $fields
+		);
+
 		$mb_args = array(
-			'echo' => true,
+			'echo' => false,
 			'columns' => 1,
 			'running' => 1,
 			'id' => '',
@@ -902,85 +1014,23 @@ class VCA_ASM_Admin_Slot_Allocation {
 		);
 		$mb_env = new VCA_ASM_Admin_Metaboxes( $mb_args );
 
-		$mb_env->top();
+		$output = $mb_env->top();
 
-		$mb_env->mb_top();
-			$output = '<table class="table-inside-table table-mobile-collapse subtable">';
+		if ( ! empty( $available_groups ) ) {
 
-			$output .= '<tr><td>' .
-					'<strong>' . __( 'Applicants', 'vca-asm' ) . '</strong>' .
-				'</td></tr>';
-			if ( ! empty( $applicants ) ) {
-				$output .= '<tr><td>' .
-						'<a id="excel-download" href="#spreadsheet-full" onclick="p1exportExcel(\'applicants\');">' .
-							__( 'Download applicant data as an MS Excel spreadsheet', 'vca-asm' ) .
-							' (' . _x( 'including sensitive data, never (!) forward', 'non-sensitive data', 'vca-asm' ) . ')' .
-						'</a>' .
-					'</td></tr><tr><td>' .
-						'<a id="excel-download-minimal" href="#spreadsheet-minimal" onclick="p1exportExcelMin(\'applicants\');">' .
-							__( 'Download applicant data as an MS Excel spreadsheet', 'vca-asm' ) .
-							' (' . _x( 'safe to forward', 'non-sensitive data', 'vca-asm' ) . ')' .
-						'</a>' .
-					'</td></tr>';
-			} else {
-				$output .= '<tr><td>' .
-						__( 'Currently no applicants', 'vca-asm' ) .
-					'</td></tr>';
-			}
-			if ( $the_activity->upcoming ) {
-				$output .= '<tr><td style="padding-top:1em">' .
-						'<strong>' . __( 'Waiting List', 'vca-asm' ) . '</strong>' .
-					'</td></tr>';
-				if ( ! empty( $waiting ) ) {
-					$output .= '<tr><td>' .
-							'<a id="excel-download" href="#spreadsheet-full" onclick="p1exportExcel(\'waiting\');">' .
-								__( 'Download waiting list as an MS Excel spreadsheet', 'vca-asm' ) .
-								' (' . _x( 'including sensitive data, never (!) forward', 'non-sensitive data', 'vca-asm' ) . ')' .
-							'</a>' .
-						'</td></tr><tr><td>' .
-							'<a id="excel-download-minimal" href="#spreadsheet-minimal" onclick="p1exportExcelMin(\'waiting\');">' .
-								__( 'Download waiting list as an MS Excel spreadsheet', 'vca-asm' ) .
-								' (' . _x( 'safe to forward', 'non-sensitive data', 'vca-asm' ) . ')' .
-							'</a>' .
-						'</td></tr>';
-				} else {
-					$output .= '<tr><td>' .
-							__( 'Waiting List currently empty', 'vca-asm' ) .
-						'</td></tr>';
-				}
-			}
-			$output .= '<tr><td style="padding-top:1em">' .
-						'<strong>' . __( 'Participants', 'vca-asm' ) . '</strong>' .
-					'</td></tr>';
-			if ( ! empty( $participants ) ) {
-				$output .= '<tr><td>' .
-						'<a id="excel-download" href="#spreadsheet-full" onclick="p1exportExcel(\'participants\');">' .
-							__( 'Download participant data as an MS Excel spreadsheet', 'vca-asm' ) .
-							' (' . _x( 'including sensitive data, never (!) forward', 'non-sensitive data', 'vca-asm' ) . ')' .
-						'</a>' .
-					'</td></tr><tr><td>' .
-						'<a id="excel-download-minimal" href="#spreadsheet-minimal" onclick="p1exportExcelMin(\'participants\');">' .
-							__( 'Download participant data as an MS Excel spreadsheet', 'vca-asm' ) .
-							' (' . _x( 'safe to forward', 'non-sensitive data', 'vca-asm' ) . ')' .
-						'</a>' .
-					'</td></tr>';
-			} else {
-				$output .= '<tr><td>' .
-						__( 'No participants yet', 'vca-asm' ) .
-					'</td></tr>';
-			}
+			$output .= $mb_env->mb_top();
 
-			$output .= '<iframe id="excel-frame" src="" style="display:none; visibility:hidden;"></iframe>' .
-					'</table>';
-			echo $output;
-		$mb_env->mb_bottom();
+			$the_form = new VCA_ASM_Admin_Form( $form_args );
+			$output .= $the_form->output();
 
-		$mb_env->mb_top( array( 'title' =>  __( 'E-Mails', 'vca-asm' ) ) );
-			$output = '<table class="table-inside-table table-mobile-collapse subtable">';
+			$output .= $mb_env->mb_bottom();
 
-			$output .= '<tr><td>' .
-					'<strong>' . __( 'Applicants', 'vca-asm' ) . '</strong>' .
-				'</td></tr>';
+		}
+
+		$output .= $mb_env->mb_top( array( 'title' =>  __( 'E-Mails', 'vca-asm' ) ) );
+
+		$output .= '<table>';
+
 			if ( ! empty( $applicants ) ) {
 				$output .= '<tr><td>' .
 						'<a href="' .
@@ -1037,8 +1087,9 @@ class VCA_ASM_Admin_Slot_Allocation {
 					'</td></tr>';
 			}
 
-			$output .= '</table>';
-			echo $output;
+		$output .= '</table>';
+		echo $output;
+
 		$mb_env->mb_bottom();
 
 		$mb_env->bottom();

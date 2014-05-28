@@ -79,10 +79,10 @@ require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-stats.php' );
 require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-supporter.php' );
 /* 2nd party code */
 require_once( VCA_ASM_ABSPATH . '/lib/PHPExcel.php' );
-require_once( VCA_ASM_ABSPATH . '/lib/class-php2excel.php' );
 /* Download Generators */
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-workbook.php' );
-require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-finances-workbook.php' );
+require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-workbook-finances.php' );
+require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-workbook-participants.php' );
 /* template classes (non-OOP templates are included on the spot) */
 if ( ! is_admin() ) {
 	require_once( VCA_ASM_ABSPATH . '/templates/class-vca-asm-frontend-activities.php' );
@@ -235,12 +235,43 @@ function vca_asm_install() {
 		UNIQUE KEY id (id)
 	) DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;";
 	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_finances_accounts (
+		id int UNSIGNED NOT  NULL AUTO_INCREMENT ,
+		city_id int UNSIGNED NOT  NULL ,
+		type varchar(255) NOT NULL ,
+		balance int NOT  NULL ,
+		last_updated varchar(255) NOT NULL ,
+		balanced_month varchar(255) NOT NULL ,
+		last_receipt varchar(255) NOT NULL ,
+		total int NOT  NULL ,
 		UNIQUE KEY id (id)
 	) DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;";
 	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_finances_meta (
+		id int UNSIGNED NOT  NULL AUTO_INCREMENT ,
+		type varchar(255) NOT NULL ,
+		name varchar(255) NOT NULL ,
+		value varchar(255) NOT NULL ,
+		description text NOT NULL ,
+		related_id int UNSIGNED NOT  NULL ,
 		UNIQUE KEY id (id)
 	) DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;";
 	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_finances_transactions (
+		id int UNSIGNED NOT  NULL AUTO_INCREMENT ,
+		city_id int UNSIGNED NOT  NULL ,
+		amount int NOT  NULL ,
+		account_type varchar(255) NOT NULL ,
+		transaction_type varchar(255) NOT NULL ,
+		transaction_date varchar(255) NOT NULL ,
+		entry_time varchar(255) NOT NULL ,
+		receipt_date varchar(255) NOT NULL ,
+		receipt_id varchar(255) NOT NULL ,
+		receipt_status tinyint NOT NULL ,
+		cash tinyint NOT NULL ,
+		cost_center varchar(255) NOT NULL ,
+		ei_account varchar(255) NOT NULL ,
+		meta_1 text NOT NULL ,
+		meta_2 text NOT NULL ,
+		meta_3 text NOT NULL ,
+		meta_4 text NOT NULL ,
 		UNIQUE KEY id (id)
 	) DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;";
 	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_geography (
