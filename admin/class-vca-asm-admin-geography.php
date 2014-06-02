@@ -335,7 +335,7 @@ class VCA_ASM_Admin_Geography {
 									'name' => $_POST['name'],
 									'type' => $_POST['type'],
 									'phone_code' => ( isset( $_POST['phone_code'] ) && is_numeric( $_POST['phone_code'] ) ) ? $_POST['phone_code'] : 0,
-									'alpha_code' => ( isset( $_POST['alpha_code'] ) && is_numeric( $_POST['alpha_code'] ) ) ? $_POST['alpha_code'] : 'xx',
+									'alpha_code' => ( isset( $_POST['alpha_code'] ) && ! empty( $_POST['alpha_code'] ) ) ? $_POST['alpha_code'] : 'xx',
 									'currency_name' => ( isset( $_POST['currency_name'] ) && is_numeric( $_POST['currency_name'] ) ) ? $_POST['currency_name'] : '',
 									'currency_code' => ( isset( $_POST['currency_code'] ) && is_numeric( $_POST['currency_code'] ) ) ? $_POST['currency_code'] : '',
 									'has_user' => $has_user,
