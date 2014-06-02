@@ -913,6 +913,22 @@ class VCA_ASM_Finances
 		return $return;
 	}
 
+	/**
+	 * Returns a translatable and human-readable type of transaction
+	 * when fed it's identifier string
+	 *
+	 * @param string $type
+	 *
+	 * @return string $nicename
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	public function type_to_nicename( $type )
+	{
+		return ! empty( $this->types_to_nicenames[$type] ) ? $this->types_to_nicenames[$type] : $type;
+	}
+
 } // class
 
 endif; // class exists
