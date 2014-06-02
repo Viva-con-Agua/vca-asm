@@ -107,6 +107,7 @@ class VCA_ASM_Workbook
 	public $col_range = 1;
 	public $row_range = 1;
 
+	public $non_autosized_columns = array();
 	public $output_method = 'download';
 
 	/**
@@ -234,13 +235,16 @@ class VCA_ASM_Workbook
 			$si = $iterator->key();
 			$this->workbook->setActiveSheetIndex( $si );
 			for ( $c = 1; $c <= $this->col_range; $c++ ) {
-				$this->workbook->getActiveSheet()->getColumnDimension( $this->num_to_letter( $c, true ) )->setAutoSize( true );
+				$col = $this->num_to_letter( $c, true );
+				if ( ! in_array( $col, $this->non_autosized_columns ) ) {
+					$this->workbook->getActiveSheet()->getColumnDimension( $col )->setAutoSize( true );
+				}
 			}
 			$this->workbook->getActiveSheet()->calculateColumnWidths();
 			for ( $c = 1; $c <= $this->col_range; $c++ ) {
 				$this->workbook->getActiveSheet()->getColumnDimension( $this->num_to_letter( $c, true ) )->setAutoSize( false );
 				$width = $this->workbook->getActiveSheet()->getColumnDimension( $this->num_to_letter( $c, true ) )->getWidth();
-				$this->workbook->getActiveSheet()->getColumnDimension( $this->num_to_letter( $c, true ) )->setWidth( ( $width + 7 ) * .65 );
+				//$this->workbook->getActiveSheet()->getColumnDimension( $this->num_to_letter( $c, true ) )->setWidth( ( $width + 7 ) * .65 );
 			}
 			for ( $r = 1; $r <= $this->row_range; $r++ ) {
 				if ( ! in_array( $r, array( 1, 4 ) ) ) {
@@ -255,6 +259,7 @@ class VCA_ASM_Workbook
 		switch ( $this->format ) {
 			case 'xls':
 				$writer = new PHPExcel_Writer_Excel5( $this->workbook );
+				$writer->setPreCalculateFormulas( false );
 				$extension = '.xls';
 				$mime_type = 'application/vnd.ms-excel';
 			break;
@@ -262,6 +267,7 @@ class VCA_ASM_Workbook
 			case 'xlsx2003':
 				$writer = new PHPExcel_Writer_Excel2007( $this->workbook );
 				$writer->setOffice2003Compatibility( true );
+				$writer->setPreCalculateFormulas( false );
 				$extension = '.xlsx';
 				$mime_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 			break;
@@ -269,6 +275,7 @@ class VCA_ASM_Workbook
 			case 'xlsx':
 			default:
 				$writer = new PHPExcel_Writer_Excel2007( $this->workbook );
+				$writer->setPreCalculateFormulas( false );
 				$extension = '.xlsx';
 				$mime_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 			break;
@@ -284,7 +291,7 @@ class VCA_ASM_Workbook
 		}
 
 		$writer->save( $save_param );
-		exit; // VERY important! (5h of Bug-Searching resulted in this line...)
+		exit; // VERY important! (5 hours of Bug-Searching resulted in this line...)
 	}
 
 } // class

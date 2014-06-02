@@ -59,6 +59,8 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 		$this->default_args['month'] = date( 'm' );
 		$this->default_args['year'] = date( 'Y' );
 
+		//$this->non_autosized_columns[] = 'P';
+
 		$this->args = wp_parse_args( $args, $this->default_args );
 		extract( $this->args );
 
@@ -122,7 +124,7 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 
 		$this->template->getPageSetup()->setOrientation( PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE );
 
-		$this->template->mergeCells( 'A1:O1' )
+		$this->template->mergeCells( 'A1:P1' )
 				->freezePane( 'B5' )
 				->setCellValue( 'A1', strtoupper( __( 'Account Statement', 'vca-asm' ) . ': ' . __( 'Revenues & Expenses', 'vca-asm' ) . ', ' . __( 'Structural Funds', 'vca-asm' ) ) );
 
@@ -148,9 +150,10 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 			->setCellValue( 'J'.$cur_row, __( 'COST2', 'vca-asm' ) )
 			->setCellValue( 'K'.$cur_row, __( 'Receiptfield1', 'vca-asm' ) )
 			->setCellValue( 'L'.$cur_row, __( 'BU-Key', 'vca-asm' ) )
-			->setCellValue( 'M'.$cur_row, __( 'Deposit / Withdrawal', 'vca-asm' ) )
-			->setCellValue( 'N'.$cur_row, __( 'Revenue Tax', 'vca-asm' ) )
-			->setCellValue( 'O'.$cur_row, _x( 'Balance', 'Saldo', 'vca-asm' ) );
+			->setCellValue( 'M'.$cur_row, __( 'Type', 'vca-asm' ) )
+			->setCellValue( 'N'.$cur_row, __( 'Deposit / Withdrawal', 'vca-asm' ) )
+			->setCellValue( 'O'.$cur_row, __( 'Revenue Tax', 'vca-asm' ) )
+			->setCellValue( 'P'.$cur_row, _x( 'Balance', 'Saldo', 'vca-asm' ) );
 
 		$this->top_row_range = $cur_row;
 
@@ -158,11 +161,15 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 		$this->top_row_range++;
 		$this->template_row_range = $this->top_row_range;
 
-		$this->template->setCellValue( 'A'.($cur_row+2), __( 'Sum', 'vca-asm' ) )
-			->setCellValue( 'A'.($cur_row+3), _x( 'Balance', 'Saldo', 'vca-asm' ) );
+		$this->template->setCellValue( 'A'.($cur_row+2), __( 'Sum', 'vca-asm' ) . ', ' . __( 'Revenues', 'vca-asm' ) )
+			->setCellValue( 'A'.($cur_row+3), __( 'Sum', 'vca-asm' ) . ', ' . __( 'Expenditures', 'vca-asm' ) )
+			->setCellValue( 'A'.($cur_row+4), __( 'Sum', 'vca-asm' ) . ', ' . __( 'Revenues', 'vca-asm' ) . ' & ' . __( 'Expenditures', 'vca-asm' ) )
+			->setCellValue( 'A'.($cur_row+5), __( 'Sum', 'vca-asm' ) . ', ' . __( 'Transactions', 'vca-asm' ) )
+			->setCellValue( 'A'.($cur_row+6), __( 'Sum', 'vca-asm' ) . ', ' . __( 'Total', 'vca-asm' ) )
+			->setCellValue( 'A'.($cur_row+7), _x( 'Balance', 'Saldo', 'vca-asm' ) );
 		$this->template_row_range = $this->template_row_range + 2;
 
-		$this->template_col_range = 15;
+		$this->template_col_range = 16;
 
 		$this->template->setShowGridlines( $gridlines );
 	}
@@ -275,44 +282,78 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 				$sheet->insertNewRowBefore( $cur_row, 1 );
 
 				$tax_rate = ! empty( $transaction['meta_3'] ) ? $vca_asm_finances->get_tax_rate( $transaction['meta_3'] ) : NULL;
+				$cash_account = $vca_asm_finances->get_cash_account( $transaction['city_id'] );
+				$nice_type = $vca_asm_finances->type_to_nicename( $transaction['transaction_type'] );
+
+				$cash_account = false !== $cash_account ? $cash_account : '---';
+				$tax_rate = false !== $tax_rate ? $tax_rate : '';
 
 				if ( 'revenue' === $transaction['transaction_type'] ) {
+					$cost1 = '210';
 					$cost2 = '4';
 					if ( 7 == $tax_rate ) {
 						$bu_key = '2';
 					} elseif ( 19 == $tax_rate ) {
 						$bu_key = '3';
 					}
-				} else {
+				} elseif ( 'expenditure' === $transaction['transaction_type'] ) {
+					$cost1 = '210';
 					$cost2 = '1';
+					$bu_key = '';
+				} else {
+					$cost1 = '';
+					$cost2 = '';
 					$bu_key = '';
 				}
 
 				$sheet->setCellValue( 'B'.$cur_row, $transaction['receipt_id'] )
-					->setCellValue( 'C'.$cur_row, $vca_asm_finances->get_cash_account( $transaction['city_id'] ) )
+					->setCellValue( 'C'.$cur_row, $cash_account )
 					->setCellValue( 'D'.$cur_row, strftime( '%d.%m.%Y', intval( $transaction['transaction_date'] ) ) )
 					->setCellValue( 'E'.$cur_row, strftime( '%d.%m.%Y', intval( $transaction['entry_time'] ) ) )
 					->setCellValue( 'F'.$cur_row, ! empty( $transaction['receipt_date'] ) && is_numeric( $transaction['receipt_date'] ) ? strftime( '%d.%m.%Y', intval( $transaction['receipt_date'] ) ) : '' )
 					->setCellValue( 'G'.$cur_row, ! empty( $transaction['meta_4'] ) ? $transaction['meta_4'] : '' )
 					->setCellValue( 'H'.$cur_row, ! empty( $transaction['ei_account'] ) ? $vca_asm_finances->get_ei_account( $transaction['ei_account'], true ) : '' )
-					->setCellValue( 'I'.$cur_row, '210' )
+					->setCellValue( 'I'.$cur_row, $cost1 )
 					->setCellValue( 'J'.$cur_row, $cost2 )
 					->setCellValue( 'K'.$cur_row, '' )
-					->setCellValue( 'L'.$cur_row, '=IF(AND(J'.$cur_row.'=4,N'.$cur_row.'=19),"3",IF(AND(J'.$cur_row.'=4,N'.$cur_row.'=7),"2",""))' )
-					->setCellValue( 'M'.$cur_row, $transaction['amount']/100 )
-					->setCellValue( 'N'.$cur_row, is_numeric( $tax_rate ) ? $tax_rate : '' )
-					->setCellValue( 'O'.$cur_row, '' );
+					->setCellValue( 'L'.$cur_row, '=IF(AND(J'.$cur_row.'=4,O'.$cur_row.'=19,N'.$cur_row.'>=0),"3",IF(AND(J'.$cur_row.'=4,O'.$cur_row.'=7,N'.$cur_row.'>=0),"2",""))' )
+					->setCellValue( 'M'.$cur_row, $nice_type )
+					->setCellValue( 'N'.$cur_row, $transaction['amount']/100 )
+					->setCellValue( 'O'.$cur_row, $tax_rate )
+					->setCellValue( 'P'.$cur_row, '' );
 
 					$cur_row++;
 			}
 
-			$sheet->setCellValue( 'O' . $this->top_row_range, number_format( $sheet_params['initial_balance']/100, 2, '.', ',' ) )
+			$sheet->setCellValue( 'P' . $this->top_row_range, number_format( $sheet_params['initial_balance']/100, 2, '.', ',' ) )
 				/* Static Values */
-				//->setCellValue( 'O'.($cur_row), number_format( $sum/100, 2, '.', ',' ) )
-				//->setCellValue( 'O'.($cur_row+1), number_format( ( $sheet_params['initial_balance'] + $sum )/100, 2, '.', ',' ) );
+				//->setCellValue( 'P'.($cur_row), number_format( $sum/100, 2, '.', ',' ) )
+				//->setCellValue( 'P'.($cur_row+1), number_format( ( $sheet_params['initial_balance'] + $sum )/100, 2, '.', ',' ) );
 				/* Excel Formulae */
-				->setCellValue( 'O' . $cur_row, '=SUM(M' . $this->top_row_range . ':M' . ( $cur_row - 1 ) . ')' )
-				->setCellValue( 'O' . ( $cur_row + 1 ), '=O' . $this->top_row_range . '+O' . $cur_row );
+				->setCellValue( 'P' . $cur_row, '=SUMIF(' .
+						'M' . $this->top_row_range . ':M' . ( $cur_row - 1 ) . ',' .
+						'"=' . $vca_asm_finances->type_to_nicename( 'revenue' ) . '",' .
+						'N' . $this->top_row_range . ':N' . ( $cur_row - 1 ) .
+					')'
+				)
+				->setCellValue( 'P' . ( $cur_row + 1 ), '=SUMIF(' .
+						'M' . $this->top_row_range . ':M' . ( $cur_row - 1 ) . ',' .
+						'"=' . $vca_asm_finances->type_to_nicename( 'expenditure' ) . '",' .
+						'N' . $this->top_row_range . ':N' . ( $cur_row - 1 ) .
+					')'
+				)
+				->setCellValue( 'P' . ( $cur_row + 2 ), '=P' . $cur_row . '+P' . ( $cur_row + 1 ) )
+				->setCellValue( 'P' . ( $cur_row + 3 ), '=SUMIF(' .
+						'M' . $this->top_row_range . ':M' . ( $cur_row - 1 ) . ',' .
+						'"=' . $vca_asm_finances->type_to_nicename( 'transfer' ) . '",' .
+						'N' . $this->top_row_range . ':N' . ( $cur_row - 1 ) .
+					')'
+				)
+				->setCellValue( 'P' . ( $cur_row + 4 ), '=SUM(' .
+						'N' . $this->top_row_range . ':N' . ( $cur_row - 1 ) .
+					')'
+				)
+				->setCellValue( 'P' . ( $cur_row + 5 ), '=P' . $this->top_row_range . '+P' . ( $cur_row + 4 ) );
 
 			$sheet->setSelectedCells('A1');
 
@@ -356,7 +397,7 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 		)->applyFromArray( $this->styles['leftbound'] );
 
 		$this->workbook->getActiveSheet()->getStyle(
-			'M5:M' .
+			'N5:N' .
 			$this->workbook->getActiveSheet()->getHighestRow()
 		)->applyFromArray( $this->styles['rightbound'] )
 			->getNumberFormat()->setFormatCode('[Black][>=0]#,##0.00;[Red][<0]-#,##0.00;');
