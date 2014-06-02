@@ -1834,7 +1834,7 @@ class VCA_ASM_Admin_Finances
 				'link' => array(
 					'title' => __( 'Edit %s', 'vca-asm' ),
 					'title_row_data' => 'name',
-					'url' => '?page=' . $page . '&todo=edit&id=%d',
+					'url' => '?page=' . $page . '&todo=edit&id=%d&cid=' . $city_id,
 					'url_row_data' => 'id'
 				),
 				'actions' => array( 'edit-transaction', 'delete-transaction' ),

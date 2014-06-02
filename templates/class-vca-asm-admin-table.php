@@ -937,7 +937,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<span class="edit">' .
 							'<a title="' .
 								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
-								'" href="' . $url . '&todo=edit&amp;id=' . $row['id'] . '">' .
+								'" href="' . $url . '&todo=edit&id=' . $row['id'] . '">' .
 								__( 'Edit', 'vca-asm' ) .
 							'</a></span>';
 					break;
@@ -946,7 +946,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<span class="edit">' .
 							'<a title="' .
 								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
-								'" href="' . $url . '&todo=edit-ei&amp;id=' . $row['id'] . '">' .
+								'" href="' . $url . '&todo=edit-ei&id=' . $row['id'] . '">' .
 								__( 'Edit', 'vca-asm' ) .
 							'</a></span>';
 					break;
@@ -955,7 +955,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<span class="edit">' .
 							'<a title="' .
 								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
-								'" href="' . $url . '&todo=edit-occ&amp;id=' . $row['id'] . '">' .
+								'" href="' . $url . '&todo=edit-occ&id=' . $row['id'] . '">' .
 								__( 'Edit', 'vca-asm' ) .
 							'</a></span>';
 					break;
@@ -964,7 +964,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<span class="edit">' .
 							'<a title="' .
 								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
-								'" href="' . $url . '&todo=edit-cc&amp;id=' . $row['id'] . '">' .
+								'" href="' . $url . '&todo=edit-cc&id=' . $row['id'] . '">' .
 								__( 'Edit', 'vca-asm' ) .
 							'</a></span>';
 					break;
@@ -982,7 +982,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<span class="edit">' .
 							'<a title="' .
 								sprintf( __( 'View %s', 'vca-asm' ), $name ) .
-								'" href="' . $url . '&todo=edit-ei&amp;id=' . $row['id'] . '">' .
+								'" href="' . $url . '&todo=edit-ei&id=' . $row['id'] . '">' .
 								__( 'View', 'vca-asm' ) .
 							'</a></span>';
 					break;
@@ -995,7 +995,7 @@ class VCA_ASM_Admin_Table {
 							'" onclick="if ( confirm(\'' .
 									ucfirst( sprintf( __( 'Really delete &quot;%s&quot;?', 'vca-asm' ), $name ) ) .
 								'\') ) { return true; } return false;" ' .
-								'href="' . $url . '&todo=delete&amp;id=' .
+								'href="' . $url . '&todo=delete&id=' .
 								$row['id'] . '" class="submitdelete">' .
 								__( 'Delete', 'vca-asm' ) .
 							'</a></span>';
@@ -1005,7 +1005,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<span class="edit">' .
 							'<a title="' .
 								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
-								'" href="' . $url . '&todo=edit&amp;id=' . $row['id'] . '">' .
+								'" href="' . $url . '&todo=edit&id=' . $row['id'] . '&cid=' . $row['city_id'] . '">' .
 								__( 'Edit', 'vca-asm' ) .
 							'</a></span>';
 					break;
@@ -1018,8 +1018,8 @@ class VCA_ASM_Admin_Table {
 							'" onclick="if ( confirm(\'' .
 									ucfirst( __( 'Really delete this transaction?', 'vca-asm' ) ) .
 								'\') ) { return true; } return false;" ' .
-								'href="' . $url . '&todo=delete&amp;id=' .
-								$row['id'] . '" class="submitdelete">' .
+								'href="' . $url . '&todo=delete&id=' .
+								$row['id'] . '&cid=' . $row['city_id'] . '" class="submitdelete">' .
 								__( 'Delete', 'vca-asm' ) .
 							'</a></span>';
 					break;
@@ -1037,7 +1037,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<span class="edit">' .
 							'<a title="';
 							$output .= ( 2 == $row['receipt_status'] ) ? __( 'Ooops. Has not been sent', 'vca-asm' ) : __( 'Ooops. Has not been received', 'vca-asm' );
-						$output .= '" href="' . $url . '&todo=unconfirm-receipt&amp;id=' . $row['id'] . '&step=' . $row['receipt_status'] . '&cid=' . $row['city_id'] . '">';
+						$output .= '" href="' . $url . '&todo=unconfirm-receipt&id=' . $row['id'] . '&step=' . $row['receipt_status'] . '&cid=' . $row['city_id'] . '">';
 							$output .= ( 2 == $row['receipt_status'] ) ? __( 'Not sent...', 'vca-asm' ) : __( 'Not received...', 'vca-asm' );
 						$output .= '</a></span>';
 					break;
