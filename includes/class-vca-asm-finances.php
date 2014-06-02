@@ -546,7 +546,14 @@ class VCA_ASM_Finances
 	 */
 	public function get_tax_rate( $id = 0 )
 	{
-		return $this->get_meta( $id, 'id' );
+		if ( ! is_numeric( $id ) ) {
+			return false;
+		}
+		$value =  $this->get_meta( $id, 'id', '', 'value' );
+		if ( ! is_numeric( $value ) ) {
+			return false;
+		}
+		return $value;
 	}
 
 	/**
