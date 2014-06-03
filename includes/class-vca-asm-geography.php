@@ -858,19 +858,20 @@ class VCA_ASM_Geography
 	 * @access public
 	 */
 	public function delete( $id ) {
-		global $wpdb;
+		global $wpdb,
+			$vca_asm_finances;
 
 		$geo_user_query = $wpdb->get_results(
 			"SELECT has_user, user_id, pass, user FROM " .
 			$wpdb->prefix . "vca_asm_geography " .
-			"WHERE id = " . $_GET['id'] . " LIMIT 1", ARRAY_A
+			"WHERE id = " . $id . " LIMIT 1", ARRAY_A
 		);
 		$geo_user = isset( $geo_user_query[0] ) ? $geo_user_query[0] : '';
 
 		$wpdb->query(
 			"DELETE FROM " .
 			$wpdb->prefix . "vca_asm_geography " .
-			"WHERE id = " . $_GET['id'] . " LIMIT 1"
+			"WHERE id = " . $id . " LIMIT 1"
 		);
 		if ( is_array( $geo_user ) && 1 == $geo_user['has_user'] ) {
 			wp_delete_user( $geo_user['user_id'] );
@@ -878,8 +879,10 @@ class VCA_ASM_Geography
 		$wpdb->query(
 			"DELETE FROM " .
 			$wpdb->prefix . "vca_asm_geography_hierarchy " .
-			"WHERE descendant = " . $_GET['id'] . " OR ancestor = " . $_GET['id']
+			"WHERE descendant = " . $id . " OR ancestor = " . $id
 		);
+
+		$vca_asm_finances->delete_account( $id, 'all', true );
 
 		return true;
 	}
