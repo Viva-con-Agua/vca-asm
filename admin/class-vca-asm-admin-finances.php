@@ -108,13 +108,23 @@ class VCA_ASM_Admin_Finances
 				break;
 
 				case 'download-data':
+					$args = array(
+						'scope' => $this->cap_lvl,
+						'id' => $this->admin_nation,
+						'format' => isset( $_POST['format'] ) ? $_POST['format'] : 'month',
+						'year' => isset( $_POST['year'] ) ? $_POST['year'] : date( 'Y' ),
+						'month' => isset( $_POST['month'] ) ? $_POST['month'] : date( 'm' ),
+						'type' => isset( $_POST['type'] ) ? $_POST['type'] : 'city',
+						'format' => isset( $_POST['format'] ) ? $_POST['format'] : 'xlsx',
+						'gridlines' => ( isset( $_POST['gridlines'] ) && 2 == $_POST['gridlines'] ) ? false : true
+					);
 					$data = new VCA_ASM_Workbook_Finances(
 						array(
 							'scope' => $this->cap_lvl,
 							'id' => $this->admin_nation,
-							'format' => isset( $_POST['format'] ) ? $_POST['format'] : 'month',
+							'timeframe' => isset( $_POST['timeframe'] ) ? $_POST['timeframe'] : 'month',
 							'year' => isset( $_POST['year'] ) ? $_POST['year'] : date( 'Y' ),
-							'month' => isset( $_POST['month'] ) ? $_POST['month'] : date( 'm' ),
+							'month' => isset( $_POST['month'] ) ? $_POST['month'] : date( 'm', strtotime( date( 'm' ) . ' -1 month' ) ),
 							'type' => isset( $_POST['type'] ) ? $_POST['type'] : 'city',
 							'format' => isset( $_POST['format'] ) ? $_POST['format'] : 'xlsx',
 							'gridlines' => ( isset( $_POST['gridlines'] ) && 2 == $_POST['gridlines'] ) ? false : true
@@ -129,7 +139,7 @@ class VCA_ASM_Admin_Finances
 			$city_id = isset( $_GET['cid'] ) ? $_GET['cid'] : 0;
 			$this->overview_city( $city_id );
 		} else {
-			$this->overview_global();//overview_city();
+			$this->overview_global();
 		}
 	}
 
