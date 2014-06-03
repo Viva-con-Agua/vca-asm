@@ -310,6 +310,46 @@ class VCA_ASM_Finances
 	 * @since 1.5
 	 * @access public
 	 */
+	public function delete_account( $city_id, $account_type = 'all', $with_transactions = false )
+	{
+		global $wpdb;
+
+		$where = "WHERE city_id = " . $city_id;
+
+		if ( 'all' !== $account_type ) {
+			$where .= " AND type = '" . $account_type . "'";
+		}
+
+		$result = $wpdb->query(
+			"DELETE FROM " .
+			$wpdb->prefix . "vca_asm_finances_accounts " .
+			$where
+		);
+
+		if ( $with_transactions ) {
+
+			$where_trans = "WHERE city_id = " . $city_id;
+
+			if ( 'all' !== $account_type ) {
+				$where_trans .= " AND account_type = '" . $account_type . "'";
+			}
+
+			$wpdb->query(
+				"DELETE FROM " .
+				$wpdb->prefix . "vca_asm_finances_transactions " .
+				$where_trans
+			);
+		}
+
+		return $result;
+	}
+
+	/**
+	 * ???
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
 	public function get_balanced_month( $city_id, $type = 'econ' )
 	{
 		global $wpdb;
