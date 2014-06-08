@@ -16,24 +16,6 @@ class VCA_ASM_Admin_Finances
 {
 
 	/**
-	 * Controller for the Finances Admin Menu
-	 *
-	 * @since 1.2
-	 * @access public
-	 */
-	public function ff_control() {
-		echo '<div class="wrap">' .
-			'<div id="icon-finances" class="icon32-pa"></div><h2>(Zellen-)Finanzen</h2>';
-		$feech = new VCA_ASM_Admin_Future_Feech( array(
-			'title' => '(Zellen-)Finanzen',
-			'version' => '1.5.1',
-			'explanation' => 'Hier werden in Zukunft die Spenden- und Wirtschaftskonten der Zellen verwaltet werden können.'
-		));
-		$feech->output();
-		echo '</div>';
-	}
-
-	/**
 	 * Class Properties
 	 *
 	 * @since 1.4
@@ -2320,6 +2302,15 @@ class VCA_ASM_Admin_Finances
 								'validation' => 'date',
 								'required' => true,
 								'maxdate' => time()
+							),
+							array(
+								'type' => 'text',
+								'label' => __( 'Item(s)', 'vca-asm' ),
+								'id' => 'meta_4',
+								'desc' => __( 'How did you gain the income?', 'vca-asm' ) . ' ' . __( 'What did you sell?', 'vca-asm' ),
+								'validation' => 'required',
+								'class' => 'required',
+								'required' => true
 							),
 							array(
 								'type' => 'radio',
