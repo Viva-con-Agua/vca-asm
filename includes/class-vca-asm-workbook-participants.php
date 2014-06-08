@@ -38,6 +38,8 @@ class VCA_ASM_Workbook_Participants extends VCA_ASM_Workbook
 	private $nation_id = 0;
 	private $delegation = '';
 
+	public static $local_non_autosized_columns = array();
+
 	/**
 	 * Constructor
 	 *
@@ -110,6 +112,8 @@ class VCA_ASM_Workbook_Participants extends VCA_ASM_Workbook
 
 		extract( $this->args );
 
+		$this->template->getPageSetup()->setOrientation( PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE );
+
 		$this->template->mergeCells( 'A1:' . ( 'private' === $scope ? 'H' : 'E' ) . '1' )
 				->freezePane( 'B5' )
 				->setCellValue( 'A1', $title );
@@ -126,7 +130,7 @@ class VCA_ASM_Workbook_Participants extends VCA_ASM_Workbook
 		$this->template->setCellValue( 'A'.$cur_row, __( 'Running Number', 'vca-asm' ) )
 			->setCellValue( 'B'.$cur_row, __( 'First Name', 'vca-asm' ) )
 			->setCellValue( 'C'.$cur_row, __( 'Last Name', 'vca-asm' ) )
-			->setCellValue( 'D'.$cur_row, __( 'City / Cell / Local Crew', 'vca-asm' ) );
+			->setCellValue( 'D'.$cur_row, __( 'City', 'vca-asm' ) );
 
 		$col = 'E';
 
@@ -138,7 +142,7 @@ class VCA_ASM_Workbook_Participants extends VCA_ASM_Workbook
 		$this->template->setCellValue( $col.$cur_row, __( 'Email-Address', 'vca-asm' ) );
 		$col++;
 
-		if ( $scope === 'private' ) {
+		if ( 'private' === $scope ) {
 			$this->template->setCellValue( $col.$cur_row, __( 'Mobile Phone', 'vca-asm' ) );
 			$col++;
 			$this->template->setCellValue( $col.$cur_row, _x( 'Present?', 'Supporter is present at event (Column in spreadsheet)', 'vca-asm' ) );
@@ -152,6 +156,8 @@ class VCA_ASM_Workbook_Participants extends VCA_ASM_Workbook
 		$this->template_col_range = 9;
 
 		$cur_row++;
+
+		$this->define_non_autosized_columns();
 
 		return $cur_row;
 	}
@@ -291,6 +297,23 @@ class VCA_ASM_Workbook_Participants extends VCA_ASM_Workbook
 			$this->workbook->getActiveSheet()->getHighestRow()
 		)->applyFromArray( $this->styles['leftbound'] );
 	}
+
+	/**
+	 * Does what the method name suggests
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	public function define_non_autosized_columns() {
+		if ( 'private' === $this->args['scope'] ) {
+			self::$local_non_autosized_columns = array(
+				'E' => 6
+			);
+		}
+	}
+	public static function grab_non_autosized_columns() {
+		return self::$local_non_autosized_columns;
+    }
 
 } // class
 

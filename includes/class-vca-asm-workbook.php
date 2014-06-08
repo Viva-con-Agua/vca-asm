@@ -107,7 +107,7 @@ class VCA_ASM_Workbook
 	public $col_range = 1;
 	public $row_range = 1;
 
-	public $non_autosized_columns = array();
+	public static $non_autosized_columns = array();
 	public $output_method = 'download';
 
 	/**
@@ -203,6 +203,21 @@ class VCA_ASM_Workbook
 	}
 
 	/**
+	 * Utility / Dummy Method
+	 * Overwritten as a late static binding
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	public static function grab_non_autosized_columns() {
+        return array();
+    }
+    public static function set_non_autosized_columns() {
+        $non_autosized_columns = static::grab_non_autosized_columns();
+		self::$non_autosized_columns = $non_autosized_columns;
+    }
+
+	/**
 	 * Takes a number and converts it to a-z,aa-zz,aaa-zzz, etc with uppercase option
 	 *
 	 * @since 1.5
@@ -228,6 +243,8 @@ class VCA_ASM_Workbook
 	 */
 	public function output()
 	{
+		$this->set_non_autosized_columns();
+		$non_autosized_columns = self::$non_autosized_columns;
 		$this->col_range = $this->col_range < $this->template_col_range ? $this->template_col_range : $this->col_range;
 		$this->row_range = $this->row_range < $this->template_row_range ? $this->template_row_range : $this->row_range;
 		$iterator = $this->workbook->getWorksheetIterator();
@@ -236,16 +253,13 @@ class VCA_ASM_Workbook
 			$this->workbook->setActiveSheetIndex( $si );
 			for ( $c = 1; $c <= $this->col_range; $c++ ) {
 				$col = $this->num_to_letter( $c, true );
-				if ( ! in_array( $col, $this->non_autosized_columns ) ) {
+				if ( ! array_key_exists( $col, $non_autosized_columns ) ) {
 					$this->workbook->getActiveSheet()->getColumnDimension( $col )->setAutoSize( true );
+				} else {
+					$this->workbook->getActiveSheet()->getColumnDimension( $col )->setWidth( $non_autosized_columns[$col] );
 				}
 			}
 			$this->workbook->getActiveSheet()->calculateColumnWidths();
-			for ( $c = 1; $c <= $this->col_range; $c++ ) {
-				$this->workbook->getActiveSheet()->getColumnDimension( $this->num_to_letter( $c, true ) )->setAutoSize( false );
-				$width = $this->workbook->getActiveSheet()->getColumnDimension( $this->num_to_letter( $c, true ) )->getWidth();
-				//$this->workbook->getActiveSheet()->getColumnDimension( $this->num_to_letter( $c, true ) )->setWidth( ( $width + 7 ) * .65 );
-			}
 			for ( $r = 1; $r <= $this->row_range; $r++ ) {
 				if ( ! in_array( $r, array( 1, 4 ) ) ) {
 					$this->workbook->getActiveSheet()->getRowDimension( $r )->setRowHeight( -1 );

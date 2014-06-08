@@ -44,9 +44,9 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 	public $title_type = '';
 	public $title_scope = '';
 
-	public $col_amount = 'N';
-	public $col_tax = 'O';
-	public $col_balance = 'P';
+	public static $col_amount = 'N';
+	public static $col_tax = 'O';
+	public static $col_balance = 'P';
 
 	/**
 	 * Constructor
@@ -62,8 +62,6 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 		$this->default_args['id'] = get_user_meta( $current_user->ID, 'nation', true );
 		$this->default_args['month'] = date( 'm' );
 		$this->default_args['year'] = date( 'Y' );
-
-		//$this->non_autosized_columns[] = 'P';
 
 		$this->args = wp_parse_args( $args, $this->default_args );
 		extract( $this->args );
@@ -103,7 +101,7 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 		$this->format = $this->args['format'];
 
 		$this->args['creator'] = 'Viva con Agua de Sankt Pauli e.V.';
-		$this->args['title'] = preg_replace( '!\s+!', ' ', $this->title_start . ': ' . $this->title_frame_name . ' ' . $this->title_frame_data . ', ' . $this->title_type . ( ! empty( $this->title_scope ) ? ' (' . $this->title_scope . ')' : '' ) );
+		$this->args['title'] = preg_replace( '!\s+!', ' ', $this->title_start . ': ' . $this->title_frame_name . ( ! empty( $this->title_frame_data ) ? ' ' . $this->title_frame_data : '' ) . ', ' . $this->title_type . ( ! empty( $this->title_scope ) ? ' (' . $this->title_scope . ')' : '' ) );
 		$this->args['filename'] = str_replace( ' ', '_', str_replace( array( ',', ':', ';', '?', '.', '!' ), '', $this->args['title'] ) );
 		$this->args['subject'] = __( 'Accounting', 'vca-asm' );
 
@@ -129,18 +127,18 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 		$this->template->getPageSetup()->setOrientation( PHPExcel_Worksheet_PageSetup::ORIENTATION_LANDSCAPE );
 
 		if ( 'city' === $type ) {
-			$this->col_amount = 'N';
-			$this->col_tax = 'O';
-			$this->col_balance = 'P';
+			self::$col_amount = 'N';
+			self::$col_tax = 'O';
+			self::$col_balance = 'P';
 			$this->template_col_range = 16;
 		} else {
-			$this->col_amount = 'O';
-			$this->col_tax = 'P';
-			$this->col_balance = 'Q';
+			self::$col_amount = 'O';
+			self::$col_tax = 'P';
+			self::$col_balance = 'Q';
 			$this->template_col_range = 17;
 		}
 
-		$this->template->mergeCells( 'A1:' . $this->col_balance . '1' )
+		$this->template->mergeCells( 'A1:' . self::$col_balance . '1' )
 				->freezePane( 'B5' )
 				->setCellValue( 'A1', strtoupper( __( 'Account Statement', 'vca-asm' ) . ': ' . __( 'Revenues & Expenses', 'vca-asm' ) . ', ' . __( 'Structural Funds', 'vca-asm' ) ) );
 
@@ -160,7 +158,7 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 			->setCellValue( 'D'.$cur_row, __( 'Booking Date', 'vca-asm' ) )
 			->setCellValue( 'E'.$cur_row, __( 'Entry Date', 'vca-asm' ) )
 			->setCellValue( 'F'.$cur_row, __( 'Receipt Date', 'vca-asm' ) )
-			->setCellValue( 'G'.$cur_row, __( 'Source', 'vca-asm' ) . "\n" . __( '(what was bought)', 'vca-asm' ) )
+			->setCellValue( 'G'.$cur_row, __( 'Item(s)', 'vca-asm' ) . "\n" . __( '(what was bought/sold)', 'vca-asm' ) )
 			->setCellValue( 'H'.$cur_row, _x( 'Expense- /', 'Expense-Account', 'vca-asm' ) . "\n" . __( 'Income-Account', 'vca-asm' ) )
 			->setCellValue( 'I'.$cur_row, __( 'COST1', 'vca-asm' ) )
 			->setCellValue( 'J'.$cur_row, __( 'COST2', 'vca-asm' ) )
@@ -346,7 +344,7 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 					->setCellValue( 'I'.$cur_row, $cost1 )
 					->setCellValue( 'J'.$cur_row, $cost2 )
 					->setCellValue( 'K'.$cur_row, '' )
-					->setCellValue( 'L'.$cur_row, '=IF(AND(J'.$cur_row.'=4,O'.$cur_row.'=19,N'.$cur_row.'>=0),"3",IF(AND(J'.$cur_row.'=4,O'.$cur_row.'=7,N'.$cur_row.'>=0),"2",""))' )
+					->setCellValue( 'L'.$cur_row, '=IF(AND(J'.$cur_row.'=4,'.self::$col_tax.$cur_row.'=19,'.self::$col_amount.$cur_row.'>=0),"3",IF(AND(J'.$cur_row.'=4,'.self::$col_tax.$cur_row.'=7,'.self::$col_amount.$cur_row.'>=0),"2",""))' )
 					->setCellValue( 'M'.$cur_row, $nice_type );
 				if ( 'city' === $type ) {
 					$sheet->setCellValue( 'N'.$cur_row, $transaction['amount']/100 )
@@ -362,35 +360,35 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 				$cur_row++;
 			}
 
-			$sheet->setCellValue( $this->col_balance . $this->top_row_range, number_format( $sheet_params['initial_balance']/100, 2, '.', ',' ) )
+			$sheet->setCellValue( self::$col_balance . $this->top_row_range, ( $sheet_params['initial_balance'] / 100 ) )
 				/* Static Values */
-				//->setCellValue( $this->col_balance . $cur_row, number_format( $sum/100, 2, '.', ',' ) )
+				//->setCellValue( self::$col_balance . $cur_row, number_format( $sum/100, 2, '.', ',' ) )
 				// ...
 				/* Excel Formulae */
-				->setCellValue( $this->col_balance . $cur_row, '=SUMIF(' .
+				->setCellValue( self::$col_balance . $cur_row, '=SUMIF(' .
 						'M' . $this->top_row_range . ':M' . ( $cur_row - 1 ) . ',' .
 						'"=' . $vca_asm_finances->type_to_nicename( 'revenue' ) . '",' .
-						$this->col_amount . $this->top_row_range . ':' . $this->col_amount . ( $cur_row - 1 ) .
+						self::$col_amount . $this->top_row_range . ':' . self::$col_amount . ( $cur_row - 1 ) .
 					')'
 				)
-				->setCellValue( $this->col_balance . ( $cur_row + 1 ), '=SUMIF(' .
+				->setCellValue( self::$col_balance . ( $cur_row + 1 ), '=SUMIF(' .
 						'M' . $this->top_row_range . ':M' . ( $cur_row - 1 ) . ',' .
 						'"=' . $vca_asm_finances->type_to_nicename( 'expenditure' ) . '",' .
-						$this->col_amount . $this->top_row_range . ':' . $this->col_amount . ( $cur_row - 1 ) .
+						self::$col_amount . $this->top_row_range . ':' . self::$col_amount . ( $cur_row - 1 ) .
 					')'
 				)
-				->setCellValue( $this->col_balance . ( $cur_row + 2 ), '=' . $this->col_balance . $cur_row . '+' . $this->col_balance . ( $cur_row + 1 ) )
-				->setCellValue( $this->col_balance . ( $cur_row + 3 ), '=SUMIF(' .
+				->setCellValue( self::$col_balance . ( $cur_row + 2 ), '=' . self::$col_balance . $cur_row . '+' . self::$col_balance . ( $cur_row + 1 ) )
+				->setCellValue( self::$col_balance . ( $cur_row + 3 ), '=SUMIF(' .
 						'M' . $this->top_row_range . ':M' . ( $cur_row - 1 ) . ',' .
 						'"=' . $vca_asm_finances->type_to_nicename( 'transfer' ) . '",' .
-						$this->col_amount . $this->top_row_range . ':' . $this->col_amount . ( $cur_row - 1 ) .
+						self::$col_amount . $this->top_row_range . ':' . self::$col_amount . ( $cur_row - 1 ) .
 					')'
 				)
-				->setCellValue( $this->col_balance . ( $cur_row + 4 ), '=SUM(' .
-						$this->col_amount . $this->top_row_range . ':' . $this->col_amount . ( $cur_row - 1 ) .
+				->setCellValue( self::$col_balance . ( $cur_row + 4 ), '=SUM(' .
+						self::$col_amount . $this->top_row_range . ':' . self::$col_amount . ( $cur_row - 1 ) .
 					')'
 				)
-				->setCellValue( $this->col_balance . ( $cur_row + 5 ), '=' . $this->col_balance . $this->top_row_range . '+' . $this->col_balance . ( $cur_row + 4 ) );
+				->setCellValue( self::$col_balance . ( $cur_row + 5 ), '=' . self::$col_balance . $this->top_row_range . '+' . self::$col_balance . ( $cur_row + 4 ) );
 
 			$sheet->setSelectedCells('A1');
 
@@ -434,7 +432,7 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 		)->applyFromArray( $this->styles['leftbound'] );
 
 		$this->workbook->getActiveSheet()->getStyle(
-			$this->col_amount . '5:' . $this->col_amount .
+			self::$col_amount . '5:' . self::$col_amount .
 			$this->workbook->getActiveSheet()->getHighestRow()
 		)->applyFromArray( $this->styles['rightbound'] )
 			->getNumberFormat()->setFormatCode('[Black][>=0]#,##0.00;[Red][<0]-#,##0.00;');
@@ -447,8 +445,22 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 		)->applyFromArray( $this->styles['rightbound'] )
 			->applyFromArray( $this->styles['bold'] )
 			->getNumberFormat()->setFormatCode('[Black][>=0]#,##0.00;[Red][<0]-#,##0.00;');
-;
 	}
+
+	/**
+	 * Does what the method name suggests
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	public static function grab_non_autosized_columns() {
+        $non_autosized_columns = array(
+			self::$col_amount => 10,
+			self::$col_tax => 10,
+			self::$col_balance => 11
+		);
+		return $non_autosized_columns;
+    }
 
 } // class
 
