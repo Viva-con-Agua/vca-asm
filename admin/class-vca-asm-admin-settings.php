@@ -432,7 +432,7 @@ class VCA_ASM_Admin_Settings {
 		$output .= $this->scope_selector( 'responses', true );
 
 		$output .= '<div id="poststuff"><div id="post-body" class="metabox-holder columns-1"><div id="postbox-container-99" class="postbox-container"><div class="postbox ">' .
-			'<h3 class="no-hover"><span>' . __( 'Contextual Help', 'vca-asm' ) . '</span></h3>' .
+			'<h3 class="no-hover"><span>' . __( 'Help', 'vca-asm' ) . '</span></h3>' .
 			'<div class="inside">' .
 				'<p>' .
 					_x( 'Here you can enable or disable, as well as overwrite the default autoresponses sent when a supporter completes a certain action.', 'Admin Email Autoresponse Options', 'vca-asm' ) .
@@ -1040,6 +1040,10 @@ class VCA_ASM_Admin_Settings {
 
 		$options = $vca_asm_geography->options_array( array( 'type' => 'nation' ));
 
+		$scope = isset( $_POST['scope'] ) ? $_POST['scope'] : ( isset( $_GET['scope'] ) ? $_GET['scope'] : ( in_array( 'goldeimer_global', $current_user->roles ) ? 'ge' : $this->admin_nation ) );
+
+		$nice_scope = 'ge' === $scope ? __( 'Goldeimer', 'vca-asm' ) : $vca_asm_geography->get_name( $scope );
+
 		if ( $include_goldeimer ) {
 			$new_options = array();
 			$i = 0;
@@ -1054,6 +1058,15 @@ class VCA_ASM_Admin_Settings {
 				'value' => 'ge'
 			);
 		}
+
+		$metabox_environment = new VCA_ASM_Admin_Metaboxes( array(
+			'echo' => false,
+			'columns' => 1,
+			'running' => 113,
+			'id' => 'vca-asm-settings-scope-selector-box',
+			'title' => __( 'Context', 'vca-asm' ),
+			'js' => false
+		));
 
 		$form = new VCA_ASM_Admin_Form( array(
 			'echo' => false,
@@ -1074,13 +1087,29 @@ class VCA_ASM_Admin_Settings {
 					'type' => 'select',
 					'id' => 'scope',
 					'options' => $options,
-					'value' => isset( $_POST['scope'] ) ? $_POST['scope'] : ( isset( $_GET['scope'] ) ? $_GET['scope'] : ( in_array( 'goldeimer_global', $current_user->roles ) ? 'ge' : $this->admin_nation ) ),
-					'label' => __( 'The context in which this setting is applied', 'vca-asm' )
+					'value' => $scope,
+					'label' => __( 'New context', 'vca-asm' ),
+					'desc' => __( 'The context in which you want to edit this setting', 'vca-asm' )
+				),
+				array(
+					'type' => 'note',
+					'id' => 'current_context',
+					'value' => $nice_scope,
+					'label' => __( 'Currently active context', 'vca-asm' ),
+					'desc' => __( 'The context in which the currently shown options are used', 'vca-asm' )
 				)
 			)
 		));
 
-		return $form->output();
+		$output = $metabox_environment->top();
+		$output .= $metabox_environment->mb_top();
+
+		$output .= $form->output();
+
+		$output .= $metabox_environment->mb_bottom();
+		$output .= $metabox_environment->bottom();
+
+		return $output;
 	}
 
 	/**
