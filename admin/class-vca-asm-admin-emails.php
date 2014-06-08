@@ -502,6 +502,11 @@ class VCA_ASM_Admin_Emails {
 		global $current_user, $vca_asm_activities, $vca_asm_geography;
 		get_currentuserinfo();
 
+		$act_id = isset( $_GET['activity'] ) ? intval( $_GET['activity'] ) : NULL;
+		$act_phase = ! empty( $act_id ) ? $vca_asm_activities->get_phase( $act_id ) : 'all';
+		$act_type = ! empty( $act_id ) ? get_post_type( $act_id ) : 'all';
+		$act_group = isset( $_GET['group'] ) ? $_GET['group'] : 'parts';
+
 		wp_enqueue_script( 'vca-asm-admin-email-compose' );
 		$act_sel_options = array();
 		$types = array( 'all' );
@@ -516,6 +521,7 @@ class VCA_ASM_Admin_Emails {
 				));
 			}
 		}
+		wp_localize_script( 'vca-asm-admin-email-compose', 'selectedActivity', $act_id );
 		wp_localize_script( 'vca-asm-admin-email-compose', 'actSelOptions', $act_sel_options );
 		wp_localize_script( 'vca-asm-admin-email-compose', 'activeTab', array( 'name' => $active_tab ) );
 		wp_localize_script( 'vca-asm-admin-email-compose', 'noActivity', array( 'string' => __( 'No activities for the currently selected criteria...', 'vca-asm' ) ) );
@@ -827,11 +833,6 @@ class VCA_ASM_Admin_Emails {
 		}
 
 		$activity_options_array = $vca_asm_activities->options_array_with_all;
-
-		$act_id = isset( $_GET['activity'] ) ? $_GET['activity'] : NULL;
-		$act_phase = ! empty( $act_id ) ? $vca_asm_activities->get_phase( $act_id ) : 'all';
-		$act_type = ! empty( $act_id ) ? get_post_type( $act_id ) : 'all';
-		$act_group = isset( $_GET['group'] ) ? $_GET['group'] : 'parts';
 
 		$activity_boxes = array(
 			array(

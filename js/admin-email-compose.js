@@ -29,10 +29,14 @@ function populateActivitySelect( actPhase, actType ) {
 	if ( 0 < actSelOptions[actType][actPhase].length ) {
 		var newSelectHTML = '';
 		for ( var i = 0; i < actSelOptions[actType][actPhase].length; i++ ) {
-			newSelectHTML += '<option value="' + actSelOptions[actType][actPhase][i].value + '">' + actSelOptions[actType][actPhase][i].label + '</option>';
+			newSelectHTML += '<option value="' + actSelOptions[actType][actPhase][i].value + '"';
+			if ( actSelOptions[actType][actPhase][i].value === selectedActivity ) {
+				newSelectHTML += ' selected="selected"';
+			}
+			newSelectHTML += '>' + actSelOptions[actType][actPhase][i].label + '</option>';
 		}
 		$('span#no-activity').remove();
-		$('select#activity').html(newSelectHTML).show(400);
+		$('select#activity').html(newSelectHTML).val(selectedActivity).show(400);
 	} else {
 		if ( 1 > $('span#no-activity').length ) {
 			$('select#activity').hide().after('<span id="no-activity" style="margin:0;">'+noActivity.string+'</span>').hide();
