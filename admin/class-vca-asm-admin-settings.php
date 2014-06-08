@@ -7,6 +7,9 @@
  * the setting of system-wide options
  * in the administrative backend
  *
+ * @todo Bring up to current template standard
+ * @todo Way too much markup!
+ *
  * @package VcA Activity & Supporter Management
  * @since 1.2
  */
@@ -27,6 +30,8 @@ class VCA_ASM_Admin_Settings {
 	private $emails_sending_options = array();
 	private $mode_options_values = array();
 	private $has_cap = false;
+
+	private $admin_nation = 0;
 
 	/**
 	 * Assigns values to class properties
@@ -165,7 +170,7 @@ class VCA_ASM_Admin_Settings {
 	 */
 	public function control() {
 
-		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : 'emails';
+		$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'emails';
 
 		echo '<div class="wrap">' .
 			'<div id="icon-settings" class="icon32-pa"></div><h2>' . _x( 'Settings', 'Settings Admin Menu', 'vca-asm' ) . '</h2><br />';
@@ -244,10 +249,12 @@ class VCA_ASM_Admin_Settings {
 	 * @access public
 	 */
 	public function autoresponses_edit() {
-		global $wpdb;
+		global $current_user, $wpdb;
 
-		$url = "admin.php?page=vca-asm-settings&amp;tab=responses";
-		$form_action = $url . "&amp;todo=save";
+		$scope = isset( $_POST['scope'] ) ? $_POST['scope'] : ( isset( $_GET['scope'] ) ? $_GET['scope'] : ( in_array( 'goldeimer_global', $current_user->roles ) ? 'ge' : $this->admin_nation ) );
+
+		$url = 'admin.php?page=vca-asm-settings&tab=responses';
+		$form_action = $url . '&todo=save' . '&scope=' . $scope;
 		$output = '';
 
 		$fields = array(
@@ -258,7 +265,7 @@ class VCA_ASM_Admin_Settings {
 						'type' => 'checkbox',
 						'label' => _x( 'Send Mail Switch', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'applied-switch',
-						'desc' => _x( 'Enable/disable application confirmations', 'Admin Email Interface', 'vca-asm' ) . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Enable/disable application confirmations', 'Admin Email Interface', 'vca-asm' ) . '<br />' . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
 					),
 					array(
 						'type' => 'text',
@@ -281,7 +288,7 @@ class VCA_ASM_Admin_Settings {
 						'type' => 'checkbox',
 						'label' => _x( 'Send Mail Switch', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'accepted-switch',
-						'desc' => _x( 'Enable/disable registration confirmations', 'Admin Email Interface', 'vca-asm' ) . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Enable/disable registration confirmations', 'Admin Email Interface', 'vca-asm' ) . '<br />' . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
 					),
 					array(
 						'type' => 'text',
@@ -304,7 +311,7 @@ class VCA_ASM_Admin_Settings {
 						'type' => 'checkbox',
 						'label' => _x( 'Send Mail Switch', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'denied-switch',
-						'desc' => _x( 'Enable/disable application denial notifications', 'Admin Email Interface', 'vca-asm' ) . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Enable/disable application denial notifications', 'Admin Email Interface', 'vca-asm' ) . '<br />' . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
 					),
 					array(
 						'type' => 'text',
@@ -327,7 +334,7 @@ class VCA_ASM_Admin_Settings {
 						'type' => 'checkbox',
 						'label' => _x( 'Send Mail Switch', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'reg_revoked-switch',
-						'desc' => _x( 'Enable/disable notifications of revoked registrations', 'Admin Email Interface', 'vca-asm' ) . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Enable/disable notifications of revoked registrations', 'Admin Email Interface', 'vca-asm' ) . '<br />' . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
 					),
 					array(
 						'type' => 'text',
@@ -342,15 +349,17 @@ class VCA_ASM_Admin_Settings {
 						'desc' => _x( 'Message body for notifications of revoked registrations', 'Admin Email Interface', 'vca-asm' )
 					)
 				)
-			),
-			array(
+			)
+		);
+		if ( 'ge' !== $scope ) {
+			$fields[] = array(
 				'title' =>  _x( 'Accept Membership', 'Admin Email Interface', 'vca-asm' ),
 				'fields' => array(
 					array(
 						'type' => 'checkbox',
 						'label' => _x( 'Send Mail Switch', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'mem_accepted-switch',
-						'desc' => _x( 'Enable/disable notifications of accepted memberships to Cell / Local Crew', 'Admin Email Interface', 'vca-asm' ) . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Enable/disable notifications of accepted memberships to Cell / Local Crew', 'Admin Email Interface', 'vca-asm' ) . '<br />' . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
 					),
 					array(
 						'type' => 'text',
@@ -365,15 +374,15 @@ class VCA_ASM_Admin_Settings {
 						'desc' => _x( 'Message body for notifications of accepted memberships to Cell / Local Crew', 'Admin Email Interface', 'vca-asm' )
 					)
 				)
-			),
-			array(
+			);
+			$fields[] = array(
 				'title' => _x( 'Deny Membership', 'Admin Email Interface', 'vca-asm' ),
 				'fields' => array(
 					array(
 						'type' => 'checkbox',
 						'label' => _x( 'Send Mail Switch', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'mem_denied-switch',
-						'desc' => _x( 'Enable/disable notifications of denied memberships to Cell / Local Crew', 'Admin Email Interface', 'vca-asm' ) . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Enable/disable notifications of denied memberships to Cell / Local Crew', 'Admin Email Interface', 'vca-asm' ) . '<br />' . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
 					),
 					array(
 						'type' => 'text',
@@ -388,15 +397,15 @@ class VCA_ASM_Admin_Settings {
 						'desc' => _x( 'Message body for notifications of denied memberships to Cell / Local Crew', 'Admin Email Interface', 'vca-asm' )
 					)
 				)
-			),
-			array(
+			);
+			$fields[] = array(
 				'title' => _x( 'Cancel Membership', 'Admin Email Interface', 'vca-asm' ),
 				'fields' => array(
 					array(
 						'type' => 'checkbox',
 						'label' => _x( 'Send Mail Switch', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'mem_cancelled-switch',
-						'desc' => _x( 'Enable/disable notifications when memberships to Cell / Local Crew are cancelled', 'Admin Email Interface', 'vca-asm' ) . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Enable/disable notifications when memberships to Cell / Local Crew are cancelled', 'Admin Email Interface', 'vca-asm' ) . '<br />' . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
 					),
 					array(
 						'type' => 'text',
@@ -411,14 +420,16 @@ class VCA_ASM_Admin_Settings {
 						'desc' => _x( 'Message body for notifications when memberships to Cell / Local Crew are cancelled', 'Admin Email Interface', 'vca-asm' )
 					)
 				)
-			)
-		);
+			);
+		}
 
 		if( isset( $_GET['todo'] ) && $_GET['todo'] == 'save' ) {
 			$output .= '<div class="message"><p>' .
 				__( 'Options successfully updated!', 'vca-asm' ) .
 				'</p></div>';
 		}
+
+		$output .= $this->scope_selector( 'responses', true );
 
 		$output .= '<div id="poststuff"><div id="post-body" class="metabox-holder columns-1"><div id="postbox-container-99" class="postbox-container"><div class="postbox ">' .
 			'<h3 class="no-hover"><span>' . __( 'Contextual Help', 'vca-asm' ) . '</span></h3>' .
@@ -449,10 +460,10 @@ class VCA_ASM_Admin_Settings {
 					$data = $wpdb->get_results(
 						"SELECT " . $column . " FROM " .
 						$wpdb->prefix . "vca_asm_auto_responses " .
-						"WHERE action = '" . $action . "' LIMIT 1", ARRAY_A
+						"WHERE action = '" . $action . "' AND scope = '" . $scope . "' LIMIT 1", ARRAY_A
 					);
-					$fields[$i]['fields'][$j]['value'] = $data[0][$column];
-				} elseif( $fields[$i]['fields'][$j]['type'] == 'checkbox' ) {
+					$fields[$i]['fields'][$j]['value'] = stripslashes( $data[0][$column] );
+				} elseif( $fields[$i]['fields'][$j]['type'] === 'checkbox' ) {
 					if( isset( $_POST[$fields[$i]['fields'][$j]['id']] ) ) {
 						$fields[$i]['fields'][$j]['value'] = 1;
 					} else {
@@ -463,36 +474,36 @@ class VCA_ASM_Admin_Settings {
 				}
 
 				/* save */
-				if( isset( $_GET['todo'] ) && $_GET['todo'] == 'save' && $fields[$i]['fields'][$j]['type'] != 'section' ) {
-					if( $fields[$i]['fields'][$j]['type'] != 'checkbox'  ) {
+				if( isset( $_GET['todo'] ) && $_GET['todo'] === 'save' ) {
+					if( $fields[$i]['fields'][$j]['type'] !== 'checkbox'  ) {
 						$wpdb->update(
 							$wpdb->prefix . 'vca_asm_auto_responses',
 							array(
 								$column => $_POST[$fields[$i]['fields'][$j]['id']]
 							),
-							array( 'action'=> $action ),
-								array( '%s' ),
-								array( '%s' )
+							array( 'action'=> $action, 'scope'=> $scope ),
+							array( '%s' ),
+							array( '%s', '%s' )
 						);
-					} elseif ( $fields[$i]['fields'][$j]['type'] == 'checkbox' && isset( $_POST[$fields[$i]['fields'][$j]['id']] ) ) {
+					} elseif ( $fields[$i]['fields'][$j]['type'] === 'checkbox' && isset( $_POST[$fields[$i]['fields'][$j]['id']] ) ) {
 						$wpdb->update(
 							$wpdb->prefix . 'vca_asm_auto_responses',
 							array(
 								$column => 1
 							),
-							array( 'action'=> $action ),
-								array( '%d' ),
-								array( '%s' )
+							array( 'action'=> $action, 'scope'=> $scope ),
+							array( '%d' ),
+							array( '%s', '%s' )
 						);
-					} elseif ( $fields[$i]['fields'][$j]['type'] == 'checkbox' ) {
+					} elseif ( $fields[$i]['fields'][$j]['type'] === 'checkbox' ) {
 						$wpdb->update(
 							$wpdb->prefix . 'vca_asm_auto_responses',
 							array(
 								$column => 0
 							),
-							array( 'action'=> $action ),
-								array( '%d' ),
-								array( '%s' )
+							array( 'action'=> $action, 'scope'=> $scope ),
+							array( '%d' ),
+							array( '%s', '%s' )
 						);
 					}
 				}
@@ -996,7 +1007,7 @@ class VCA_ASM_Admin_Settings {
 		echo $output;
 	}
 
-	/******************** CONSTRUCTORS ********************/
+	/******************** CONSTRUCTOR ********************/
 
 	/**
 	 * Constructor
@@ -1005,8 +1016,133 @@ class VCA_ASM_Admin_Settings {
 	 * @access public
 	 */
 	public function __construct() {
+		global $current_user;
+
+		$this->admin_nation = get_user_meta( $current_user->ID, 'nation', true );
+
 		$this->init();
-		add_action( 'admin_init', array( &$this, 'initialize_options' ) );
+		add_action( 'admin_init', array( $this, 'initialize_options' ) );
+	}
+
+	/******************** UTILITY METHODS ********************/
+
+	/**
+	 * Scope Selector
+	 * ( Countries + Goldeimer )
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	private function scope_selector( $tab, $include_goldeimer = true )
+	{
+		global $current_user,
+			$vca_asm_geography;
+
+		$options = $vca_asm_geography->options_array( array( 'type' => 'nation' ));
+
+		if ( $include_goldeimer ) {
+			$new_options = array();
+			$i = 0;
+			foreach ( $options as $option ) {
+				$new_options[$i] = $option;
+				$new_options[$i]['label'] = 'VcA ' . $option['label'];
+				$i++;
+			}
+			$options = $new_options;
+			$options[] = array(
+				'label' => __( 'Goldeimer', 'vca-asm' ),
+				'value' => 'ge'
+			);
+		}
+
+		$form = new VCA_ASM_Admin_Form( array(
+			'echo' => false,
+			'form' => true,
+			'name' => 'vca-asm-settings-scope-selector',
+			'method' => 'post',
+			'metaboxes' => false,
+			'js' => false,
+			'url' => '?page=vca-asm-finances-settings&tab=' . $tab,
+			'action' => '?page=vca-asm-settings&tab=' . $tab,
+			'button' => __( 'Switch Context', 'vca-asm' ),
+			'button_id' => 'submit',
+			'top_button' => false,
+			'submitted_field' => false,
+			'has_cap' => true,
+			'fields' => array(
+				array(
+					'type' => 'select',
+					'id' => 'scope',
+					'options' => $options,
+					'value' => isset( $_POST['scope'] ) ? $_POST['scope'] : ( isset( $_GET['scope'] ) ? $_GET['scope'] : ( in_array( 'goldeimer_global', $current_user->roles ) ? 'ge' : $this->admin_nation ) ),
+					'label' => __( 'The context in which this setting is applied', 'vca-asm' )
+				)
+			)
+		));
+
+		return $form->output();
+	}
+
+	/**
+	 * Inserts a new set of autoresponses
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	public function insert_autoresponses( $scope, $preset = false )
+	{
+		global $wpdb;
+
+		$actions = array(
+			'applied',
+			'accepted',
+			'denied',
+			'reg_revoked',
+			'mem_accepted',
+			'mem_denied',
+			'mem_cancelled'
+		);
+		foreach( $actions as $action ) {
+			$subject = '';
+			$message = '';
+			if ( ! empty( $preset ) ) {
+				$preset_query = $wpdb->get_results(
+					"SELECT subject, message FROM " .
+					$wpdb->prefix . "vca_asm_auto_responses " .
+					"WHERE scope = '" . $preset . "' LIMIT 1", ARRAY_A
+				);
+				$subject = isset( $preset_query[0] ) ? $preset_query[0]['subject'] : $subject;
+				$message = isset( $preset_query[0] ) ? $preset_query[0]['message'] : $message;
+			}
+			$wpdb->insert(
+				$wpdb->prefix . 'vca_asm_auto_responses',
+				array(
+					'action' => $action,
+					'scope' => $scope,
+					'switch' => 1,
+					'subject' => stripcslashes( $subject ),
+					'message' => stripcslashes( $message )
+				),
+				array( '%s', '%s', '%d', '%s', '%s' )
+			);
+		}
+	}
+
+	/**
+	 * Deletes a set of autoresponses
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	public function delete_autoresponses( $scope = 'dummy' )
+	{
+		global $wpdb;
+
+		$wpdb->query(
+			"DELETE FROM " .
+			$wpdb->prefix . "vca_asm_auto_responses " .
+			"WHERE scope = '" . $scope . "'"
+		);
 	}
 
 } // class

@@ -23,7 +23,8 @@ class VCA_ASM_Admin_Geography {
 	 */
 	public function control() {
 		global $current_user, $wpdb,
-			$vca_asm_finances, $vca_asm_geography;
+			$vca_asm_finances, $vca_asm_geography,
+			$vca_asm_admin_settings;
 
 		$messages = array();
 
@@ -352,6 +353,10 @@ class VCA_ASM_Admin_Geography {
 							if ( in_array( $_POST['type'], array( 'lc', 'cell' ) ) ) {
 								$vca_asm_finances->create_account( $region_id, 'econ' );
 								$vca_asm_finances->create_account( $region_id, 'donations' );
+							}
+
+							if ( 'nation' === $_POST['type'] ) {
+								$vca_asm_admin_settings->insert_autoresponses( $region_id );
 							}
 
 							if ( ! empty( $_POST['parent_nation'] ) && is_numeric( $_POST['parent_nation'] ) ) {

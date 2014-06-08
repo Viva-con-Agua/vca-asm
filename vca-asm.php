@@ -192,7 +192,7 @@ function vca_asm_install() {
 		id int UNSIGNED NOT NULL AUTO_INCREMENT ,
 		supporter int UNSIGNED NOT NULL ,
 		activity int UNSIGNED NOT NULL ,
-		state tinyint UNSIGNED ,
+		state tinyint UNSIGNED NOT NULL ,
 		notes text NOT NULL ,
 		UNIQUE KEY id (id)
     ) DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;";
@@ -205,8 +205,9 @@ function vca_asm_install() {
 	) DEFAULT CHARACTER SET = utf8 COLLATE = utf8_general_ci;";
 	$sql[] = "CREATE TABLE " . $wpdb->prefix . "vca_asm_auto_responses (
 		id int UNSIGNED NOT NULL AUTO_INCREMENT ,
+		scope varchar(255) NOT NULL ,
 		action tinytext NOT NULL ,
-		switch tinyint UNSIGNED ,
+		switch tinyint UNSIGNED NOT NULL ,
 		subject text NOT NULL ,
 		message text NOT NULL ,
 		UNIQUE KEY id (id)
@@ -351,7 +352,6 @@ function vca_asm_install() {
 		$actions = array(
 			'applied',
 			'accepted',
-			'accepted_late',
 			'denied',
 			'reg_revoked',
 			'mem_accepted',
@@ -363,9 +363,10 @@ function vca_asm_install() {
 				$wpdb->prefix . 'vca_asm_auto_responses',
 				array(
 					'action' => $action,
+					'scope' => 'ge',
 					'switch' => 1
 				),
-				array( '%s', '%d' )
+				array( '%s', '%s', '%d' )
 			);
 		}
 	}

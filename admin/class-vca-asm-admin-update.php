@@ -29,7 +29,7 @@ class VCA_ASM_Admin_Update {
 			'Update',
 			'vca_asm_set_mode',
 			'vca-asm-update',
-			array( &$this, 'control' )
+			array( $this, 'control' )
 		);
 	}
 
@@ -73,19 +73,18 @@ class VCA_ASM_Admin_Update {
 	public function control() {
 		global $wpdb,
 			$vca_asm_activities, $vca_asm_finances, $vca_asm_geography, $vca_asm_mailer,
-			$vca_asm_admin;
+			$vca_asm_admin, $vca_asm_admin_settings;
 
 		$messages = array();
 
 		if ( isset( $_GET['todo'] ) && 'update' === $_GET['todo'] ) {
 			$updated = true;
 
-			//$cities = $vca_asm_geography->get_all( 'name', 'ASC', 'city' );
-			//
-			//foreach( $cities as $city ) {
-			//	$vca_asm_finances->create_account( $city['id'] );
-			//	$vca_asm_finances->create_account( $city['id'], 'donations' );
-			//}
+			$nations = $vca_asm_geography->get_all( 'name', 'ASC', 'nation' );
+			
+			foreach( $nations as $nation ) {
+				$vca_asm_admin_settings->insert_autoresponses( $nation['id'], 'ge' );
+			}
 
 			//$users = get_users();
 			//
@@ -184,7 +183,7 @@ class VCA_ASM_Admin_Update {
 	 * @access public
 	 */
 	public function __construct() {
-		add_action( 'admin_menu', array( &$this, 'admin_menu' ), 19 );
+		add_action( 'admin_menu', array( $this, 'admin_menu' ), 19 );
 	}
 
 } // class

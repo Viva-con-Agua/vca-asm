@@ -37,6 +37,7 @@ class VCA_ASM_Admin_Form {
 		'confirm_text' => 'Really?',
 		'back' => false,
 		'back_url' => '#',
+		'submitted_field' => true,
 		'has_cap' => true,
 		'fields' => array()
 	);
@@ -96,8 +97,10 @@ class VCA_ASM_Admin_Form {
 			if ( $top_button && $has_cap ) {
 				$output .=  $the_button;
 			}
-			$output .= '<input type="hidden" name="submitted" value="y"/>' .
-					'<input type="hidden" name="edit_val" value="' . $id . '"/>' ;
+			if ( $submitted_field ) {
+				$output .= '<input type="hidden" name="submitted" value="y"/>';
+			}
+			$output .= '<input type="hidden" name="edit_val" value="' . $id . '"/>' ;
 			if ( 'post' === $method ) {
 				$output .= wp_nonce_field( $nonce, $nonce . '-nonce', false, false ) .
 					wp_nonce_field( 'meta-box-order', 'meta-box-order-nonce', false, false ) .

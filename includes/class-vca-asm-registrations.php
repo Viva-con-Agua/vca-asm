@@ -529,7 +529,8 @@ class VcA_ASM_Registrations {
 	 * @access public
 	 */
 	public function set_application( $activity, $notes = '', $supporter = NULL ) {
-		global $wpdb, $vca_asm_mailer;
+		global $current_user, $wpdb,
+			$vca_asm_mailer;
 
 		/* default action (if called from frontend) */
 		if( $supporter === NULL ) {
@@ -538,6 +539,9 @@ class VcA_ASM_Registrations {
 			$supporter = $current_user->ID;
 		}
 		$activity = intval( $activity );
+
+		$metadata = $this->scope_from_activity( $activity );
+		extract( $metadata );
 
 		$applications_query = $wpdb->get_results(
 			"SELECT id FROM " .
@@ -563,6 +567,9 @@ class VcA_ASM_Registrations {
 			$supporter,
 			'applied',
 			array(
+				'scope' => $scope,
+				'from_name' => $from_name,
+				'from_email' => $from_email,
 				'activity' => get_the_title( $activity ),
 				'activity_id' => $activity
 			)
@@ -581,7 +588,8 @@ class VcA_ASM_Registrations {
 	 * @access public
 	 */
 	public function deny_application( $activity, $supporter ) {
-		global $wpdb, $vca_asm_mailer;
+		global $wpdb,
+			$vca_asm_mailer;
 
 		$success = $wpdb->update(
 			$wpdb->prefix . 'vca_asm_applications',
@@ -601,10 +609,16 @@ class VcA_ASM_Registrations {
 			)
 		);
 
+		$metadata = $this->scope_from_activity( $activity );
+		extract( $metadata );
+
 		$vca_asm_mailer->auto_response(
 			$supporter,
 			'denied',
 			array(
+				'scope' => $scope,
+				'from_name' => $from_name,
+				'from_email' => $from_email,
 				'activity' => get_the_title( $activity ),
 				'activity_id' => $activity
 			)
@@ -664,10 +678,17 @@ class VcA_ASM_Registrations {
 						'%s'
 					)
 				);
+
+				$metadata = $this->scope_from_activity( $activity );
+				extract( $metadata );
+
 				$vca_asm_mailer->auto_response(
 					$supporter,
 					'accepted',
 					array(
+						'scope' => $scope,
+						'from_name' => $from_name,
+						'from_email' => $from_email,
 						'activity' => get_the_title( $activity ),
 						'activity_id' => $activity
 					)
@@ -809,16 +830,73 @@ class VcA_ASM_Registrations {
 			'WHERE activity = ' . $activity . ' AND supporter = ' . $supporter . ' LIMIT 1'
 		);
 
+		$metadata = $this->scope_from_activity( $activity );
+		extract( $metadata );
+
 		$vca_asm_mailer->auto_response(
 			$supporter,
 			'reg_revoked',
 			array(
+				'scope' => $scope,
+				'from_name' => $from_name,
+				'from_email' => $from_email,
 				'activity' => get_the_title( $activity ),
 				'activity_id' => $activity
 			)
 		);
 
 		return $success;
+	}
+
+	/********** UTILITY METHODS **********/
+
+	/**
+	 * Writes an application to the database
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
+	public function scope_from_activity( $activity ) {
+		global $current_user, $wpdb,
+			$vca_asm_activities, $vca_asm_mailer;
+
+		$type = get_post_type( $activity );
+
+		if ( ! empty( $vca_asm_activities->departments_by_activity[$type] ) && 'goldeimer' === $vca_asm_activities->departments_by_activity[$type] ) {
+			$scope = 'ge';
+			$from_name = __( 'Goldeimer', 'vca-asm' );
+			$from_email = _x( 'no-reply@goldeimer.de', 'Utility Translation', 'vca-asm' );
+		} else {
+			$scope = get_post_meta( $activity, 'nation', true );
+			$scope = ! empty( $scope ) ? $scope : get_user_meta( $current_user->ID, 'nation', true );
+			/* ToDo: Move into Database (Geo Settings) */
+			switch ( $scope ) {
+				case 42:
+					$from_name = 'Viva con Agua';
+					$from_email = 'no-reply@vivaconagua.ch';
+
+				break;
+
+				case 68:
+					$from_name = 'Viva con Agua';
+					$from_email = 'no-reply@vivaconagua.at';
+				break;
+
+				case 40:
+				default:
+					$from_name = 'Viva con Agua';
+					$from_email = 'no-reply@vivaconagua.org';
+				break;
+			}
+		}
+
+		$metadata = array(
+			'scope' => $scope,
+			'from_name' => $from_name,
+			'from_email' => $from_email
+		);
+
+		return $metadata;
 	}
 
 } // class

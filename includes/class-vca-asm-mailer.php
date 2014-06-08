@@ -549,12 +549,15 @@ class VCA_ASM_Mailer {
 	 * @access public
 	 */
 	public function auto_response( $id, $action, $message_args = array() ) {
-		global $wpdb;
+		global $current_user, $wpdb;
 
 		$emails_options = get_option( 'vca_asm_emails_options' );
 		$format = ! empty( $emails_options['email_format_auto'] ) ? $emails_options['email_format_auto'] : 'plain';
 
 		$default_args = array(
+			'scope' => 0,
+			'from_name' => 'Viva con Agua',
+			'from_email' => 'no-reply@vivaconagua.org',
 			'activity_id' => 0,
 			'activity' => __( 'Festival', 'vca-asm' ),
 			'city_id' => 0,
@@ -567,11 +570,13 @@ class VCA_ASM_Mailer {
 		if ( is_array( $message_args ) ) {
 			$message_args = wp_parse_args( $message_args, $default_args );
 			extract( $message_args, EXTR_SKIP );
-		} else { /* lagacy */
+		} else { /* lagacy | backwards compatibility */
 			extract( $default_args, EXTR_SKIP );
 			$activity = $message_args;
 			$city = $message_args;
 		}
+		/* lagacy | backwards compatibility */
+		$scope = empty( $scope ) ? get_user_meta( $current_user->ID, 'nation', true ) : $scope;
 
 		$this_user = new WP_User( intval( $id ) );
 
@@ -654,10 +659,10 @@ class VCA_ASM_Mailer {
 			$this->send_pre( array(
 				'mail_id' => $mail_id,
 				'receipients' => $id,
-				'subject' => $subject,
-				'message' => $message,
-				'from_name' => 'Viva con Agua',
-				'from_email' => 'no-reply@vivaconagua.org',
+				'subject' => stripcslashes( $subject ),
+				'message' => stripcslashes( $message ),
+				'from_name' => $from_name,
+				'from_email' => $from_email,
 				'content_type' => $format,
 				'input_type' => 'plain',
 				'for' => $name,

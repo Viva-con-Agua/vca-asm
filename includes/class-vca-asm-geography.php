@@ -859,22 +859,26 @@ class VCA_ASM_Geography
 	 */
 	public function delete( $id ) {
 		global $wpdb,
-			$vca_asm_finances;
+			$vca_asm_finances,
+			$vca_asm_admin_settings;
 
-		$geo_user_query = $wpdb->get_results(
-			"SELECT has_user, user_id, pass, user FROM " .
+		$pre_delete_query = $wpdb->get_results(
+			"SELECT has_user, user_id, pass, user, type FROM " .
 			$wpdb->prefix . "vca_asm_geography " .
 			"WHERE id = " . $id . " LIMIT 1", ARRAY_A
 		);
-		$geo_user = isset( $geo_user_query[0] ) ? $geo_user_query[0] : '';
+		$pre_delete_data = isset( $pre_delete_query[0] ) ? $pre_delete_query[0] : '';
 
 		$wpdb->query(
 			"DELETE FROM " .
 			$wpdb->prefix . "vca_asm_geography " .
 			"WHERE id = " . $id . " LIMIT 1"
 		);
-		if ( is_array( $geo_user ) && 1 == $geo_user['has_user'] ) {
-			wp_delete_user( $geo_user['user_id'] );
+		if ( is_array( $pre_delete_data ) && 1 == $pre_delete_data['has_user'] ) {
+			wp_delete_user( $pre_delete_data['user_id'] );
+		}
+		if ( is_array( $pre_delete_data ) && 'nation' === $pre_delete_data['type'] ) {
+			$vca_asm_admin_settings->delete_autoresponses( $id );
 		}
 		$wpdb->query(
 			"DELETE FROM " .
