@@ -404,19 +404,34 @@ class VCA_ASM_Profile {
 							update_user_meta( $user_id, $field['id'], '2' );
 						} else {
 							$regions = $vca_asm_geography->get_ids();
-							$region_name = isset( $_POST['city'] ) ? $regions[$_POST['city']] : $regions[get_user_meta( $user_id, 'city', true )];
+							$city_id = get_user_meta( $user_id, 'city', true );
+							$geo_name = isset( $_POST['city'] ) ? $regions[$_POST['city']] : $regions[$city_id];
 							$old = get_user_meta( $user_id, $field['id'], true );
 							if( isset( $_POST[ $field['id'] ] ) ) {
 								if( ( ( is_array( $this_user->roles ) && ! in_array( 'supporter', $this_user->roles ) ) || ( ! is_array( $this_user->roles ) && 'supporter' != $this_user->roles ) ) && $old != '2' ) {
 									update_user_meta( $user_id, $field['id'], '2' );
-									$vca_asm_mailer->auto_response( $user_id, 'mem_accepted', $region_name );
+									$vca_asm_mailer->auto_response(
+										$user_id,
+										'mem_accepted',
+										array(
+											'city' => $geo_name,
+											'city_id' => $city_id
+										)
+									);
 								} elseif( empty( $old ) ) {
 									update_user_meta( $user_id, $field['id'], '1' );
 								}
 							} elseif( ! isset( $_POST[ $field['id'] ] ) && ( $old !== '0' || $old !== 0 ) ) {
 								update_user_meta( $user_id, $field['id'], '0' );
 								if( $old == '2' ) {
-									$vca_asm_mailer->auto_response( $user_id, 'mem_cancelled', $region_name );
+									$vca_asm_mailer->auto_response(
+										$user_id,
+										'mem_cancelled',
+										array(
+											'city' => $geo_name,
+											'city_id' => $city_id
+										)
+									);
 								}
 							}
 						}
