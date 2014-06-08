@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: VcA Activity & Supporter Management v1.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-06-08 10:25:04+0200\n"
+"PO-Revision-Date: 2014-06-08 15:19:00+0200\n"
 "Last-Translator: Johannes Pilkahn <johannes@pilkahn.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -20,7 +20,7 @@ msgstr ""
 "X-Poedit-SearchPath-0: .\n"
 "X-Textdomain-Support: yes"
 
-#: admin/class-vca-asm-admin-geography.php:556
+#: admin/class-vca-asm-admin-geography.php:561
 #@ vca-asm
 msgid "Members"
 msgstr "Mitglieder"
@@ -31,10 +31,10 @@ msgstr "Mitglieder"
 #: admin/class-vca-asm-admin-finances.php:3505
 #: admin/class-vca-asm-admin-finances.php:3726
 #: admin/class-vca-asm-admin-finances.php:3905
-#: admin/class-vca-asm-admin-geography.php:524
+#: admin/class-vca-asm-admin-geography.php:529
 #: templates/admin-table.php:160
 #: templates/admin-table.php:196
-#: templates/class-vca-asm-admin-form.php:604
+#: templates/class-vca-asm-admin-form.php:607
 #: templates/class-vca-asm-admin-table.php:939
 #: templates/class-vca-asm-admin-table.php:948
 #: templates/class-vca-asm-admin-table.php:957
@@ -197,9 +197,9 @@ msgid "Select One"
 msgstr "Eine Auswählen"
 
 #: admin/class-vca-asm-admin-finances.php:3193
-#: admin/class-vca-asm-admin-geography.php:910
+#: admin/class-vca-asm-admin-geography.php:915
 #: includes/class-vca-asm-geography.php:540
-#: includes/class-vca-asm-mailer.php:561
+#: includes/class-vca-asm-mailer.php:564
 #: templates/admin-table.php:169
 #: templates/class-vca-asm-admin-table.php:1250
 #@ vca-asm
@@ -207,7 +207,7 @@ msgid "Cell"
 msgstr "Zelle"
 
 #: admin/class-vca-asm-admin-finances.php:3186
-#: admin/class-vca-asm-admin-geography.php:906
+#: admin/class-vca-asm-admin-geography.php:911
 #: includes/class-vca-asm-geography.php:543
 #: templates/admin-table.php:171
 #: templates/class-vca-asm-admin-table.php:1252
@@ -228,13 +228,13 @@ msgid "Send the email either from your personal email address or select the gene
 msgstr "Schicke die Nachricht entweder von deiner persönlichen Email-Adresse oder von der generischen \"no-reply\"."
 
 #: admin/class-vca-asm-admin-emails.php:629
-#: admin/class-vca-asm-admin-settings.php:265
-#: admin/class-vca-asm-admin-settings.php:288
-#: admin/class-vca-asm-admin-settings.php:311
-#: admin/class-vca-asm-admin-settings.php:334
-#: admin/class-vca-asm-admin-settings.php:357
-#: admin/class-vca-asm-admin-settings.php:380
-#: admin/class-vca-asm-admin-settings.php:403
+#: admin/class-vca-asm-admin-settings.php:272
+#: admin/class-vca-asm-admin-settings.php:295
+#: admin/class-vca-asm-admin-settings.php:318
+#: admin/class-vca-asm-admin-settings.php:341
+#: admin/class-vca-asm-admin-settings.php:366
+#: admin/class-vca-asm-admin-settings.php:389
+#: admin/class-vca-asm-admin-settings.php:412
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Subject"
@@ -242,13 +242,13 @@ msgstr "Betreff"
 
 #: admin/class-vca-asm-admin-emails.php:566
 #: admin/class-vca-asm-admin-emails.php:615
-#: admin/class-vca-asm-admin-settings.php:271
-#: admin/class-vca-asm-admin-settings.php:294
-#: admin/class-vca-asm-admin-settings.php:317
-#: admin/class-vca-asm-admin-settings.php:340
-#: admin/class-vca-asm-admin-settings.php:363
-#: admin/class-vca-asm-admin-settings.php:386
-#: admin/class-vca-asm-admin-settings.php:409
+#: admin/class-vca-asm-admin-settings.php:278
+#: admin/class-vca-asm-admin-settings.php:301
+#: admin/class-vca-asm-admin-settings.php:324
+#: admin/class-vca-asm-admin-settings.php:347
+#: admin/class-vca-asm-admin-settings.php:372
+#: admin/class-vca-asm-admin-settings.php:395
+#: admin/class-vca-asm-admin-settings.php:418
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Message"
@@ -276,187 +276,187 @@ msgstr "Email jetzt verschicken?"
 msgid "Send Mail!"
 msgstr "Mail verschicken!"
 
-#: admin/class-vca-asm-admin-settings.php:255
+#: admin/class-vca-asm-admin-settings.php:262
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Application Confirmation"
 msgstr "Bestätigung des Bewerbungseingangs"
 
-#: admin/class-vca-asm-admin-settings.php:259
-#: admin/class-vca-asm-admin-settings.php:282
-#: admin/class-vca-asm-admin-settings.php:305
-#: admin/class-vca-asm-admin-settings.php:328
-#: admin/class-vca-asm-admin-settings.php:351
-#: admin/class-vca-asm-admin-settings.php:374
-#: admin/class-vca-asm-admin-settings.php:397
+#: admin/class-vca-asm-admin-settings.php:266
+#: admin/class-vca-asm-admin-settings.php:289
+#: admin/class-vca-asm-admin-settings.php:312
+#: admin/class-vca-asm-admin-settings.php:335
+#: admin/class-vca-asm-admin-settings.php:360
+#: admin/class-vca-asm-admin-settings.php:383
+#: admin/class-vca-asm-admin-settings.php:406
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Send Mail Switch"
 msgstr "Ein/Aus Schalter"
 
-#: admin/class-vca-asm-admin-settings.php:261
+#: admin/class-vca-asm-admin-settings.php:268
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Enable/disable application confirmations"
 msgstr "Bestätigung von Bewerbungen ein- und ausschalten."
 
-#: admin/class-vca-asm-admin-settings.php:267
+#: admin/class-vca-asm-admin-settings.php:274
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Subject line for application confirmations"
 msgstr "Betreffszeile für Bewerbungsbestätigungen"
 
-#: admin/class-vca-asm-admin-settings.php:273
+#: admin/class-vca-asm-admin-settings.php:280
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Message body for application confirmations"
 msgstr "Nachrichtentext für Bewerbungsbestätigungen"
 
-#: admin/class-vca-asm-admin-settings.php:278
+#: admin/class-vca-asm-admin-settings.php:285
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Registration Confirmation / Application Acceptance"
 msgstr "Zusage von Bewerbungen"
 
-#: admin/class-vca-asm-admin-settings.php:284
+#: admin/class-vca-asm-admin-settings.php:291
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Enable/disable registration confirmations"
 msgstr "Zusagen ein- und ausschalten"
 
-#: admin/class-vca-asm-admin-settings.php:290
+#: admin/class-vca-asm-admin-settings.php:297
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Subject line for acceptance to event"
 msgstr "Betreffszeile für Zusagen"
 
-#: admin/class-vca-asm-admin-settings.php:296
+#: admin/class-vca-asm-admin-settings.php:303
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Message body for acceptance to event"
 msgstr "Nachrichtentext für Zusagen"
 
-#: admin/class-vca-asm-admin-settings.php:301
+#: admin/class-vca-asm-admin-settings.php:308
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Deny Application"
 msgstr "Absage einer Bewerbung"
 
-#: admin/class-vca-asm-admin-settings.php:307
+#: admin/class-vca-asm-admin-settings.php:314
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Enable/disable application denial notifications"
 msgstr "Absagen ein- oder ausschalten"
 
-#: admin/class-vca-asm-admin-settings.php:313
+#: admin/class-vca-asm-admin-settings.php:320
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Subject line for application denial"
 msgstr "Betreffszeile für Absagen"
 
-#: admin/class-vca-asm-admin-settings.php:319
+#: admin/class-vca-asm-admin-settings.php:326
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Message body for application denial"
 msgstr "Nachrichtentext für Absagen"
 
-#: admin/class-vca-asm-admin-settings.php:324
+#: admin/class-vca-asm-admin-settings.php:331
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Withdraw Registration"
 msgstr "Zusage Zurückziehen"
 
-#: admin/class-vca-asm-admin-settings.php:330
+#: admin/class-vca-asm-admin-settings.php:337
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Enable/disable notifications of revoked registrations"
 msgstr "Benachrichtigung bei zurückgezogenen Zusagen ein- oder ausschalten"
 
-#: admin/class-vca-asm-admin-settings.php:336
+#: admin/class-vca-asm-admin-settings.php:343
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Subject line for notifications of revoked registrations"
 msgstr "Betreffszeile bei zurückgezogenen Zusagen"
 
-#: admin/class-vca-asm-admin-settings.php:342
+#: admin/class-vca-asm-admin-settings.php:349
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Message body for notifications of revoked registrations"
 msgstr "Nachrichtentext bei zurückgezogenen Zusagen"
 
-#: admin/class-vca-asm-admin-settings.php:347
+#: admin/class-vca-asm-admin-settings.php:356
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Accept Membership"
 msgstr "Mitgliedsstatus Akzeptieren"
 
-#: admin/class-vca-asm-admin-settings.php:353
+#: admin/class-vca-asm-admin-settings.php:362
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Enable/disable notifications of accepted memberships to Cell / Local Crew"
 msgstr "Benachrichtigung bei Aufnahme in Zelle / Local Crew ein- oder ausschalten"
 
-#: admin/class-vca-asm-admin-settings.php:359
+#: admin/class-vca-asm-admin-settings.php:368
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Subject line for notifications of accepted memberships to Cell / Local Crew"
 msgstr "Betreffszeile bei Aufnahme in Zelle / Local Crew"
 
-#: admin/class-vca-asm-admin-settings.php:365
+#: admin/class-vca-asm-admin-settings.php:374
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Message body for notifications of accepted memberships to Cell / Local Crew"
 msgstr "Nachrichtentext bei Aufnahme in Zelle oder Local Crew"
 
-#: admin/class-vca-asm-admin-settings.php:370
+#: admin/class-vca-asm-admin-settings.php:379
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Deny Membership"
 msgstr "Mitgliedschaft Verweigern"
 
-#: admin/class-vca-asm-admin-settings.php:376
+#: admin/class-vca-asm-admin-settings.php:385
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Enable/disable notifications of denied memberships to Cell / Local Crew"
 msgstr "Nachricht bei Verweigerung des Mitgliedsstatus ein- oder ausschalten"
 
-#: admin/class-vca-asm-admin-settings.php:382
+#: admin/class-vca-asm-admin-settings.php:391
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Subject line for notifications of denied memberships to Cell / Local Crew"
 msgstr "Betreffszeile für Verweigerung des Mitgliedsstatus für Zelle / LocaL Crew"
 
-#: admin/class-vca-asm-admin-settings.php:388
+#: admin/class-vca-asm-admin-settings.php:397
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Message body for notifications of denied memberships to Cell / Local Crew"
 msgstr "Nachrichtentext bei Verweigerung des Mitgliedsstatus für Zelle / Local Crew"
 
-#: admin/class-vca-asm-admin-settings.php:393
+#: admin/class-vca-asm-admin-settings.php:402
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Cancel Membership"
 msgstr "Mitgliedschaft Beenden"
 
-#: admin/class-vca-asm-admin-settings.php:399
+#: admin/class-vca-asm-admin-settings.php:408
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Enable/disable notifications when memberships to Cell / Local Crew are cancelled"
 msgstr "Benachrichtigung bei zurückgezogenem Mitgliedsstatus ein- oder ausschalten"
 
-#: admin/class-vca-asm-admin-settings.php:405
+#: admin/class-vca-asm-admin-settings.php:414
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Subject line for notifications when memberships to Cell / Local Crew are cancelled"
 msgstr "Betreffszeile bei zurückgezogenem Mitgliedsstatus"
 
-#: admin/class-vca-asm-admin-settings.php:411
+#: admin/class-vca-asm-admin-settings.php:420
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Message body for notifications when memberships to Cell / Local Crew are cancelled"
 msgstr "Nachrichtentext bei zurückgezogenem Mitgliedsstatus"
 
-#: admin/class-vca-asm-admin-settings.php:419
+#: admin/class-vca-asm-admin-settings.php:428
 #@ vca-asm
 msgid "Options successfully updated!"
 msgstr "Optionen erfolgreich gespeichert!"
@@ -496,8 +496,8 @@ msgstr "Alter"
 
 #: includes/class-vca-asm-mailer.php:302
 #: includes/class-vca-asm-mailer.php:520
-#: includes/class-vca-asm-mailer.php:562
-#: includes/class-vca-asm-mailer.php:579
+#: includes/class-vca-asm-mailer.php:565
+#: includes/class-vca-asm-mailer.php:584
 #: templates/notifications.php:25
 #@ vca-asm
 msgid "Supporter"
@@ -513,7 +513,7 @@ msgstr "Emails"
 #: includes/class-vca-asm-activities.php:982
 #: includes/class-vca-asm-activities.php:1771
 #: includes/class-vca-asm-activities.php:1799
-#: includes/class-vca-asm-mailer.php:559
+#: includes/class-vca-asm-mailer.php:562
 #: models/class-vca-asm-activity.php:127
 #@ vca-asm
 msgid "Festival"
@@ -550,67 +550,67 @@ msgstr "Aktuelle Bewerbungen"
 msgid "Waiting List"
 msgstr "Warteliste"
 
-#: includes/class-vca-asm-mailer.php:593
+#: includes/class-vca-asm-mailer.php:598
 #@ vca-asm
 msgid "Successful application!"
 msgstr "Erfolgreiche Bewerbung!"
 
-#: includes/class-vca-asm-mailer.php:594
+#: includes/class-vca-asm-mailer.php:599
 #, php-format
 #@ vca-asm
 msgid "You have successfully applied to support Viva con Agua at \"%s\""
 msgstr "Du hast dich erfolgreich beworben, Viva con Agua bei \"%s\" zu unterstützen."
 
-#: includes/class-vca-asm-mailer.php:597
+#: includes/class-vca-asm-mailer.php:602
 #@ vca-asm
 msgid "Your application has been accepted!"
 msgstr "Deine Bewerbung wurde angenommen!"
 
-#: includes/class-vca-asm-mailer.php:601
+#: includes/class-vca-asm-mailer.php:606
 #@ vca-asm
 msgid "Your application has been denied."
 msgstr "Deine Bewerbung wurde leider abgelehnt."
 
-#: includes/class-vca-asm-mailer.php:602
+#: includes/class-vca-asm-mailer.php:607
 #, php-format
 #@ vca-asm
 msgid "Sorry this time there weren't enough open slots for \"%s\" and your application had to be denied. You have been moved to the waiting list."
 msgstr "Sorry, dieses Mal gab's nicht genügend Plätze für \"%s\" und wir mussten deine Bewerbung ablehnen. Du stehst jetzt auf der Warteliste."
 
-#: includes/class-vca-asm-mailer.php:605
+#: includes/class-vca-asm-mailer.php:610
 #@ vca-asm
 msgid "Registration revoked."
 msgstr "Zusage zurückgezogen."
 
-#: includes/class-vca-asm-mailer.php:606
+#: includes/class-vca-asm-mailer.php:611
 #, php-format
 #@ vca-asm
 msgid "Your registration to \"%s\" has been revoked."
 msgstr "Deine Registrierung zu \"%s\" wurde zurückgezogen."
 
-#: includes/class-vca-asm-mailer.php:609
+#: includes/class-vca-asm-mailer.php:614
 #@ vca-asm
 msgid "Membership confirmed."
 msgstr "Mitgliedsschaft akzeptiert."
 
-#: includes/class-vca-asm-mailer.php:610
+#: includes/class-vca-asm-mailer.php:615
 #, php-format
 #@ vca-asm
 msgid "Your membership to \"%s\" has been confirmed."
 msgstr "Deine Mitgliedsschaft bei \"%s\" wurde bestätigt."
 
-#: includes/class-vca-asm-mailer.php:613
+#: includes/class-vca-asm-mailer.php:618
 #@ vca-asm
 msgid "Membership denied."
 msgstr "Mitgliedsschaft nicht akzeptiert."
 
-#: includes/class-vca-asm-mailer.php:614
+#: includes/class-vca-asm-mailer.php:619
 #, php-format
 #@ vca-asm
 msgid "Your membership to \"%s\" has been denied."
 msgstr "Deine Mitgliedsschaft bei \"%s\" wurde nicht akzeptiert. Sorry."
 
-#: includes/class-vca-asm-mailer.php:617
+#: includes/class-vca-asm-mailer.php:622
 #@ vca-asm
 msgid "Membership cancelled."
 msgstr "Mitgliedsschaft beendet."
@@ -838,18 +838,18 @@ msgctxt "Frontend: Application Process"
 msgid "If you wish to send a message with your application, do so here."
 msgstr "Wenn du eine Nachricht mit deiner Bewerbung schicken willst, kannst du das hier tun."
 
-#: includes/class-vca-asm-mailer.php:598
+#: includes/class-vca-asm-mailer.php:603
 #, php-format
 #@ vca-asm
 msgid "Your application to support us at \"%s\" has been accepted. Please login to the Pool to check who your contact person(s) is/are."
 msgstr "Deine Bewerbung, uns beim \"%s\" zu unterstützen wurde angenommen. Bitte log' dich in den Pool ein, um deine(n) Ansprechpartner_innen zu erfahren."
 
-#: admin/class-vca-asm-admin-geography.php:146
+#: admin/class-vca-asm-admin-geography.php:147
 #@ vca-asm
 msgid "If this region is supposed to have a Head-Of User, please set its username, password and email."
 msgstr "Wenn diese Region einen Head Of Benutzer haben soll, gib bitte einen Bentuzernamen, Passwort und Email an."
 
-#: admin/class-vca-asm-admin-geography.php:209
+#: admin/class-vca-asm-admin-geography.php:210
 #@ vca-asm
 msgid "Either the username is empty, already exists or the email is already in use."
 msgstr "Entweder hast du keinen Bentuzernamen eingegeben, jener wird schon verwandt oder die angegebene Email ist bereits in unserem System vorhanden."
@@ -941,13 +941,13 @@ msgstr "Wähle bitte ob und welche Neugikeiten aus dem VcA Kosmos Dir zugeschick
 #: includes/class-vca-asm-finances.php:682
 #: includes/class-vca-asm-finances.php:736
 #: includes/class-vca-asm-finances.php:791
-#: includes/class-vca-asm-geography.php:903
-#: includes/class-vca-asm-geography.php:945
+#: includes/class-vca-asm-geography.php:907
+#: includes/class-vca-asm-geography.php:949
 #@ vca-asm
 msgid "Please select..."
 msgstr "Bitte wählen..."
 
-#: admin/class-vca-asm-admin-geography.php:551
+#: admin/class-vca-asm-admin-geography.php:556
 #: admin/class-vca-asm-admin-home.php:113
 #: admin/class-vca-asm-admin.php:49
 #: admin/class-vca-asm-admin.php:50
@@ -1070,12 +1070,12 @@ msgctxt "User Profile"
 msgid "News Options"
 msgstr "News Optionen"
 
-#: admin/class-vca-asm-admin-geography.php:1123
+#: admin/class-vca-asm-admin-geography.php:1128
 #@ vca-asm
 msgid "Attention"
 msgstr "Achtung"
 
-#: admin/class-vca-asm-admin-geography.php:1128
+#: admin/class-vca-asm-admin-geography.php:1133
 #@ vca-asm
 msgid "The username (login) of the head of user. It cannot be changed (other than through deletion and creation of a new user)."
 msgstr "Der Benutzername (Login) des Head-Of-Kontos. Dies kann nicht geändert werden (es sei denn durch Löschen des Benutzerkontos und Erstellen eines neuen)."
@@ -1101,13 +1101,13 @@ msgstr "Log mich raus"
 msgid "Logout"
 msgstr "Rausloggen"
 
-#: admin/class-vca-asm-admin-settings.php:261
-#: admin/class-vca-asm-admin-settings.php:284
-#: admin/class-vca-asm-admin-settings.php:307
-#: admin/class-vca-asm-admin-settings.php:330
-#: admin/class-vca-asm-admin-settings.php:353
-#: admin/class-vca-asm-admin-settings.php:376
-#: admin/class-vca-asm-admin-settings.php:399
+#: admin/class-vca-asm-admin-settings.php:268
+#: admin/class-vca-asm-admin-settings.php:291
+#: admin/class-vca-asm-admin-settings.php:314
+#: admin/class-vca-asm-admin-settings.php:337
+#: admin/class-vca-asm-admin-settings.php:362
+#: admin/class-vca-asm-admin-settings.php:385
+#: admin/class-vca-asm-admin-settings.php:408
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "(this goes for the default responses as well)"
@@ -1141,7 +1141,7 @@ msgstr "Teilnehmerdaten als Excel Datei herunterladen"
 msgid "All Head Ofs"
 msgstr "Alle Head Ofs"
 
-#: includes/class-vca-asm-profile.php:450
+#: includes/class-vca-asm-profile.php:465
 #@ vca-asm
 msgid "Please confirm that you agree to the terms &amp; conditions."
 msgstr "Bitte bestätige, dass du die Nutzungsbedingungen und Datenschutzerklärung akzeptierst."
@@ -1216,12 +1216,12 @@ msgstr "Ausgewählte Bewerbungen bearbeiten"
 msgid "Revoke selected accepted applications"
 msgstr "Ausgewählte bestätigte Bewerbungen zurückziehen"
 
-#: admin/class-vca-asm-admin-geography.php:154
+#: admin/class-vca-asm-admin-geography.php:155
 #@ vca-asm
 msgid "Please do not leave the password or email field blank as long as the region has a user assigned."
 msgstr "Bitte fülle die Felder für Passwort und Email aus, wenn der Region ein Benutzer zugeordnet ist. Willst du keinen Head Of Benutzer, musst du auch das entsprechende Häkchen entfernen."
 
-#: admin/class-vca-asm-admin-geography.php:1145
+#: admin/class-vca-asm-admin-geography.php:1150
 #@ vca-asm
 msgid "This is the current email address assigned to the Head Of User."
 msgstr "Die aktuelle Email Adresse des Head Of Benutzers"
@@ -1269,13 +1269,13 @@ msgstr "Festival gespeichert."
 msgid "has applied..."
 msgstr "hat sich beworben..."
 
-#: admin/class-vca-asm-admin-settings.php:899
+#: admin/class-vca-asm-admin-settings.php:910
 #: admin/class-vca-asm-admin-supporters.php:1516
 #@ vca-asm
 msgid "Yes"
 msgstr "Ja"
 
-#: admin/class-vca-asm-admin-settings.php:889
+#: admin/class-vca-asm-admin-settings.php:900
 #: admin/class-vca-asm-admin-supporters.php:914
 #: admin/class-vca-asm-admin-supporters.php:1012
 #: admin/class-vca-asm-admin-supporters.php:1520
@@ -1350,7 +1350,7 @@ msgstr "Supporter, die sich um Mitgliedsschaft in deiner %region_status% beworbe
 
 #: admin/class-vca-asm-admin-supporters.php:465
 #: admin/class-vca-asm-admin-supporters.php:1339
-#: includes/class-vca-asm-profile.php:505
+#: includes/class-vca-asm-profile.php:520
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Membership"
@@ -1422,7 +1422,7 @@ msgid "Finances"
 msgstr "Finanzen"
 
 #: admin/class-vca-asm-admin-finances.php:3071
-#: admin/class-vca-asm-admin-settings.php:213
+#: admin/class-vca-asm-admin-settings.php:218
 #: admin/class-vca-asm-admin.php:231
 #: admin/class-vca-asm-admin.php:232
 #: admin/class-vca-asm-admin.php:251
@@ -1609,25 +1609,25 @@ msgctxt "Statistics"
 msgid "%1$s of those are Local Crews"
 msgstr "und %1$s Local Crews"
 
-#: admin/class-vca-asm-admin-settings.php:50
+#: admin/class-vca-asm-admin-settings.php:55
 #: includes/class-vca-asm-security.php:39
 #@ vca-asm
 msgid "very weak"
 msgstr "sehr schwach"
 
-#: admin/class-vca-asm-admin-settings.php:51
+#: admin/class-vca-asm-admin-settings.php:56
 #: includes/class-vca-asm-security.php:40
 #@ vca-asm
 msgid "weak"
 msgstr "schwach"
 
-#: admin/class-vca-asm-admin-settings.php:52
+#: admin/class-vca-asm-admin-settings.php:57
 #: includes/class-vca-asm-security.php:41
 #@ vca-asm
 msgid "medium"
 msgstr "mittel"
 
-#: admin/class-vca-asm-admin-settings.php:53
+#: admin/class-vca-asm-admin-settings.php:58
 #: includes/class-vca-asm-security.php:42
 #@ vca-asm
 msgid "strong"
@@ -1800,64 +1800,64 @@ msgstr "Teilnehmer"
 msgid "not set"
 msgstr "nicht angegeben"
 
-#: admin/class-vca-asm-admin-settings.php:171
+#: admin/class-vca-asm-admin-settings.php:176
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Settings"
 msgstr "Einstellungen"
 
-#: admin/class-vca-asm-admin-settings.php:186
+#: admin/class-vca-asm-admin-settings.php:191
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Security"
 msgstr "Sicherheit"
 
-#: admin/class-vca-asm-admin-settings.php:616
+#: admin/class-vca-asm-admin-settings.php:627
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "(Minimum) Password Strength"
 msgstr "(Minimale) Passwort-Stärke"
 
-#: admin/class-vca-asm-admin-settings.php:66
-#: admin/class-vca-asm-admin-settings.php:96
+#: admin/class-vca-asm-admin-settings.php:71
+#: admin/class-vca-asm-admin-settings.php:101
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Supporter"
 msgstr "Supporter"
 
-#: admin/class-vca-asm-admin-settings.php:81
-#: admin/class-vca-asm-admin-settings.php:108
+#: admin/class-vca-asm-admin-settings.php:86
+#: admin/class-vca-asm-admin-settings.php:113
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Access to Administration"
 msgstr "mit Verwaltungszugriff"
 
-#: admin/class-vca-asm-admin-settings.php:622
+#: admin/class-vca-asm-admin-settings.php:633
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Password Reset Cycle"
 msgstr "Passwort Lebensdauer"
 
-#: admin/class-vca-asm-admin-settings.php:120
-#: admin/class-vca-asm-admin-settings.php:628
+#: admin/class-vca-asm-admin-settings.php:125
+#: admin/class-vca-asm-admin-settings.php:639
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Automatic Logout"
 msgstr "Automatischer Logout"
 
-#: admin/class-vca-asm-admin-settings.php:793
+#: admin/class-vca-asm-admin-settings.php:804
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "The minimal strength of newly set passwords:"
 msgstr "Die minimale Stärke neu gewählter Passwörter:"
 
-#: admin/class-vca-asm-admin-settings.php:796
+#: admin/class-vca-asm-admin-settings.php:807
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "After this period, users are prompted to reset their password to a new one:"
 msgstr "Nach dieser Zeitspanne werden Benutzer aufgefordert, ihr Passwort zu erneuern:"
 
-#: admin/class-vca-asm-admin-settings.php:799
+#: admin/class-vca-asm-admin-settings.php:810
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "After being idle for this period, users are automatically logged out of the Pool:"
@@ -1947,21 +1947,21 @@ msgctxt "Admin Supporters"
 msgid "Gender"
 msgstr "Geschlecht"
 
-#: includes/class-vca-asm-profile.php:498
+#: includes/class-vca-asm-profile.php:513
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "City"
 msgstr "Stadt"
 
 #: admin/class-vca-asm-admin-supporters.php:498
-#: includes/class-vca-asm-profile.php:494
+#: includes/class-vca-asm-profile.php:509
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Registered since"
 msgstr "im Pool angemeldet seit"
 
 #: admin/class-vca-asm-admin-supporters.php:503
-#: includes/class-vca-asm-profile.php:501
+#: includes/class-vca-asm-profile.php:516
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Last Login"
@@ -2119,45 +2119,45 @@ msgstr "Alle ausgewählten Supporter von der Teilnehmerliste entfernen und die B
 msgid "Attention: This does not move the supporters to the waiting list - it removes them from the participants entirely!"
 msgstr "Achtung: Diese Aktion kann nicht rückgängig gemacht werden! Die Teilnehmer werden nicht auf die Warteliste verschoben."
 
-#: admin/class-vca-asm-admin-settings.php:102
-#: admin/class-vca-asm-admin-settings.php:114
+#: admin/class-vca-asm-admin-settings.php:107
+#: admin/class-vca-asm-admin-settings.php:119
 #@ vca-asm
 msgid "Months"
 msgstr "Monate"
 
-#: admin/class-vca-asm-admin-settings.php:103
-#: admin/class-vca-asm-admin-settings.php:115
-#: admin/class-vca-asm-admin-settings.php:127
-#: admin/class-vca-asm-admin-settings.php:141
-#: admin/class-vca-asm-admin-settings.php:153
+#: admin/class-vca-asm-admin-settings.php:108
+#: admin/class-vca-asm-admin-settings.php:120
+#: admin/class-vca-asm-admin-settings.php:132
+#: admin/class-vca-asm-admin-settings.php:146
+#: admin/class-vca-asm-admin-settings.php:158
 #@ vca-asm
 msgid "never"
 msgstr "nie"
 
-#: admin/class-vca-asm-admin-settings.php:126
-#: admin/class-vca-asm-admin-settings.php:152
+#: admin/class-vca-asm-admin-settings.php:131
+#: admin/class-vca-asm-admin-settings.php:157
 #@ vca-asm
 msgid "Minutes"
 msgstr "Minuten"
 
-#: admin/class-vca-asm-admin-settings.php:670
+#: admin/class-vca-asm-admin-settings.php:681
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Global Reset"
 msgstr "Globaler Reset"
 
-#: admin/class-vca-asm-admin-settings.php:847
+#: admin/class-vca-asm-admin-settings.php:858
 #@ vca-asm
 msgid "Really force a global pass reset?"
 msgstr "Wirklich globalen Passwort-Reset ezwingen?"
 
-#: admin/class-vca-asm-admin-settings.php:851
+#: admin/class-vca-asm-admin-settings.php:862
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "When activating this, all users, whose settings above are not set to &quot;never&quot;, will be prompted to reset their password on their next login, regardless of how old their passwords are."
 msgstr "Wenn dies aktiviert worden ist, werden alle Benutzer, deren Einstellungen oben nicht auf &quot;nie&quot; gesetzt sind, beim ihrem nächsten Login aufgefordert, ihr Passwort zu erneuern - unabhängig davon, wie alt das Passwort ist."
 
-#: admin/class-vca-asm-admin-settings.php:853
+#: admin/class-vca-asm-admin-settings.php:864
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Last global reset"
@@ -2183,13 +2183,13 @@ msgstr "Vergangene Aktivitäten"
 msgid "These are the activities you have participated in in the past."
 msgstr "An diesen Aktivitäten hast du teilgenommen."
 
-#: includes/class-vca-asm-profile.php:517
+#: includes/class-vca-asm-profile.php:532
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Edit your Profile &amp; Settings"
 msgstr "Dein Profil &amp; deine Einstellungen bearbeiten"
 
-#: includes/class-vca-asm-profile.php:518
+#: includes/class-vca-asm-profile.php:533
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Edit Profile"
@@ -2311,12 +2311,12 @@ msgstr "Bevor du dich für eine Aktivität bewirbst, check bitte nochmal deinen 
 msgid "&larr; Back to the frontend"
 msgstr "&larr; Zurück nach Vorne"
 
-#: includes/class-vca-asm-mailer.php:790
+#: includes/class-vca-asm-mailer.php:795
 #@ vca-asm
 msgid "All Supporters"
 msgstr "Alle Supporter"
 
-#: includes/class-vca-asm-mailer.php:844
+#: includes/class-vca-asm-mailer.php:849
 #@ vca-asm
 msgid "Selection"
 msgstr "manuelle Auswahl"
@@ -2430,7 +2430,7 @@ msgctxt "Admin Supporters"
 msgid "Show all Emails"
 msgstr "Zeige alle Mails"
 
-#: includes/class-vca-asm-mailer.php:827
+#: includes/class-vca-asm-mailer.php:832
 #: templates/newsletter-with-images.php:56
 #: templates/newsletter.php:56
 #, php-format
@@ -2596,7 +2596,7 @@ msgstr "Aktivität"
 msgid "Single Supporter"
 msgstr "Einzelne(r) Supporter_in"
 
-#: includes/class-vca-asm-mailer.php:812
+#: includes/class-vca-asm-mailer.php:817
 #: templates/newsletter-with-images.php:51
 #: templates/newsletter.php:51
 #@ vca-asm
@@ -2632,8 +2632,8 @@ msgstr "an"
 msgid "Visit the Viva con Agua website"
 msgstr "Die Webseite von Viva con Agua besuchen"
 
-#: includes/class-vca-asm-mailer.php:796
-#: includes/class-vca-asm-mailer.php:825
+#: includes/class-vca-asm-mailer.php:801
+#: includes/class-vca-asm-mailer.php:830
 #: templates/newsletter-with-images.php:31
 #: templates/newsletter.php:31
 #, php-format
@@ -2673,74 +2673,74 @@ msgstr "Test-Mail"
 msgid "Preview"
 msgstr "Vorschau"
 
-#: admin/class-vca-asm-admin-settings.php:178
+#: admin/class-vca-asm-admin-settings.php:183
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Emails"
 msgstr "E-Mails"
 
-#: admin/class-vca-asm-admin-settings.php:182
-#: admin/class-vca-asm-admin-settings.php:694
+#: admin/class-vca-asm-admin-settings.php:187
+#: admin/class-vca-asm-admin-settings.php:705
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Automatic Responses"
 msgstr "automatische Benachrichtigungen"
 
-#: admin/class-vca-asm-admin-settings.php:427
+#: admin/class-vca-asm-admin-settings.php:438
 #@ vca-asm
 msgctxt "Admin Email Autoresponse Options"
 msgid "Here you can enable or disable, as well as overwrite the default autoresponses sent when a supporter completes a certain action."
 msgstr "Hier kannst du die automatisch versandten E-Mail-Benachrichtigungen für die jeweiligen Fälle ein- oder ausschalten, sowie die Standardtexte durch eigene Formulierungen ersetzen."
 
-#: admin/class-vca-asm-admin-settings.php:429
+#: admin/class-vca-asm-admin-settings.php:440
 #@ vca-asm
 msgctxt "Admin Email Autoresponse Options"
 msgid "You can use the following placeholders (if applicable)"
 msgstr "Du kannst die folgenden Platzhalter verwenden (falls auf die Situation zutreffend)"
 
-#: admin/class-vca-asm-admin-settings.php:431
+#: admin/class-vca-asm-admin-settings.php:442
 #@ vca-asm
 msgctxt "Admin Email Autoresponse Options"
 msgid "The title of the event in question"
 msgstr "Der Titel des betreffenden Events (Festival, Konzert, etc.)"
 
-#: admin/class-vca-asm-admin-settings.php:432
+#: admin/class-vca-asm-admin-settings.php:443
 #@ vca-asm
 msgctxt "Admin Email Autoresponse Options"
 msgid "The name of the region in question"
 msgstr "Der Name der betreffenden Region"
 
-#: admin/class-vca-asm-admin-settings.php:433
+#: admin/class-vca-asm-admin-settings.php:444
 #@ vca-asm
 msgctxt "Admin Email Autoresponse Options"
 msgid "The name of the supporter"
 msgstr "Der Name (Vor- und Nach-) der/s Supporter_in"
 
-#: admin/class-vca-asm-admin-settings.php:634
+#: admin/class-vca-asm-admin-settings.php:645
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Email Format"
 msgstr "E-Mail Format"
 
-#: admin/class-vca-asm-admin-settings.php:678
+#: admin/class-vca-asm-admin-settings.php:689
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Office / Administrators"
 msgstr "Büro / Verwaltung"
 
-#: admin/class-vca-asm-admin-settings.php:805
+#: admin/class-vca-asm-admin-settings.php:816
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "For each type of Email or Sender, set the format of the outgoing Email."
 msgstr "Wähle das Format der E-Mails, nach Typ bzw. Absender."
 
-#: admin/class-vca-asm-admin-settings.php:867
+#: admin/class-vca-asm-admin-settings.php:878
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Rich Text (HTML)"
 msgstr "Rich Text (HTML)"
 
-#: admin/class-vca-asm-admin-settings.php:877
+#: admin/class-vca-asm-admin-settings.php:888
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Plain Text"
@@ -2790,7 +2790,7 @@ msgstr "Kopieren und Einfügen aus anderen Quellen"
 
 #: includes/class-vca-asm.php:201
 #: templates/admin-form.php:199
-#: templates/class-vca-asm-admin-form.php:589
+#: templates/class-vca-asm-admin-form.php:592
 #@ vca-asm
 msgid "Deselect all"
 msgstr "Alle deaktivieren"
@@ -2822,53 +2822,53 @@ msgstr "Netzwerk"
 msgid "Geography"
 msgstr "Geographie"
 
-#: admin/class-vca-asm-admin-geography.php:1133
+#: admin/class-vca-asm-admin-geography.php:1138
 #@ vca-asm
 msgid "This is the current password of the city-user. If you change this and save the region, it will be updated as well."
 msgstr "Dies ist das aktuelle Passwort des Stadt-Benutzers. Wenn du es änderst und die Stadt speicherst, wir auch das Password aktualisiert."
 
-#: admin/class-vca-asm-admin-geography.php:76
+#: admin/class-vca-asm-admin-geography.php:77
 #@ vca-asm
 msgid "The selected geographical unit has been successfully deleted."
 msgstr "Die ausgewählte geographische Einheit wurde erfolgreich gelöscht."
 
-#: admin/class-vca-asm-admin-geography.php:328
+#: admin/class-vca-asm-admin-geography.php:329
 #, php-format
 #@ vca-asm
 msgid "%s successfully updated!"
 msgstr "%s erfolgreich aktualisiert!"
 
-#: admin/class-vca-asm-admin-geography.php:385
+#: admin/class-vca-asm-admin-geography.php:390
 #, php-format
 #@ vca-asm
 msgid "%s successfully added!"
 msgstr "%s erfolgreich hinzugefügt!"
 
-#: admin/class-vca-asm-admin-geography.php:441
+#: admin/class-vca-asm-admin-geography.php:446
 #@ vca-asm
 msgctxt "Geography Admin Menu"
 msgid "Geography"
 msgstr "Geographie"
 
-#: admin/class-vca-asm-admin-geography.php:446
+#: admin/class-vca-asm-admin-geography.php:451
 #@ vca-asm
 msgctxt "Geography Admin Menu"
 msgid "Cities (Cells &amp; Local Crews)"
 msgstr "Städte (Zellen &amp; Local Crews)"
 
-#: admin/class-vca-asm-admin-geography.php:451
+#: admin/class-vca-asm-admin-geography.php:456
 #@ vca-asm
 msgctxt "Geography Admin Menu"
 msgid "City Groups"
 msgstr "Städtegruppen"
 
-#: admin/class-vca-asm-admin-geography.php:456
+#: admin/class-vca-asm-admin-geography.php:461
 #@ vca-asm
 msgctxt "Geography Admin Menu"
 msgid "Countries"
 msgstr "Länder"
 
-#: admin/class-vca-asm-admin-geography.php:461
+#: admin/class-vca-asm-admin-geography.php:466
 #@ vca-asm
 msgctxt "Geography Admin Menu"
 msgid "Country Groups"
@@ -2876,7 +2876,7 @@ msgstr "Ländergruppen"
 
 #: admin/class-vca-asm-admin-finances.php:1710
 #: admin/class-vca-asm-admin-finances.php:1717
-#: admin/class-vca-asm-admin-geography.php:481
+#: admin/class-vca-asm-admin-geography.php:486
 #, php-format
 #@ vca-asm
 msgid "add %s"
@@ -2885,7 +2885,7 @@ msgstr "%s hinzufügen"
 #: admin/class-vca-asm-admin-emails.php:880
 #: admin/class-vca-asm-admin-finances.php:608
 #: admin/class-vca-asm-admin-finances.php:1848
-#: admin/class-vca-asm-admin-geography.php:534
+#: admin/class-vca-asm-admin-geography.php:539
 #: admin/class-vca-asm-admin-slot-allocation.php:400
 #: includes/class-vca-asm-workbook-finances.php:167
 #: templates/class-vca-asm-frontend-activities.php:243
@@ -2893,14 +2893,14 @@ msgstr "%s hinzufügen"
 msgid "Type"
 msgstr "Typ"
 
-#: admin/class-vca-asm-admin-geography.php:540
+#: admin/class-vca-asm-admin-geography.php:545
 #@ vca-asm
 msgid "Group(s)"
 msgstr "Gruppe(n)"
 
 #: admin/class-vca-asm-admin-finances.php:2077
 #: admin/class-vca-asm-admin-finances.php:2087
-#: admin/class-vca-asm-admin-geography.php:635
+#: admin/class-vca-asm-admin-geography.php:640
 #, php-format
 #@ vca-asm
 msgid "Add New %s"
@@ -2909,7 +2909,7 @@ msgstr "%s hinzufügen"
 #: admin/class-vca-asm-admin-finances.php:3381
 #: admin/class-vca-asm-admin-finances.php:3552
 #: admin/class-vca-asm-admin-finances.php:3773
-#: admin/class-vca-asm-admin-geography.php:638
+#: admin/class-vca-asm-admin-geography.php:643
 #: templates/class-vca-asm-admin-table.php:1161
 #, php-format
 #@ vca-asm
@@ -2918,12 +2918,12 @@ msgstr "&quot;%s&quot; editieren"
 
 #: admin/class-vca-asm-admin-finances.php:2096
 #: admin/class-vca-asm-admin-finances.php:2112
-#: admin/class-vca-asm-admin-geography.php:650
+#: admin/class-vca-asm-admin-geography.php:655
 #@ vca-asm
 msgid "Add new"
 msgstr "Hinzufügen"
 
-#: admin/class-vca-asm-admin-geography.php:653
+#: admin/class-vca-asm-admin-geography.php:658
 #@ vca-asm
 msgid "New city (and/or Local Crew or Cell)"
 msgstr "Neue Stadt (und/oder Zelle bzw. Local Crew)"
@@ -2932,7 +2932,7 @@ msgstr "Neue Stadt (und/oder Zelle bzw. Local Crew)"
 #: admin/class-vca-asm-admin-finances.php:600
 #: admin/class-vca-asm-admin-finances.php:848
 #: admin/class-vca-asm-admin-finances.php:1569
-#: admin/class-vca-asm-admin-geography.php:655
+#: admin/class-vca-asm-admin-geography.php:660
 #: admin/class-vca-asm-admin-slot-allocation.php:1161
 #: admin/class-vca-asm-admin-supporters.php:460
 #: admin/class-vca-asm-admin-supporters.php:1052
@@ -2946,28 +2946,28 @@ msgstr "Neue Stadt (und/oder Zelle bzw. Local Crew)"
 msgid "City"
 msgstr "Stadt"
 
-#: admin/class-vca-asm-admin-geography.php:659
+#: admin/class-vca-asm-admin-geography.php:664
 #@ vca-asm
 msgid "New group of cities"
 msgstr "Neue Gruppe"
 
 #: admin/class-vca-asm-admin-emails.php:766
-#: admin/class-vca-asm-admin-geography.php:661
+#: admin/class-vca-asm-admin-geography.php:666
 #: includes/class-vca-asm-geography.php:546
 #@ vca-asm
 msgid "City Group"
 msgstr "Städtegruppe"
 
-#: admin/class-vca-asm-admin-geography.php:666
+#: admin/class-vca-asm-admin-geography.php:671
 #@ vca-asm
 msgid "New country"
 msgstr "Neues Land"
 
 #: admin/class-vca-asm-admin-emails.php:780
 #: admin/class-vca-asm-admin-finances.php:604
-#: admin/class-vca-asm-admin-geography.php:668
-#: admin/class-vca-asm-admin-geography.php:936
-#: admin/class-vca-asm-admin-geography.php:962
+#: admin/class-vca-asm-admin-geography.php:673
+#: admin/class-vca-asm-admin-geography.php:941
+#: admin/class-vca-asm-admin-geography.php:967
 #: admin/class-vca-asm-admin-supporters.php:455
 #: admin/class-vca-asm-admin-supporters.php:1044
 #: includes/class-vca-asm-activities.php:149
@@ -2979,202 +2979,202 @@ msgstr "Neues Land"
 msgid "Country"
 msgstr "Land"
 
-#: admin/class-vca-asm-admin-geography.php:672
+#: admin/class-vca-asm-admin-geography.php:677
 #@ vca-asm
 msgid "New group of countries"
 msgstr "Neue Gruppe"
 
 #: admin/class-vca-asm-admin-emails.php:790
-#: admin/class-vca-asm-admin-geography.php:674
+#: admin/class-vca-asm-admin-geography.php:679
 #: includes/class-vca-asm-geography.php:552
 #@ vca-asm
 msgid "Country Group"
 msgstr "Ländergruppe"
 
-#: templates/class-vca-asm-admin-form.php:89
+#: templates/class-vca-asm-admin-form.php:90
 #: templates/class-vca-asm-admin-page.php:67
 #@ vca-asm
 msgid "Back to where you came from..."
 msgstr "Geh' doch wo du herkommst..."
 
-#: templates/class-vca-asm-admin-form.php:90
+#: templates/class-vca-asm-admin-form.php:91
 #: templates/class-vca-asm-admin-page.php:68
 #@ vca-asm
 msgid "back"
 msgstr "zurück"
 
 #: admin/class-vca-asm-admin-finances.php:2150
-#: admin/class-vca-asm-admin-geography.php:720
+#: admin/class-vca-asm-admin-geography.php:725
 #@ vca-asm
 msgid "You do not have the rights to edit this. Sorry."
 msgstr "Du hast nicht die erforderlichen Rechte, um dies zu editieren. Sorry."
 
-#: admin/class-vca-asm-admin-geography.php:744
-#: admin/class-vca-asm-admin-geography.php:748
-#: admin/class-vca-asm-admin-geography.php:842
-#: admin/class-vca-asm-admin-geography.php:880
+#: admin/class-vca-asm-admin-geography.php:749
+#: admin/class-vca-asm-admin-geography.php:753
+#: admin/class-vca-asm-admin-geography.php:847
+#: admin/class-vca-asm-admin-geography.php:885
 #: admin/class-vca-asm-admin-supporters.php:1118
 #: admin/class-vca-asm-admin-supporters.php:1169
 #@ vca-asm
 msgid "Cities"
 msgstr "Städte"
 
-#: admin/class-vca-asm-admin-geography.php:745
+#: admin/class-vca-asm-admin-geography.php:750
 #@ vca-asm
 msgid "The cities that are part of this nation"
 msgstr "Die Städte, die zu diesem Land gehören"
 
-#: admin/class-vca-asm-admin-geography.php:749
+#: admin/class-vca-asm-admin-geography.php:754
 #@ vca-asm
 msgid "The cities that are part of this group"
 msgstr "Die Städte, die zu dieser Gruppe gehören"
 
-#: admin/class-vca-asm-admin-geography.php:752
-#: admin/class-vca-asm-admin-geography.php:785
+#: admin/class-vca-asm-admin-geography.php:757
+#: admin/class-vca-asm-admin-geography.php:790
 #: admin/class-vca-asm-admin-supporters.php:1126
 #: admin/class-vca-asm-admin-supporters.php:1252
 #@ vca-asm
 msgid "Countries"
 msgstr "Länder"
 
-#: admin/class-vca-asm-admin-geography.php:753
+#: admin/class-vca-asm-admin-geography.php:758
 #@ vca-asm
 msgid "The countries that are part of this group"
 msgstr "Die Länder, die zu dieser Gruppe gehören"
 
-#: admin/class-vca-asm-admin-geography.php:769
-#: admin/class-vca-asm-admin-geography.php:864
+#: admin/class-vca-asm-admin-geography.php:774
+#: admin/class-vca-asm-admin-geography.php:869
 #@ vca-asm
 msgid "The group"
 msgstr "Die Gruppe"
 
-#: admin/class-vca-asm-admin-geography.php:773
+#: admin/class-vca-asm-admin-geography.php:778
 #@ vca-asm
 msgid "Name of Group"
 msgstr "Name der Gruppe"
 
-#: admin/class-vca-asm-admin-geography.php:775
+#: admin/class-vca-asm-admin-geography.php:780
 #@ vca-asm
 msgid "The name or title of the group of countries"
 msgstr "Der Name oder Titel der Ländergruppe"
 
-#: admin/class-vca-asm-admin-geography.php:796
+#: admin/class-vca-asm-admin-geography.php:801
 #@ vca-asm
 msgid "The country"
 msgstr "Das Land"
 
-#: admin/class-vca-asm-admin-geography.php:800
+#: admin/class-vca-asm-admin-geography.php:805
 #@ vca-asm
 msgid "Name of country"
 msgstr "Name des Landes"
 
-#: admin/class-vca-asm-admin-geography.php:802
+#: admin/class-vca-asm-admin-geography.php:807
 #@ vca-asm
 msgid "The name the country"
 msgstr "So heisst das Land"
 
-#: admin/class-vca-asm-admin-geography.php:848
-#: admin/class-vca-asm-admin-geography.php:932
-#: admin/class-vca-asm-admin-geography.php:958
+#: admin/class-vca-asm-admin-geography.php:853
+#: admin/class-vca-asm-admin-geography.php:937
+#: admin/class-vca-asm-admin-geography.php:963
 #@ vca-asm
 msgid "Parent Groups"
 msgstr "Elterngruppen"
 
-#: admin/class-vca-asm-admin-geography.php:852
-#: admin/class-vca-asm-admin-geography.php:950
-#: admin/class-vca-asm-admin-geography.php:981
+#: admin/class-vca-asm-admin-geography.php:857
+#: admin/class-vca-asm-admin-geography.php:955
+#: admin/class-vca-asm-admin-geography.php:986
 #@ vca-asm
 msgid "Groups"
 msgstr "Gruppen"
 
-#: admin/class-vca-asm-admin-geography.php:854
+#: admin/class-vca-asm-admin-geography.php:859
 #@ vca-asm
 msgid "The group(s) this country is part of"
 msgstr "Die Gruppe(n), zu welchen dieses Land gehört"
 
-#: admin/class-vca-asm-admin-geography.php:868
+#: admin/class-vca-asm-admin-geography.php:873
 #@ vca-asm
 msgid "Name of city group"
 msgstr "Name der Gruppe"
 
-#: admin/class-vca-asm-admin-geography.php:870
+#: admin/class-vca-asm-admin-geography.php:875
 #@ vca-asm
 msgid "The name or title of the group of cities / region"
 msgstr "Der Name oder Titel der Städtegruppe"
 
-#: admin/class-vca-asm-admin-geography.php:892
+#: admin/class-vca-asm-admin-geography.php:897
 #@ vca-asm
 msgid "The city"
 msgstr "Die Stadt"
 
-#: admin/class-vca-asm-admin-geography.php:896
+#: admin/class-vca-asm-admin-geography.php:901
 #@ vca-asm
 msgid "Name of city"
 msgstr "Name der Stadt"
 
-#: admin/class-vca-asm-admin-geography.php:898
+#: admin/class-vca-asm-admin-geography.php:903
 #@ vca-asm
 msgid "The name or title of the city"
 msgstr "Der Name oder Titel der Stadt"
 
-#: admin/class-vca-asm-admin-geography.php:918
+#: admin/class-vca-asm-admin-geography.php:923
 #@ vca-asm
 msgid "Select the type of the region - is it just a city or also a Cell or Local Crew?"
 msgstr "Wähle die Art der Region: Ist es einfach nur eine Stadt oder gibt es hier eine Zelle oder Local Crew?"
 
-#: admin/class-vca-asm-admin-geography.php:944
-#: admin/class-vca-asm-admin-geography.php:970
+#: admin/class-vca-asm-admin-geography.php:949
+#: admin/class-vca-asm-admin-geography.php:975
 #@ vca-asm
 msgid "The country this city is part of"
 msgstr "Das Land, in welchem diese Stadt liegt"
 
-#: admin/class-vca-asm-admin-geography.php:952
-#: admin/class-vca-asm-admin-geography.php:983
+#: admin/class-vca-asm-admin-geography.php:957
+#: admin/class-vca-asm-admin-geography.php:988
 #@ vca-asm
 msgid "The group(s) this city is part of"
 msgstr "Die Gruppe(n), zu welchen diese Stadt gehört"
 
-#: admin/class-vca-asm-admin-geography.php:990
+#: admin/class-vca-asm-admin-geography.php:995
 #@ vca-asm
 msgid "Administrative User"
 msgstr "Verwaltungsbenutzer"
 
-#: admin/class-vca-asm-admin-geography.php:994
+#: admin/class-vca-asm-admin-geography.php:999
 #@ vca-asm
 msgid "Administrative User?"
 msgstr "Verwaltungsbenutzer?"
 
-#: admin/class-vca-asm-admin-geography.php:996
+#: admin/class-vca-asm-admin-geography.php:1001
 #@ vca-asm
 msgid "If the city is supposed to have a dedicated administrative user, check this box"
 msgstr "Wenn diese Stadt einen allgemeinen Stadt-Verwaltungsbenutzer bekommen soll, setze hier ein Häkchen"
 
-#: admin/class-vca-asm-admin-geography.php:1000
+#: admin/class-vca-asm-admin-geography.php:1005
 #@ vca-asm
 msgid "Administrative User's Username"
 msgstr "Benutzername des Stadtmins"
 
-#: admin/class-vca-asm-admin-geography.php:1002
+#: admin/class-vca-asm-admin-geography.php:1007
 #@ vca-asm
 msgid "With the above box checked, this will the administrative user's username. Please only use alphanumeric characters. Avoid spaces and special characters."
 msgstr "Ist die obiges Häkchen gesetzt, wird dies der Benutzername des Stadtmin-Kontos. Bitte verwende nur alphanumerische Zeichen und vermeide Leerstellen und Sonderzeichen."
 
-#: admin/class-vca-asm-admin-geography.php:1006
+#: admin/class-vca-asm-admin-geography.php:1011
 #@ vca-asm
 msgid "Administrative User's Password"
 msgstr "Passwort des Stadtmins"
 
-#: admin/class-vca-asm-admin-geography.php:1008
+#: admin/class-vca-asm-admin-geography.php:1013
 #@ vca-asm
 msgid "With the above box checked, this will be the administrative user's password."
 msgstr "Dies wird das Passwort des neuen Benutzerkontos."
 
-#: admin/class-vca-asm-admin-geography.php:1012
+#: admin/class-vca-asm-admin-geography.php:1017
 #@ vca-asm
 msgid "Administrative User's Email"
 msgstr "E-Mail des Stadtmins"
 
-#: admin/class-vca-asm-admin-geography.php:1014
+#: admin/class-vca-asm-admin-geography.php:1019
 #@ vca-asm
 msgid "With the above box checked, this will be the administrative user's email address."
 msgstr "Dies wird als E-Mail-Adresse des neuen Bentuzerkontos hinterlegt."
@@ -3197,7 +3197,7 @@ msgctxt "Home Admin Menu"
 msgid "Activity Log"
 msgstr "Aktivitäts-Log"
 
-#: admin/class-vca-asm-admin-settings.php:424
+#: admin/class-vca-asm-admin-settings.php:435
 #@ vca-asm
 msgid "Contextual Help"
 msgstr "kontextuelle Hilfe"
@@ -3410,9 +3410,9 @@ msgid "Quotas cannot be disabled anymore, unless those participants are removed 
 msgstr "Die Kontingente können nicht wieder ausgeschaltet werden, es sei denn diese Teilnehmer werden wieder entfernt..."
 
 #: templates/admin-form.php:194
-#: templates/class-vca-asm-admin-form.php:465
-#: templates/class-vca-asm-admin-form.php:520
-#: templates/class-vca-asm-admin-form.php:582
+#: templates/class-vca-asm-admin-form.php:468
+#: templates/class-vca-asm-admin-form.php:523
+#: templates/class-vca-asm-admin-form.php:585
 #@ vca-asm
 msgid "There is no data to select..."
 msgstr "Es stehen keine Daten zur Auswahl..."
@@ -3424,19 +3424,19 @@ msgstr "Es stehen keine Daten zur Auswahl..."
 #: admin/class-vca-asm-admin-finances.php:3666
 #: admin/class-vca-asm-admin-finances.php:3831
 #: admin/class-vca-asm-admin-finances.php:4018
-#: templates/class-vca-asm-admin-form.php:52
-#: templates/class-vca-asm-admin-form.php:586
+#: templates/class-vca-asm-admin-form.php:53
+#: templates/class-vca-asm-admin-form.php:589
 #@ vca-asm
 msgid "Save"
 msgstr "Speichern"
 
-#: templates/class-vca-asm-admin-form.php:605
+#: templates/class-vca-asm-admin-form.php:608
 #@ vca-asm
 msgid "edit"
 msgstr "editieren"
 
 #: admin/class-vca-asm-admin-supporters.php:1196
-#: templates/class-vca-asm-admin-form.php:612
+#: templates/class-vca-asm-admin-form.php:615
 #@ vca-asm
 msgid "not part of any group"
 msgstr "in keiner Gruppe"
@@ -3580,7 +3580,7 @@ msgstr "Sa"
 
 #: admin/class-vca-asm-admin-finances.php:1159
 #: admin/class-vca-asm-admin-finances.php:2658
-#: admin/class-vca-asm-admin-geography.php:69
+#: admin/class-vca-asm-admin-geography.php:70
 #@ vca-asm
 msgid "You cannot delete this data. Sorry."
 msgstr "Du kannst diesen Datensatz nicht löschen. Sorry."
@@ -3589,30 +3589,30 @@ msgstr "Du kannst diesen Datensatz nicht löschen. Sorry."
 #: admin/class-vca-asm-admin-finances.php:1182
 #: admin/class-vca-asm-admin-finances.php:2652
 #: admin/class-vca-asm-admin-finances.php:2664
-#: admin/class-vca-asm-admin-geography.php:81
-#: admin/class-vca-asm-admin-geography.php:88
+#: admin/class-vca-asm-admin-geography.php:82
+#: admin/class-vca-asm-admin-geography.php:89
 #@ vca-asm
 msgid "There was an error deleting this data. Sorry."
 msgstr "Es gab einen Fehler beim Löschen dieser Daten. Sorry."
 
-#: admin/class-vca-asm-admin-geography.php:138
+#: admin/class-vca-asm-admin-geography.php:139
 #, php-format
 #@ vca-asm
 msgid "You do not have the required capabilities to edit/save %s. Sorry."
 msgstr "Du hast nicht die notwendigen Rechte, um %s zu bearbeiten / zu speichern. Sorry."
 
-#: admin/class-vca-asm-admin-geography.php:138
+#: admin/class-vca-asm-admin-geography.php:139
 #@ vca-asm
 msgid "this data"
 msgstr "diesen Datensatz"
 
 #: admin/class-vca-asm-admin-finances.php:1881
-#: admin/class-vca-asm-admin-geography.php:902
+#: admin/class-vca-asm-admin-geography.php:907
 #@ vca-asm
 msgid "Status"
 msgstr "Status"
 
-#: admin/class-vca-asm-admin-geography.php:914
+#: admin/class-vca-asm-admin-geography.php:919
 #@ vca-asm
 msgid "City only"
 msgstr "nur &apos;ne Stadt"
@@ -3630,25 +3630,25 @@ msgstr "nur &apos;ne Stadt"
 msgid "Slots &amp; Participants"
 msgstr "Plätze &amp; Teilnehmer"
 
-#: admin/class-vca-asm-admin-settings.php:686
+#: admin/class-vca-asm-admin-settings.php:697
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "City User"
 msgstr "Stadtmin"
 
-#: admin/class-vca-asm-admin-settings.php:802
+#: admin/class-vca-asm-admin-settings.php:813
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "If this is enabled, users of the type in question will be forced to login via the secure HTTPS protocol."
 msgstr "XXX"
 
-#: admin/class-vca-asm-admin-settings.php:963
+#: admin/class-vca-asm-admin-settings.php:974
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Login only via SSL/HTTPS"
 msgstr "Login nur via SSL/HTTPS"
 
-#: admin/class-vca-asm-admin-settings.php:973
+#: admin/class-vca-asm-admin-settings.php:984
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "normal login"
@@ -3762,8 +3762,8 @@ msgstr "Es gibt einen Fehler in der Datums- bzw. Zeit-Formatierung"
 msgid "For this feature of the Pool to work properly, you need to have javascript enabled or have a javascript-capable browser, respectively. Unfortunately you cannot set further options here."
 msgstr "Damit dieses Feature des Pools vernünftig funktioniert, muss javascript eingeschaltet sein, bzw. du einen javascript-fähigen Browser benutzen. Leider kannst du an dieser Stelle keine weitergehenden Optionen bearbeiten."
 
-#: admin/class-vca-asm-admin-geography.php:545
-#: admin/class-vca-asm-admin-geography.php:811
+#: admin/class-vca-asm-admin-geography.php:550
+#: admin/class-vca-asm-admin-geography.php:816
 #@ vca-asm
 msgid "Phone Country Code"
 msgstr "Telefon-Länder-Vorwahl"
@@ -3937,7 +3937,7 @@ msgstr "Wähle ob du nur Supporter, Verwaltungsbenutzer oder beide anzeigen will
 msgid "Concert"
 msgstr "Konzert"
 
-#: templates/class-vca-asm-admin-form.php:120
+#: templates/class-vca-asm-admin-form.php:123
 #: templates/class-vca-asm-admin-metaboxes.php:75
 #@ vca-asm
 msgid "Click to toggle"
@@ -4042,7 +4042,7 @@ msgctxt "Role Names"
 msgid "Watchdog"
 msgstr "Beobachter"
 
-#: admin/class-vca-asm-admin-geography.php:813
+#: admin/class-vca-asm-admin-geography.php:818
 #@ vca-asm
 msgid "The phone extension of the country (without &quot;+&quot; or &quot;00&quot;)"
 msgstr "Die (Telefon-)Ländervorwahl des Landes (ohne &quot;+&quot; oder &quot;00&quot;)"
@@ -4053,7 +4053,7 @@ msgctxt "Validation Error"
 msgid "The system attempted to automatically correct this. Please check again."
 msgstr "Das System hat versucht, dies automatisch zu korrigieren. Bitte schaue nochmal nach."
 
-#: admin/class-vca-asm-admin-geography.php:1124
+#: admin/class-vca-asm-admin-geography.php:1129
 #@ vca-asm
 msgid "This city is assigned a city user account. Unchecking this box and saving the city results in the permanent deletion of that user!"
 msgstr "Dieser Stadt ist ein &quot;Stadtmin&quot; Benutzerkonto zugeordnet. Wenn du dieses Häkchen entfernst und die Stadt speicherst, wird der zugeordnete Benutzer unwiderruflich gelöscht."
@@ -4099,7 +4099,7 @@ msgctxt "Statistics"
 msgid "%s Country Groups"
 msgstr "%s Ländergruppen"
 
-#: admin/class-vca-asm-admin-settings.php:850
+#: admin/class-vca-asm-admin-settings.php:861
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Force reset now"
@@ -4251,28 +4251,28 @@ msgstr "nur &quot;aktive Mitglieder&quot;"
 msgid "Maintenance Mode Settings"
 msgstr "Wartungsmodus Einstellungen"
 
-#: admin/class-vca-asm-admin-settings.php:213
-#: admin/class-vca-asm-admin-settings.php:652
-#: admin/class-vca-asm-admin-settings.php:766
+#: admin/class-vca-asm-admin-settings.php:218
+#: admin/class-vca-asm-admin-settings.php:663
+#: admin/class-vca-asm-admin-settings.php:777
 #: admin/class-vca-asm-admin.php:270
 #: includes/class-vca-asm-security.php:387
 #@ vca-asm
 msgid "Maintenance Mode"
 msgstr "Wartungsmodus"
 
-#: admin/class-vca-asm-admin-settings.php:814
+#: admin/class-vca-asm-admin-settings.php:825
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "The Pool can be put into Maintenance Mode. If in this mode, non-management users will be prohibited to login. Activity registrations are not possible."
 msgstr "Der Pool kann in einen Wartungsmodus versetzt werden. In diesem Modus ist es Benutzern, abgesehen von Pool-Managern und Administratoren, nicht möglich, sich anzumelden. Bewerbungen / Anmeldungen für Aktivitäten sind somit ebenfalls deaktiviert."
 
-#: admin/class-vca-asm-admin-settings.php:985
+#: admin/class-vca-asm-admin-settings.php:996
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "off"
 msgstr "aus"
 
-#: admin/class-vca-asm-admin-settings.php:995
+#: admin/class-vca-asm-admin-settings.php:1006
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "on"
@@ -5048,32 +5048,32 @@ msgstr "Netzwerktreffen zur Veröffentlichung vorgemerkt für: <strong>%1$s</str
 msgid "Network Gathering draft updated. <a target=\"_blank\" href=\"%s\">Preview Network Gathering</a>"
 msgstr "Entwurf des Netzwerktreffens aktualisiert. <a target=\"_blank\" href=\"%s\">Vorschau des Netzwerktreffens</a>"
 
-#: admin/class-vca-asm-admin-geography.php:817
+#: admin/class-vca-asm-admin-geography.php:822
 #@ vca-asm
 msgid "2-letter Country Code"
 msgstr "2-Buchstaben Länder-Code"
 
-#: admin/class-vca-asm-admin-geography.php:819
+#: admin/class-vca-asm-admin-geography.php:824
 #@ vca-asm
 msgid "The 2-letter country code (as defined by <a target=\"_blank\" title=\"Read the standard\" href=\"http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\">ISO 3166-1-alpha-2</a>)"
 msgstr "Der 2-Buchstaben Länder-Code (nach <a target=\"_blank\" title=\"Lies nach\" href=\"http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2\">ISO 3166-1-alpha-2</a>)"
 
-#: admin/class-vca-asm-admin-geography.php:823
+#: admin/class-vca-asm-admin-geography.php:828
 #@ vca-asm
 msgid "Currency (Name)"
 msgstr "Währung (Name)"
 
-#: admin/class-vca-asm-admin-geography.php:825
+#: admin/class-vca-asm-admin-geography.php:830
 #@ vca-asm
 msgid "The name of the local currency"
 msgstr "Der Name der lokalen Währung"
 
-#: admin/class-vca-asm-admin-geography.php:829
+#: admin/class-vca-asm-admin-geography.php:834
 #@ vca-asm
 msgid "Currency (Code)"
 msgstr "Währung (Code)"
 
-#: admin/class-vca-asm-admin-geography.php:831
+#: admin/class-vca-asm-admin-geography.php:836
 #@ vca-asm
 msgid "The 3-letter code of the local currency (as defined by <a target=\"_blank\" title=\"Read the standard\" href=\"http://en.wikipedia.org/wiki/ISO_4217\">ISO 4217</a>)"
 msgstr "Der 3-Buchstaben Code der lokalen Währung (nach <a target=\"_blank\" title=\"Lies nach\" href=\"http://en.wikipedia.org/wiki/ISO_4217\">ISO 4217</a>)"
@@ -5201,7 +5201,7 @@ msgctxt "User Profile"
 msgid "Choose your city (Cell or Local Crew), if applicable. Should you not be able to find yours, please send an email to <a title=\"Send Mail\" href=\"mailto:zellen@vivaconagua.ch\">zellen@vivaconagua.ch</a>"
 msgstr "Wähle deine Stadt (Zelle oder Local Crew), sofern zutreffend. Solltest du deine nicht finden, schicke uns gerne eine E-Mail an <a title=\"Mail schicken\" href=\"mailto:zellen@vivaconagua.ch\">zellen@vivaconagua.ch</a>"
 
-#: includes/class-vca-asm-profile.php:491
+#: includes/class-vca-asm-profile.php:506
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Country"
@@ -5360,7 +5360,7 @@ msgstr "Die Warteliste ist leer"
 msgid "No participants yet"
 msgstr "Noch keine Bewerber"
 
-#: admin/class-vca-asm-admin-settings.php:140
+#: admin/class-vca-asm-admin-settings.php:145
 #: admin/class-vca-asm-admin-slot-allocation.php:1030
 #@ vca-asm
 msgid "E-Mails"
@@ -5536,73 +5536,73 @@ msgstr "Tipps &amp; Hilfe"
 msgid "Outbox"
 msgstr "Postausgang"
 
-#: admin/class-vca-asm-admin-settings.php:640
+#: admin/class-vca-asm-admin-settings.php:651
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Sending Options"
 msgstr "Versandoptionen"
 
-#: admin/class-vca-asm-admin-settings.php:646
+#: admin/class-vca-asm-admin-settings.php:657
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Server / Protocol"
 msgstr "Server / Protokoll"
 
-#: admin/class-vca-asm-admin-settings.php:702
+#: admin/class-vca-asm-admin-settings.php:713
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Send in packets?"
 msgstr "In Paketen verschicken?"
 
-#: admin/class-vca-asm-admin-settings.php:710
+#: admin/class-vca-asm-admin-settings.php:721
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Packet size"
 msgstr "Paketgröße"
 
-#: admin/class-vca-asm-admin-settings.php:718
+#: admin/class-vca-asm-admin-settings.php:729
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Interval"
 msgstr "Intervall"
 
-#: admin/class-vca-asm-admin-settings.php:726
+#: admin/class-vca-asm-admin-settings.php:737
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "How?"
 msgstr "Wie?"
 
-#: admin/class-vca-asm-admin-settings.php:734
+#: admin/class-vca-asm-admin-settings.php:745
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Server URL"
 msgstr "Server URL"
 
-#: admin/class-vca-asm-admin-settings.php:742
+#: admin/class-vca-asm-admin-settings.php:753
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Port"
 msgstr "Port"
 
-#: admin/class-vca-asm-admin-settings.php:750
+#: admin/class-vca-asm-admin-settings.php:761
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Username"
 msgstr "Benutzername"
 
-#: admin/class-vca-asm-admin-settings.php:758
+#: admin/class-vca-asm-admin-settings.php:769
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Password"
 msgstr "Passwort"
 
-#: admin/class-vca-asm-admin-settings.php:933
+#: admin/class-vca-asm-admin-settings.php:944
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Unix Sendmail"
 msgstr "Unix Sendmail"
 
-#: admin/class-vca-asm-admin-settings.php:943
+#: admin/class-vca-asm-admin-settings.php:954
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "SMTP"
@@ -5712,13 +5712,13 @@ msgctxt "Admin Email Interface"
 msgid "Which activity are the users associated with?"
 msgstr "Mit welcher Aktivität sind die Benutzer assoziert?"
 
-#: admin/class-vca-asm-admin-settings.php:808
+#: admin/class-vca-asm-admin-settings.php:819
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "Emails can either be sent in bulk, or split in packets in pre-defined intervals."
 msgstr "E-Mails können entweder alle auf einmal oder in Paketen in definierten Intervallen verschickt werden."
 
-#: admin/class-vca-asm-admin-settings.php:811
+#: admin/class-vca-asm-admin-settings.php:822
 #@ vca-asm
 msgctxt "Settings Admin Menu"
 msgid "The Emails can be sent via Unix Sendmail or SMTP. In the latter case, server data is required. When using sendmail, the server fields maybe left blank."
@@ -5817,47 +5817,47 @@ msgstr "Alle %d Minuten"
 msgid "Every half an hour"
 msgstr "Jede halbe Stunde"
 
-#: includes/class-vca-asm-mailer.php:788
+#: includes/class-vca-asm-mailer.php:793
 #@ vca-asm
 msgid "All Active Members"
 msgstr "Alle aktiven Mitglieder"
 
-#: includes/class-vca-asm-mailer.php:798
+#: includes/class-vca-asm-mailer.php:803
 #, php-format
 #@ vca-asm
 msgid "All Supporters from %s"
 msgstr "Alle Supporter aus %s"
 
-#: includes/class-vca-asm-mailer.php:804
+#: includes/class-vca-asm-mailer.php:809
 #@ vca-asm
 msgid "All City Users"
 msgstr "Alle Stadtbenutzer"
 
-#: includes/class-vca-asm-mailer.php:808
+#: includes/class-vca-asm-mailer.php:813
 #, php-format
 #@ vca-asm
 msgid "All City Users from %s"
 msgstr "Alle Stadtbenutzer aus %s"
 
-#: includes/class-vca-asm-mailer.php:816
+#: includes/class-vca-asm-mailer.php:821
 #, php-format
 #@ vca-asm
 msgid "Office / Administrators from %s"
 msgstr "Büro / Verwaltung aus %s"
 
-#: includes/class-vca-asm-mailer.php:832
+#: includes/class-vca-asm-mailer.php:837
 #, php-format
 #@ vca-asm
 msgid "Applicants to %s"
 msgstr "Bewerber für %s"
 
-#: includes/class-vca-asm-mailer.php:836
+#: includes/class-vca-asm-mailer.php:841
 #, php-format
 #@ vca-asm
 msgid "Participants of %s"
 msgstr "Teilnehmer von %s"
 
-#: includes/class-vca-asm-mailer.php:840
+#: includes/class-vca-asm-mailer.php:845
 #, php-format
 #@ vca-asm
 msgid "Waiting List for %s"
@@ -5950,7 +5950,7 @@ msgstr "Nach eigener Stadt filtern"
 msgid "My city"
 msgstr "Meine Stadt"
 
-#: includes/class-vca-asm-mailer.php:618
+#: includes/class-vca-asm-mailer.php:623
 #, php-format
 #@ vca-asm
 msgid "Your membership to &quot;%s&quot; has been cencelled, either by yourself or a city user."
@@ -6575,17 +6575,17 @@ msgstr "Die Kennzahl des Kontos, meist numerisch"
 msgid "A description of what all should be booked under this account"
 msgstr "Eine Beschreibung dessen, was unter diesem Konto gebucht werden sollte"
 
-#: admin/class-vca-asm-admin-geography.php:835
+#: admin/class-vca-asm-admin-geography.php:840
 #@ vca-asm
 msgid "Currency (Minor Unit, Name)"
 msgstr "Währung (Kleine Einheit, Name)"
 
-#: admin/class-vca-asm-admin-geography.php:837
+#: admin/class-vca-asm-admin-geography.php:842
 #@ vca-asm
 msgid "The name of the minor unit of the local currency"
 msgstr "Der Name der kleinen Einheit der lokalen Währung"
 
-#: admin/class-vca-asm-admin-geography.php:922
+#: admin/class-vca-asm-admin-geography.php:927
 #@ vca-asm
 msgid "City Code"
 msgstr "Stadt Code"
@@ -6644,7 +6644,7 @@ msgstr "Wirtschaftskonten"
 msgid "View %s"
 msgstr "%s ansehen"
 
-#: admin/class-vca-asm-admin-geography.php:924
+#: admin/class-vca-asm-admin-geography.php:929
 #@ vca-asm
 msgid "A 1- to 3-letter abbreviation for this city. Choose something intuitive, such as a car number plate of the region."
 msgstr "Eine 1- bis 3-buchstabige Abkürzung für die Stadt. Wähle etwas intuitives, z.B. das Autokennzeichen der Region."
@@ -7595,8 +7595,10 @@ msgctxt "Department Name"
 msgid "Goldeimer Compost-Toilets"
 msgstr "Goldeimer Kompopsttoiletten"
 
+#: admin/class-vca-asm-admin-settings.php:1053
 #: admin/class-vca-asm-admin.php:135
 #: admin/class-vca-asm-admin.php:136
+#: includes/class-vca-asm-registrations.php:867
 #@ vca-asm
 msgid "Goldeimer"
 msgstr "Goldeimer"
@@ -8050,4 +8052,20 @@ msgstr "Liste der Supporter, die an einer Aktivität teilnehmen"
 msgctxt "Supporter is present at event (Column in spreadsheet)"
 msgid "Present?"
 msgstr "Anwesend?"
+
+#: admin/class-vca-asm-admin-settings.php:1067
+#@ vca-asm
+msgid "Switch Context"
+msgstr "Kontext wechseln"
+
+#: admin/class-vca-asm-admin-settings.php:1078
+#@ vca-asm
+msgid "The context in which this setting is applied"
+msgstr "Der Kontext in welchem diese Einstellung verwandt wird"
+
+#: includes/class-vca-asm-registrations.php:868
+#@ vca-asm
+msgctxt "Utility Translation"
+msgid "no-reply@goldeimer.de"
+msgstr "no-reply@goldeimer.de"
 
