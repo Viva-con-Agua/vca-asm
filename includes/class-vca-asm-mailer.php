@@ -629,7 +629,7 @@ class VCA_ASM_Mailer {
 		/* grab action options from database */
 		$options_query = $wpdb->get_results(
 			"SELECT * FROM " . $wpdb->prefix . "vca_asm_auto_responses " .
-			"WHERE action = '" . $action . "' LIMIT 1", ARRAY_A
+			"WHERE action = '" . $action . "' AND scope = '" . $scope . "' LIMIT 1", ARRAY_A
 		);
 		$options = $options_query[0];
 
