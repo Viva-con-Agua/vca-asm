@@ -248,9 +248,9 @@ class VCA_ASM_City_Finances
 		$this->sendable_receipts = array_merge( $this->late_receipts, $this->current_receipts );
 		$this->sent_receipts = $vca_asm_finances->get_receipts( $id, array( 'status' => 2, 'data_type' => 'receipt_id' ) );
 		$receipts_full = $vca_asm_finances->get_receipts( $id, array( 'status' => 1, 'data_type' => 'all', 'split' => true ) );
-		$this->late_receipts_full = $receipts['late'];
-		$this->current_receipts_full = $receipts['current'];
-		$this->sendable_receipts_full = array_merge( $this->late_receipts, $this->current_receipts );
+		$this->late_receipts_full = $receipts_full['late'];
+		$this->current_receipts_full = $receipts_full['current'];
+		$this->sendable_receipts_full = array_merge( $this->late_receipts_full, $this->current_receipts_full );
 		$this->sent_receipts_full = $vca_asm_finances->get_receipts( $id, array( 'status' => 2, 'data_type' => 'all' ) );
 
 		$this->balanced_month_econ_string = $vca_asm_finances->get_balanced_month( $id, 'econ' );

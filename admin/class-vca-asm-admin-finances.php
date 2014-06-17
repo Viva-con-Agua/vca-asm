@@ -408,22 +408,35 @@ class VCA_ASM_Admin_Finances
 			foreach ( $the_city_finances->sendable_receipts_full as $receipt ) {
 				$output .= '<a title="' . __( 'See details', 'vca-asm' ) . '"' .
 					' href="?page=vca-asm-finances-accounts-econ&tab=expenditure&referrer=overview-city&cid=' . $the_city_finances->id . '#row-' . $receipt['id'] . '">' .
-						number_format( abs( $transfer['amount'] )/100, 2, ',', '.' ) . ' ' .
-						$the_city_finances->currency_symbol .
-						' (' . strftime( '%d.%m.%y', $transfer['transaction_date'] ) . ')' .
+						$receipt['receipt_id'] .
+						' (' . strftime( '%d.%m.%y', $receipt['receipt_date'] ) . ')' .
 					'</a><span>';
-				if ( $j < count( $the_city_finances->confirmable_econ_transfers ) ) {
+				if ( $j < count( $the_city_finances->sendable_receipts_full ) ) {
 					$output .= '<br />';
 				}
 				$j++;
 			}
 		} else {
-			$output .= '<em>' . _x( 'None', 'Transfers', 'vca-asm' ) . '</em>';
+			$output .= '<em>' . __( 'No receipts that could be sent...', 'vca-asm' ) . '</em>';
 		}
-		$output .= ! empty( $the_city_finances->sendable_receipts ) ? '<strong>' . implode( '<br />', $the_city_finances->sendable_receipts ) . '</strong>' : '<em>' . __( 'No receipts that could be sent...', 'vca-asm' ) . '</em>';
 		$output .= '</td></tr>';
 		$output .= '<tr><td style="vertical-align:top;">' . __( 'have been sent', 'vca-asm' ) . ':</td><td class="right-aligned-tcell">';
-		$output .= ! empty( $the_city_finances->sent_receipts ) ? '<strong>' . implode( '<br />', $the_city_finances->sent_receipts ) . '</strong>' : '<em>' . __( 'No receipts waiting for confirmation...', 'vca-asm' ) . '</em>';
+				if ( ! empty( $the_city_finances->sent_receipts_full ) ) {
+			$j = 1;
+			foreach ( $the_city_finances->sent_receipts_full as $receipt ) {
+				$output .= '<a title="' . __( 'See details', 'vca-asm' ) . '"' .
+					' href="?page=vca-asm-finances-accounts-econ&tab=expenditure&referrer=overview-city&cid=' . $the_city_finances->id . '#row-' . $receipt['id'] . '">' .
+						$receipt['receipt_id'] .
+						' (' . strftime( '%d.%m.%y', $receipt['receipt_date'] ) . ')' .
+					'</a><span>';
+				if ( $j < count( $the_city_finances->sent_receipts_full ) ) {
+					$output .= '<br />';
+				}
+				$j++;
+			}
+		} else {
+			$output .= '<em>' . __( 'No receipts waiting for confirmation...', 'vca-asm' ) . '</em>';
+		}
 		$output .= '</td></tr></table>';
 
 		$output .= $mbs->mb_bottom();
