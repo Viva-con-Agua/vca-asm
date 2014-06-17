@@ -1301,7 +1301,7 @@ class VCA_ASM_Admin_Finances
 												$format[] = '%d';
 											};
 										}
-									} else{
+									} elseif ( 'direction' !== $field['id'] ) {
 										$data[$field['id']] = $_POST[$field['id']];
 										$format[] = '%d';
 									}
