@@ -3561,7 +3561,7 @@ class VCA_ASM_Admin_Finances
 
 		if ( ! empty( $id ) ) {
 			$form_action = $url . '&todo=save-occ&noheader=true&id=' . $id;
-			$data = $vca_asm_finances->get_tax_rate( $id );
+			$data = $vca_asm_finances->get_occasion( $id );
 			$title = sprintf( __( 'Edit &quot;%s&quot;', 'vca-asm' ), $data['name'] );
 		} else {
 			$form_action = $url . '&todo=save-occ&noheader=true';
