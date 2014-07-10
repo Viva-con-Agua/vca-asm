@@ -76,6 +76,10 @@ class VCA_ASM_Security {
 			$level = $supp_level;
 		}
 
+		/* Hack for stupid-ass Kevin */
+		$is_kevin = 79 === $user_id;
+		/* End Kevin */
+
 		if ( ! $errors->get_error_data('pass') && empty ( $_POST['pass1'] ) && is_page( 'bitte-passwort-erneuern' ) ) {
 			$error = __( 'You must enter something...', 'vca-asm' );
 			$errors->add( 'pass', $error );
@@ -87,7 +91,7 @@ class VCA_ASM_Security {
 			$errors->add( 'pass', $error );
 		} elseif ( ! $errors->get_error_data('pass') &&
 			$_POST['pass1'] && $_POST['pass2'] &&
-			$this->password_strength( $_POST['pass1'], $user_login ) < $level
+			$this->password_strength( $_POST['pass1'], $user_login, $is_kevin ) < $level
 		) {
 			$error = __( 'The password you have chosen is not strong enough.', 'vca-asm' ) . '<br />' .
 				sprintf(
@@ -97,7 +101,7 @@ class VCA_ASM_Security {
 			$errors->add( 'pass', $error );
 		} elseif ( ! $errors->get_error_data('pass') && $_POST['pass1'] && $_POST['pass2']  ) {
 			$same = wp_check_password( $_POST['pass1'], $user_obj->user_pass );
-			if ( false !== $same ) {
+			if ( false !== $same && ! $is_kevin ) {
 				$error = __( 'You cannot replace your old password with itsself...', 'vca-asm' );
 				$errors->add( 'pass', $error );
 			}
@@ -125,7 +129,12 @@ class VCA_ASM_Security {
 	 * @since 1.2
 	 * @access private
 	 */
-	private function password_strength( $pass, $username = '' ) {
+	private function password_strength( $pass, $username = '', $is_kevin = false ) {
+		/* Hack for stupid-ass Kevin */
+		if ( $is_kevin ) {
+			return 4;
+		}
+		/* End Kevin */
 		$str_coeff = 0;
 		if ( strlen( $pass ) < 4 )
 			return 1;
