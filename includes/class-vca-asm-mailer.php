@@ -860,7 +860,7 @@ class VCA_ASM_Mailer {
 	 * @since 1.4
 	 * @access public
 	 */
-	public function receipient_id_from_group( $receipient_group, $with_users = false ) {
+	public function receipient_id_from_group( $receipient_group, $with_users = false, $ignore_switch, $membership ) {
 		global $current_user,
 			$vca_asm_geography;
 
@@ -922,6 +922,7 @@ class VCA_ASM_Mailer {
 					}
 				}
 			break;
+
 			case 'admins':
 			case 'adminsn':
 				$receipient_id = 'adminsn' === $receipient_group ? $admin_nation : 0;
