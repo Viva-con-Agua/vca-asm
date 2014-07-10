@@ -511,9 +511,10 @@ class VCA_ASM_Geography
 		}
 
 		if ( true === $sorted && 'name' === $data ) {
-			sort( $descendants_arr );
+			usort( $descendants_arr, 'strnatcasecmp' );
 		} elseif ( true === $sorted && 'all' === $data ) {
-			array_multisort( $names, SORT_ASC, $descendants_arr );
+			$lowercase_names = array_map( 'strtolower', $names );
+			array_multisort( $lowercase_names, SORT_ASC, $descendants_arr );
 		}
 
 		if ( 'string' === $format ) {

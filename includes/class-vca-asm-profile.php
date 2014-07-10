@@ -29,7 +29,7 @@ class VCA_ASM_Profile {
 			$disable_field = false;
 		}
 
-		list( $nation_field, $city_field, $membership_field ) = $this->region_options();
+		list( $nation_field, $city_field, $membership_field ) = $this->geo_options();
 
 		if ( $is_city ) {
 			$fields = array();
@@ -171,7 +171,7 @@ class VCA_ASM_Profile {
 	 * @since 1.0
 	 * @access private
 	 */
-	private function region_options() {
+	private function geo_options() {
 		global $vca_asm_geography, $vca_asm_utilities;
 
 		$disable_field = false;
@@ -555,17 +555,17 @@ class VCA_ASM_Profile {
 	 * @access public
 	 */
 	public function __construct() {
-		add_action( 'register_post', array( &$this, 'verify_tc_acceptance' ), 1, 3 );
-		add_action( 'user_register', array( &$this, 'save_on_registration' ), 100 );
-		add_action( 'show_user_profile', array( &$this, 'user_extra_profile_fields' ) );
-		add_action( 'edit_user_profile', array( &$this, 'admin_extra_profile_fields' ) );
-		add_action( 'vca_theme_show_user_profile', array( &$this, 'user_extra_profile_fields_custom' ) );
-		add_action( 'wp_enqueue_scripts', array( &$this, 'set_script_params' ), 20 );
-		add_action( 'admin_enqueue_scripts', array( &$this, 'set_script_params' ), 20 );
-		add_action( 'vca_theme_show_user_settings', array( &$this, 'user_extra_profile_fields_settings' ) );
-		add_action( 'personal_options_update', array( &$this, 'save_extra_profile_fields' ) );
-		add_action( 'edit_user_profile_update', array( &$this, 'save_extra_profile_fields' ) );
-		add_shortcode( 'vca-asm-supporter-vcard', array( &$this, 'supporter_vcard' ) );
+		add_action( 'register_post', array( $this, 'verify_tc_acceptance' ), 1, 3 );
+		add_action( 'user_register', array( $this, 'save_on_registration' ), 100 );
+		add_action( 'show_user_profile', array( $this, 'user_extra_profile_fields' ) );
+		add_action( 'edit_user_profile', array( $this, 'admin_extra_profile_fields' ) );
+		add_action( 'vca_theme_show_user_profile', array( $this, 'user_extra_profile_fields_custom' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'set_script_params' ), 20 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'set_script_params' ), 20 );
+		add_action( 'vca_theme_show_user_settings', array( $this, 'user_extra_profile_fields_settings' ) );
+		add_action( 'personal_options_update', array( $this, 'save_extra_profile_fields' ) );
+		add_action( 'edit_user_profile_update', array( $this, 'save_extra_profile_fields' ) );
+		add_shortcode( 'vca-asm-supporter-vcard', array( $this, 'supporter_vcard' ) );
 	}
 }
 
