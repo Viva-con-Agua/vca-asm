@@ -602,15 +602,24 @@ class VCA_ASM_Admin_Slot_Allocation {
 
 				case "accept":
 					if( isset( $_GET['id'] ) ) {
-						$free = $vca_asm_registrations->get_free_slots( intval( $activity_id ), intval( $_GET['id'] ) );
+						$free = $vca_asm_registrations->get_free_slots(
+							intval( $activity_id ),
+							intval( $_GET['id'] )
+						);
 						if( $free > 0 ) {
-							$success = $vca_asm_registrations->accept_application( intval( $activity_id ), intval( $_GET['id'] ) );
+							$success = $vca_asm_registrations->accept_application(
+								intval( $activity_id ),
+								intval( $_GET['id'] )
+							);
 						} else {
 							$slots_fail = true;
 						}
 					} elseif( isset( $_GET['supporters'] ) ) {
 						foreach( $_GET['supporters'] as $supporter ) {
-							$free = $vca_asm_registrations->get_free_slots( intval( $activity_id ), intval( $supporter ) );
+							$free = $vca_asm_registrations->get_free_slots(
+								intval( $activity_id ),
+								intval( $supporter )
+							);
 							if( $free > 0 ) {
 								$partial_success = $vca_asm_registrations->accept_application( intval( $activity_id ), intval( $supporter ) );
 								$success = $success + intval( $partial_success );
@@ -1295,9 +1304,9 @@ class VCA_ASM_Admin_Slot_Allocation {
 
 		$tables = array();
 		if (
-			$current_user->has_cap(  'vca_asm_manage_' . $this->department . '_global' )
+			$current_user->has_cap( 'vca_asm_manage_' . $this->department . '_global' )
 			|| (
-				$current_user->has_cap(  'vca_asm_manage_' . $this->department . '_nation' ) &&
+				$current_user->has_cap( 'vca_asm_manage_' . $this->department . '_nation' ) &&
 				$the_activity->nation === $admin_nation
 			) || (
 				$the_activity->delegation === 'delegate' &&
@@ -1361,7 +1370,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 				$tables[] = array(
 					'headline' => $list_nicename . ', ' . $vca_asm_geography->get_status( $admin_city ) . ' ' . $vca_asm_geography->get_name( $admin_city ),
 					'quota' => $admin_city,
-					'slots' => $the_activity->cty_slots[$admin_nation],
+					'slots' => $the_activity->cty_slots[$admin_city],
 					'supps_of_quota' => isset( $supporters_by_quota[$admin_city] ) ? $supporters_by_quota[$admin_city] : array()
 				);
 			}
