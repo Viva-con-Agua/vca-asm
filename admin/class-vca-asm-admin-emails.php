@@ -729,15 +729,19 @@ class VCA_ASM_Admin_Emails {
 				'options' => array(
 					array(
 						'label' => __( 'All', 'vca-asm' ),
-						'value' => 0
+						'value' => 'all'
 					),
 					array(
 						'label' => _x( '&quot;Active Members&quot; only', 'Admin Email Interface', 'vca-asm' ),
-						'value' => 2
+						'value' => 'active'
+					),
+					array(
+						'label' => __( '(Inactive) Pool Users only', 'vca-asm' ),
+						'value' => 'inactive'
 					)
 				),
 				'value' => 0,
-				'desc' => _x( 'Select whether to send the email to all users of the selected group or to those with &quot;active membership&quot; status only.', 'Admin Email Interface', 'vca-asm' )
+				'desc' => _x( 'Select whether to send the email to all users of the selected group or a partial selection based on  &quot;active membership&quot; status.', 'Admin Email Interface', 'vca-asm' )
 			),
 			array(
 				'type' => 'checkbox',
@@ -1011,7 +1015,7 @@ class VCA_ASM_Admin_Emails {
 			$vca_asm_mailer, $vca_asm_geography;
 
 		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
-		$membership = ( isset( $_POST['membership'] ) && in_array( $_POST['membership'], array( 0, 2 ) ) ) ? $_POST['membership'] : 0;
+		$membership = ( isset( $_POST['membership'] ) && in_array( $_POST['membership'], array( 'all', 'active', 'inactive' ) ) ) ? $_POST['membership'] : 'all';
 		$receipient_group = isset( $_POST['receipient-group'] ) ? $_POST['receipient-group'] : '';
 		$receipient_id = 0;
 		$activity_id = isset( $_POST['activity'] ) ? $_POST['activity'] : 0;

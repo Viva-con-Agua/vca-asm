@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: VcA Activity & Supporter Management v1.5\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: \n"
-"PO-Revision-Date: 2014-06-08 18:07:49+0200\n"
+"PO-Revision-Date: 2014-07-25 08:34:43+0200\n"
 "Last-Translator: Johannes Pilkahn <johannes@pilkahn.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -25,12 +25,12 @@ msgstr ""
 msgid "Members"
 msgstr "Mitglieder"
 
-#: admin/class-vca-asm-admin-finances.php:1827
-#: admin/class-vca-asm-admin-finances.php:2082
-#: admin/class-vca-asm-admin-finances.php:3334
-#: admin/class-vca-asm-admin-finances.php:3505
-#: admin/class-vca-asm-admin-finances.php:3726
-#: admin/class-vca-asm-admin-finances.php:3905
+#: admin/class-vca-asm-admin-finances.php:1840
+#: admin/class-vca-asm-admin-finances.php:2095
+#: admin/class-vca-asm-admin-finances.php:3347
+#: admin/class-vca-asm-admin-finances.php:3518
+#: admin/class-vca-asm-admin-finances.php:3739
+#: admin/class-vca-asm-admin-finances.php:3918
 #: admin/class-vca-asm-admin-geography.php:529
 #: templates/admin-table.php:160
 #: templates/admin-table.php:196
@@ -196,9 +196,9 @@ msgctxt "taxonomy selection for acitivity"
 msgid "Select One"
 msgstr "Eine Auswählen"
 
-#: admin/class-vca-asm-admin-finances.php:3193
+#: admin/class-vca-asm-admin-finances.php:3206
 #: admin/class-vca-asm-admin-geography.php:915
-#: includes/class-vca-asm-geography.php:540
+#: includes/class-vca-asm-geography.php:541
 #: includes/class-vca-asm-mailer.php:564
 #: templates/admin-table.php:169
 #: templates/class-vca-asm-admin-table.php:1250
@@ -206,9 +206,9 @@ msgstr "Eine Auswählen"
 msgid "Cell"
 msgstr "Zelle"
 
-#: admin/class-vca-asm-admin-finances.php:3186
+#: admin/class-vca-asm-admin-finances.php:3199
 #: admin/class-vca-asm-admin-geography.php:911
-#: includes/class-vca-asm-geography.php:543
+#: includes/class-vca-asm-geography.php:544
 #: templates/admin-table.php:171
 #: templates/class-vca-asm-admin-table.php:1252
 #@ vca-asm
@@ -261,17 +261,17 @@ msgctxt "Admin Email Interface"
 msgid "Message Body"
 msgstr "Text der Nachricht"
 
-#: admin/class-vca-asm-admin-emails.php:931
+#: admin/class-vca-asm-admin-emails.php:935
 #@ vca-asm
 msgid "Send an email"
 msgstr "Schicke eine Email raus"
 
-#: admin/class-vca-asm-admin-emails.php:964
+#: admin/class-vca-asm-admin-emails.php:968
 #@ vca-asm
 msgid "Send Email now?"
 msgstr "Email jetzt verschicken?"
 
-#: admin/class-vca-asm-admin-emails.php:960
+#: admin/class-vca-asm-admin-emails.php:964
 #@ vca-asm
 msgid "Send Mail!"
 msgstr "Mail verschicken!"
@@ -461,33 +461,33 @@ msgstr "Nachrichtentext bei zurückgezogenem Mitgliedsstatus"
 msgid "Options successfully updated!"
 msgstr "Optionen erfolgreich gespeichert!"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1124
+#: admin/class-vca-asm-admin-slot-allocation.php:1133
 #: admin/class-vca-asm-admin-supporters.php:1027
 #: includes/class-vca-asm-workbook-participants.php:131
 #@ vca-asm
 msgid "First Name"
 msgstr "Vorname"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1132
+#: admin/class-vca-asm-admin-slot-allocation.php:1141
 #: admin/class-vca-asm-admin-supporters.php:1035
 #: includes/class-vca-asm-workbook-participants.php:132
 #@ vca-asm
 msgid "Last Name"
 msgstr "Nachname"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1174
+#: admin/class-vca-asm-admin-slot-allocation.php:1183
 #: admin/class-vca-asm-admin-supporters.php:1074
 #@ vca-asm
 msgid "Email Address"
 msgstr "Email Adresse"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1167
+#: admin/class-vca-asm-admin-slot-allocation.php:1176
 #: admin/class-vca-asm-admin-supporters.php:1066
 #@ vca-asm
 msgid "Membership Status"
 msgstr "Mitgliedsstatus"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1185
+#: admin/class-vca-asm-admin-slot-allocation.php:1194
 #: admin/class-vca-asm-admin-supporters.php:1084
 #: includes/class-vca-asm-workbook-participants.php:138
 #@ vca-asm
@@ -540,10 +540,10 @@ msgstr "Zeitraum"
 msgid "Current Applications"
 msgstr "Aktuelle Bewerbungen"
 
-#: admin/class-vca-asm-admin-emails.php:915
-#: admin/class-vca-asm-admin-slot-allocation.php:917
-#: admin/class-vca-asm-admin-slot-allocation.php:1053
-#: admin/class-vca-asm-admin-slot-allocation.php:1233
+#: admin/class-vca-asm-admin-emails.php:919
+#: admin/class-vca-asm-admin-slot-allocation.php:926
+#: admin/class-vca-asm-admin-slot-allocation.php:1062
+#: admin/class-vca-asm-admin-slot-allocation.php:1242
 #: includes/class-vca-asm-lists.php:261
 #: includes/class-vca-asm-workbook-participants.php:79
 #@ vca-asm
@@ -704,7 +704,7 @@ msgstr "(Zum Mitglied) Befördern"
 msgid "Deny membership to %s"
 msgstr "%s die Mitgliedschaft verweigern"
 
-#: admin/class-vca-asm-admin-finances.php:576
+#: admin/class-vca-asm-admin-finances.php:589
 #: admin/class-vca-asm-admin-slot-allocation.php:407
 #: includes/class-vca-asm-activities.php:932
 #: includes/class-vca-asm-activities.php:945
@@ -854,7 +854,7 @@ msgstr "Wenn diese Region einen Head Of Benutzer haben soll, gib bitte einen Ben
 msgid "Either the username is empty, already exists or the email is already in use."
 msgstr "Entweder hast du keinen Bentuzernamen eingegeben, jener wird schon verwandt oder die angegebene Email ist bereits in unserem System vorhanden."
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1255
+#: admin/class-vca-asm-admin-slot-allocation.php:1264
 #@ vca-asm
 msgid "No current applications..."
 msgstr "Keine Bewerbungen derzeit..."
@@ -882,7 +882,7 @@ msgctxt "Tools Meta Box"
 msgid "Special"
 msgstr "Special (z.B. Theater, Schlauchboot, etc.)"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1378
+#: admin/class-vca-asm-admin-slot-allocation.php:1387
 #, php-format
 #@ vca-asm
 msgid "Slots: %1$s, of which %2$s are free"
@@ -900,7 +900,7 @@ msgctxt "User Profile"
 msgid "Mobile Phone"
 msgstr "Handy Nummer"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1138
+#: admin/class-vca-asm-admin-slot-allocation.php:1147
 #: includes/class-vca-asm-workbook-participants.php:150
 #@ vca-asm
 msgid "Note"
@@ -927,7 +927,7 @@ msgstr "Nur allgemeine News"
 msgid "Only regional news"
 msgstr "Nur regionale News"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1470
+#: admin/class-vca-asm-admin-slot-allocation.php:1479
 #: includes/class-vca-asm-profile.php:121
 #@ vca-asm
 msgid "None"
@@ -941,8 +941,8 @@ msgstr "Wähle bitte ob und welche Neugikeiten aus dem VcA Kosmos Dir zugeschick
 #: includes/class-vca-asm-finances.php:682
 #: includes/class-vca-asm-finances.php:736
 #: includes/class-vca-asm-finances.php:791
-#: includes/class-vca-asm-geography.php:907
-#: includes/class-vca-asm-geography.php:949
+#: includes/class-vca-asm-geography.php:908
+#: includes/class-vca-asm-geography.php:950
 #@ vca-asm
 msgid "Please select..."
 msgstr "Bitte wählen..."
@@ -996,7 +996,7 @@ msgstr "Avatar Löschen"
 msgid "Replace the local avatar by uploading a new avatar, or erase the local avatar (falling back to a gravatar) by checking the delete option."
 msgstr "Ersetze das aktuelle Avatar durch Hochladen eines neuen oder lösche es in dem du das Häkchen setzt."
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1180
+#: admin/class-vca-asm-admin-slot-allocation.php:1189
 #: admin/class-vca-asm-admin-supporters.php:1079
 #: includes/class-vca-asm-workbook-participants.php:146
 #@ vca-asm
@@ -1113,13 +1113,13 @@ msgctxt "Admin Email Interface"
 msgid "(this goes for the default responses as well)"
 msgstr "(dies gilt auch für die Standard-Texte)"
 
-#: admin/class-vca-asm-admin-emails.php:744
+#: admin/class-vca-asm-admin-emails.php:748
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Ignore user settings?"
 msgstr "\"News Optionen\" (Benutzereinstellungen) ignorieren?"
 
-#: admin/class-vca-asm-admin-emails.php:746
+#: admin/class-vca-asm-admin-emails.php:750
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "As you know from your own profile, users may select which news to receive - general news, regional ones, both or none. In rare cases you have a message so important, that you might want to ignore the users wishes and reach everyone within your selected group. Tick this box to do so. Please do not make use of this feature frequently!"
@@ -1147,12 +1147,12 @@ msgid "Please confirm that you agree to the terms &amp; conditions."
 msgstr "Bitte bestätige, dass du die Nutzungsbedingungen und Datenschutzerklärung akzeptierst."
 
 #: admin/class-vca-asm-admin-slot-allocation.php:427
-#: admin/class-vca-asm-admin-slot-allocation.php:1256
+#: admin/class-vca-asm-admin-slot-allocation.php:1265
 #@ vca-asm
 msgid "Applications"
 msgstr "Bewerbungen"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1263
+#: admin/class-vca-asm-admin-slot-allocation.php:1272
 #: templates/admin-table.php:108
 #: templates/admin-table.php:280
 #: templates/class-vca-asm-admin-table.php:1088
@@ -1162,7 +1162,7 @@ msgstr "Bewerbungen"
 msgid "Accept"
 msgstr "Annehmen"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1267
+#: admin/class-vca-asm-admin-slot-allocation.php:1276
 #: templates/admin-table.php:118
 #: templates/admin-table.php:287
 #: templates/class-vca-asm-admin-table.php:1098
@@ -1171,24 +1171,24 @@ msgstr "Annehmen"
 msgid "Deny"
 msgstr "Ablehnen"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1257
-#: admin/class-vca-asm-admin-slot-allocation.php:1287
+#: admin/class-vca-asm-admin-slot-allocation.php:1266
+#: admin/class-vca-asm-admin-slot-allocation.php:1296
 #: templates/class-vca-asm-admin-table.php:77
 #@ vca-asm
 msgid "Execute"
 msgstr "Ausführen"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1258
+#: admin/class-vca-asm-admin-slot-allocation.php:1267
 #@ vca-asm
 msgid "Manage all selected applications?"
 msgstr "Alle ausgewählten Bewerbungen bearbeiten?"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1467
+#: admin/class-vca-asm-admin-slot-allocation.php:1476
 #@ vca-asm
 msgid "YES!"
 msgstr "JA!"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1244
+#: admin/class-vca-asm-admin-slot-allocation.php:1253
 #@ vca-asm
 msgid "Revoke!"
 msgstr "Zurückziehen!"
@@ -1206,12 +1206,12 @@ msgctxt "Region Meta Box"
 msgid "Yes, delegate"
 msgstr "Ja, delegieren"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1259
+#: admin/class-vca-asm-admin-slot-allocation.php:1268
 #@ vca-asm
 msgid "Handle selected applications"
 msgstr "Ausgewählte Bewerbungen bearbeiten"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1248
+#: admin/class-vca-asm-admin-slot-allocation.php:1257
 #@ vca-asm
 msgid "Revoke selected accepted applications"
 msgstr "Ausgewählte bestätigte Bewerbungen zurückziehen"
@@ -1323,7 +1323,7 @@ msgctxt "Admin Supporters"
 msgid "Filtered Supporters of your %region_status%"
 msgstr "Gefilterte Supporter deiner %region_status%"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1191
+#: admin/class-vca-asm-admin-slot-allocation.php:1200
 #: admin/class-vca-asm-admin-supporters.php:1090
 #@ vca-asm
 msgid "Gender"
@@ -1421,7 +1421,7 @@ msgstr "Aktivitäten"
 msgid "Finances"
 msgstr "Finanzen"
 
-#: admin/class-vca-asm-admin-finances.php:3071
+#: admin/class-vca-asm-admin-finances.php:3084
 #: admin/class-vca-asm-admin-settings.php:218
 #: admin/class-vca-asm-admin.php:231
 #: admin/class-vca-asm-admin.php:232
@@ -1633,20 +1633,20 @@ msgstr "mittel"
 msgid "strong"
 msgstr "stark"
 
-#: includes/class-vca-asm-security.php:92
+#: includes/class-vca-asm-security.php:96
 #@ vca-asm
 msgid "The password you have chosen is not strong enough."
 msgstr "Das Passwort, welches du gewählt hast, ist nicht stark genug."
 
-#: includes/class-vca-asm-security.php:94
+#: includes/class-vca-asm-security.php:98
 #, php-format
 #@ vca-asm
 msgid "It must at least be &quot;%s&quot;. See the strength indicator below the password-fields."
 msgstr "Es muss mindestens &quot;%s&quot; sein. Achte auf den Stärke-Indikator unter den Passwort-Eingabefeldern."
 
 #: admin/class-vca-asm-admin-slot-allocation.php:560
-#: admin/class-vca-asm-admin-slot-allocation.php:619
-#: admin/class-vca-asm-admin-slot-allocation.php:685
+#: admin/class-vca-asm-admin-slot-allocation.php:628
+#: admin/class-vca-asm-admin-slot-allocation.php:694
 #: admin/class-vca-asm-admin-supporters.php:172
 #: admin/class-vca-asm-admin-supporters.php:267
 #: models/class-vca-asm-supporter.php:107
@@ -1681,110 +1681,110 @@ msgctxt "Message"
 msgid "Application denial not successful. Sorry."
 msgstr "Ablehnung der Bewerbung(en) nicht erfolgreich. Sorry."
 
-#: admin/class-vca-asm-admin-slot-allocation.php:631
+#: admin/class-vca-asm-admin-slot-allocation.php:640
 #, php-format
 #@ vca-asm
 msgctxt "Message"
 msgid "Successfully accepted the applications of %1$s (%2$d)"
 msgstr "Die Bewerbungen von %1$s (%2$d) sind erfolgreich angenommen worden!"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:637
+#: admin/class-vca-asm-admin-slot-allocation.php:646
 #, php-format
 #@ vca-asm
 msgctxt "Message"
 msgid "Successfully accepted the applications of %s."
 msgstr "Die Bewerbung von %s ist erfolgreich angenommen worden!"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:647
+#: admin/class-vca-asm-admin-slot-allocation.php:656
 #@ vca-asm
 msgctxt "Message"
 msgid "Successfully accepted the application of one supporter."
 msgstr "Eine Bewerbung erfolgreich angenommen!"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:653
+#: admin/class-vca-asm-admin-slot-allocation.php:662
 #@ vca-asm
 msgctxt "Message"
 msgid "Application acceptance not successful. Sorry."
 msgstr "Annahme der Bewerbung(en) nicht erfolgreich. Sorry."
 
-#: admin/class-vca-asm-admin-slot-allocation.php:694
+#: admin/class-vca-asm-admin-slot-allocation.php:703
 #, php-format
 #@ vca-asm
 msgctxt "Message"
 msgid "Successfully removed %1$s (%2$d) from participants."
 msgstr "%1$s (%2$d) erfolgreich von der Teilnehmerliste gestrichen."
 
-#: admin/class-vca-asm-admin-slot-allocation.php:700
-#: admin/class-vca-asm-admin-slot-allocation.php:705
+#: admin/class-vca-asm-admin-slot-allocation.php:709
+#: admin/class-vca-asm-admin-slot-allocation.php:714
 #, php-format
 #@ vca-asm
 msgctxt "Message"
 msgid "Successfully removed %s from participants."
 msgstr "%s erfolgreich von der Teilnehmerliste gestrichen."
 
-#: admin/class-vca-asm-admin-slot-allocation.php:710
+#: admin/class-vca-asm-admin-slot-allocation.php:719
 #@ vca-asm
 msgctxt "Message"
 msgid "Successfully removed one supporter from participants."
 msgstr "Einen Supporter erfolgreich von der Teilnehmerliste gestrichen."
 
-#: admin/class-vca-asm-admin-slot-allocation.php:716
+#: admin/class-vca-asm-admin-slot-allocation.php:725
 #@ vca-asm
 msgctxt "Message"
 msgid "Participant removal not successful. Sorry."
 msgstr "Die Bearbeitung der Teilnehmerliste war nicht erfolgreich. Sorry."
 
-#: admin/class-vca-asm-admin-slot-allocation.php:761
+#: admin/class-vca-asm-admin-slot-allocation.php:770
 #@ vca-asm
 msgctxt "Slot Allocation Admin Menu"
 msgid "Applications"
 msgstr "Bewerbungen"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:766
+#: admin/class-vca-asm-admin-slot-allocation.php:775
 #@ vca-asm
 msgctxt "Slot Allocation Admin Menu"
 msgid "Waiting List"
 msgstr "Warteliste"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:748
-#: admin/class-vca-asm-admin-slot-allocation.php:771
+#: admin/class-vca-asm-admin-slot-allocation.php:757
+#: admin/class-vca-asm-admin-slot-allocation.php:780
 #@ vca-asm
 msgctxt "Slot Allocation Admin Menu"
 msgid "Participants"
 msgstr "Teilnehmer"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1118
+#: admin/class-vca-asm-admin-slot-allocation.php:1127
 #: admin/class-vca-asm-admin-supporters.php:1021
 #@ vca-asm
 msgid "Photo"
 msgstr "Foto"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1232
+#: admin/class-vca-asm-admin-slot-allocation.php:1241
 #@ vca-asm
 msgid "Currently, this waiting list is empty..."
 msgstr "Keine Supporter auf dieser Warteliste..."
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1235
+#: admin/class-vca-asm-admin-slot-allocation.php:1244
 #@ vca-asm
 msgid "Accept all selected applications and move the selected supporters from the waiting list to participants?"
 msgstr "Alle ausgewählten Bewerbungen annehmen und die ausgewählten Supporter von der Warte- auf die Teilnehmerliste setzen?"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1242
+#: admin/class-vca-asm-admin-slot-allocation.php:1251
 #@ vca-asm
 msgid "So far, no applications have been accepted yet..."
 msgstr "Noch sind keine Bewerbungen angenommen worden..."
 
-#: admin/class-vca-asm-admin-emails.php:911
+#: admin/class-vca-asm-admin-emails.php:915
 #: admin/class-vca-asm-admin-slot-allocation.php:432
-#: admin/class-vca-asm-admin-slot-allocation.php:905
-#: admin/class-vca-asm-admin-slot-allocation.php:1070
-#: admin/class-vca-asm-admin-slot-allocation.php:1204
-#: admin/class-vca-asm-admin-slot-allocation.php:1243
+#: admin/class-vca-asm-admin-slot-allocation.php:914
+#: admin/class-vca-asm-admin-slot-allocation.php:1079
+#: admin/class-vca-asm-admin-slot-allocation.php:1213
+#: admin/class-vca-asm-admin-slot-allocation.php:1252
 #@ vca-asm
 msgid "Participants"
 msgstr "Teilnehmer"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1457
+#: admin/class-vca-asm-admin-slot-allocation.php:1466
 #: admin/class-vca-asm-admin-supporters.php:976
 #: admin/class-vca-asm-admin-supporters.php:994
 #: admin/class-vca-asm-admin-supporters.php:995
@@ -2055,37 +2055,37 @@ msgstr ""
 "Achtung: Der Supporter und alle seine Daten werden permanent aus der Datenbank gelöscht.\\\n"
 "Diese Aktion ist nicht rückgängig zu machen!"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:642
+#: admin/class-vca-asm-admin-slot-allocation.php:651
 #, php-format
 #@ vca-asm
 msgctxt "Message"
 msgid "Successfully accepted the application of %s."
 msgstr "Die Bewerbung von %s ist erfolgreich angenommen worden!"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:659
+#: admin/class-vca-asm-admin-slot-allocation.php:668
 #@ vca-asm
 msgctxt "Message"
 msgid "Could not accept any applications of this contingent, all available slots have been assigned..."
 msgstr "Für dieses Kontingent können (im Moment) keine Bewerbungen mehr angenommen werden.<br />Alle verfügbaren Plätze sind vergeben worden..."
 
-#: admin/class-vca-asm-admin-slot-allocation.php:664
+#: admin/class-vca-asm-admin-slot-allocation.php:673
 #@ vca-asm
 msgctxt "Message"
 msgid "Some applications however could not be accepted. It appears that you selected more supporters than free slots existed."
 msgstr "Eine oder mehrere der ausgewählten Bewerbungen konnten allerdings nicht angenommen werden. Du hast mehr Supporter ausgewählt, als Plätze verfügbar gewesen sind."
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1309
+#: admin/class-vca-asm-admin-slot-allocation.php:1318
 #@ vca-asm
 msgctxt "female"
 msgid "General"
 msgstr "Allgemeine"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1234
+#: admin/class-vca-asm-admin-slot-allocation.php:1243
 #@ vca-asm
 msgid "Accept application(s) in retrospect"
 msgstr "Bewerbung(en) nachträglich annehmen"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1236
+#: admin/class-vca-asm-admin-slot-allocation.php:1245
 #@ vca-asm
 msgid "Move selected supporters to participants"
 msgstr "Ausgewählte Supporter auf die Teilnehmerliste setzen"
@@ -2109,12 +2109,12 @@ msgstr "%s von der Teilnehmerliste entfernen und die Bewerbungsbestätigung zur�
 msgid "Attention: This does not move the supporter to the waiting list - it removes him/her from the participants entirely!"
 msgstr "Achtung: Diese Aktion kann nicht rückgängig gemacht werden! Der Teilnehmer wird nicht auf die Warteliste verschoben."
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1245
+#: admin/class-vca-asm-admin-slot-allocation.php:1254
 #@ vca-asm
 msgid "Revoke all selected accepted applications and remove the supporters from the list of participants?"
 msgstr "Alle ausgewählten Supporter von der Teilnehmerliste entfernen und die Bewerbungsbestätigungen zurückziehen?"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1247
+#: admin/class-vca-asm-admin-slot-allocation.php:1256
 #@ vca-asm
 msgid "Attention: This does not move the supporters to the waiting list - it removes them from the participants entirely!"
 msgstr "Achtung: Diese Aktion kann nicht rückgängig gemacht werden! Die Teilnehmer werden nicht auf die Warteliste verschoben."
@@ -2200,84 +2200,84 @@ msgstr "Profil editieren"
 msgid "mismatch"
 msgstr "keine Übereinstimmung"
 
-#: includes/class-vca-asm-security.php:80
+#: includes/class-vca-asm-security.php:84
 #@ vca-asm
 msgid "You must enter something..."
 msgstr "Irgendwas musst du schon eingeben..."
 
-#: includes/class-vca-asm-security.php:86
+#: includes/class-vca-asm-security.php:90
 #@ vca-asm
 msgid "The passwords you entered do not match..."
 msgstr "Die eingegebenen Passwörter stimmen nicht überein..."
 
-#: includes/class-vca-asm-security.php:101
+#: includes/class-vca-asm-security.php:105
 #@ vca-asm
 msgid "You cannot replace your old password with itsself..."
 msgstr "Du kannst dein altes Passwort nicht durch sich selbst ersetzen..."
 
-#: includes/class-vca-asm-security.php:317
+#: includes/class-vca-asm-security.php:326
 #@ vca-asm
 msgid "Password updated!"
 msgstr "Passwort erneuert!"
 
-#: includes/class-vca-asm-security.php:319
+#: includes/class-vca-asm-security.php:328
 #@ vca-asm
 msgid "You have successfully updated your password."
 msgstr "Du hast dein Passwort erfolgreich erneuert."
 
-#: includes/class-vca-asm-security.php:321
+#: includes/class-vca-asm-security.php:330
 #@ vca-asm
 msgid "Back to the Pool!"
 msgstr "Zurück in den Pool!"
 
-#: includes/class-vca-asm-security.php:322
+#: includes/class-vca-asm-security.php:331
 #@ vca-asm
 msgid "Log in with the new password"
 msgstr "Log dich mit dem neuen Passwort wieder rein"
 
-#: includes/class-vca-asm-security.php:328
+#: includes/class-vca-asm-security.php:337
 #@ vca-asm
 msgid "Please renew your password"
 msgstr "Bitte erneuere dein Passwort"
 
-#: includes/class-vca-asm-security.php:330
+#: includes/class-vca-asm-security.php:339
 #, php-format
 #@ vca-asm
 msgid "Users of the Pool are required to renew their password every %d months. Either your password is that old or a global password reset has been initiated."
 msgstr "Benutzer des Pools müssen ihre Passwörter alle %d Monate erneuern. Entweder dein Passwort ist mal wieder so alt, oder ein globaler Passwort-Reset wurde durchgeführt."
 
-#: includes/class-vca-asm-security.php:350
+#: includes/class-vca-asm-security.php:359
 #@ vca-asm
 msgid "New password"
 msgstr "Neues Passwort"
 
-#: includes/class-vca-asm-security.php:353
+#: includes/class-vca-asm-security.php:362
 #@ vca-asm
 msgid "Confirm new password"
 msgstr "Passwort-Wiederholung"
 
-#: includes/class-vca-asm-security.php:356
+#: includes/class-vca-asm-security.php:365
 #@ vca-asm
 msgid "Strength indicator"
 msgstr "Stärke-Indikator"
 
-#: includes/class-vca-asm-security.php:360
+#: includes/class-vca-asm-security.php:369
 #, php-format
 #@ vca-asm
 msgid "The password must at least be &quot;%s&quot;."
 msgstr "Das neue Passwort sollte mindestens &quot;%s&quot; sein."
 
-#: includes/class-vca-asm-security.php:369
+#: includes/class-vca-asm-security.php:378
 #@ vca-asm
 msgid "Set new Password"
 msgstr "Neues Passwort Speichern"
 
-#: includes/class-vca-asm-security.php:396
+#: includes/class-vca-asm-security.php:405
 #@ vca-asm
 msgid "Logged out..."
 msgstr "Rausgeloggt..."
 
-#: includes/class-vca-asm-security.php:398
+#: includes/class-vca-asm-security.php:407
 #, php-format
 #@ vca-asm
 msgid "You have been logged out. After %d minutes of inactivity, users of the Pool are automatically logged out of the system."
@@ -2311,12 +2311,12 @@ msgstr "Bevor du dich für eine Aktivität bewirbst, check bitte nochmal deinen 
 msgid "&larr; Back to the frontend"
 msgstr "&larr; Zurück nach Vorne"
 
-#: includes/class-vca-asm-mailer.php:795
+#: includes/class-vca-asm-mailer.php:797
 #@ vca-asm
 msgid "All Supporters"
 msgstr "Alle Supporter"
 
-#: includes/class-vca-asm-mailer.php:849
+#: includes/class-vca-asm-mailer.php:855
 #@ vca-asm
 msgid "Selection"
 msgstr "manuelle Auswahl"
@@ -2430,7 +2430,7 @@ msgctxt "Admin Supporters"
 msgid "Show all Emails"
 msgstr "Zeige alle Mails"
 
-#: includes/class-vca-asm-mailer.php:832
+#: includes/class-vca-asm-mailer.php:838
 #: templates/newsletter-with-images.php:56
 #: templates/newsletter.php:56
 #, php-format
@@ -2596,7 +2596,7 @@ msgstr "Aktivität"
 msgid "Single Supporter"
 msgstr "Einzelne(r) Supporter_in"
 
-#: includes/class-vca-asm-mailer.php:817
+#: includes/class-vca-asm-mailer.php:821
 #: templates/newsletter-with-images.php:51
 #: templates/newsletter.php:51
 #@ vca-asm
@@ -2632,8 +2632,8 @@ msgstr "an"
 msgid "Visit the Viva con Agua website"
 msgstr "Die Webseite von Viva con Agua besuchen"
 
-#: includes/class-vca-asm-mailer.php:801
-#: includes/class-vca-asm-mailer.php:830
+#: includes/class-vca-asm-mailer.php:803
+#: includes/class-vca-asm-mailer.php:834
 #: templates/newsletter-with-images.php:31
 #: templates/newsletter.php:31
 #, php-format
@@ -2746,43 +2746,43 @@ msgctxt "Settings Admin Menu"
 msgid "Plain Text"
 msgstr "Plain Text"
 
-#: admin/class-vca-asm-admin-emails.php:983
+#: admin/class-vca-asm-admin-emails.php:987
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Help / Tips"
 msgstr "Hilfe / Tipps"
 
-#: admin/class-vca-asm-admin-emails.php:985
+#: admin/class-vca-asm-admin-emails.php:989
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "&quot;Styles&quot; Dropdown Menu"
 msgstr "&quot;Styles&quot; Dropdown Menü"
 
-#: admin/class-vca-asm-admin-emails.php:986
+#: admin/class-vca-asm-admin-emails.php:990
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Of course you may use all of the above editor&apos;s formatting options, but for almost all cases, the &quot;Styles&quot; Dropdown should suffice. Try to accomplish what you want using these preset styles first."
 msgstr "Natürlich darfst du alle der Formatierungs-Optionen des obigen Editors verwenden. Allerdings sollte das &quot;Styles&quot; Dropdown in den allermeisten Fällen zur Formatierung ausreichen. Bitte versuche, das was du erreichen willst zuerst mit Hilfe dieser vorformatierten Styles umzusetzen."
 
-#: admin/class-vca-asm-admin-emails.php:988
+#: admin/class-vca-asm-admin-emails.php:992
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Inserting Links"
 msgstr "Einfügen von Links"
 
-#: admin/class-vca-asm-admin-emails.php:989
+#: admin/class-vca-asm-admin-emails.php:993
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "You <em>can</em> simply copy and paste URLs (Internet-Addresses) into the Editor, but it looks much nicer, if you write a paragraph first, then select the word(s) or sentence you want to use as a link and then use the &quot;Insert Link&quot; Button (3rd from the right, top row)."
 msgstr "Du <em>kannst</em> URLs (Internetadressen) einfach in den Editor hinein kopieren. Allerdings sieht es deutlich hübscher aus, wenn du zuerst einen Absatz fertig schreibst, dann das Wort, die Wörter oder den Satz, den du verlinken möchtest markierst und danach den &quot;Link Einfügen&quot; Knopf (3ter von rechts, obere Reihe) verwendest."
 
-#: admin/class-vca-asm-admin-emails.php:992
+#: admin/class-vca-asm-admin-emails.php:996
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "You <em>can</em> copy and paste from pretty much anywhere and the previously selected formatting will be preserved. Most times that is not what you want though, as it is not inline with the VcA-specific styling used by default. Hence when copying text from somewhere else, please use the &quot;Copy without formatting&quot; Button (3rd from the left, bottom row). If you must copy formatted text from a Word document, it is safest to use the &quot;Copy from Word&quot; Button (4th from the left, bottom row)."
 msgstr "Du <em>kannst</em> Text von so ziemlich überall in den Editor kopieren und die vorherige Formatierung sollte erhalten bleiben. In den meisten Fällen willst du das aber gar nicht, denn das geht nicht mit der vordefinierten VcA-spezifischen Formatierung einher. Deshalb nutze bitte den &quot;Als unformatierten Text einfügen&quot; Knopf (3ter von Links, untere Reihe). Wenn du Text aus einem M$ Word Dokument einfügen willst und die Formatierung unbedingt erhalten bleiben soll, dann ist es das sicherste, wenn du den &quot;Aus Word einfügen&quot; Knopf (4ter von Links, untere Reihe) verwendest."
 
-#: admin/class-vca-asm-admin-emails.php:991
+#: admin/class-vca-asm-admin-emails.php:995
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Copy and Pasting from somewhere else"
@@ -2874,17 +2874,17 @@ msgctxt "Geography Admin Menu"
 msgid "Country Groups"
 msgstr "Ländergruppen"
 
-#: admin/class-vca-asm-admin-finances.php:1710
-#: admin/class-vca-asm-admin-finances.php:1717
+#: admin/class-vca-asm-admin-finances.php:1723
+#: admin/class-vca-asm-admin-finances.php:1730
 #: admin/class-vca-asm-admin-geography.php:486
 #, php-format
 #@ vca-asm
 msgid "add %s"
 msgstr "%s hinzufügen"
 
-#: admin/class-vca-asm-admin-emails.php:881
-#: admin/class-vca-asm-admin-finances.php:608
-#: admin/class-vca-asm-admin-finances.php:1848
+#: admin/class-vca-asm-admin-emails.php:885
+#: admin/class-vca-asm-admin-finances.php:621
+#: admin/class-vca-asm-admin-finances.php:1861
 #: admin/class-vca-asm-admin-geography.php:539
 #: admin/class-vca-asm-admin-slot-allocation.php:400
 #: includes/class-vca-asm-workbook-finances.php:167
@@ -2898,17 +2898,17 @@ msgstr "Typ"
 msgid "Group(s)"
 msgstr "Gruppe(n)"
 
-#: admin/class-vca-asm-admin-finances.php:2077
-#: admin/class-vca-asm-admin-finances.php:2087
+#: admin/class-vca-asm-admin-finances.php:2090
+#: admin/class-vca-asm-admin-finances.php:2100
 #: admin/class-vca-asm-admin-geography.php:640
 #, php-format
 #@ vca-asm
 msgid "Add New %s"
 msgstr "%s hinzufügen"
 
-#: admin/class-vca-asm-admin-finances.php:3381
-#: admin/class-vca-asm-admin-finances.php:3552
-#: admin/class-vca-asm-admin-finances.php:3773
+#: admin/class-vca-asm-admin-finances.php:3394
+#: admin/class-vca-asm-admin-finances.php:3565
+#: admin/class-vca-asm-admin-finances.php:3786
 #: admin/class-vca-asm-admin-geography.php:643
 #: templates/class-vca-asm-admin-table.php:1161
 #, php-format
@@ -2916,8 +2916,8 @@ msgstr "%s hinzufügen"
 msgid "Edit &quot;%s&quot;"
 msgstr "&quot;%s&quot; editieren"
 
-#: admin/class-vca-asm-admin-finances.php:2096
-#: admin/class-vca-asm-admin-finances.php:2112
+#: admin/class-vca-asm-admin-finances.php:2109
+#: admin/class-vca-asm-admin-finances.php:2125
 #: admin/class-vca-asm-admin-geography.php:655
 #@ vca-asm
 msgid "Add new"
@@ -2928,15 +2928,15 @@ msgstr "Hinzufügen"
 msgid "New city (and/or Local Crew or Cell)"
 msgstr "Neue Stadt (und/oder Zelle bzw. Local Crew)"
 
-#: admin/class-vca-asm-admin-emails.php:762
-#: admin/class-vca-asm-admin-finances.php:600
-#: admin/class-vca-asm-admin-finances.php:848
-#: admin/class-vca-asm-admin-finances.php:1569
+#: admin/class-vca-asm-admin-emails.php:766
+#: admin/class-vca-asm-admin-finances.php:613
+#: admin/class-vca-asm-admin-finances.php:861
+#: admin/class-vca-asm-admin-finances.php:1582
 #: admin/class-vca-asm-admin-geography.php:660
-#: admin/class-vca-asm-admin-slot-allocation.php:1161
+#: admin/class-vca-asm-admin-slot-allocation.php:1170
 #: admin/class-vca-asm-admin-supporters.php:460
 #: admin/class-vca-asm-admin-supporters.php:1052
-#: includes/class-vca-asm-geography.php:559
+#: includes/class-vca-asm-geography.php:560
 #: includes/class-vca-asm-workbook-finances.php:145
 #: includes/class-vca-asm-workbook-finances.php:173
 #: includes/class-vca-asm-workbook-participants.php:121
@@ -2951,9 +2951,9 @@ msgstr "Stadt"
 msgid "New group of cities"
 msgstr "Neue Gruppe"
 
-#: admin/class-vca-asm-admin-emails.php:772
+#: admin/class-vca-asm-admin-emails.php:776
 #: admin/class-vca-asm-admin-geography.php:666
-#: includes/class-vca-asm-geography.php:546
+#: includes/class-vca-asm-geography.php:547
 #@ vca-asm
 msgid "City Group"
 msgstr "Städtegruppe"
@@ -2963,15 +2963,15 @@ msgstr "Städtegruppe"
 msgid "New country"
 msgstr "Neues Land"
 
-#: admin/class-vca-asm-admin-emails.php:786
-#: admin/class-vca-asm-admin-finances.php:604
+#: admin/class-vca-asm-admin-emails.php:790
+#: admin/class-vca-asm-admin-finances.php:617
 #: admin/class-vca-asm-admin-geography.php:673
 #: admin/class-vca-asm-admin-geography.php:941
 #: admin/class-vca-asm-admin-geography.php:967
 #: admin/class-vca-asm-admin-supporters.php:455
 #: admin/class-vca-asm-admin-supporters.php:1044
 #: includes/class-vca-asm-activities.php:149
-#: includes/class-vca-asm-geography.php:549
+#: includes/class-vca-asm-geography.php:550
 #: includes/class-vca-asm-workbook-finances.php:146
 #: includes/class-vca-asm-workbook-participants.php:122
 #: templates/class-vca-asm-frontend-activities.php:240
@@ -2984,9 +2984,9 @@ msgstr "Land"
 msgid "New group of countries"
 msgstr "Neue Gruppe"
 
-#: admin/class-vca-asm-admin-emails.php:796
+#: admin/class-vca-asm-admin-emails.php:800
 #: admin/class-vca-asm-admin-geography.php:679
-#: includes/class-vca-asm-geography.php:552
+#: includes/class-vca-asm-geography.php:553
 #@ vca-asm
 msgid "Country Group"
 msgstr "Ländergruppe"
@@ -3003,7 +3003,7 @@ msgstr "Geh' doch wo du herkommst..."
 msgid "back"
 msgstr "zurück"
 
-#: admin/class-vca-asm-admin-finances.php:2150
+#: admin/class-vca-asm-admin-finances.php:2163
 #: admin/class-vca-asm-admin-geography.php:725
 #@ vca-asm
 msgid "You do not have the rights to edit this. Sorry."
@@ -3263,7 +3263,7 @@ msgctxt "Quotas Meta Box"
 msgid "City Quotas"
 msgstr "Städtekontingente"
 
-#: admin/class-vca-asm-admin-finances.php:2058
+#: admin/class-vca-asm-admin-finances.php:2071
 #: includes/class-vca-asm-activities.php:809
 #: includes/class-vca-asm-validation.php:335
 #@ vca-asm
@@ -3271,7 +3271,7 @@ msgctxt "Validation Error"
 msgid "You have not filled out all the required fields"
 msgstr "Du hast nicht alle Pflichtfelder ausgefüllt"
 
-#: admin/class-vca-asm-admin-finances.php:2059
+#: admin/class-vca-asm-admin-finances.php:2072
 #: includes/class-vca-asm-activities.php:810
 #: includes/class-vca-asm-validation.php:336
 #@ vca-asm
@@ -3279,7 +3279,7 @@ msgctxt "Validation Error"
 msgid "Some fields only accept numeric values"
 msgstr "Einige Felder akzeptieren nur numerische Werte"
 
-#: admin/class-vca-asm-admin-finances.php:2060
+#: admin/class-vca-asm-admin-finances.php:2073
 #: includes/class-vca-asm-activities.php:811
 #: includes/class-vca-asm-validation.php:337
 #@ vca-asm
@@ -3287,7 +3287,7 @@ msgctxt "Validation Error"
 msgid "A phone number you have entered is not valid"
 msgstr "Eine eingegebene Telefonnummer hat keine valides Format"
 
-#: admin/class-vca-asm-admin-finances.php:2061
+#: admin/class-vca-asm-admin-finances.php:2074
 #: includes/class-vca-asm-activities.php:812
 #: includes/class-vca-asm-validation.php:338
 #@ vca-asm
@@ -3412,13 +3412,13 @@ msgstr "Die Kontingente können nicht wieder ausgeschaltet werden, es sei denn d
 msgid "There is no data to select..."
 msgstr "Es stehen keine Daten zur Auswahl..."
 
-#: admin/class-vca-asm-admin-finances.php:3211
-#: admin/class-vca-asm-admin-finances.php:3301
-#: admin/class-vca-asm-admin-finances.php:3439
-#: admin/class-vca-asm-admin-finances.php:3610
-#: admin/class-vca-asm-admin-finances.php:3666
-#: admin/class-vca-asm-admin-finances.php:3831
-#: admin/class-vca-asm-admin-finances.php:4018
+#: admin/class-vca-asm-admin-finances.php:3224
+#: admin/class-vca-asm-admin-finances.php:3314
+#: admin/class-vca-asm-admin-finances.php:3452
+#: admin/class-vca-asm-admin-finances.php:3623
+#: admin/class-vca-asm-admin-finances.php:3679
+#: admin/class-vca-asm-admin-finances.php:3844
+#: admin/class-vca-asm-admin-finances.php:4031
 #: templates/class-vca-asm-admin-form.php:53
 #: templates/class-vca-asm-admin-form.php:589
 #@ vca-asm
@@ -3573,17 +3573,17 @@ msgctxt "Weekdays, Shortform"
 msgid "Sat"
 msgstr "Sa"
 
-#: admin/class-vca-asm-admin-finances.php:1159
-#: admin/class-vca-asm-admin-finances.php:2658
+#: admin/class-vca-asm-admin-finances.php:1172
+#: admin/class-vca-asm-admin-finances.php:2671
 #: admin/class-vca-asm-admin-geography.php:70
 #@ vca-asm
 msgid "You cannot delete this data. Sorry."
 msgstr "Du kannst diesen Datensatz nicht löschen. Sorry."
 
-#: admin/class-vca-asm-admin-finances.php:1175
-#: admin/class-vca-asm-admin-finances.php:1182
-#: admin/class-vca-asm-admin-finances.php:2652
-#: admin/class-vca-asm-admin-finances.php:2664
+#: admin/class-vca-asm-admin-finances.php:1188
+#: admin/class-vca-asm-admin-finances.php:1195
+#: admin/class-vca-asm-admin-finances.php:2665
+#: admin/class-vca-asm-admin-finances.php:2677
 #: admin/class-vca-asm-admin-geography.php:82
 #: admin/class-vca-asm-admin-geography.php:89
 #@ vca-asm
@@ -3601,7 +3601,7 @@ msgstr "Du hast nicht die notwendigen Rechte, um %s zu bearbeiten / zu speichern
 msgid "this data"
 msgstr "diesen Datensatz"
 
-#: admin/class-vca-asm-admin-finances.php:1881
+#: admin/class-vca-asm-admin-finances.php:1894
 #: admin/class-vca-asm-admin-geography.php:907
 #@ vca-asm
 msgid "Status"
@@ -3775,25 +3775,25 @@ msgctxt "Slot Allocation"
 msgid "Filter Activities"
 msgstr "Auswahl an Aktivitäten einschränken"
 
-#: admin/class-vca-asm-admin-emails.php:849
+#: admin/class-vca-asm-admin-emails.php:853
 #: admin/class-vca-asm-admin-slot-allocation.php:323
 #@ vca-asm
 msgid "Phase"
 msgstr "Phase"
 
-#: admin/class-vca-asm-admin-emails.php:856
+#: admin/class-vca-asm-admin-emails.php:860
 #: admin/class-vca-asm-admin-slot-allocation.php:326
 #@ vca-asm
 msgid "before application phase"
 msgstr "vor der Bewerbungsphase"
 
-#: admin/class-vca-asm-admin-emails.php:860
+#: admin/class-vca-asm-admin-emails.php:864
 #: admin/class-vca-asm-admin-slot-allocation.php:330
 #@ vca-asm
 msgid "in application phase"
 msgstr "in der Bewerbungsphase"
 
-#: admin/class-vca-asm-admin-emails.php:868
+#: admin/class-vca-asm-admin-emails.php:872
 #: admin/class-vca-asm-admin-slot-allocation.php:338
 #@ vca-asm
 msgid "past activities"
@@ -3809,19 +3809,19 @@ msgstr "Aktivitäten nach Phase filtern"
 msgid "Filter"
 msgstr "Filtern"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1551
+#: admin/class-vca-asm-admin-slot-allocation.php:1560
 #@ vca-asm
 msgctxt "Department Name"
 msgid "Actions"
 msgstr "Aktionen"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1552
+#: admin/class-vca-asm-admin-slot-allocation.php:1561
 #@ vca-asm
 msgctxt "Department Name"
 msgid "Education"
 msgstr "Bildung"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1553
+#: admin/class-vca-asm-admin-slot-allocation.php:1562
 #@ vca-asm
 msgctxt "Department Name"
 msgid "Network"
@@ -4142,7 +4142,7 @@ msgctxt "Quotas Meta Box"
 msgid "Should this activity be limited to &quot;active members&quot; or open to all supporters?"
 msgstr "Soll diese Aktivität &quot;aktiven Mitgliedern&quot; vorbehalten oder für alle Supporter offen sein?"
 
-#: includes/class-vca-asm-geography.php:555
+#: includes/class-vca-asm-geography.php:556
 #@ vca-asm
 msgid "does not exist"
 msgstr "existiert nicht"
@@ -4217,7 +4217,7 @@ msgstr "Aktivitäten des Bereichs &quot;%s&quot;"
 msgid "%d Activities"
 msgstr "%d Aktivitäten"
 
-#: admin/class-vca-asm-admin-emails.php:864
+#: admin/class-vca-asm-admin-emails.php:868
 #: admin/class-vca-asm-admin-slot-allocation.php:334
 #@ vca-asm
 msgid "future activities where the application phase has ended"
@@ -4250,7 +4250,7 @@ msgstr "Wartungsmodus Einstellungen"
 #: admin/class-vca-asm-admin-settings.php:663
 #: admin/class-vca-asm-admin-settings.php:777
 #: admin/class-vca-asm-admin.php:270
-#: includes/class-vca-asm-security.php:387
+#: includes/class-vca-asm-security.php:396
 #@ vca-asm
 msgid "Maintenance Mode"
 msgstr "Wartungsmodus"
@@ -4531,7 +4531,7 @@ msgstr "Sonstige Aktivitäten"
 msgid "Miscellaneous activities"
 msgstr "Sonstige Aktivitäten"
 
-#: includes/class-vca-asm-security.php:391
+#: includes/class-vca-asm-security.php:400
 #@ vca-asm
 msgid "Your friendly neighborhood Pool-Administration."
 msgstr "Gemeinde Henstedt-Ulzburg, der Bademeister."
@@ -4556,13 +4556,13 @@ msgstr "via dem Kontingent deiner Stadt"
 msgid "Manage this activities&apos; applications"
 msgstr "Die Bewerbungen dieser Aktivität bearbeiten"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:783
+#: admin/class-vca-asm-admin-slot-allocation.php:792
 #@ vca-asm
 msgctxt "Slot Allocation Admin Menu"
 msgid "Quotas &amp; Slots"
 msgstr "Kontingente &amp; Plätze"
 
-#: includes/class-vca-asm-security.php:389
+#: includes/class-vca-asm-security.php:398
 #@ vca-asm
 msgid "The Pool is currently in maintenance mode. Please come back in 24 hours."
 msgstr "Der Pool ist derzeit im Wartungsmodus. Bitte komme in 24 Stunden wieder."
@@ -4579,7 +4579,7 @@ msgctxt "Festival Data Meta Box"
 msgid "The activities&apos; Website"
 msgstr "Der Webauftritt der Aktivität, sofern vorhanden"
 
-#: admin/class-vca-asm-admin-finances.php:2062
+#: admin/class-vca-asm-admin-finances.php:2075
 #: includes/class-vca-asm-activities.php:813
 #@ vca-asm
 msgctxt "Validation Error"
@@ -4621,55 +4621,55 @@ msgctxt "Statistics"
 msgid "%1$s network gatherings in total, of which %2$s are in the future (applications for %3$s of those are still open)"
 msgstr "%1$s Netzwerktreffen, %2$s davon in der Zukunft (%3$s davon in der Bewerbungsphase)"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:743
+#: admin/class-vca-asm-admin-slot-allocation.php:752
 #@ vca-asm
 msgctxt "Slot Allocation Admin Menu"
 msgid "Denied Applications"
 msgstr "Abgelehnte Bewerbungen"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1203
+#: admin/class-vca-asm-admin-slot-allocation.php:1212
 #@ vca-asm
 msgid "Nobody participated in this activity"
 msgstr "An dieser Aktivität hat niemand teilgenommen"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1205
-#: admin/class-vca-asm-admin-slot-allocation.php:1218
+#: admin/class-vca-asm-admin-slot-allocation.php:1214
+#: admin/class-vca-asm-admin-slot-allocation.php:1227
 #@ vca-asm
 msgid "Remove!"
 msgstr "Entfernen!"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1206
+#: admin/class-vca-asm-admin-slot-allocation.php:1215
 #@ vca-asm
 msgid "Remove the supporters from the list of participants?"
 msgstr "Die Supporter von der Teilnehmerliste entfernen?"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1208
-#: admin/class-vca-asm-admin-slot-allocation.php:1221
+#: admin/class-vca-asm-admin-slot-allocation.php:1217
+#: admin/class-vca-asm-admin-slot-allocation.php:1230
 #@ vca-asm
 msgid "Attention: This cannot be undone!"
 msgstr "Achtung: Dieser Vorgang ist unwiderruflich!"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1209
+#: admin/class-vca-asm-admin-slot-allocation.php:1218
 #@ vca-asm
 msgid "Remove selected supporters from the participants list"
 msgstr "Die ausgewählten Supporter von der Teilnehmerliste entfernen"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1216
+#: admin/class-vca-asm-admin-slot-allocation.php:1225
 #@ vca-asm
 msgid "No applications were denied for this activity"
 msgstr "Für diese Aktivität sind keine Bewerbungen abgelehnt worden"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1217
+#: admin/class-vca-asm-admin-slot-allocation.php:1226
 #@ vca-asm
 msgid "Denied Applications"
 msgstr "Abgelehnte Bewerbungen"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1219
+#: admin/class-vca-asm-admin-slot-allocation.php:1228
 #@ vca-asm
 msgid "Remove the supporters from the list of denied applications?"
 msgstr "Die Supporter von der Liste der abgelehnten Bewerbungen entfernen?"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1222
+#: admin/class-vca-asm-admin-slot-allocation.php:1231
 #@ vca-asm
 msgid "Remove selected supporters from the list of denied applications"
 msgstr "Die ausgewählten Supporter von der Liste der abgelehnten Bewerbungen entferne"
@@ -4825,8 +4825,8 @@ msgid "Country"
 msgstr "Land"
 
 #: admin/class-vca-asm-admin-supporters.php:1231
-#: includes/class-vca-asm-geography.php:579
-#: includes/class-vca-asm-geography.php:582
+#: includes/class-vca-asm-geography.php:580
+#: includes/class-vca-asm-geography.php:583
 #: includes/class-vca-asm-profile.php:222
 #: includes/class-vca-asm-profile.php:262
 #: includes/class-vca-asm-profile.php:303
@@ -4894,7 +4894,7 @@ msgid "All months"
 msgstr "Alle Monate"
 
 #: admin/class-vca-asm-admin-emails.php:731
-#: admin/class-vca-asm-admin-emails.php:852
+#: admin/class-vca-asm-admin-emails.php:856
 #: includes/class-vca-asm-activities.php:1831
 #: templates/class-vca-asm-frontend-activities.php:607
 #: templates/class-vca-asm-frontend-activities.php:645
@@ -5102,28 +5102,28 @@ msgctxt "Registrations Meta Box"
 msgid "(denied) Applicants"
 msgstr "(abgelehnte) Bewerber"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1060
+#: admin/class-vca-asm-admin-slot-allocation.php:1069
 #@ vca-asm
 msgid "Send an email to all supporters currently on the waiting list"
 msgstr "Schicke eine E-Mail an alle sich auf der Warteliste befindlichen Supporter"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1078
+#: admin/class-vca-asm-admin-slot-allocation.php:1087
 #@ vca-asm
 msgid "Send an email to all accepted applicants"
 msgstr "Schicke eine E-Mail an alle Teilnehmer"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1040
+#: admin/class-vca-asm-admin-slot-allocation.php:1049
 #@ vca-asm
 msgid "Send an email to all current applicants"
 msgstr "Schicke eine E-Mail an alle derzeitigen Bewerber"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:940
+#: admin/class-vca-asm-admin-slot-allocation.php:949
 #@ vca-asm
 msgctxt "non-sensitive data"
 msgid "including sensitive data, never (!) forward"
 msgstr "inklusive sensibler Daten, nie (!) weiterleiten"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:936
+#: admin/class-vca-asm-admin-slot-allocation.php:945
 #@ vca-asm
 msgctxt "non-sensitive data"
 msgid "safe to forward"
@@ -5303,7 +5303,7 @@ msgid "Successfully promoted %s!"
 msgstr "%s erfolgreich befördert!"
 
 #: admin/class-vca-asm-admin-supporters.php:1228
-#: includes/class-vca-asm-geography.php:581
+#: includes/class-vca-asm-geography.php:582
 #: includes/class-vca-asm-profile.php:208
 #: includes/class-vca-asm-profile.php:248
 #: includes/class-vca-asm-profile.php:289
@@ -5311,7 +5311,7 @@ msgstr "%s erfolgreich befördert!"
 msgid "other, non-listed country"
 msgstr "anderes, nicht gelistetes Land"
 
-#: includes/class-vca-asm-geography.php:584
+#: includes/class-vca-asm-geography.php:585
 #@ vca-asm
 msgctxt "Geography"
 msgid "no regional info"
@@ -5322,51 +5322,51 @@ msgstr "keine geographischen Informationen"
 msgid "In order to be able to register for activities, you should at least have filled out first- and lastname, your mobile phone and date of birth, as well as selected a country in your user profile."
 msgstr "Um dich für Aktivitäten anmelden, bzw. bewerben, zu können, musst du deinen Vor- und Nachnamen, deine Telefonnummer und dein Geburtsdatum in deinem Profil angegeben, sowie ein Land gewählt haben."
 
-#: admin/class-vca-asm-admin-slot-allocation.php:753
-#: admin/class-vca-asm-admin-slot-allocation.php:776
+#: admin/class-vca-asm-admin-slot-allocation.php:762
+#: admin/class-vca-asm-admin-slot-allocation.php:785
 #@ vca-asm
 msgctxt "Slot Allocation Admin Menu"
 msgid "Lists &amp; Mailing"
 msgstr "Listen &amp; Mails"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1012
+#: admin/class-vca-asm-admin-slot-allocation.php:1021
 #@ vca-asm
 msgid "Lists"
 msgstr "Listen"
 
-#: admin/class-vca-asm-admin-emails.php:907
-#: admin/class-vca-asm-admin-slot-allocation.php:911
+#: admin/class-vca-asm-admin-emails.php:911
+#: admin/class-vca-asm-admin-slot-allocation.php:920
 #@ vca-asm
 msgid "Applicants"
 msgstr "Bewerber"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1048
+#: admin/class-vca-asm-admin-slot-allocation.php:1057
 #@ vca-asm
 msgid "Currently no applicants"
 msgstr "Keine Bewerber derzeit"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1065
+#: admin/class-vca-asm-admin-slot-allocation.php:1074
 #@ vca-asm
 msgid "Waiting List currently empty"
 msgstr "Die Warteliste ist leer"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1086
+#: admin/class-vca-asm-admin-slot-allocation.php:1095
 #@ vca-asm
 msgid "No participants yet"
 msgstr "Noch keine Bewerber"
 
 #: admin/class-vca-asm-admin-settings.php:145
-#: admin/class-vca-asm-admin-slot-allocation.php:1030
+#: admin/class-vca-asm-admin-slot-allocation.php:1039
 #@ vca-asm
 msgid "E-Mails"
 msgstr "E-Mails"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1042
+#: admin/class-vca-asm-admin-slot-allocation.php:1051
 #@ vca-asm
 msgid "Send an email to all (denied) applicants"
 msgstr "Eine E-Mail an alle (abgelehnten) Bewerber schicken"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1080
+#: admin/class-vca-asm-admin-slot-allocation.php:1089
 #@ vca-asm
 msgid "Send an email to all supporters that participated"
 msgstr "Eine E-Mail an alle Supporter verschicken, die teilgenommen haben"
@@ -5439,87 +5439,81 @@ msgctxt "Admin Email Interface"
 msgid "&quot;Active Members&quot; only"
 msgstr "nur &quot;Aktive Mitglieder&quot;"
 
-#: admin/class-vca-asm-admin-emails.php:740
-#@ vca-asm
-msgctxt "Admin Email Interface"
-msgid "Select whether to send the email to all users of the selected group or to those with &quot;active membership&quot; status only."
-msgstr "Wähle, ob du die E-Mail an alle Benutzer der gewählten Gruppe oder nur an solche mit Status &quot;aktive Mitgliedschaft&quot; schicken willst"
-
-#: admin/class-vca-asm-admin-emails.php:755
+#: admin/class-vca-asm-admin-emails.php:759
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Receipient Group"
 msgstr "Empfängergruppe"
 
-#: admin/class-vca-asm-admin-emails.php:766
+#: admin/class-vca-asm-admin-emails.php:770
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Select the city you want to write to."
 msgstr "Wähle die Stadt, welcher du schreiben möchtest."
 
-#: admin/class-vca-asm-admin-emails.php:776
+#: admin/class-vca-asm-admin-emails.php:780
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Select the city group you want to write to."
 msgstr "Wähle die Städtegruppe, welcher du schreiben möchtest."
 
-#: admin/class-vca-asm-admin-emails.php:790
+#: admin/class-vca-asm-admin-emails.php:794
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Select the country you want to write to"
 msgstr "Wähle das Land, welchem du schreiben möchtest."
 
-#: admin/class-vca-asm-admin-emails.php:800
+#: admin/class-vca-asm-admin-emails.php:804
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Select the country group you want to write to"
 msgstr "Wähle die Ländergruppe, welcher du schreiben möchtest."
 
-#: admin/class-vca-asm-admin-emails.php:810
-#: admin/class-vca-asm-admin-emails.php:839
+#: admin/class-vca-asm-admin-emails.php:814
+#: admin/class-vca-asm-admin-emails.php:843
 #@ vca-asm
 msgid "Receipients &amp; Meta Data"
 msgstr "Empfänger &amp; Metadaten"
 
-#: admin/class-vca-asm-admin-emails.php:872
+#: admin/class-vca-asm-admin-emails.php:876
 #@ vca-asm
 msgid "Narrow activity list by current phase"
 msgstr "Aktivitätsauswähl nach Phase einschränken"
 
-#: admin/class-vca-asm-admin-emails.php:883
+#: admin/class-vca-asm-admin-emails.php:887
 #@ vca-asm
 msgid "Narrow activity list by its type"
 msgstr "Aktivitätsauswähl nach Typ einschränken"
 
-#: admin/class-vca-asm-admin-emails.php:892
+#: admin/class-vca-asm-admin-emails.php:896
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "The Activity"
 msgstr "Die Aktivität"
 
-#: admin/class-vca-asm-admin-emails.php:904
+#: admin/class-vca-asm-admin-emails.php:908
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Group"
 msgstr "Gruppe"
 
-#: admin/class-vca-asm-admin-emails.php:920
+#: admin/class-vca-asm-admin-emails.php:924
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Select the status of the applications"
 msgstr "Wähle den Status der Bewerbungen"
 
-#: admin/class-vca-asm-admin-emails.php:936
+#: admin/class-vca-asm-admin-emails.php:940
 #@ vca-asm
 msgid "Newsletters"
 msgstr "Newsletter"
 
-#: admin/class-vca-asm-admin-emails.php:941
+#: admin/class-vca-asm-admin-emails.php:945
 #@ vca-asm
 msgid "Activity Notifications"
 msgstr "Aktivitätsbenachrichtigungen"
 
-#: admin/class-vca-asm-admin-emails.php:973
+#: admin/class-vca-asm-admin-emails.php:977
 #@ vca-asm
 msgid "Tips &amp; Help"
 msgstr "Tipps &amp; Hilfe"
@@ -5638,12 +5632,12 @@ msgstr "Meine Aktivitäten"
 msgid "Setting / Editing the slots without javascript will soon be possible via the current department's &quot;Slots &amp; Participants&quot; menu."
 msgstr "Das Verteilen / Bearbeiten der Plätze ohne Javascript wird in naher Zukunft via dem &quot;Plätze &amp; Teilnehmer&quot; Menü des jeweiligen Bereichs möglich sein."
 
-#: admin/class-vca-asm-admin-finances.php:1819
-#: admin/class-vca-asm-admin-finances.php:2218
-#: admin/class-vca-asm-admin-finances.php:2299
-#: admin/class-vca-asm-admin-finances.php:2371
-#: admin/class-vca-asm-admin-finances.php:2474
-#: admin/class-vca-asm-admin-finances.php:2508
+#: admin/class-vca-asm-admin-finances.php:1832
+#: admin/class-vca-asm-admin-finances.php:2231
+#: admin/class-vca-asm-admin-finances.php:2312
+#: admin/class-vca-asm-admin-finances.php:2384
+#: admin/class-vca-asm-admin-finances.php:2487
+#: admin/class-vca-asm-admin-finances.php:2521
 #: templates/class-vca-asm-frontend-activities.php:57
 #@ vca-asm
 msgid "Date"
@@ -5696,12 +5690,12 @@ msgstr "Linke Spalte zuerst"
 msgid "Sort by this"
 msgstr "Nach diesem Kriterium sortieren"
 
-#: admin/class-vca-asm-admin-emails.php:758
+#: admin/class-vca-asm-admin-emails.php:762
 #@ vca-asm
 msgid "Select the type of group this mail will be addressed to."
 msgstr "Wähle die Gruppe, die diese E-Mail erreichen soll."
 
-#: admin/class-vca-asm-admin-emails.php:899
+#: admin/class-vca-asm-admin-emails.php:903
 #@ vca-asm
 msgctxt "Admin Email Interface"
 msgid "Which activity are the users associated with?"
@@ -5758,7 +5752,7 @@ msgctxt "Admin Email Interface"
 msgid "Pool Users from %s"
 msgstr "Pool Benutzer aus %s"
 
-#: admin/class-vca-asm-admin-emails.php:828
+#: admin/class-vca-asm-admin-emails.php:832
 #, php-format
 #@ vca-asm
 msgid "Newsletter to your %s"
@@ -5817,42 +5811,42 @@ msgstr "Jede halbe Stunde"
 msgid "All Active Members"
 msgstr "Alle aktiven Mitglieder"
 
-#: includes/class-vca-asm-mailer.php:803
+#: includes/class-vca-asm-mailer.php:807
 #, php-format
 #@ vca-asm
 msgid "All Supporters from %s"
 msgstr "Alle Supporter aus %s"
 
-#: includes/class-vca-asm-mailer.php:809
+#: includes/class-vca-asm-mailer.php:813
 #@ vca-asm
 msgid "All City Users"
 msgstr "Alle Stadtbenutzer"
 
-#: includes/class-vca-asm-mailer.php:813
+#: includes/class-vca-asm-mailer.php:817
 #, php-format
 #@ vca-asm
 msgid "All City Users from %s"
 msgstr "Alle Stadtbenutzer aus %s"
 
-#: includes/class-vca-asm-mailer.php:821
+#: includes/class-vca-asm-mailer.php:825
 #, php-format
 #@ vca-asm
 msgid "Office / Administrators from %s"
 msgstr "Büro / Verwaltung aus %s"
 
-#: includes/class-vca-asm-mailer.php:837
+#: includes/class-vca-asm-mailer.php:843
 #, php-format
 #@ vca-asm
 msgid "Applicants to %s"
 msgstr "Bewerber für %s"
 
-#: includes/class-vca-asm-mailer.php:841
+#: includes/class-vca-asm-mailer.php:847
 #, php-format
 #@ vca-asm
 msgid "Participants of %s"
 msgstr "Teilnehmer von %s"
 
-#: includes/class-vca-asm-mailer.php:845
+#: includes/class-vca-asm-mailer.php:851
 #, php-format
 #@ vca-asm
 msgid "Waiting List for %s"
@@ -6012,337 +6006,337 @@ msgstr "Wirtschaftskonto"
 msgid "Donations, total"
 msgstr "Spenden, insgesamt"
 
-#: admin/class-vca-asm-admin-finances.php:431
+#: admin/class-vca-asm-admin-finances.php:444
 #@ vca-asm
 msgid "Monthly Balancing"
 msgstr "Monatlicher Abschluss"
 
-#: admin/class-vca-asm-admin-finances.php:432
+#: admin/class-vca-asm-admin-finances.php:445
 #@ vca-asm
 msgid "Last balanced month, Structural"
 msgstr "Letzter abgeschlossener Monat, Wirtschaftskonto"
 
-#: admin/class-vca-asm-admin-finances.php:434
-#: admin/class-vca-asm-admin-finances.php:439
+#: admin/class-vca-asm-admin-finances.php:447
+#: admin/class-vca-asm-admin-finances.php:452
 #@ vca-asm
 msgid "Needs Balancing!"
 msgstr "Bedarf eines Abschlusses!"
 
-#: admin/class-vca-asm-admin-finances.php:437
+#: admin/class-vca-asm-admin-finances.php:450
 #@ vca-asm
 msgid "Last balanced month, Donations"
 msgstr "Letzter abgeschlossener Monat, Spendenkonto"
 
-#: admin/class-vca-asm-admin-finances.php:446
+#: admin/class-vca-asm-admin-finances.php:459
 #@ vca-asm
 msgid "The account is up to date!"
 msgstr "Das Konto ist up to date!"
 
-#: admin/class-vca-asm-admin-finances.php:982
+#: admin/class-vca-asm-admin-finances.php:995
 #@ vca-asm
 msgid "Whatever"
 msgstr "Irgendwas"
 
-#: admin/class-vca-asm-admin-finances.php:1170
+#: admin/class-vca-asm-admin-finances.php:1183
 #@ vca-asm
 msgid "The selected transaction has been successfully deleted."
 msgstr "Die ausgewählte Buchung wurde erfolgreich gelöscht."
 
-#: admin/class-vca-asm-admin-finances.php:1675
+#: admin/class-vca-asm-admin-finances.php:1688
 #@ vca-asm
 msgctxt " Admin Menu"
 msgid "All entries"
 msgstr "Alle Einträge"
 
-#: admin/class-vca-asm-admin-finances.php:1681
+#: admin/class-vca-asm-admin-finances.php:1694
 #, php-format
 #@ vca-asm
 msgctxt " Admin Menu"
 msgid "Donation Account of %s"
 msgstr "Spendenkonto von %s"
 
-#: admin/class-vca-asm-admin-finances.php:1683
+#: admin/class-vca-asm-admin-finances.php:1696
 #@ vca-asm
 msgctxt " Admin Menu"
 msgid "Donations"
 msgstr "Spenden"
 
-#: admin/class-vca-asm-admin-finances.php:1688
+#: admin/class-vca-asm-admin-finances.php:1701
 #, php-format
 #@ vca-asm
 msgctxt " Admin Menu"
 msgid "Economical Account of %s"
 msgstr "Wirtschaftskonto von  %s"
 
-#: admin/class-vca-asm-admin-finances.php:1690
+#: admin/class-vca-asm-admin-finances.php:1703
 #@ vca-asm
 msgctxt " Admin Menu"
 msgid "Revenues"
 msgstr "Einnahmen"
 
-#: admin/class-vca-asm-admin-finances.php:1695
+#: admin/class-vca-asm-admin-finances.php:1708
 #@ vca-asm
 msgctxt " Admin Menu"
 msgid "Expenditures"
 msgstr "Ausgaben"
 
-#: admin/class-vca-asm-admin-finances.php:2099
+#: admin/class-vca-asm-admin-finances.php:2112
 #@ vca-asm
 msgid "New Donation"
 msgstr "Neue Spende"
 
-#: admin/class-vca-asm-admin-finances.php:2101
+#: admin/class-vca-asm-admin-finances.php:2114
 #: includes/class-vca-asm-finances.php:44
 #@ vca-asm
 msgid "Donation"
 msgstr "Spende"
 
-#: admin/class-vca-asm-admin-finances.php:2115
+#: admin/class-vca-asm-admin-finances.php:2128
 #@ vca-asm
 msgid "New Revenue"
 msgstr "Neue Einnahme"
 
-#: admin/class-vca-asm-admin-finances.php:2117
+#: admin/class-vca-asm-admin-finances.php:2130
 #: includes/class-vca-asm-finances.php:46
 #@ vca-asm
 msgid "Revenue"
 msgstr "Einnahme"
 
-#: admin/class-vca-asm-admin-finances.php:2121
+#: admin/class-vca-asm-admin-finances.php:2134
 #@ vca-asm
 msgid "New Expenditure"
 msgstr "Neue Ausgabe"
 
-#: admin/class-vca-asm-admin-finances.php:2123
+#: admin/class-vca-asm-admin-finances.php:2136
 #: includes/class-vca-asm-finances.php:45
 #@ vca-asm
 msgid "Expenditure"
 msgstr "Ausgabe"
 
-#: admin/class-vca-asm-admin-finances.php:2204
+#: admin/class-vca-asm-admin-finances.php:2217
 #@ vca-asm
 msgid "The Donation"
 msgstr "Die Spende"
 
-#: admin/class-vca-asm-admin-finances.php:1824
-#: admin/class-vca-asm-admin-finances.php:2208
-#: admin/class-vca-asm-admin-finances.php:2289
-#: admin/class-vca-asm-admin-finances.php:2361
-#: admin/class-vca-asm-admin-finances.php:2464
-#: admin/class-vca-asm-admin-finances.php:2498
+#: admin/class-vca-asm-admin-finances.php:1837
+#: admin/class-vca-asm-admin-finances.php:2221
+#: admin/class-vca-asm-admin-finances.php:2302
+#: admin/class-vca-asm-admin-finances.php:2374
+#: admin/class-vca-asm-admin-finances.php:2477
+#: admin/class-vca-asm-admin-finances.php:2511
 #@ vca-asm
 msgid "Amount"
 msgstr "Betrag"
 
-#: admin/class-vca-asm-admin-finances.php:2212
+#: admin/class-vca-asm-admin-finances.php:2225
 #@ vca-asm
 msgid "How much was gathered?"
 msgstr "Wieviel wurde gesammelt?"
 
-#: admin/class-vca-asm-admin-finances.php:2220
+#: admin/class-vca-asm-admin-finances.php:2233
 #@ vca-asm
 msgid "When did you receive the donation?"
 msgstr "Wann hast du die Spende erhalten?"
 
-#: admin/class-vca-asm-admin-finances.php:2250
+#: admin/class-vca-asm-admin-finances.php:2263
 #@ vca-asm
 msgid "Did you receive cash or was the donation transferred to the office directly?"
 msgstr "Hast du Bargeld erhalten oder wurde die Spende direkt ans Büro weitergeleitet?"
 
-#: admin/class-vca-asm-admin-finances.php:2257
+#: admin/class-vca-asm-admin-finances.php:2270
 #@ vca-asm
 msgid "Donation was transferred"
 msgstr "Spende wurde überwiesen"
 
-#: admin/class-vca-asm-admin-finances.php:2253
+#: admin/class-vca-asm-admin-finances.php:2266
 #@ vca-asm
 msgid "Cash"
 msgstr "Bar-Spende"
 
-#: admin/class-vca-asm-admin-finances.php:1898
+#: admin/class-vca-asm-admin-finances.php:1911
 #@ vca-asm
 msgid "Occasion"
 msgstr "Anlass"
 
-#: admin/class-vca-asm-admin-finances.php:2285
+#: admin/class-vca-asm-admin-finances.php:2298
 #@ vca-asm
 msgid "The Revenue"
 msgstr "Die Einnahme"
 
-#: admin/class-vca-asm-admin-finances.php:2293
+#: admin/class-vca-asm-admin-finances.php:2306
 #@ vca-asm
 msgid "How much was gained?"
 msgstr "Wieviel wurde eingenommen?"
 
-#: admin/class-vca-asm-admin-finances.php:2301
+#: admin/class-vca-asm-admin-finances.php:2314
 #@ vca-asm
 msgid "When did you gain the revenue?"
 msgstr "Wann hast du die Einnahme erhalten?"
 
-#: admin/class-vca-asm-admin-finances.php:2357
+#: admin/class-vca-asm-admin-finances.php:2370
 #@ vca-asm
 msgid "The Expenditure"
 msgstr "Die Ausgabe"
 
-#: admin/class-vca-asm-admin-finances.php:2365
+#: admin/class-vca-asm-admin-finances.php:2378
 #@ vca-asm
 msgid "How much was spent?"
 msgstr "Wieviel wurde ausgegeben?"
 
-#: admin/class-vca-asm-admin-finances.php:2380
+#: admin/class-vca-asm-admin-finances.php:2393
 #@ vca-asm
 msgid "Date of Receipt"
 msgstr "Datum auf dem Beleg"
 
-#: admin/class-vca-asm-admin-finances.php:2382
+#: admin/class-vca-asm-admin-finances.php:2395
 #@ vca-asm
 msgid "When was the money spent? (What is the date on the rerceipt?)"
 msgstr "Wann wurde das Geld ausgegeben? (Welches Datum steht auf dem Beleg?)"
 
-#: admin/class-vca-asm-admin-finances.php:2468
-#: admin/class-vca-asm-admin-finances.php:2502
+#: admin/class-vca-asm-admin-finances.php:2481
+#: admin/class-vca-asm-admin-finances.php:2515
 #@ vca-asm
 msgid "How much did you transfer?"
 msgstr "Wieviel hast du überwiesen?"
 
-#: admin/class-vca-asm-admin-finances.php:2476
-#: admin/class-vca-asm-admin-finances.php:2510
+#: admin/class-vca-asm-admin-finances.php:2489
+#: admin/class-vca-asm-admin-finances.php:2523
 #@ vca-asm
 msgid "When did you make the transfer?"
 msgstr "Wann hast du die Überweisung getätigt?"
 
-#: admin/class-vca-asm-admin-finances.php:2526
+#: admin/class-vca-asm-admin-finances.php:2539
 #@ vca-asm
 msgid "Direction?"
 msgstr "Richtung?"
 
-#: admin/class-vca-asm-admin-finances.php:2528
+#: admin/class-vca-asm-admin-finances.php:2541
 #@ vca-asm
 msgid "Was money transferred from a city to the office or the other way around?"
 msgstr "Wurde von einer Stadt an das Büro überwiesen oder anders herum?"
 
-#: admin/class-vca-asm-admin-finances.php:2531
+#: admin/class-vca-asm-admin-finances.php:2544
 #@ vca-asm
 msgid "from city to office"
 msgstr "von Stadt an Büro"
 
-#: admin/class-vca-asm-admin-finances.php:2535
+#: admin/class-vca-asm-admin-finances.php:2548
 #@ vca-asm
 msgid "from office to city"
 msgstr "von Büro an Stadt"
 
-#: admin/class-vca-asm-admin-finances.php:2647
+#: admin/class-vca-asm-admin-finances.php:2660
 #@ vca-asm
 msgid "The selected metadata has been successfully deleted."
 msgstr "Die ausgewählten Metadaten wurden erfolgreich gelöscht."
 
-#: admin/class-vca-asm-admin-finances.php:2932
+#: admin/class-vca-asm-admin-finances.php:2945
 #@ vca-asm
 msgid "Saved."
 msgstr "Gespeichert."
 
-#: admin/class-vca-asm-admin-finances.php:2940
+#: admin/class-vca-asm-admin-finances.php:2953
 #@ vca-asm
 msgid "Cash Accounts successfully updated."
 msgstr "Kassenkonten erfolgreich aktualisiert."
 
-#: admin/class-vca-asm-admin-finances.php:2948
+#: admin/class-vca-asm-admin-finances.php:2961
 #@ vca-asm
 msgid "Cost center successfully updated."
 msgstr "Kostenstellen erfolgreich aktualisiert."
 
-#: admin/class-vca-asm-admin-finances.php:2956
+#: admin/class-vca-asm-admin-finances.php:2969
 #@ vca-asm
 msgid "Cost center successfully added."
 msgstr "Kostenstelle erfolgreich hinzugefügt."
 
-#: admin/class-vca-asm-admin-finances.php:3077
+#: admin/class-vca-asm-admin-finances.php:3090
 #@ vca-asm
 msgctxt "Finances Admin Menu"
 msgid "General"
 msgstr "Allgemeines"
 
-#: admin/class-vca-asm-admin-finances.php:3097
+#: admin/class-vca-asm-admin-finances.php:3110
 #@ vca-asm
 msgctxt "Finances Admin Menu"
 msgid "Cash Accounts"
 msgstr "Kassenkonten"
 
-#: admin/class-vca-asm-admin-finances.php:3102
+#: admin/class-vca-asm-admin-finances.php:3115
 #@ vca-asm
 msgctxt "Finances Admin Menu"
 msgid "Cost Centers"
 msgstr "Kostenstellen"
 
-#: admin/class-vca-asm-admin-finances.php:3164
+#: admin/class-vca-asm-admin-finances.php:3177
 #@ vca-asm
 msgid "Structural Cash, Local Crew"
 msgstr "Wirtschaftsgeld, Local Crew"
 
-#: admin/class-vca-asm-admin-finances.php:3171
+#: admin/class-vca-asm-admin-finances.php:3184
 #@ vca-asm
 msgid "Structural Cash, Cell"
 msgstr "Wirtschaftsgeld, Zelle"
 
-#: admin/class-vca-asm-admin-finances.php:3182
+#: admin/class-vca-asm-admin-finances.php:3195
 #@ vca-asm
 msgid "Maximum Structural Cash"
 msgstr "Maximaler Kontostand des Wirtschaftskontos"
 
-#: admin/class-vca-asm-admin-finances.php:3635
+#: admin/class-vca-asm-admin-finances.php:3648
 #@ vca-asm
 msgid "Cash Accounts per City"
 msgstr "Kassenkonten nach Stadt"
 
-#: admin/class-vca-asm-admin-finances.php:3697
+#: admin/class-vca-asm-admin-finances.php:3710
 #@ vca-asm
 msgid "add cost center"
 msgstr "Kostenstelle hinzufügen"
 
-#: admin/class-vca-asm-admin-finances.php:3722
-#: admin/class-vca-asm-admin-finances.php:3794
+#: admin/class-vca-asm-admin-finances.php:3735
+#: admin/class-vca-asm-admin-finances.php:3807
 #@ vca-asm
 msgctxt "Cost Centers"
 msgid "Name"
 msgstr "Name"
 
-#: admin/class-vca-asm-admin-finances.php:3736
-#: admin/class-vca-asm-admin-finances.php:3801
+#: admin/class-vca-asm-admin-finances.php:3749
+#: admin/class-vca-asm-admin-finances.php:3814
 #@ vca-asm
 msgid "Cost Center"
 msgstr "Kostenstelle"
 
-#: admin/class-vca-asm-admin-finances.php:3349
-#: admin/class-vca-asm-admin-finances.php:3416
-#: admin/class-vca-asm-admin-finances.php:3741
-#: admin/class-vca-asm-admin-finances.php:3808
-#: admin/class-vca-asm-admin-finances.php:3920
-#: admin/class-vca-asm-admin-finances.php:3995
+#: admin/class-vca-asm-admin-finances.php:3362
+#: admin/class-vca-asm-admin-finances.php:3429
+#: admin/class-vca-asm-admin-finances.php:3754
+#: admin/class-vca-asm-admin-finances.php:3821
+#: admin/class-vca-asm-admin-finances.php:3933
+#: admin/class-vca-asm-admin-finances.php:4008
 #@ vca-asm
 msgid "Description"
 msgstr "Beschreibung"
 
-#: admin/class-vca-asm-admin-finances.php:3776
+#: admin/class-vca-asm-admin-finances.php:3789
 #@ vca-asm
 msgid "Add new cost center"
 msgstr "Neue Kostenstelle hinzufügen"
 
-#: admin/class-vca-asm-admin-finances.php:3790
+#: admin/class-vca-asm-admin-finances.php:3803
 #@ vca-asm
 msgid "The Cost Center"
 msgstr "Die Kostenstelle"
 
-#: admin/class-vca-asm-admin-finances.php:3797
+#: admin/class-vca-asm-admin-finances.php:3810
 #@ vca-asm
 msgid "The (short-)name of the cost center"
 msgstr "Der (Kurz-)Name der Kostenstelle"
 
-#: admin/class-vca-asm-admin-finances.php:3804
+#: admin/class-vca-asm-admin-finances.php:3817
 #@ vca-asm
 msgid "The ID of the cost center, usually numeric"
 msgstr "Die ID der Kostenstelle, in der Regel numerisch"
 
-#: admin/class-vca-asm-admin-finances.php:3811
+#: admin/class-vca-asm-admin-finances.php:3824
 #@ vca-asm
 msgid "A description of what all belongs in this category of costs"
 msgstr "Beschreibung dessen, was in diese Kostenkategorie gehört"
@@ -6357,19 +6351,19 @@ msgstr "Beschreibung dessen, was in diese Kostenkategorie gehört"
 msgid "Overview"
 msgstr "Übersicht"
 
-#: admin/class-vca-asm-admin-finances.php:864
-#: admin/class-vca-asm-admin-finances.php:869
-#: admin/class-vca-asm-admin-finances.php:1058
-#: admin/class-vca-asm-admin-finances.php:1596
+#: admin/class-vca-asm-admin-finances.php:877
+#: admin/class-vca-asm-admin-finances.php:882
+#: admin/class-vca-asm-admin-finances.php:1071
+#: admin/class-vca-asm-admin-finances.php:1609
 #: admin/class-vca-asm-admin.php:215
 #: admin/class-vca-asm-admin.php:216
 #@ vca-asm
 msgid "Donations"
 msgstr "Spenden"
 
-#: admin/class-vca-asm-admin-finances.php:854
-#: admin/class-vca-asm-admin-finances.php:859
-#: admin/class-vca-asm-admin-finances.php:1015
+#: admin/class-vca-asm-admin-finances.php:867
+#: admin/class-vca-asm-admin-finances.php:872
+#: admin/class-vca-asm-admin-finances.php:1028
 #: admin/class-vca-asm-admin.php:223
 #: admin/class-vca-asm-admin.php:224
 #: includes/class-vca-asm-workbook-finances.php:143
@@ -6395,7 +6389,7 @@ msgstr "Kontaktiere die Supporter_innen"
 msgid "Send an email or print a list"
 msgstr "Schicke eine E-Mail oder drucke eine Liste"
 
-#: admin/class-vca-asm-admin-finances.php:2373
+#: admin/class-vca-asm-admin-finances.php:2386
 #@ vca-asm
 msgid "When did you take the money from your cities structural account?"
 msgstr "Wann hast du das Geld aus dem Wirtschaftskonto deiner Stadt genommen?"
@@ -6406,7 +6400,7 @@ msgid "Donations (Cash) Account"
 msgstr "Spenden (Bar)"
 
 #: admin/class-vca-asm-admin-finances.php:272
-#: admin/class-vca-asm-admin-finances.php:874
+#: admin/class-vca-asm-admin-finances.php:887
 #, php-format
 #@ vca-asm
 msgctxt "Placeholder is a year"
@@ -6423,30 +6417,30 @@ msgstr "Belege"
 msgid "need to be sent"
 msgstr "müssen geschickt werden"
 
-#: admin/class-vca-asm-admin-finances.php:425
+#: admin/class-vca-asm-admin-finances.php:423
 #@ vca-asm
 msgid "have been sent"
 msgstr "wurden verschickt"
 
-#: admin/class-vca-asm-admin-finances.php:426
+#: admin/class-vca-asm-admin-finances.php:438
 #@ vca-asm
 msgid "No receipts waiting for confirmation..."
 msgstr "Keine Belege warten auf Ankunftsbestätigung..."
 
-#: admin/class-vca-asm-admin-finances.php:1701
+#: admin/class-vca-asm-admin-finances.php:1714
 #@ vca-asm
 msgctxt " Admin Menu"
 msgid "Transfers"
 msgstr "Überweisungen"
 
-#: admin/class-vca-asm-admin-finances.php:2105
-#: admin/class-vca-asm-admin-finances.php:2127
+#: admin/class-vca-asm-admin-finances.php:2118
+#: admin/class-vca-asm-admin-finances.php:2140
 #@ vca-asm
 msgid "New Transfer"
 msgstr "Neue Überweisung"
 
-#: admin/class-vca-asm-admin-finances.php:2107
-#: admin/class-vca-asm-admin-finances.php:2129
+#: admin/class-vca-asm-admin-finances.php:2120
+#: admin/class-vca-asm-admin-finances.php:2142
 #: includes/class-vca-asm-finances.php:47
 #@ vca-asm
 msgid "Transfer"
@@ -6457,12 +6451,12 @@ msgstr "Überweisung"
 msgid "Income Account"
 msgstr "Ertragskonto"
 
-#: admin/class-vca-asm-admin-finances.php:2389
+#: admin/class-vca-asm-admin-finances.php:2402
 #@ vca-asm
 msgid "Receipt ID"
 msgstr "Beleg Nummer"
 
-#: admin/class-vca-asm-admin-finances.php:2392
+#: admin/class-vca-asm-admin-finances.php:2405
 #@ vca-asm
 msgid "Please mark the receipt belonging to this expenditure with the above ID before sending it. Thanks!"
 msgstr "Bitte kennzeichne den Beleg zu dieser Ausgabe mit der obigen Nummer bevor du ihn verschickst. Danke!"
@@ -6472,100 +6466,100 @@ msgstr "Bitte kennzeichne den Beleg zu dieser Ausgabe mit der obigen Nummer bevo
 msgid "Expense Account"
 msgstr "Aufwandskonto"
 
-#: admin/class-vca-asm-admin-finances.php:2460
-#: admin/class-vca-asm-admin-finances.php:2494
+#: admin/class-vca-asm-admin-finances.php:2473
+#: admin/class-vca-asm-admin-finances.php:2507
 #@ vca-asm
 msgid "The Transfer"
 msgstr "Die Überweisung"
 
-#: admin/class-vca-asm-admin-finances.php:2964
+#: admin/class-vca-asm-admin-finances.php:2977
 #@ vca-asm
 msgid "Account successfully updated."
 msgstr "Konto erfolgreich bearbeitet."
 
-#: admin/class-vca-asm-admin-finances.php:2972
+#: admin/class-vca-asm-admin-finances.php:2985
 #@ vca-asm
 msgid "Account successfully added."
 msgstr "Konto erfolgreich erstellt."
 
-#: admin/class-vca-asm-admin-finances.php:3092
+#: admin/class-vca-asm-admin-finances.php:3105
 #@ vca-asm
 msgctxt "Finances Admin Menu"
 msgid "Income/Expense Accounts"
 msgstr "Aufwands- & Ertragskonten"
 
-#: admin/class-vca-asm-admin-finances.php:3868
+#: admin/class-vca-asm-admin-finances.php:3881
 #@ vca-asm
 msgid "add Expense Account"
 msgstr "Aufwandskonto hinzufügen"
 
-#: admin/class-vca-asm-admin-finances.php:3871
+#: admin/class-vca-asm-admin-finances.php:3884
 #@ vca-asm
 msgid "add Income Account"
 msgstr "Ertragskonto hinzufügen"
 
-#: admin/class-vca-asm-admin-finances.php:3877
+#: admin/class-vca-asm-admin-finances.php:3890
 #@ vca-asm
 msgid "Expense Accounts"
 msgstr "Aufwandskonto"
 
-#: admin/class-vca-asm-admin-finances.php:3880
+#: admin/class-vca-asm-admin-finances.php:3893
 #@ vca-asm
 msgid "Income Accounts"
 msgstr "Ertragskonto"
 
-#: admin/class-vca-asm-admin-finances.php:3901
+#: admin/class-vca-asm-admin-finances.php:3914
 #@ vca-asm
 msgctxt "Name"
 msgid "Name"
 msgstr "Name"
 
-#: admin/class-vca-asm-admin-finances.php:3915
+#: admin/class-vca-asm-admin-finances.php:3928
 #@ vca-asm
 msgid "Account Number"
 msgstr "Kontonummer"
 
-#: admin/class-vca-asm-admin-finances.php:3954
+#: admin/class-vca-asm-admin-finances.php:3967
 #, php-format
 #@ vca-asm
 msgid "Edit &quot;%1$s&quot; (%2$s)"
 msgstr "&quot;%1$s&quot; (%2$s) bearbeiten"
 
-#: admin/class-vca-asm-admin-finances.php:3958
+#: admin/class-vca-asm-admin-finances.php:3971
 #, php-format
 #@ vca-asm
 msgid "Add new %s"
 msgstr "%s hinzufügen"
 
-#: admin/class-vca-asm-admin-finances.php:3972
+#: admin/class-vca-asm-admin-finances.php:3985
 #, php-format
 #@ vca-asm
 msgctxt "The xyz Account"
 msgid "The %s"
 msgstr "Das %s"
 
-#: admin/class-vca-asm-admin-finances.php:3981
+#: admin/class-vca-asm-admin-finances.php:3994
 #@ vca-asm
 msgctxt "Income/Expense Accounts"
 msgid "Name"
 msgstr "Name"
 
-#: admin/class-vca-asm-admin-finances.php:3984
+#: admin/class-vca-asm-admin-finances.php:3997
 #@ vca-asm
 msgid "The (short-)name of the account"
 msgstr "Der (Kurz-)name des Kontos"
 
-#: admin/class-vca-asm-admin-finances.php:3988
+#: admin/class-vca-asm-admin-finances.php:4001
 #@ vca-asm
 msgid "Account ID"
 msgstr "Kontonummer"
 
-#: admin/class-vca-asm-admin-finances.php:3991
+#: admin/class-vca-asm-admin-finances.php:4004
 #@ vca-asm
 msgid "The ID of the account, usually numeric"
 msgstr "Die Kennzahl des Kontos, meist numerisch"
 
-#: admin/class-vca-asm-admin-finances.php:3998
+#: admin/class-vca-asm-admin-finances.php:4011
 #@ vca-asm
 msgid "A description of what all should be booked under this account"
 msgstr "Eine Beschreibung dessen, was unter diesem Konto gebucht werden sollte"
@@ -6590,49 +6584,49 @@ msgstr "Stadt Code"
 msgid "I don&apos;t know..."
 msgstr "Ich hab' keine Ahnung..."
 
-#: admin/class-vca-asm-admin-finances.php:3797
+#: admin/class-vca-asm-admin-finances.php:3810
 #@ vca-asm
 msgid "for the tax statement"
 msgstr "für die Steuer"
 
-#: admin/class-vca-asm-admin-finances.php:3811
+#: admin/class-vca-asm-admin-finances.php:3824
 #@ vca-asm
 msgid "for city users"
 msgstr "für Stadt-ASPs"
 
-#: admin/class-vca-asm-admin-finances.php:2317
+#: admin/class-vca-asm-admin-finances.php:2330
 #@ vca-asm
 msgid "Kind of revenue"
 msgstr "Art der Einnahme"
 
-#: admin/class-vca-asm-admin-finances.php:2325
+#: admin/class-vca-asm-admin-finances.php:2338
 #@ vca-asm
 msgid "Of what category is this revenue?"
 msgstr "Welcher Kategorie ist diese Einnahme zuzuordnen?"
 
-#: admin/class-vca-asm-admin-finances.php:2396
+#: admin/class-vca-asm-admin-finances.php:2409
 #@ vca-asm
 msgid "Kind of expense"
 msgstr "Art der Ausgabe"
 
-#: admin/class-vca-asm-admin-finances.php:2404
+#: admin/class-vca-asm-admin-finances.php:2417
 #@ vca-asm
 msgid "Of what category is this expenditure?"
 msgstr "Welcher Kategorie ist diese Ausgabe zuzuordnen?"
 
-#: admin/class-vca-asm-admin-finances.php:1540
+#: admin/class-vca-asm-admin-finances.php:1553
 #@ vca-asm
 msgctxt " Admin Menu"
 msgid "Donation Accounts"
 msgstr "Spendenkonten"
 
-#: admin/class-vca-asm-admin-finances.php:1542
+#: admin/class-vca-asm-admin-finances.php:1555
 #@ vca-asm
 msgctxt " Admin Menu"
 msgid "Economical Accounts"
 msgstr "Wirtschaftskonten"
 
-#: admin/class-vca-asm-admin-finances.php:1572
+#: admin/class-vca-asm-admin-finances.php:1585
 #: templates/class-vca-asm-admin-table.php:984
 #, php-format
 #@ vca-asm
@@ -6649,28 +6643,28 @@ msgstr "Eine 1- bis 3-buchstabige Abkürzung für die Stadt. Wähle etwas intuit
 msgid "View"
 msgstr "Ansehen"
 
-#: admin/class-vca-asm-admin-finances.php:1582
+#: admin/class-vca-asm-admin-finances.php:1595
 #@ vca-asm
 msgid "Balance"
 msgstr "Kontostand"
 
-#: admin/class-vca-asm-admin-finances.php:2248
+#: admin/class-vca-asm-admin-finances.php:2261
 #@ vca-asm
 msgid "Cash flow"
 msgstr "Geldfluss"
 
 #: admin/class-vca-asm-admin-finances.php:215
-#: admin/class-vca-asm-admin-finances.php:493
-#: admin/class-vca-asm-admin-finances.php:1540
-#: admin/class-vca-asm-admin-finances.php:1542
-#: admin/class-vca-asm-admin-finances.php:3071
+#: admin/class-vca-asm-admin-finances.php:506
+#: admin/class-vca-asm-admin-finances.php:1553
+#: admin/class-vca-asm-admin-finances.php:1555
+#: admin/class-vca-asm-admin-finances.php:3084
 #@ vca-asm
 msgctxt "Admin Menu"
 msgid "Finances"
 msgstr "Finanzen"
 
 #: admin/class-vca-asm-admin-finances.php:215
-#: admin/class-vca-asm-admin-finances.php:493
+#: admin/class-vca-asm-admin-finances.php:506
 #@ vca-asm
 msgctxt "Admin Menu"
 msgid "Overview"
@@ -6717,101 +6711,101 @@ msgstr "IBAN"
 msgid "BIC"
 msgstr "BIC"
 
-#: admin/class-vca-asm-admin-finances.php:469
+#: admin/class-vca-asm-admin-finances.php:482
 #@ vca-asm
 msgctxt " Admin Menu"
 msgid "Summary"
 msgstr "Zusammenfassung"
 
-#: admin/class-vca-asm-admin-finances.php:474
+#: admin/class-vca-asm-admin-finances.php:487
 #@ vca-asm
 msgctxt " Admin Menu"
 msgid "Cities"
 msgstr "Städte"
 
-#: admin/class-vca-asm-admin-finances.php:887
-#: admin/class-vca-asm-admin-finances.php:888
-#: admin/class-vca-asm-admin-finances.php:1018
-#: admin/class-vca-asm-admin-finances.php:1061
+#: admin/class-vca-asm-admin-finances.php:900
+#: admin/class-vca-asm-admin-finances.php:901
+#: admin/class-vca-asm-admin-finances.php:1031
+#: admin/class-vca-asm-admin-finances.php:1074
 #@ vca-asm
 msgid "Further Details"
 msgstr "Weitere Details"
 
-#: admin/class-vca-asm-admin-finances.php:887
-#: admin/class-vca-asm-admin-finances.php:888
-#: admin/class-vca-asm-admin-finances.php:1018
-#: admin/class-vca-asm-admin-finances.php:1061
+#: admin/class-vca-asm-admin-finances.php:900
+#: admin/class-vca-asm-admin-finances.php:901
+#: admin/class-vca-asm-admin-finances.php:1031
+#: admin/class-vca-asm-admin-finances.php:1074
 #@ vca-asm
 msgid "View Transactions"
 msgstr "Umsätze einsehen"
 
-#: admin/class-vca-asm-admin-finances.php:1021
+#: admin/class-vca-asm-admin-finances.php:1034
 #@ vca-asm
 msgid "Account Balance"
 msgstr "Kontostand"
 
-#: admin/class-vca-asm-admin-finances.php:1024
+#: admin/class-vca-asm-admin-finances.php:1037
 #@ vca-asm
 msgid "Revenue this year"
 msgstr "Einnahmen im aktuellen Jahr"
 
-#: admin/class-vca-asm-admin-finances.php:1027
+#: admin/class-vca-asm-admin-finances.php:1040
 #@ vca-asm
 msgid "Expenses this year"
 msgstr "Ausgaben im aktuellen Jahr"
 
-#: admin/class-vca-asm-admin-finances.php:1030
-#: admin/class-vca-asm-admin-finances.php:1070
+#: admin/class-vca-asm-admin-finances.php:1043
+#: admin/class-vca-asm-admin-finances.php:1083
 #@ vca-asm
 msgid "Account balanced until the end of"
 msgstr "Konto abgeschlossen bis Ende"
 
-#: admin/class-vca-asm-admin-finances.php:1035
-#: admin/class-vca-asm-admin-finances.php:1075
+#: admin/class-vca-asm-admin-finances.php:1048
+#: admin/class-vca-asm-admin-finances.php:1088
 #@ vca-asm
 msgid "The city needs to balance a previous month"
 msgstr "Diese Stadt muss einen vergangenen Monat abschließen"
 
-#: admin/class-vca-asm-admin-finances.php:1041
+#: admin/class-vca-asm-admin-finances.php:1054
 #@ vca-asm
 msgid "The city needs to send receipts from last month"
 msgstr "Diese Stadt muss Belege aus einem vergangenen Monat schicken"
 
-#: admin/class-vca-asm-admin-finances.php:1047
+#: admin/class-vca-asm-admin-finances.php:1060
 #@ vca-asm
 msgid "The reception of sent receipts needs to be confirmed by the office"
 msgstr "Der Erhalt von gesendeten Belegen muss durch das Büro bestätigt werden"
 
-#: admin/class-vca-asm-admin-finances.php:1064
-#: admin/class-vca-asm-admin-finances.php:1974
+#: admin/class-vca-asm-admin-finances.php:1077
+#: admin/class-vca-asm-admin-finances.php:1987
 #@ vca-asm
 msgid "Cash money"
 msgstr "Bargeld"
 
-#: admin/class-vca-asm-admin-finances.php:1067
+#: admin/class-vca-asm-admin-finances.php:1080
 #@ vca-asm
 msgid "Total Donations this year"
 msgstr "Spenden im aktuellen Jahr"
 
-#: admin/class-vca-asm-admin-finances.php:1081
+#: admin/class-vca-asm-admin-finances.php:1094
 #@ vca-asm
 msgid "The city needs to transfer donations it gathered in cash"
 msgstr "Diese Stadt muss in bar erhaltenen Spenden überweisen"
 
-#: admin/class-vca-asm-admin-finances.php:1053
-#: admin/class-vca-asm-admin-finances.php:1087
+#: admin/class-vca-asm-admin-finances.php:1066
+#: admin/class-vca-asm-admin-finances.php:1100
 #@ vca-asm
 msgid "The reception of transfer(s) from the city itsself needs confirmation"
 msgstr "Der Erhalt von Überweisungen von der Stadt muss bestätigt werden"
 
-#: admin/class-vca-asm-admin-finances.php:1862
+#: admin/class-vca-asm-admin-finances.php:1875
 #@ vca-asm
 msgid "Receipt"
 msgstr "Beleg"
 
-#: admin/class-vca-asm-admin-finances.php:2241
-#: admin/class-vca-asm-admin-finances.php:2344
-#: admin/class-vca-asm-admin-finances.php:2442
+#: admin/class-vca-asm-admin-finances.php:2254
+#: admin/class-vca-asm-admin-finances.php:2357
+#: admin/class-vca-asm-admin-finances.php:2455
 #@ vca-asm
 msgid "Name of the concert, festival or party, for instance"
 msgstr "Name des Konzertes, Festivals oder der Party, z.B."
@@ -6826,13 +6820,13 @@ msgstr "Diese Transaktion löschen"
 msgid "Really delete this transaction?"
 msgstr "Diese Transaktion wirklich löschen?"
 
-#: admin/class-vca-asm-admin-finances.php:1093
+#: admin/class-vca-asm-admin-finances.php:1106
 #@ vca-asm
 msgid "The reception of donations transferred to the office directly by third parties needs confirmation"
 msgstr "Der Erhalt von Überweisungen durch Dritte bedarf einer Bestätigung"
 
-#: admin/class-vca-asm-admin-finances.php:864
-#: admin/class-vca-asm-admin-finances.php:1971
+#: admin/class-vca-asm-admin-finances.php:877
+#: admin/class-vca-asm-admin-finances.php:1984
 #@ vca-asm
 msgid "cash"
 msgstr "bar"
@@ -6842,12 +6836,12 @@ msgstr "bar"
 msgid "Please transfer / deposit them to:"
 msgstr "Bitte transferiere jene an, bzw. zahle jene ein:"
 
-#: admin/class-vca-asm-admin-finances.php:1972
+#: admin/class-vca-asm-admin-finances.php:1985
 #@ vca-asm
 msgid "to city"
 msgstr "an Stadt"
 
-#: admin/class-vca-asm-admin-finances.php:1972
+#: admin/class-vca-asm-admin-finances.php:1985
 #@ vca-asm
 msgid "to office"
 msgstr "an das Büro"
@@ -6892,269 +6886,269 @@ msgstr "Nicht geschickt..."
 msgid "Not received..."
 msgstr "Nicht erhalten..."
 
-#: admin/class-vca-asm-admin-finances.php:1373
+#: admin/class-vca-asm-admin-finances.php:1386
 #, php-format
 #@ vca-asm
 msgid "%s saved."
 msgstr "%s gespeichert."
 
-#: admin/class-vca-asm-admin-finances.php:1398
+#: admin/class-vca-asm-admin-finances.php:1411
 #@ vca-asm
 msgid "Receipt sent to the office."
 msgstr "Beleg wurde an das Büro verschickt."
 
-#: admin/class-vca-asm-admin-finances.php:1412
+#: admin/class-vca-asm-admin-finances.php:1425
 #@ vca-asm
 msgid "Reception confirmed."
 msgstr "Erhalt bestätigt."
 
-#: admin/class-vca-asm-admin-finances.php:1440
+#: admin/class-vca-asm-admin-finances.php:1453
 #@ vca-asm
 msgid "Receipt was not sent yet."
 msgstr "Beleg wurde noch nicht geschickt."
 
-#: admin/class-vca-asm-admin-finances.php:1454
+#: admin/class-vca-asm-admin-finances.php:1467
 #@ vca-asm
 msgid "Reception confirmation canceled."
 msgstr "Erhaltsbestätigung zurückgezogen."
 
-#: admin/class-vca-asm-admin-finances.php:1991
+#: admin/class-vca-asm-admin-finances.php:2004
 #@ vca-asm
 msgid "Receipt not sent"
 msgstr "Beleg nicht geschickt"
 
-#: admin/class-vca-asm-admin-finances.php:1993
-#: admin/class-vca-asm-admin-finances.php:2002
+#: admin/class-vca-asm-admin-finances.php:2006
+#: admin/class-vca-asm-admin-finances.php:2015
 #@ vca-asm
 msgid "Unconfirmed"
 msgstr "Nicht bestätigt"
 
-#: admin/class-vca-asm-admin-finances.php:2000
+#: admin/class-vca-asm-admin-finances.php:2013
 #@ vca-asm
 msgid "Receipt sent"
 msgstr "Beleg ist verschickt"
 
-#: admin/class-vca-asm-admin-finances.php:2008
+#: admin/class-vca-asm-admin-finances.php:2021
 #@ vca-asm
 msgid "Confirmed"
 msgstr "Erhalt bestätigt"
 
-#: admin/class-vca-asm-admin-finances.php:1909
-#: admin/class-vca-asm-admin-finances.php:2267
+#: admin/class-vca-asm-admin-finances.php:1922
+#: admin/class-vca-asm-admin-finances.php:2280
 #@ vca-asm
 msgid "From whom?"
 msgstr "Von wem?"
 
-#: admin/class-vca-asm-admin-finances.php:1588
+#: admin/class-vca-asm-admin-finances.php:1601
 #@ vca-asm
 msgid "Balanced until"
 msgstr "Abgeschlossen bis Ende"
 
-#: admin/class-vca-asm-admin-finances.php:1602
+#: admin/class-vca-asm-admin-finances.php:1615
 #: includes/class-vca-asm-workbook-finances.php:185
 #: includes/class-vca-asm-workbook-finances.php:187
 #@ vca-asm
 msgid "Revenues"
 msgstr "Einnahmen"
 
-#: admin/class-vca-asm-admin-finances.php:1607
+#: admin/class-vca-asm-admin-finances.php:1620
 #: includes/class-vca-asm-workbook-finances.php:186
 #: includes/class-vca-asm-workbook-finances.php:187
 #@ vca-asm
 msgid "Expenditures"
 msgstr "Ausgaben"
 
-#: admin/class-vca-asm-admin-finances.php:474
+#: admin/class-vca-asm-admin-finances.php:487
 #@ vca-asm
 msgctxt " Admin Menu"
 msgid "tabular"
 msgstr "tabellarisch"
 
-#: admin/class-vca-asm-admin-finances.php:2227
-#: admin/class-vca-asm-admin-finances.php:2330
-#: admin/class-vca-asm-admin-finances.php:2429
+#: admin/class-vca-asm-admin-finances.php:2240
+#: admin/class-vca-asm-admin-finances.php:2343
+#: admin/class-vca-asm-admin-finances.php:2442
 #@ vca-asm
 msgid "Category of activity"
 msgstr "Art der Aktion"
 
-#: admin/class-vca-asm-admin-finances.php:2235
-#: admin/class-vca-asm-admin-finances.php:2337
-#: admin/class-vca-asm-admin-finances.php:2436
+#: admin/class-vca-asm-admin-finances.php:2248
+#: admin/class-vca-asm-admin-finances.php:2350
+#: admin/class-vca-asm-admin-finances.php:2449
 #@ vca-asm
 msgid "How can the activity be categorized?"
 msgstr "Wie kann die Aktion kategorisiert werden?"
 
-#: admin/class-vca-asm-admin-finances.php:2239
-#: admin/class-vca-asm-admin-finances.php:2342
-#: admin/class-vca-asm-admin-finances.php:2440
+#: admin/class-vca-asm-admin-finances.php:2252
+#: admin/class-vca-asm-admin-finances.php:2355
+#: admin/class-vca-asm-admin-finances.php:2453
 #@ vca-asm
 msgid "Name of activity"
 msgstr "Name der Aktion"
 
-#: admin/class-vca-asm-admin-finances.php:2241
+#: admin/class-vca-asm-admin-finances.php:2254
 #@ vca-asm
 msgid "What was the name of the activity the donation was gathered at?"
 msgstr "Wie hieß die Aktion, bei welcher die Spende gesammelt wurde?"
 
-#: admin/class-vca-asm-admin-finances.php:2269
+#: admin/class-vca-asm-admin-finances.php:2282
 #@ vca-asm
 msgid "Who will transfer the donation?"
 msgstr "Wer wird die Spende überweisen?"
 
-#: admin/class-vca-asm-admin-finances.php:2269
+#: admin/class-vca-asm-admin-finances.php:2282
 #@ vca-asm
 msgid "Enter the name of the transferring (legal) party; The company name of a venue for instance."
 msgstr "Gib den Namen der überweisenden (juristischen) Person an; z.B. Firmenname der Veranstaltungslocation."
 
-#: admin/class-vca-asm-admin-finances.php:2344
+#: admin/class-vca-asm-admin-finances.php:2357
 #@ vca-asm
 msgid "What was the name of the activity the money was earned at?"
 msgstr "Wie hieß die Aktion, bei welcher das Geld eingenommen wurde?"
 
-#: admin/class-vca-asm-admin-finances.php:2442
+#: admin/class-vca-asm-admin-finances.php:2455
 #@ vca-asm
 msgid "What was the name of the activity the money was spent for?"
 msgstr "Wie hieß die Aktion, für welche das Geld ausgegeben wurde?"
 
-#: admin/class-vca-asm-admin-finances.php:2980
+#: admin/class-vca-asm-admin-finances.php:2993
 #@ vca-asm
 msgid "Revenue Tax Rates successfully updated."
 msgstr "Umsatzsteuersatz erfolgreich aktualisiert."
 
-#: admin/class-vca-asm-admin-finances.php:2988
+#: admin/class-vca-asm-admin-finances.php:3001
 #@ vca-asm
 msgid "Revenue Tax Rate successfully added."
 msgstr "Umsatzsteuersatz erfolgreich hinzugefügt."
 
-#: admin/class-vca-asm-admin-finances.php:3005
+#: admin/class-vca-asm-admin-finances.php:3018
 #@ vca-asm
 msgid "Occasion successfully updated."
 msgstr "Anlass erfolgreich aktualisiert."
 
-#: admin/class-vca-asm-admin-finances.php:3013
+#: admin/class-vca-asm-admin-finances.php:3026
 #@ vca-asm
 msgid "Occasion successfully added."
 msgstr "Anlass erfolgreich hinzugefügt."
 
-#: admin/class-vca-asm-admin-finances.php:3042
+#: admin/class-vca-asm-admin-finances.php:3055
 #@ vca-asm
 msgid "Switch Country"
 msgstr "Land wechseln"
 
-#: admin/class-vca-asm-admin-finances.php:3052
+#: admin/class-vca-asm-admin-finances.php:3065
 #@ vca-asm
 msgid "The country this data belongs to"
 msgstr "Das Land, zu welchem diese Datensätze gehören"
 
-#: admin/class-vca-asm-admin-finances.php:3082
+#: admin/class-vca-asm-admin-finances.php:3095
 #@ vca-asm
 msgctxt "Finances Admin Menu"
 msgid "Revenue Tax"
 msgstr "Umsatzsteuer"
 
-#: admin/class-vca-asm-admin-finances.php:3087
+#: admin/class-vca-asm-admin-finances.php:3100
 #@ vca-asm
 msgctxt "Finances Admin Menu"
 msgid "Occasions / Activities"
 msgstr "Anlässe / Aktionen"
 
-#: admin/class-vca-asm-admin-finances.php:3233
-#: admin/class-vca-asm-admin-finances.php:3467
-#: admin/class-vca-asm-admin-finances.php:3688
-#: admin/class-vca-asm-admin-finances.php:3859
+#: admin/class-vca-asm-admin-finances.php:3246
+#: admin/class-vca-asm-admin-finances.php:3480
+#: admin/class-vca-asm-admin-finances.php:3701
+#: admin/class-vca-asm-admin-finances.php:3872
 #, php-format
 #@ vca-asm
 msgctxt "%s is a country"
 msgid "for %s"
 msgstr "für %s"
 
-#: admin/class-vca-asm-admin-finances.php:3242
+#: admin/class-vca-asm-admin-finances.php:3255
 #@ vca-asm
 msgid "add tax rate"
 msgstr "Steuersatz hinzufügen"
 
-#: admin/class-vca-asm-admin-finances.php:3344
-#: admin/class-vca-asm-admin-finances.php:3409
+#: admin/class-vca-asm-admin-finances.php:3357
+#: admin/class-vca-asm-admin-finances.php:3422
 #@ vca-asm
 msgctxt "Tax Rates"
 msgid "Name"
 msgstr "Name"
 
-#: admin/class-vca-asm-admin-finances.php:3330
-#: admin/class-vca-asm-admin-finances.php:3402
+#: admin/class-vca-asm-admin-finances.php:3343
+#: admin/class-vca-asm-admin-finances.php:3415
 #@ vca-asm
 msgid "Percentage Points"
 msgstr "Prozentsatz"
 
-#: admin/class-vca-asm-admin-finances.php:3384
+#: admin/class-vca-asm-admin-finances.php:3397
 #@ vca-asm
 msgid "Add new tax rate"
 msgstr "Neuen Steuersatz hinzufügen"
 
-#: admin/class-vca-asm-admin-finances.php:3398
+#: admin/class-vca-asm-admin-finances.php:3411
 #@ vca-asm
 msgid "The Revenue Tax Rate"
 msgstr "Der Umsatzsteuersatz"
 
-#: admin/class-vca-asm-admin-finances.php:3412
+#: admin/class-vca-asm-admin-finances.php:3425
 #@ vca-asm
 msgid "The (short-)name of the tax rate"
 msgstr "Der (Kurz-)name des Steuersatzes"
 
-#: admin/class-vca-asm-admin-finances.php:3405
+#: admin/class-vca-asm-admin-finances.php:3418
 #@ vca-asm
 msgid "The tax rate itsself"
 msgstr "Die Steuersatz in Prozent"
 
-#: admin/class-vca-asm-admin-finances.php:3419
+#: admin/class-vca-asm-admin-finances.php:3432
 #@ vca-asm
 msgid "A description of what is taxed at this rate"
 msgstr "Eine Beschreibung, was mit dieser Rate besteuert wird"
 
-#: admin/class-vca-asm-admin-finances.php:3476
+#: admin/class-vca-asm-admin-finances.php:3489
 #@ vca-asm
 msgid "add occasion"
 msgstr "Anlass hinzufügen"
 
-#: admin/class-vca-asm-admin-finances.php:3501
-#: admin/class-vca-asm-admin-finances.php:3573
+#: admin/class-vca-asm-admin-finances.php:3514
+#: admin/class-vca-asm-admin-finances.php:3586
 #@ vca-asm
 msgctxt "Occasions"
 msgid "Name"
 msgstr "Name"
 
-#: admin/class-vca-asm-admin-finances.php:3555
+#: admin/class-vca-asm-admin-finances.php:3568
 #@ vca-asm
 msgid "Add new occasion"
 msgstr "Neuen Anlass hinzufügen"
 
-#: admin/class-vca-asm-admin-finances.php:3569
+#: admin/class-vca-asm-admin-finances.php:3582
 #@ vca-asm
 msgid "The Occasion"
 msgstr "Der Anlass"
 
-#: admin/class-vca-asm-admin-finances.php:3576
+#: admin/class-vca-asm-admin-finances.php:3589
 #@ vca-asm
 msgid "The (short-)name of the occasion"
 msgstr "Der (Kurz-)name des Anlasses"
 
-#: admin/class-vca-asm-admin-finances.php:3583
-#: admin/class-vca-asm-admin-finances.php:3590
+#: admin/class-vca-asm-admin-finances.php:3596
+#: admin/class-vca-asm-admin-finances.php:3603
 #@ vca-asm
 msgid "A description of what qualifies as this category of occasion"
 msgstr "Eine Beschreibung, was sich als diese Art von Anlass qualifiziert"
 
-#: admin/class-vca-asm-admin-finances.php:2417
+#: admin/class-vca-asm-admin-finances.php:2430
 #@ vca-asm
 msgid "Tax Rate"
 msgstr "Steuersatz"
 
-#: admin/class-vca-asm-admin-finances.php:2424
+#: admin/class-vca-asm-admin-finances.php:2437
 #@ vca-asm
 msgid "How much revenue tax did you have top pay?"
 msgstr "Wieviel Mehrwertsteuer (Umsatzsteuer) hast du gezahlt?"
 
-#: admin/class-vca-asm-admin-finances.php:2424
+#: admin/class-vca-asm-admin-finances.php:2437
 #@ vca-asm
 msgid "Check the receipt..."
 msgstr "Check den Beleg..."
@@ -7171,14 +7165,14 @@ msgstr "%s Spenden sind in bar vorhanden."
 msgid "You have a structural cash surplus of %s."
 msgstr "Es besteht ein Wirtschaftsgeldüberschuss von %s."
 
-#: admin/class-vca-asm-admin-finances.php:3576
-#: admin/class-vca-asm-admin-finances.php:3998
+#: admin/class-vca-asm-admin-finances.php:3589
+#: admin/class-vca-asm-admin-finances.php:4011
 #: templates/class-vca-asm-admin-table.php:1304
 #@ vca-asm
 msgid "This is, what the Finances-SPOC sees."
 msgstr "Dies ist die Angabe, welche die/der Finanz-ASP sieht."
 
-#: admin/class-vca-asm-admin-finances.php:854
+#: admin/class-vca-asm-admin-finances.php:867
 #@ vca-asm
 msgid "cash in stock"
 msgstr "Barbestand"
@@ -7189,39 +7183,39 @@ msgctxt "Occasions"
 msgid "Miscellaneous"
 msgstr "Sonstiges"
 
-#: admin/class-vca-asm-admin-finances.php:859
-#: admin/class-vca-asm-admin-finances.php:869
+#: admin/class-vca-asm-admin-finances.php:872
+#: admin/class-vca-asm-admin-finances.php:882
 #@ vca-asm
 msgid "Last balanced month"
 msgstr "Letzter abgeschlossener Monat"
 
-#: admin/class-vca-asm-admin-finances.php:423
+#: admin/class-vca-asm-admin-finances.php:420
 #@ vca-asm
 msgid "No receipts that could be sent..."
 msgstr "Keine Belege, die geschickt werden könnten..."
 
-#: admin/class-vca-asm-admin-finances.php:879
+#: admin/class-vca-asm-admin-finances.php:892
 #: admin/class-vca-asm-admin-home.php:253
 #@ vca-asm
 msgid "Tasks"
 msgstr "Aufgaben"
 
-#: admin/class-vca-asm-admin-finances.php:2997
+#: admin/class-vca-asm-admin-finances.php:3010
 #@ vca-asm
 msgid "Default Revenue Tax Rates successfully updated."
 msgstr "Standard Umsatzsteuersatz erfolgreich aktualisiert."
 
-#: admin/class-vca-asm-admin-finances.php:3262
+#: admin/class-vca-asm-admin-finances.php:3275
 #@ vca-asm
 msgid "Default rate"
 msgstr "Standard Satz"
 
-#: admin/class-vca-asm-admin-finances.php:3279
+#: admin/class-vca-asm-admin-finances.php:3292
 #@ vca-asm
 msgid "Default value"
 msgstr "Standard Wert"
 
-#: admin/class-vca-asm-admin-finances.php:3282
+#: admin/class-vca-asm-admin-finances.php:3295
 #@ vca-asm
 msgid "Which of the above rates should be selected by default, when the SPOC has to choose?"
 msgstr "Welche der obigen Raten sollte vorausgewählt sein, wenn ein ASP wählen muss?"
@@ -7473,87 +7467,88 @@ msgstr "Zu bestätigende Wirtschafts-Überweisungen"
 #: admin/class-vca-asm-admin-finances.php:308
 #: admin/class-vca-asm-admin-finances.php:329
 #: admin/class-vca-asm-admin-finances.php:409
-#: admin/class-vca-asm-admin-finances.php:707
-#: admin/class-vca-asm-admin-finances.php:708
-#: admin/class-vca-asm-admin-finances.php:709
-#: admin/class-vca-asm-admin-finances.php:710
-#: admin/class-vca-asm-admin-finances.php:711
-#: admin/class-vca-asm-admin-finances.php:712
+#: admin/class-vca-asm-admin-finances.php:427
+#: admin/class-vca-asm-admin-finances.php:720
+#: admin/class-vca-asm-admin-finances.php:721
+#: admin/class-vca-asm-admin-finances.php:722
+#: admin/class-vca-asm-admin-finances.php:723
+#: admin/class-vca-asm-admin-finances.php:724
+#: admin/class-vca-asm-admin-finances.php:725
 #@ vca-asm
 msgid "See details"
 msgstr "Details ansehen"
 
-#: admin/class-vca-asm-admin-finances.php:751
-#: admin/class-vca-asm-admin-finances.php:752
-#: admin/class-vca-asm-admin-finances.php:753
-#: admin/class-vca-asm-admin-finances.php:754
-#: admin/class-vca-asm-admin-finances.php:755
-#: admin/class-vca-asm-admin-finances.php:756
-#: admin/class-vca-asm-admin-finances.php:757
-#: admin/class-vca-asm-admin-finances.php:758
-#: admin/class-vca-asm-admin-finances.php:759
-#: admin/class-vca-asm-admin-finances.php:760
-#: admin/class-vca-asm-admin-finances.php:761
-#: admin/class-vca-asm-admin-finances.php:762
+#: admin/class-vca-asm-admin-finances.php:764
+#: admin/class-vca-asm-admin-finances.php:765
+#: admin/class-vca-asm-admin-finances.php:766
+#: admin/class-vca-asm-admin-finances.php:767
+#: admin/class-vca-asm-admin-finances.php:768
+#: admin/class-vca-asm-admin-finances.php:769
+#: admin/class-vca-asm-admin-finances.php:770
+#: admin/class-vca-asm-admin-finances.php:771
+#: admin/class-vca-asm-admin-finances.php:772
+#: admin/class-vca-asm-admin-finances.php:773
+#: admin/class-vca-asm-admin-finances.php:774
+#: admin/class-vca-asm-admin-finances.php:775
 #@ vca-asm
 msgctxt "Cities"
 msgid "None..."
 msgstr "Keine..."
 
-#: admin/class-vca-asm-admin-finances.php:769
+#: admin/class-vca-asm-admin-finances.php:782
 #@ vca-asm
 msgid "Structural Accounts"
 msgstr "Wirtschatskonten"
 
-#: admin/class-vca-asm-admin-finances.php:778
+#: admin/class-vca-asm-admin-finances.php:791
 #@ vca-asm
 msgid "With surplus"
 msgstr "Mit Überschuss"
 
-#: admin/class-vca-asm-admin-finances.php:781
-#: admin/class-vca-asm-admin-finances.php:807
+#: admin/class-vca-asm-admin-finances.php:794
+#: admin/class-vca-asm-admin-finances.php:820
 #@ vca-asm
 msgid "Transfers to be confirmed"
 msgstr "Zu bestätigende Überweisungen"
 
-#: admin/class-vca-asm-admin-finances.php:784
+#: admin/class-vca-asm-admin-finances.php:797
 #@ vca-asm
 msgid "Receipts to be sent, previous month"
 msgstr "Belege zu schicken, vergangener Monat"
 
-#: admin/class-vca-asm-admin-finances.php:787
+#: admin/class-vca-asm-admin-finances.php:800
 #@ vca-asm
 msgid "Receipts to be sent, current month"
 msgstr "Belege zu schicken, aktueller Monat"
 
-#: admin/class-vca-asm-admin-finances.php:790
+#: admin/class-vca-asm-admin-finances.php:803
 #@ vca-asm
 msgid "Receipts to be confirmed"
 msgstr "Belege zu bestätigen"
 
-#: admin/class-vca-asm-admin-finances.php:793
-#: admin/class-vca-asm-admin-finances.php:813
+#: admin/class-vca-asm-admin-finances.php:806
+#: admin/class-vca-asm-admin-finances.php:826
 #@ vca-asm
 msgid "Last month not yet balanced"
 msgstr "Letzter Monat noch nicht abgeschlossen"
 
-#: admin/class-vca-asm-admin-finances.php:796
-#: admin/class-vca-asm-admin-finances.php:816
+#: admin/class-vca-asm-admin-finances.php:809
+#: admin/class-vca-asm-admin-finances.php:829
 #@ vca-asm
 msgid "Multiple months not yet balanced"
 msgstr "Mehrere Monate noch nicht abgeschlossen"
 
-#: admin/class-vca-asm-admin-finances.php:801
+#: admin/class-vca-asm-admin-finances.php:814
 #@ vca-asm
 msgid "Donation Accounts"
 msgstr "Spendenkonten"
 
-#: admin/class-vca-asm-admin-finances.php:804
+#: admin/class-vca-asm-admin-finances.php:817
 #@ vca-asm
 msgid "Transfers required"
 msgstr "Überweisungen notwendig"
 
-#: admin/class-vca-asm-admin-finances.php:810
+#: admin/class-vca-asm-admin-finances.php:823
 #@ vca-asm
 msgid "External Donations to be confirmed"
 msgstr "Zu bestätigende externe Überweisungen"
@@ -7561,7 +7556,6 @@ msgstr "Zu bestätigende externe Überweisungen"
 #: admin/class-vca-asm-admin-finances.php:299
 #: admin/class-vca-asm-admin-finances.php:320
 #: admin/class-vca-asm-admin-finances.php:341
-#: admin/class-vca-asm-admin-finances.php:421
 #@ vca-asm
 msgctxt "Transfers"
 msgid "None"
@@ -7572,19 +7566,19 @@ msgstr "Keine"
 msgid "Do something about it!"
 msgstr "Ändere was daran!"
 
-#: admin/class-vca-asm-admin-finances.php:3515
-#: admin/class-vca-asm-admin-finances.php:3580
+#: admin/class-vca-asm-admin-finances.php:3528
+#: admin/class-vca-asm-admin-finances.php:3593
 #@ vca-asm
 msgid "Description for Donations"
 msgstr "Beschreibung für Spenden"
 
-#: admin/class-vca-asm-admin-finances.php:3520
-#: admin/class-vca-asm-admin-finances.php:3587
+#: admin/class-vca-asm-admin-finances.php:3533
+#: admin/class-vca-asm-admin-finances.php:3600
 #@ vca-asm
 msgid "Description for Structural Funds"
 msgstr "Beschreibung für Wirtschaftsgeld"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:1554
+#: admin/class-vca-asm-admin-slot-allocation.php:1563
 #@ vca-asm
 msgctxt "Department Name"
 msgid "Goldeimer Compost-Toilets"
@@ -7679,28 +7673,28 @@ msgstr "Goldeimer Festival"
 msgid "Goldeimer Compost-Toilets @ Festivals"
 msgstr "Goldeimer Komposttoiletten @ Festivals"
 
-#: admin/class-vca-asm-admin-finances.php:479
+#: admin/class-vca-asm-admin-finances.php:492
 #@ vca-asm
 msgctxt " Admin Menu"
 msgid "Download Data"
 msgstr "Daten Herunterladen"
 
-#: admin/class-vca-asm-admin-finances.php:539
+#: admin/class-vca-asm-admin-finances.php:552
 #@ vca-asm
 msgid "Structural Accounts for Tax Accounting"
 msgstr "Wirtschafskonten für den Steuerberater"
 
-#: admin/class-vca-asm-admin-finances.php:564
+#: admin/class-vca-asm-admin-finances.php:577
 #@ vca-asm
 msgid "Monthly"
 msgstr "Monatlich"
 
-#: admin/class-vca-asm-admin-finances.php:568
+#: admin/class-vca-asm-admin-finances.php:581
 #@ vca-asm
 msgid "Annually"
 msgstr "Jährlich"
 
-#: admin/class-vca-asm-admin-finances.php:572
+#: admin/class-vca-asm-admin-finances.php:585
 #: includes/class-vca-asm-workbook-finances.php:88
 #: includes/class-vca-asm-workbook-finances.php:189
 #: includes/class-vca-asm-workbook-finances.php:221
@@ -7708,105 +7702,105 @@ msgstr "Jährlich"
 msgid "Total"
 msgstr "Gesamt"
 
-#: admin/class-vca-asm-admin-finances.php:577
+#: admin/class-vca-asm-admin-finances.php:590
 #@ vca-asm
 msgid "Output of structural revenues and expenditures in this kind of timeframe."
 msgstr "Die Einnahmen und Ausgaben aus diesem Zeitraum ausgeben."
 
-#: admin/class-vca-asm-admin-finances.php:583
+#: admin/class-vca-asm-admin-finances.php:596
 #: includes/class-vca-asm-workbook-finances.php:81
 #: includes/class-vca-asm-workbook-finances.php:148
 #@ vca-asm
 msgid "Year"
 msgstr "Jahr"
 
-#: admin/class-vca-asm-admin-finances.php:584
+#: admin/class-vca-asm-admin-finances.php:597
 #@ vca-asm
 msgid "Data from this year."
 msgstr "Daten aus diesem Jahr."
 
-#: admin/class-vca-asm-admin-finances.php:591
+#: admin/class-vca-asm-admin-finances.php:604
 #: includes/class-vca-asm-workbook-finances.php:75
 #: includes/class-vca-asm-workbook-finances.php:147
 #@ vca-asm
 msgid "Month"
 msgstr "Monat"
 
-#: admin/class-vca-asm-admin-finances.php:592
+#: admin/class-vca-asm-admin-finances.php:605
 #@ vca-asm
 msgid "Data from this month."
 msgstr "Daten aus diesem Monat."
 
-#: admin/class-vca-asm-admin-finances.php:609
+#: admin/class-vca-asm-admin-finances.php:622
 #@ vca-asm
 msgid "Group data by geography."
 msgstr "Daten nach Geographie gruppieren."
 
-#: admin/class-vca-asm-admin-finances.php:617
-#: admin/class-vca-asm-admin-slot-allocation.php:953
+#: admin/class-vca-asm-admin-finances.php:630
+#: admin/class-vca-asm-admin-slot-allocation.php:962
 #@ vca-asm
 msgid "Office 2007 (.xlsx)"
 msgstr "Office 2007 (.xlsx)"
 
-#: admin/class-vca-asm-admin-finances.php:621
-#: admin/class-vca-asm-admin-slot-allocation.php:957
+#: admin/class-vca-asm-admin-finances.php:634
+#: admin/class-vca-asm-admin-slot-allocation.php:966
 #@ vca-asm
 msgid "Office 2003, (.xlsx)"
 msgstr "Office 2003 (.xlsx)"
 
-#: admin/class-vca-asm-admin-finances.php:625
-#: admin/class-vca-asm-admin-slot-allocation.php:961
+#: admin/class-vca-asm-admin-finances.php:638
+#: admin/class-vca-asm-admin-slot-allocation.php:970
 #@ vca-asm
 msgid "Office 95 to XP (.xls)"
 msgstr "Office 95 bis XP (.xls)"
 
-#: admin/class-vca-asm-admin-finances.php:632
-#: admin/class-vca-asm-admin-slot-allocation.php:968
+#: admin/class-vca-asm-admin-finances.php:645
+#: admin/class-vca-asm-admin-slot-allocation.php:977
 #@ vca-asm
 msgctxt "Excel File Format"
 msgid "Format"
 msgstr "Format"
 
-#: admin/class-vca-asm-admin-finances.php:633
-#: admin/class-vca-asm-admin-slot-allocation.php:969
+#: admin/class-vca-asm-admin-finances.php:646
+#: admin/class-vca-asm-admin-slot-allocation.php:978
 #@ vca-asm
 msgid "Download as this kind of file format."
 msgstr "Dieses Dateiformat herunterladen."
 
-#: admin/class-vca-asm-admin-finances.php:634
-#: admin/class-vca-asm-admin-slot-allocation.php:970
+#: admin/class-vca-asm-admin-finances.php:647
+#: admin/class-vca-asm-admin-slot-allocation.php:979
 #@ vca-asm
 msgid "Choose &quot;Office 2007&quot; for best results."
 msgstr "Wähle &quot;Office 2007&quot; für bestmögliche Ergebnisse."
 
-#: admin/class-vca-asm-admin-finances.php:643
+#: admin/class-vca-asm-admin-finances.php:656
 #@ vca-asm
 msgid "Show"
 msgstr "Zeigen"
 
-#: admin/class-vca-asm-admin-finances.php:647
+#: admin/class-vca-asm-admin-finances.php:660
 #@ vca-asm
 msgid "Hide"
 msgstr "Verstecken"
 
-#: admin/class-vca-asm-admin-finances.php:651
+#: admin/class-vca-asm-admin-finances.php:664
 #@ vca-asm
 msgid "Gridlines"
 msgstr "Gitternetzlinien"
 
-#: admin/class-vca-asm-admin-finances.php:652
+#: admin/class-vca-asm-admin-finances.php:665
 #@ vca-asm
 msgid "Do you want the file to show gridlines?"
 msgstr "Soll die Datei Gitternetzlinien anzeigen?"
 
-#: admin/class-vca-asm-admin-finances.php:665
-#: admin/class-vca-asm-admin-slot-allocation.php:1001
+#: admin/class-vca-asm-admin-finances.php:678
+#: admin/class-vca-asm-admin-slot-allocation.php:1010
 #@ vca-asm
 msgid "Download Spreadsheet"
 msgstr "Tabelle(n) Herunterladen"
 
-#: admin/class-vca-asm-admin-finances.php:1971
-#: admin/class-vca-asm-admin-finances.php:1974
+#: admin/class-vca-asm-admin-finances.php:1984
+#: admin/class-vca-asm-admin-finances.php:1987
 #@ vca-asm
 msgid "external transfer"
 msgstr "externe Überweisung"
@@ -7955,7 +7949,7 @@ msgstr "Bestand, Vorher"
 msgid "Sum"
 msgstr "Summe"
 
-#: includes/class-vca-asm-geography.php:543
+#: includes/class-vca-asm-geography.php:544
 #@ vca-asm
 msgid "LC"
 msgstr "LC"
@@ -7966,49 +7960,49 @@ msgctxt "Tasks"
 msgid "None"
 msgstr "Keine"
 
-#: admin/class-vca-asm-admin-finances.php:2308
-#: admin/class-vca-asm-admin-finances.php:2408
+#: admin/class-vca-asm-admin-finances.php:2321
+#: admin/class-vca-asm-admin-finances.php:2421
 #: includes/class-vca-asm-workbook-finances.php:161
 #@ vca-asm
 msgid "Item(s)"
 msgstr "Artikel"
 
-#: admin/class-vca-asm-admin-finances.php:2310
+#: admin/class-vca-asm-admin-finances.php:2323
 #@ vca-asm
 msgid "How did you gain the income?"
 msgstr "Wie hast du das Geld eingenommen?"
 
-#: admin/class-vca-asm-admin-finances.php:2310
+#: admin/class-vca-asm-admin-finances.php:2323
 #@ vca-asm
 msgid "What did you sell?"
 msgstr "Was wurde verkauft?"
 
-#: admin/class-vca-asm-admin-finances.php:2410
+#: admin/class-vca-asm-admin-finances.php:2423
 #@ vca-asm
 msgid "What did you buy?"
 msgstr "Was wurde gekauft?"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:927
+#: admin/class-vca-asm-admin-slot-allocation.php:936
 #@ vca-asm
 msgid "Group"
 msgstr "Gruppe"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:928
+#: admin/class-vca-asm-admin-slot-allocation.php:937
 #@ vca-asm
 msgid "Which group of supporters is supposed to appear on this list?"
 msgstr "Welche Gruppe Supporter soll auf dieser Liste auftauchen?"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:929
+#: admin/class-vca-asm-admin-slot-allocation.php:938
 #@ vca-asm
 msgid "The pre-selected &quot;Participants&quot; is what you&apos;d usually want."
 msgstr "Die Vorauswahl, &quot;Teilnehmer&quot; ist in den meisten Fällen das was du ausgeben willst."
 
-#: admin/class-vca-asm-admin-slot-allocation.php:944
+#: admin/class-vca-asm-admin-slot-allocation.php:953
 #@ vca-asm
 msgid "Data Types"
 msgstr "Daten"
 
-#: admin/class-vca-asm-admin-slot-allocation.php:945
+#: admin/class-vca-asm-admin-slot-allocation.php:954
 #@ vca-asm
 msgid "Whether to include personal data such as phone numbers, age and the like."
 msgstr "Sollen persönliche (schützenswerte) Daten wie etwa Telefonnummern und Alter mit ausgegeben werden?"
@@ -8089,4 +8083,27 @@ msgstr "Aktuell aktiver Kontext"
 #@ vca-asm
 msgid "The context in which the currently shown options are used"
 msgstr "Der Kontext in welchem die aktuell sichtbaren Optionen verwandt werden"
+
+#: admin/class-vca-asm-admin-emails.php:739
+#@ vca-asm
+msgid "(Inactive) Pool Users only"
+msgstr "(Inaktive) Pool Benutzer"
+
+#: admin/class-vca-asm-admin-emails.php:744
+#@ vca-asm
+msgctxt "Admin Email Interface"
+msgid "Select whether to send the email to all users of the selected group or a partial selection based on  &quot;active membership&quot; status."
+msgstr "Wähle, ob die E-Mail an alle Benutzer aus der gewählten Gruppe oder nur einen Teil je nach &quot;Aktivem Mitgliedsschafts&quot;-Status geschickt werden soll."
+
+#: includes/class-vca-asm-mailer.php:795
+#@ vca-asm
+msgid "Pool Users"
+msgstr "Pool Benutzer"
+
+#: includes/class-vca-asm-mailer.php:805
+#: includes/class-vca-asm-mailer.php:836
+#, php-format
+#@ vca-asm
+msgid "Pool Users from %s"
+msgstr "Pool Benutzer aus %s"
 

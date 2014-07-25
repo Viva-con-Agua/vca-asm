@@ -789,16 +789,20 @@ class VCA_ASM_Mailer {
 
 		switch( $receipient_group ) {
 			case 'all':
-				if( 2 == $membership ) {
-					$for = sprintf( __( 'All Active Members', 'vca-asm' ), $vca_asm_geography->get_name( $receipient_id ) );
+				if ( 'active' === $membership ) {
+					$for = __( 'All Active Members', 'vca-asm' );
+				} elseif ( 'inactive' === $membership ) {
+					$for = __( 'Pool Users', 'vca-asm' );
 				} else {
 					$for = __( 'All Supporters', 'vca-asm' );
 				}
 			break;
 
 			case 'alln':
-				if( 2 == $membership ) {
+				if( 'active' === $membership ) {
 					$for = sprintf( __( 'Active Members from %s', 'vca-asm' ), $vca_asm_geography->get_name( $receipient_id ) );
+				} elseif( 'inactive' === $membership ) {
+					$for = sprintf( __( 'Pool Users from %s', 'vca-asm' ), $vca_asm_geography->get_name( $receipient_id ) );
 				} else {
 					$for = sprintf( __( 'All Supporters from %s', 'vca-asm' ), $vca_asm_geography->get_name( $receipient_id ) );
 				}
@@ -826,8 +830,10 @@ class VCA_ASM_Mailer {
 			case 'cg':
 			case 'nation':
 			case 'ng':
-				if( 2 == $membership ) {
+				if( 'active' === $membership ) {
 					$for = sprintf( __( 'Active Members from %s', 'vca-asm' ), $vca_asm_geography->get_name( $receipient_id ) );
+				} elseif( 'inactive' === $membership ) {
+					$for = sprintf( __( 'Pool Users from %s', 'vca-asm' ), $vca_asm_geography->get_name( $receipient_id ) );
 				} else {
 					$for = sprintf( __( 'Supporters from %s', 'vca-asm' ), $vca_asm_geography->get_name( $receipient_id ) );
 				}
@@ -881,10 +887,16 @@ class VCA_ASM_Mailer {
 							'compare' => 'IN'
 						);
 					}
-					if ( 2 == $membership ) {
+					if ( 'active' === $membership ) {
 						$metaqueries[] = array(
 							'key' => 'membership',
 							'value' => 2
+						);
+					} elseif ( 'inactive' === $membership ) {
+						$metaqueries[] = array(
+							'key' => 'membership',
+							'value' => array( 0, 1 ),
+							'compare' => 'IN'
 						);
 					}
 					if ( 'alln' == $receipient_group ) {
@@ -954,10 +966,16 @@ class VCA_ASM_Mailer {
 							'compare' => 'IN'
 						);
 					}
-					if ( 2 == $membership ) {
+					if ( 'active' === $membership ) {
 						$metaqueries[] = array(
 							'key' => 'membership',
 							'value' => 2
+						);
+					} elseif ( 'inactive' === $membership ) {
+						$metaqueries[] = array(
+							'key' => 'membership',
+							'value' => array( 0, 1 ),
+							'compare' => 'IN'
 						);
 					}
 					$metaqueries[] = array(
@@ -987,10 +1005,16 @@ class VCA_ASM_Mailer {
 							'compare' => 'IN'
 						);
 					}
-					if ( 2 == $membership ) {
+					if ( 'active' === $membership ) {
 						$metaqueries[] = array(
 							'key' => 'membership',
 							'value' => 2
+						);
+					} elseif ( 'inactive' === $membership ) {
+						$metaqueries[] = array(
+							'key' => 'membership',
+							'value' => array( 0, 1 ),
+							'compare' => 'IN'
 						);
 					}
 					$metaqueries[] = array(
@@ -1025,10 +1049,16 @@ class VCA_ASM_Mailer {
 							'compare' => 'IN'
 						);
 					}
-					if ( 2 == $membership ) {
+					if ( 'active' === $membership ) {
 						$metaqueries[] = array(
 							'key' => 'membership',
 							'value' => 2
+						);
+					} elseif ( 'inactive' === $membership ) {
+						$metaqueries[] = array(
+							'key' => 'membership',
+							'value' => array( 0, 1 ),
+							'compare' => 'IN'
 						);
 					}
 					$metaqueries[] = array(
@@ -1058,10 +1088,16 @@ class VCA_ASM_Mailer {
 							'compare' => 'IN'
 						);
 					}
-					if ( 2 == $membership ) {
+					if ( 'active' === $membership ) {
 						$metaqueries[] = array(
 							'key' => 'membership',
 							'value' => 2
+						);
+					} elseif ( 'inactive' === $membership ) {
+						$metaqueries[] = array(
+							'key' => 'membership',
+							'value' => array( 0, 1 ),
+							'compare' => 'IN'
 						);
 					}
 					$metaqueries[] = array(
