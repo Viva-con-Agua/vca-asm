@@ -98,6 +98,7 @@ class VCA_ASM_Mailer {
 			$wpdb->prefix . 'vca_asm_emails_queue',
 			array(
 				'mail_id' => $mail_id,
+				// DEBUG SPOT
 				'receipients' => serialize( $receipients ),
 				'total_receipients' => count( $receipients )
 			),
@@ -120,6 +121,7 @@ class VCA_ASM_Mailer {
 
 		$default_args = array(
 			'mail_id' => 1,
+			// DEBUG SPOT
 			'receipients' => array( 1 ),
 			'subject' => 'The Subject',
 			'message' => 'Lorem Ipsum',
@@ -137,6 +139,7 @@ class VCA_ASM_Mailer {
 		$args = wp_parse_args( $args, $default_args );
 		if ( ! is_array( $args['receipients'] ) ) $args['receipients'] = array( $args['receipients'] );
 
+		// DEBUG SPOT
 		switch ( $this->protocol ) {
 			case 'smtp':
 				$return = $this->send_smtp( $args );
@@ -291,6 +294,7 @@ class VCA_ASM_Mailer {
 
 		foreach ( $receipients as $receipient ) {
 
+			/* Translation of User ID into readable information */
 			$receipient_data = get_userdata( $receipient );
 			if( ! empty( $receipient_data->user_firstname ) && ! empty( $receipient_data->user_lastname ) ) {
 				$receipient_name = $receipient_data->user_firstname . ' ' . $receipient_data->user_lastname;
@@ -301,6 +305,7 @@ class VCA_ASM_Mailer {
 			} else {
 				$receipient_name = __( 'Supporter', 'vca-asm' );
 			}
+			// DEBUG SPOT
 			$receipient_email = $receipient_data->user_email;
 
 			if ( 'html' === $content_type ) {
@@ -312,6 +317,7 @@ class VCA_ASM_Mailer {
 
 			$mailer->AddAddress( $receipient_email, $receipient_name );
 
+			// DEBUG SPOT
 			$results['total']++;
 			if ( ! $mailer->Send() ) {
 				$results['failures']++;
@@ -709,6 +715,7 @@ class VCA_ASM_Mailer {
 			return false;
 		}
 
+		// DEBUG SPOT
 		$receipients = unserialize( $queued['receipients'] );
 
 		$queue_count = count( $receipients );
@@ -1124,24 +1131,57 @@ class VCA_ASM_Mailer {
 			case 'apps':
 				$receipient_id = isset( $_POST['activity'] ) ? $_POST['activity'] : 0;
 				if ( true === $with_users ) {
-					$the_activity = new VCA_ASM_Activity( $receipient_id );
-					$receipients = $the_activity->applicants;
+					// is the sending user allowed to target this activity?
+					if ( $vca_asm_activities->is_relevant_to_user( $receipient_id, $current_user ) ) {
+						$the_activity = new VCA_ASM_Activity( $receipient_id );
+						// is the user eligible as a sender because of his capabilities or because of a relevant quota only?
+						if ( $vca_asm_activities->is_relevant_to_user( $receipient_id, $current_user, array( 'quotas' => false ) ) ) {
+							$receipients = $the_activity->applicants;
+						} else {
+							$admin_city = get_user_meta( $current_user->ID, 'city', true );
+							$receipients = $the_activity->applicants_by_quota[$admin_city];
+						}
+					} else {
+						$receipients = array();
+					}
 				}
 			break;
 
 			case 'parts':
 				$receipient_id = isset( $_POST['activity'] ) ? $_POST['activity'] : 0;
 				if ( true === $with_users ) {
-					$the_activity = new VCA_ASM_Activity( $receipient_id );
-					$receipients = $the_activity->participants;
+					// is the sending user allowed to target this activity?
+					if ( $vca_asm_activities->is_relevant_to_user( $receipient_id, $current_user ) ) {
+						$the_activity = new VCA_ASM_Activity( $receipient_id );
+						// is the user eligible as a sender because of his capabilities or because of a relevant quota only?
+						if ( $vca_asm_activities->is_relevant_to_user( $receipient_id, $current_user, array( 'quotas' => false ) ) ) {
+							$receipients = $the_activity->participants;
+						} else {
+							$admin_city = get_user_meta( $current_user->ID, 'city', true );
+							$receipients = $the_activity->participants_by_quota[$admin_city];
+						}
+					} else {
+						$receipients = array();
+					}
 				}
 			break;
 
 			case 'waiting':
 				$receipient_id = isset( $_POST['activity'] ) ? $_POST['activity'] : 0;
 				if ( true === $with_users ) {
-					$the_activity = new VCA_ASM_Activity( $receipient_id );
-					$receipients = $the_activity->waiting;
+					// is the sending user allowed to target this activity?
+					if ( $vca_asm_activities->is_relevant_to_user( $receipient_id, $current_user ) ) {
+						$the_activity = new VCA_ASM_Activity( $receipient_id );
+						// is the user eligible as a sender because of his capabilities or because of a relevant quota only?
+						if ( $vca_asm_activities->is_relevant_to_user( $receipient_id, $current_user, array( 'quotas' => false ) ) ) {
+							$receipients = $the_activity->waiting;
+						} else {
+							$admin_city = get_user_meta( $current_user->ID, 'city', true );
+							$receipients = $the_activity->waiting_by_quota[$admin_city];
+						}
+					} else {
+						$receipients = array();
+					}
 				}
 			break;
 		}
