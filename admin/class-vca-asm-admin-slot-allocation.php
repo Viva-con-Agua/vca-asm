@@ -34,7 +34,8 @@ class VCA_ASM_Admin_Slot_Allocation {
 	 * @since 1.3
 	 * @access public
 	 */
-	public function control() {
+	public function control()
+	{
 		global $current_user,
 			$vca_asm_activities, $vca_asm_utilities;
 
@@ -196,23 +197,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 				if ( ! $current_user->has_cap( 'vca_asm_manage_' . $this->department . '_global' ) ) {
 					$relevant_activities = array();
 					foreach ( $activities as $activity ) {
-						$cty_slots = get_post_meta( $activity->ID, 'cty_slots', true );
-						if (
-							(
-								$current_user->has_cap( 'vca_asm_manage_' . $this->department . '_nation' ) &&
-								get_post_meta( $activity->ID, 'nation', true ) === $admin_nation
-							) || (
-								$current_user->has_cap( 'vca_asm_manage_' . $this->department ) &&
-								(
-									(
-										get_post_meta( $activity->ID, 'city', true ) === $admin_city &&
-										'delegate' === get_post_meta( $activity->ID, 'delegate', true )
-									) || (
-										is_array( $cty_slots ) && array_key_exists( $admin_city, $cty_slots )
-									)
-								)
-							)
-						) {
+						if ( $vca_asm_activities->is_relevant_to_user( $activity->ID, $current_user ) ) {
 							$relevant_activities[] = $activity;
 						}
 					}

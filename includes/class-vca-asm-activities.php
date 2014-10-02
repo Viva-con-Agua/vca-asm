@@ -884,7 +884,7 @@ class VCA_ASM_Activities
 								'value' => 'yes'
 							),
 							array(
-								'label' => _x( 'Yes, notify relevant countries&apos; users to split available slots', 'Slots Selection', 'vca-asm' ) . ' (verfügbar ab Version 1.4)',
+								'label' => _x( 'Yes, notify relevant countries&apos; users to split available slots', 'Slots Selection', 'vca-asm' ) . ' ' . __( '(not yet implemented...)', 'vca-asm' ),
 								'value' => 'notify'
 							)
 						);
@@ -1571,6 +1571,76 @@ class VCA_ASM_Activities
 	/****************************** UTILITY METHODS ******************************/
 
 	/**
+	 * Determines whether an activity is relevant to an (administrative) user
+	 *
+	 * @var int $activity ID of the activity checked against
+	 * @var mixed $user WP_User Object or ID of the user in question
+	 * @var array $args (Optional) arguments, i.e. what to check for
+	 *
+	 * @return bool Is the activity relevant to the user?
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	public function is_relevant_to_user( $activity, $user = 0, $args = array() )
+	{
+		if ( empty( $user ) ) {
+			global $current_user;
+			$user = $current_user->ID;
+			$user_obj = $current_user;
+		} else {
+			if ( is_object( $user ) ) {
+				$user_obj = $user;
+				$user = $user_obj->ID;
+			} else {
+				$user_obj = get_userdata( $user );
+			}
+		}
+
+		$default_args = array(
+			'delegations' => true,
+			'quotas' => true
+		);
+		extract( $args = wp_parse_args( $args, $default_args ) );
+
+		$activity_type = get_post_type( $activity );
+		$department = $this->departments_by_activity[$activity_type];
+
+		if ( $user_obj->has_cap( 'vca_asm_manage_' . $department . '_global' ) ) {
+			return true;
+		}
+
+		if ( $user_obj->has_cap( 'vca_asm_manage_' . $department . '_nation' ) ) {
+			$user_nation = get_user_meta( $user, 'nation', true );
+			$activity_nation = get_post_meta( $activity, 'nation', true );
+			if ( $user_nation === $activity_nation ) {
+				return true;
+			}
+		}
+
+		if ( true === $delegations || true === $quotas ) {
+			$user_city = get_user_meta( $user, 'city', true );
+		}
+
+		if ( true === $delegations && $user_obj->has_cap( 'vca_asm_manage_' . $department ) ) {
+			$activity_city = get_post_meta( $activity, 'city', true );
+			$activity_delegation = get_post_meta( $activity, 'delegate', true );
+			if ( 'delegate' === $activity_delegation && $user_city === $activity_city ) {
+				return true;
+			}
+		}
+
+		if ( true === $quotas && $user_obj->has_cap( 'vca_asm_manage_' . $department ) ) {
+			$cty_slots = get_post_meta( $activity, 'cty_slots', true );
+			if ( is_array( $cty_slots ) && array_key_exists( $user_city, $cty_slots ) ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
 	 * Returns array of activity IDs based on phase & type
 	 *
 	 * @since 1.3
@@ -1699,17 +1769,7 @@ class VCA_ASM_Activities
 		foreach ( $activities as $activity ) {
 			if (
 				false === $check_caps ||
-				(
-					$current_user->has_cap( 'vca_asm_manage_' . $this->departments_by_activity[$activity->post_type] . '_global' ) ||
-					(
-						$current_user->has_cap( 'vca_asm_manage_' . $this->departments_by_activity[$activity->post_type] . '_nation' ) &&
-						get_post_meta( $activity->ID, 'nation', true ) === $admin_nation
-					) || (
-						$current_user->has_cap( 'vca_asm_manage_' . $this->departments_by_activity[$activity->post_type] ) &&
-						get_post_meta( $activity->ID, 'city', true ) === $admin_city &&
-						'delegate' === get_post_meta( $activity->ID, 'delegate', true )
-					)
-				)
+				$this->is_relevant_to_user( $activity->ID, $current_user )
 			) {
 				$options_array[] = array(
 					'label' => $activity->post_title . ' (' . strftime( '%d.%m.%Y', get_post_meta( $activity->ID, 'start_act', true ) ) . ')',
