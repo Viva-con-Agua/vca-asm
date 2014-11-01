@@ -266,7 +266,7 @@ class VCA_ASM {
 
 		wp_enqueue_script( 'vca-asm-profile' );
 
-		wp_register_style( 'vca-asm-activities-style', VCA_ASM_RELPATH . 'css/activities.css', false, '2014.5.7.15' );
+		wp_register_style( 'vca-asm-activities-style', VCA_ASM_RELPATH . 'css/activities.css', false, '2014.11.1.2' );
 		wp_register_style( 'vca-asm-isotope-style', VCA_ASM_RELPATH . 'css/isotope.css', false, '2013.11.6.3' );
 
 		if ( is_singular( $vca_asm_activities->activity_types ) ) {

@@ -111,7 +111,7 @@ how activities are displayed in the front-end
 	border-color: #e2007a;
 }
 .activity h4 {
-	font-family: GS;
+	font-family: GS, Verdana, Geneva, Helvetica, Arial, sans-serif;
 	font-size: 1.8em;
 	font-weight: 700;
 	line-height: 1;
