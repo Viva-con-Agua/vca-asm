@@ -280,8 +280,8 @@ class VCA_ASM_Mailer {
 		$mailer->Port = 25;
 		$mailer->SMTPAuth = true;
 		$mailer->SMTPKeepAlive = true;
-		$mailer->Username = 'no-reply@vivaconagua.org';
-		$mailer->Password = 'BCN2013';
+		$mailer->Username = 'j.pilkahn@vivaconagua.org';
+		$mailer->Password = 'HSV_Ole!';
 
 		$mailer->SetFrom( $from_email, $from_name );
 		$mailer->AddReplyTo( $from_email, $from_name );

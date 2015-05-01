@@ -21,7 +21,7 @@ if( isset ( $fields ) &&  ! empty( $fields ) ) {
 		if( ! isset( $field['value'] ) ) {
 			$field['value'] = '';
 		}
-		$output .= '<div class="form-row'
+		$output .= '<div class="form-row';
 		if( isset( $field['row-class'] ) && ! empty( $field['row-class'] ) ) {
 			$output .= ' ' . $field['row-class'];
 		}

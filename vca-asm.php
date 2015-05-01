@@ -22,36 +22,56 @@ License: GPL3
 */
 
 /**
+ *	This file is the root of the plugin,
+ *	initially read by WordPress.
+ *
+ *	It sets a few global constants,
+ *	conditionally includes/requires other logical files,
+ *	sets the locale,
+ *	holds an installation routine (and its triggering hook),
+ *	holds a routine to update the database (and its triggering hook),
+ *	as well as a clean up routine run on plugin deactivation.
+ */
+
+/**
  * Holds the absolute location of the main plugin file (this file)
  *
+ * @var const VCA_ASM_FILE
  * @since 1.0
  */
-if ( ! defined( 'VCA_ASM_FILE' ) )
+if ( ! defined( 'VCA_ASM_FILE' ) ) {
 	define( 'VCA_ASM_FILE', __FILE__ );
+}
 
 /**
  * Holds the absolute location of VcA Activity & Supporter Management
  *
+ * @var const VCA_ASM_ABSPATH
  * @since 1.0
  */
-if ( ! defined( 'VCA_ASM_ABSPATH' ) )
+if ( ! defined( 'VCA_ASM_ABSPATH' ) ) {
 	define( 'VCA_ASM_ABSPATH', dirname( __FILE__ ) );
+}
 
 /**
  * Holds the URL of VcA Activity & Supporter Management
  *
+ * @var const VCA_ASM_RELPATH
  * @since 1.0
  */
-if ( ! defined( 'VCA_ASM_RELPATH' ) )
+if ( ! defined( 'VCA_ASM_RELPATH' ) ) {
 	define( 'VCA_ASM_RELPATH', plugin_dir_url( __FILE__ ) );
+}
 
 /**
  * Holds the name of the VcA Activity & Supporter Management directory
  *
+ * @var const VCA_ASM_DIRNAME
  * @since 1.0
  */
-if ( !defined( 'VCA_ASM_DIRNAME' ) )
+if ( !defined( 'VCA_ASM_DIRNAME' ) ) {
 	define( 'VCA_ASM_DIRNAME', basename( VCA_ASM_ABSPATH ) );
+}
 
 /**
  * Require needed files
@@ -131,10 +151,13 @@ if ( is_admin() ) {
  *
  * @since 1.3
  */
-function vca_asm_user_locale() {
+function vca_asm_user_locale()
+{
 	add_filter( 'locale', 'vca_asm_set_locale', 1 );
 }
-function vca_asm_set_locale( $locale ) {
+
+function vca_asm_set_locale( $locale )
+{
 	global $current_user;
 	get_currentuserinfo();
 
@@ -168,6 +191,7 @@ $vca_asm = new VCA_ASM();
  *
  * increase to alter tables and table structures
  *
+ * @global string $vca_asm_db_version
  * @since 1.0
  */
 $vca_asm_db_version = "3.7";
@@ -183,7 +207,8 @@ $vca_asm_db_version = "3.7";
  *
  * @since 1.0
  */
-function vca_asm_install() {
+function vca_asm_install()
+{
    global $wpdb, $vca_asm_db_version;
 
 	/* SQL statements to create required tables */
@@ -378,7 +403,14 @@ function vca_asm_install() {
    update_option( 'vca_asm_db_version', $vca_asm_db_version );
 }
 
-function vca_asm_setup_taxonomies() {
+/**
+ * Factorised part of installation routine.
+ * Sets up taxonomies for custom post types.
+ *
+ * @since 1.0
+ */
+function vca_asm_setup_taxonomies()
+{
 	$activities_id = NULL;
 	if ( ! is_category( 'activities' ) ) {
 		$activities_id = wp_create_category( array(
@@ -415,14 +447,28 @@ function vca_asm_setup_taxonomies() {
 	}
 }
 
-function vca_asm_update_db_check() {
+/**
+ * Compares the DB version number saved as an option in the database
+ * with the one defined above in this file.
+ *
+ * @since 1.0
+ */
+function vca_asm_update_db_check()
+{
     global $vca_asm_db_version;
     if( get_site_option( 'vca_asm_db_version' ) != $vca_asm_db_version ) {
         vca_asm_install();
     }
 }
 
-function vca_asm_clear_cron() {
+/**
+ * Runs when the plugin is deactivated/uninstalled.
+ * Garbage collection of the WordPress core's pseudo-cron.
+ *
+ * @since 1.0
+ */
+function vca_asm_clear_cron()
+{
 	$vca_asm_tmp_cron =  new VCA_ASM_Cron();
 
 	foreach ( $vca_asm_tmp_cron->hooks as $hook ) {
@@ -431,6 +477,11 @@ function vca_asm_clear_cron() {
 	}
 }
 
+/**
+ * Hooks
+ *
+ * @since 1.0
+ */
 add_action( 'plugins_loaded', 'vca_asm_update_db_check' );
 register_activation_hook( VCA_ASM_FILE, 'vca_asm_install' );
 register_deactivation_hook( VCA_ASM_FILE, 'vca_asm_clear_cron' );

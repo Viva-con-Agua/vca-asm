@@ -5,6 +5,8 @@
  *
  * This class contains properties and methods for the activity post types.
  *
+ * @link http://codex.wordpress.org/Post_Types Intro to Custom Post Types (in the following: CPT)
+ *
  * @package VcA Activity & Supporter Management
  * @since 1.0
  */
@@ -16,11 +18,26 @@ class VCA_ASM_Activities
 
 	/**
 	 * Class Properties
+	 */
+
+	/**
+	 * Holds the current activity
 	 *
+	 * @var object $the_activity
+	 * @see constructor
+	 * @see class VCA_ASM_Activity (models)
 	 * @since 1.3
 	 * @access public
 	 */
 	public $the_activity = false;
+
+	/**
+	 * Holds (slugs of) valid CPTs
+	 *
+	 * @var array $activity_types
+	 * @since 1.3
+	 * @access public
+	 */
 	public $activity_types = array(
 		'concert',
 		'festival',
@@ -28,6 +45,14 @@ class VCA_ASM_Activities
 		'nwgathering',
 		'goldeimerfestival'
 	);
+
+	/**
+	 * Pairs CPTs with organizational departments
+	 *
+	 * @var array $departments_by_activity
+	 * @since 1.3
+	 * @access public
+	 */
 	public $departments_by_activity = array(
 		'concert' => 'actions',
 		'festival' => 'actions',
@@ -37,18 +62,59 @@ class VCA_ASM_Activities
 		'nwgathering' => 'network',
 		'goldeimerfestival' => 'goldeimer'
 	);
+
+	/**
+	 * Pairs activity slugs with department nice names (as translatable strings)
+	 *
+	 * @var array $activities_by_departement
+	 * @see constructor
+	 * @since 1.3
+	 * @access public
+	 */
 	public $activities_by_department = array();
+
+	/**
+	 * Pairs acticity slugs with activity nice names (as translatable strings)
+	 *
+	 * @var array $activities_to_nicename
+	 * @see constructor
+	 * @since 1.3
+	 * @access public
+	 */
 	public $to_nicename = array();
 	public $activities_to_nicename = array();
+
+	/**
+	 * Pairs activity slugs with plural forms of their nice names (as translatable strings)
+	 *
+	 * @var array $activities_to_plural_nicename
+	 * @see constructor
+	 * @since 1.3
+	 * @access public
+	 */
 	public $to_plural_nicename = array();
 	public $activities_to_plural_nicename = array();
+
+	/**
+	 * Holds all activity types in a standardized format,
+	 * such that it will be readily accepted by the plugins template classes
+	 * for use  in a dropdown menu
+	 *
+	 * @var array $options_array
+	 * @see constructor
+	 * @since 1.3
+	 * @access public
+	 */
 	public $options_array = array();
 	public $options_array_with_all = array();
 
 	/****************************** CUSTOM POST TYPES ******************************/
 
 	/**
-	 * Nested arrays of custom fields
+	 * Returns nested arrays of custom fields
+	 *
+	 * @param string $group Return either 'all' custom fields or those in a specific subset
+	 * @return array $custom_fields
 	 *
 	 * @since 1.0
 	 * @access private
@@ -392,6 +458,9 @@ class VCA_ASM_Activities
 	 * Registers all activity post types
 	 * Initiates creation of custom fields and metaboxes, initiates meta capability mapping.
 	 *
+	 * @param void
+	 * @return void
+	 *
 	 * @since 1.0
 	 * @access public
 	 */
@@ -630,6 +699,10 @@ class VCA_ASM_Activities
 	/**
 	 * Alters UI strings to fit post type
 	 *
+	 * @param string $translation
+	 * @param string $text
+	 * $return string $translation
+	 *
 	 * @since 1.1
 	 * @access public
 	 */
@@ -706,10 +779,14 @@ class VCA_ASM_Activities
 	/**
 	 * Alters message strings to fit post type
 	 *
+	 * @param array $messages Holds default translatable strings
+	 * @return array $messages Takes up new strings depending on post type
+	 *
 	 * @since 1.1
 	 * @access public
 	 */
-	public function admin_ui_updated_messages( $messages ) {
+	public function admin_ui_updated_messages( $messages )
+	{
 		global $post, $post_ID;
 
 		$messages['concert'] = array(
@@ -793,14 +870,19 @@ class VCA_ASM_Activities
 	}
 
 	/**
-	 * Localize enqueued javascript with post specific parameters
+	 * Localize enqueued Javascript with post specific parameters
+	 *
+	 * @param void
+	 * @return void
 	 *
 	 * @since 1.3
 	 * @access public
 	 */
-	public function set_script_params() {
+	public function set_script_params()
+	{
 		global $current_user, $pagenow, $post, $vca_asm_geography;
 		get_currentuserinfo();
+
 
 		if( is_admin() && ( 'post.php' == $pagenow || 'post-new.php' == $pagenow ) ) {
 
@@ -920,6 +1002,9 @@ class VCA_ASM_Activities
 	/**
 	 * Columns of post type tables in the backend
 	 *
+	 * @param array $columns
+	 * @return array $columns
+	 *
 	 * @since 1.0
 	 * @access public
 	 */
@@ -936,6 +1021,16 @@ class VCA_ASM_Activities
 		);
 		return $columns;
 	}
+
+	/**
+	 * Columns of post type tables in the backend
+	 *
+	 * @param array $columns
+	 * @return array $columns
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
 	public function festival_columns( $columns )
 	{
 		$columns = array(
@@ -949,6 +1044,16 @@ class VCA_ASM_Activities
 		);
 		return $columns;
 	}
+
+	/**
+	 * Columns of post type tables in the backend
+	 *
+	 * @param array $columns
+	 * @return array $columns
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
 	public function miscactions_columns( $columns )
 	{
 		$columns = array(
@@ -962,6 +1067,16 @@ class VCA_ASM_Activities
 		);
 		return $columns;
 	}
+
+	/**
+	 * Columns of post type tables in the backend
+	 *
+	 * @param array $columns
+	 * @return array $columns
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
 	public function nwgathering_columns( $columns )
 	{
 		$columns = array(
@@ -975,6 +1090,16 @@ class VCA_ASM_Activities
 		);
 		return $columns;
 	}
+
+	/**
+	 * Columns of post type tables in the backend
+	 *
+	 * @param array $columns
+	 * @return array $columns
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
 	public function goldeimerfestival_columns( $columns )
 	{
 		$columns = array(
@@ -992,10 +1117,14 @@ class VCA_ASM_Activities
 	/**
 	 * Populate custom columns
 	 *
+	 * @param string $column
+	 * @return void
+	 *
 	 * @since 1.0
 	 * @access public
 	 */
-	public function custom_column( $column ){
+	public function custom_column( $column )
+	{
 		global $post, $wpdb, $vca_asm_registrations;
 
 		switch ($column) {
@@ -1032,10 +1161,14 @@ class VCA_ASM_Activities
 	/**
 	 * Meta Boxes
 	 *
+	 * @param void
+	 * @return void
+	 *
 	 * @since 1.0
 	 * @access public
 	 */
-	public function meta_boxes() {
+	public function meta_boxes()
+	{
 		global $current_user, $pagenow;
 		get_currentuserinfo();
 		$roles = $current_user->roles;
@@ -1159,7 +1292,10 @@ class VCA_ASM_Activities
 
 	/**
 	 * Custom Fields / Meta Box Content
-	 * One function per meta box
+	 * Tools
+	 *
+	 * @param void
+	 * @return void
 	 *
 	 * @since 1.0
 	 * @access public
@@ -1171,12 +1307,33 @@ class VCA_ASM_Activities
 		echo $output;
 	}
 
+	/**
+	 * Custom Fields / Meta Box Content
+	 * Slots Settings
+	 *
+	 * @param void
+	 * @return void
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
 	public function box_slots_settings()
 	{
 		$fields = $this->custom_fields( 'slots-settings' );
 		require( VCA_ASM_ABSPATH . '/templates/admin-custom-fields.php' );
 		echo $output;
 	}
+
+	/**
+	 * Custom Fields / Meta Box Content
+	 * Slots (Network Gathering)
+	 *
+	 * @param void
+	 * @return void
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
 	public function box_slots_settings_nwgathering()
 	{
 		$fields = $this->custom_fields( 'slots-settings' );
@@ -1184,6 +1341,16 @@ class VCA_ASM_Activities
 		echo $output;
 	}
 
+	/**
+	 * Custom Fields / Meta Box Content
+	 * Application Phase
+	 *
+	 * @param void
+	 * @return void
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
 	public function box_application_phase()
 	{
 		$fields = $this->custom_fields( 'applications' );
@@ -1191,6 +1358,16 @@ class VCA_ASM_Activities
 		echo $output;
 	}
 
+	/**
+	 * Custom Fields / Meta Box Content
+	 * Participants
+	 *
+	 * @param void
+	 * @return void
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
 	public function box_participants()
 	{
 		$fields = $this->custom_fields( 'participants' );
@@ -1198,6 +1375,16 @@ class VCA_ASM_Activities
 		echo $output;
 	}
 
+	/**
+	 * Custom Fields / Meta Box Content
+	 * Date / Timeframe
+	 *
+	 * @param void
+	 * @return void
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
 	public function box_date()
 	{
 		$fields = $this->custom_fields( 'date' );
@@ -1205,6 +1392,16 @@ class VCA_ASM_Activities
 		echo $output;
 	}
 
+	/**
+	 * Custom Fields / Meta Box Content
+	 * Matadata
+	 *
+	 * @param void
+	 * @return void
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
 	public function box_meta()
 	{
 		$fields = $this->custom_fields( 'meta' );
@@ -1212,6 +1409,16 @@ class VCA_ASM_Activities
 		echo $output;
 	}
 
+	/**
+	 * Custom Fields / Meta Box Content
+	 * Geographical Affiliation
+	 *
+	 * @param void
+	 * @return void
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
 	public function box_geo()
 	{
 		$fields = $this->custom_fields( 'geo' );
@@ -1219,6 +1426,16 @@ class VCA_ASM_Activities
 		echo $output;
 	}
 
+	/**
+	 * Custom Fields / Meta Box Content
+	 * Contact
+	 *
+	 * @param void
+	 * @return void
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
 	public function box_contact()
 	{
 		$fields = $this->custom_fields( 'contact' );
@@ -1822,7 +2039,8 @@ class VCA_ASM_Activities
 	 */
 	public function __construct()
 	{
-		global $post, $vca_asm_utilities;
+		global $post,
+			$vca_asm_utilities;
 
 		$this->activities_by_department = array(
 			'actions' => array(
