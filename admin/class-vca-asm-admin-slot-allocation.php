@@ -1025,6 +1025,9 @@ class VCA_ASM_Admin_Slot_Allocation {
 
 		$output .= '<table>';
 
+			$output .= '<tr><td style="padding-top:1em">' .
+					'<strong>' . __( 'Applicants', 'vca-asm' ) . '</strong>' .
+				'</td></tr>';
 			if ( ! empty( $applicants ) ) {
 				$output .= '<tr><td>' .
 						'<a href="' .
