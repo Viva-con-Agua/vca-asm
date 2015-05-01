@@ -828,6 +828,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 		$post_city = $the_activity->city;
 		$post_nation = $the_activity->nation;
 		$department = $the_activity->department;
+		$post_delegation = $the_activity->delegation;
 
 		$applicants = array();
 		$waiting = array();
