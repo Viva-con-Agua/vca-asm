@@ -29,7 +29,8 @@ class VCA_ASM_Admin_Page {
 		'tabs' => array(),
 		'messages' => array(),
 		'back' => false,
-		'back_url' => '#'
+		'back_url' => '#',
+		'logout_buttons' => true
 	);
 	private $args = array();
 
@@ -71,6 +72,17 @@ class VCA_ASM_Admin_Page {
 
 				if( ! empty( $messages ) ) {
 					$output .= $vca_asm_admin->convert_messages( $messages );
+				}
+
+				if( true === $logout_buttons ) {
+					$output .= '<p>' .
+							'<a class="button" title="' . __( '&larr; Back to the frontend', 'vca-asm' ) . '" href="' . get_bloginfo('url') . '">' .
+								__( '&larr; Back to the frontend', 'vca-asm' ) .
+							'</a>' . '&nbsp;&nbsp;&nbsp;' .
+							'<a class="button-primary" title="' . __( 'Log me out', 'vca-asm' ) .
+								'" href="' . wp_logout_url( get_bloginfo('url') ) . '">' . __( 'Logout', 'vca-asm' ) .
+							'</a>' .
+						'</p>';
 				}
 
 				if( ! empty( $extra_head_html ) ) {

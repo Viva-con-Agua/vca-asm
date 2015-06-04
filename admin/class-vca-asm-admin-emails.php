@@ -131,7 +131,8 @@ class VCA_ASM_Admin_Emails {
 			'icon' => 'icon-emails',
 			'title' => __( 'Outbox', 'vca-asm' ),
 			'url' => $url,
-			'messages' => $messages
+			'messages' => $messages,
+			'logout_buttons' => true
 		);
 
 		$tbl_args = array(
@@ -401,7 +402,15 @@ class VCA_ASM_Admin_Emails {
 
 		$output = '<div class="wrap">' .
 				'<div id="icon-emails" class="icon32-pa"></div>' .
-				'<h2>' . __( 'Sent Items', 'vca-asm' ) . '</h2>';
+				'<h2>' . __( 'Sent Items', 'vca-asm' ) . '</h2>' .
+				'<p>' .
+					'<a class="button" title="' . __( '&larr; Back to the frontend', 'vca-asm' ) . '" href="' . get_bloginfo('url') . '">' .
+						__( '&larr; Back to the frontend', 'vca-asm' ) .
+					'</a>' . '&nbsp;&nbsp;&nbsp;' .
+					'<a class="button-primary" title="' . __( 'Log me out', 'vca-asm' ) .
+						'" href="' . wp_logout_url( get_bloginfo('url') ) . '">' . __( 'Logout', 'vca-asm' ) .
+					'</a>' .
+				'</p>';
 
 		$output .= '<h3 class="title title-top-pa">' . _x( 'Search', 'Admin Emails', 'vca-asm' ) . '</h3>' .
 			'<form name="vca_asm_email_search" method="post" action="'.$url .'&amp;search=1';
@@ -499,8 +508,8 @@ class VCA_ASM_Admin_Emails {
 	 * @access public
 	 */
 	public function compose_view( $messages = array(), $active_tab = 'newsletter', $editor_type = 'plain' ) {
-		global $current_user, $vca_asm_activities, $vca_asm_geography;
-		get_currentuserinfo();
+		global $current_user, $wpdb,
+			$vca_asm_activities, $vca_asm_geography;
 
 		$act_id = isset( $_GET['activity'] ) ? intval( $_GET['activity'] ) : NULL;
 		$act_phase = ! empty( $act_id ) ? $vca_asm_activities->get_phase( $act_id ) : 'all';
@@ -742,17 +751,23 @@ class VCA_ASM_Admin_Emails {
 				),
 				'value' => 0,
 				'desc' => _x( 'Select whether to send the email to all users of the selected group or a partial selection based on  &quot;active membership&quot; status.', 'Admin Email Interface', 'vca-asm' )
-			),
-			array(
-				'type' => 'checkbox',
-				'label' => _x( 'Ignore user settings?', 'Admin Email Interface', 'vca-asm' ),
-				'id' => 'ignore_switch',
-				'desc' => _x( 'As you know from your own profile, users may select which news to receive - general news, regional ones, both or none. In rare cases you have a message so important, that you might want to ignore the users wishes and reach everyone within your selected group. Tick this box to do so. Please do not make use of this feature frequently!', 'Admin Email Interface', 'vca-asm' )
-			),
-			$sender_field
+			)
 		);
 
-		if ( $current_user->has_cap('vca_asm_send_emails_global') || $current_user->has_cap('vca_asm_send_emails_nation') ) {
+		if ( $current_user->has_cap('vca_asm_send_emails_global') || $current_user->has_cap('vca_asm_send_emails_nation') )
+		{
+			$newsletter_meta_fields[] =
+				array(
+					'type' => 'checkbox',
+					'label' => _x( 'Ignore user settings?', 'Admin Email Interface', 'vca-asm' ),
+					'id' => 'ignore_switch',
+					'desc' => _x( 'As you know from your own profile, users may select which news to receive - general news, regional ones, both or none. In rare cases you have a message so important, that you might want to ignore the users wishes and reach everyone within your selected group. Tick this box to do so. Please do not make use of this feature frequently!', 'Admin Email Interface', 'vca-asm' )
+				);
+		}
+		$newsletter_meta_fields[] = $sender_field;
+
+		if ( $current_user->has_cap('vca_asm_send_emails_global') || $current_user->has_cap('vca_asm_send_emails_nation') )
+		{
 			$newsletter_meta_admins = array(
 				array(
 					'type' => 'select',
@@ -947,7 +962,8 @@ class VCA_ASM_Admin_Emails {
 					'icon' => 'icon-activity'
 				)
 			),
-			'active_tab' => $active_tab
+			'active_tab' => $active_tab,
+			'logout_buttons' => true
 		));
 
 		$form = new VCA_ASM_Admin_Form( array(

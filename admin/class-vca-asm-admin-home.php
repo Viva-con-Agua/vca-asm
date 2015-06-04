@@ -45,20 +45,12 @@ class VCA_ASM_Admin_Home {
 		}
 		$active_tab = isset( $_GET[ 'tab' ] ) ? $_GET[ 'tab' ] : $default_tab;
 
-		$extra_head_html = '<p>' .
-				'<a class="button" title="' . __( '&larr; Back to the frontend', 'vca-asm' ) . '" href="' . get_bloginfo('url') . '">' .
-					__( '&larr; Back to the frontend', 'vca-asm' ) .
-				'</a>' . '&nbsp;&nbsp;&nbsp;' .
-				'<a class="button-primary" title="' . __( 'Log me out', 'vca-asm' ) .
-					'" href="' . wp_logout_url( get_bloginfo('url') ) . '">' . __( 'Logout', 'vca-asm' ) .
-				'</a>' .
-			'</p>';
 		$page = new VCA_ASM_Admin_Page( array(
 			'echo' => true,
 			'icon' => 'icon-home',
 			'title' => _x( 'Viva con Agua | Pool', 'Home Admin Menu', 'vca-asm' ),
 			'url' => '?page=vca-asm-home',
-			'extra_head_html' => $extra_head_html,
+			'logout_buttons' => true,
 			'active_tab' => $active_tab,
 			'tabs' => array(
 				array(

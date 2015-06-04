@@ -137,7 +137,7 @@ class VCA_ASM_Mailer {
 		$args = wp_parse_args( $args, $default_args );
 		if ( ! is_array( $args['receipients'] ) ) $args['receipients'] = array( $args['receipients'] );
 
-		// DEBUG SPOT
+		// DEBUG SPOT: Comment for safe testing, to prevent possible accidental sending
 		switch ( $this->protocol ) {
 			case 'smtp':
 				$return = $this->send_smtp( $args );
