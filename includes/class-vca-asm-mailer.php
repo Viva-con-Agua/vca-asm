@@ -90,7 +90,7 @@ class VCA_ASM_Mailer {
 				'format' => $format,
 				'type' => $type
 			),
-			array( '%d', '%d', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s' )
+			array( '%d', '%d', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%s' )
 		);
 		$mail_id = $wpdb->insert_id;
 
@@ -98,7 +98,6 @@ class VCA_ASM_Mailer {
 			$wpdb->prefix . 'vca_asm_emails_queue',
 			array(
 				'mail_id' => $mail_id,
-				// DEBUG SPOT
 				'receipients' => serialize( $receipients ),
 				'total_receipients' => count( $receipients )
 			),
@@ -121,7 +120,6 @@ class VCA_ASM_Mailer {
 
 		$default_args = array(
 			'mail_id' => 1,
-			// DEBUG SPOT
 			'receipients' => array( 1 ),
 			'subject' => 'The Subject',
 			'message' => 'Lorem Ipsum',
@@ -280,8 +278,8 @@ class VCA_ASM_Mailer {
 		$mailer->Port = 25;
 		$mailer->SMTPAuth = true;
 		$mailer->SMTPKeepAlive = true;
-		$mailer->Username = 'j.pilkahn@vivaconagua.org';
-		$mailer->Password = 'HSV_Ole!';
+		$mailer->Username = 'no-reply@vivaconagua.org';
+		$mailer->Password = 'Opuhobema571';
 
 		$mailer->SetFrom( $from_email, $from_name );
 		$mailer->AddReplyTo( $from_email, $from_name );
@@ -715,7 +713,6 @@ class VCA_ASM_Mailer {
 			return false;
 		}
 
-		// DEBUG SPOT
 		$receipients = unserialize( $queued['receipients'] );
 
 		$queue_count = count( $receipients );
@@ -875,7 +872,7 @@ class VCA_ASM_Mailer {
 	 */
 	public function receipient_id_from_group( $receipient_group, $with_users = false, $ignore_switch, $membership ) {
 		global $current_user,
-			$vca_asm_geography;
+			$vca_asm_activities, $vca_asm_geography;
 
 		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
 		$receipient_id = 0;
