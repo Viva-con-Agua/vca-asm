@@ -142,7 +142,7 @@ class VCA_ASM_Mailer {
 			case 'smtp':
 				$return = $this->send_smtp( $args );
 			break;
-
+		
 			case 'sendmail':
 			default:
 				$return = $this->send_sendmail( $args );
@@ -165,6 +165,8 @@ class VCA_ASM_Mailer {
 	public function send_smtp( $args = array() ) {
 		global $current_user,
 			$vca_asm_geography, $vca_asm_utilities;
+
+		$emails_options = get_option( 'vca_asm_emails_options' );
 
 		$results = array(
 			'total' => 0,
@@ -274,12 +276,12 @@ class VCA_ASM_Mailer {
 
 		$mailer->CharSet = 'UTF-8';
 
-		$mailer->Host = 'smtp.vivaconagua.org';
-		$mailer->Port = 25;
+		$mailer->Host = ! empty( $emails_options['email_protocol_url'] ) ? $emails_options['email_protocol_url'] : 'smtp.vivaconagua.org';
+		$mailer->Port = ! empty( $emails_options['email_protocol_port'] ) ? $emails_options['email_protocol_port'] : 25;
 		$mailer->SMTPAuth = true;
 		$mailer->SMTPKeepAlive = true;
-		$mailer->Username = 'no-reply@vivaconagua.org';
-		$mailer->Password = 'Opuhobema571';
+		$mailer->Username = ! empty( $emails_options['email_protocol_username'] ) ? $emails_options['email_protocol_username'] : 'no-reply@vivaconagua.org';
+		$mailer->Password = ! empty( $emails_options['email_protocol_pass'] ) ? $emails_options['email_protocol_pass'] : 'Opuhobema571';
 
 		$mailer->SetFrom( $from_email, $from_name );
 		$mailer->AddReplyTo( $from_email, $from_name );

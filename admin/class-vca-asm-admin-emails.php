@@ -62,7 +62,10 @@ class VCA_ASM_Admin_Emails {
 					'<a title="' . _x( 'One more...', 'Admin Email Interface', 'vca-asm' ) . '" ' .
 						'href="' . get_option( 'siteurl' ) . '/wp-admin/admin.php?page=vca-asm-compose">' .
 							'&larr; ' . _x( 'Send further mails', 'Admin Email Interface', 'vca-asm' ) .
-					'</a>'
+					'</a>' .
+					'<span id="processed-url" style="display:none">' .
+						'?page=vca-asm-outbox&todo=processed&id=' .$mail_id . '&cnt=' . $receipients_count .
+					'</span>'
 			);
 		} elseif( isset( $_GET['todo'] ) && $_GET['todo'] == 'test' ) {
 			echo $vca_asm_mailer->check_outbox();
@@ -511,6 +514,79 @@ class VCA_ASM_Admin_Emails {
 		global $current_user, $wpdb,
 			$vca_asm_activities, $vca_asm_geography;
 
+		/* Check whether a city user's last mail is sufficiently long ago */
+		$waiting_period = intval( ( ! empty( $this->emails_options['email_restrictions_city'] ) ? $this->emails_options['email_restrictions_city'] : 0 ) );
+		$waiting_period_seconds = $waiting_period * 3600;
+
+
+		$blocked = false;
+		if ( 'newsletter' === $active_tab && 0 !== $waiting_period_seconds /*&& in_array( 'city', $current_user->roles )*/ )
+		{
+			$mails = $wpdb->get_results(
+				"SELECT time FROM " .
+				$wpdb->prefix . "vca_asm_emails " .
+				"WHERE sent_by = " . $current_user->ID,
+				ARRAY_A
+			);
+			$newest_stamp = 0;
+			if ( ! empty( $mails ) ) {
+				foreach ( $mails as $mail ) {
+					if ( $newest_stamp < $mail['time'] ) {
+						$newest_stamp = $mail['time'];
+					}
+				}
+			}
+
+			$left_string = '';
+			$left_to_wait = ( $newest_stamp + $waiting_period_seconds ) - time();
+			if ( 0 < $left_to_wait ) {
+				$blocked = true;
+
+				$days = floor( $left_to_wait / (3600*24) );
+				if ( $days > 0 )
+				{
+					$left_string .= $days . ' ' . __( 'Days', 'vca-asm' ) . ', ';
+				}
+
+				$hours = ($left_to_wait / 3600) % 24;
+				if ( $hours > 0 )
+				{
+					$left_string .= $hours . ' ' . __( 'Hours', 'vca-asm' ) . ' & ';
+				}
+
+				$minutes = ($left_to_wait / 60) % 60;
+				if ( $minutes > 0 )
+				{
+					$left_string .= $minutes . ' ' . __( 'Minutes', 'vca-asm' );
+				}
+
+				$newest_string = strftime( '%A, %d %B, %H:%M', $newest_stamp );
+
+				$periods = array(
+					1 => _x( '1 Hour', 'Settings Admin Menu', 'vca-asm' ),
+					2 => _x( '2 Hours', 'Settings Admin Menu', 'vca-asm' ),
+					3 => _x( '3 Hours', 'Settings Admin Menu', 'vca-asm' ),
+					6 => _x( '6 Hours', 'Settings Admin Menu', 'vca-asm' ),
+					12 => _x( '12 Hours', 'Settings Admin Menu', 'vca-asm' ),
+					24 => _x( '1 Day', 'Settings Admin Menu', 'vca-asm' ),
+					72 => _x( '3 Days', 'Settings Admin Menu', 'vca-asm' ),
+					144 => _x( '6 Days', 'Settings Admin Menu', 'vca-asm' ),
+					288 => _x( '12 Days', 'Settings Admin Menu', 'vca-asm' )
+				);
+
+				$period_string = ! empty( $periods[$waiting_period] ) ? $periods[$waiting_period] : $waiting_period . ' ' . _x( 'Hours', 'Settings Admin Menu', 'vca-asm' );
+
+				$waiting_message = '<div class="message">' .
+					'<p>' .
+						sprintf( _x( 'You&apos;ve sent the last newsletter on %s', 'Waiting Period before being allowed to send subsequent newsletters', 'vca-asm' ), $newest_string ) .
+					'</p><p>' .
+						sprintf( _x( 'The waiting period is set to: %s', 'vca-asm' ), $period_string ) .
+					'</p><p>' .
+						sprintf( _x( 'Unfortunately you will have to wait <span class="warning">for %s</span> until you can send another newsletter.', 'Waiting Period before being allowed to send subsequent newsletters', 'vca-asm' ), $left_string ) .
+					'</p></div>';
+			}
+		}
+
 		$act_id = isset( $_GET['activity'] ) ? intval( $_GET['activity'] ) : NULL;
 		$act_phase = ! empty( $act_id ) ? $vca_asm_activities->get_phase( $act_id ) : 'all';
 		$act_type = ! empty( $act_id ) ? get_post_type( $act_id ) : 'all';
@@ -542,11 +618,12 @@ class VCA_ASM_Admin_Emails {
 
 		/* form parameters */
 		$url = "admin.php?page=vca-asm-compose";
-		$form_action = "admin.php?page=vca-asm-outbox&todo=process&noheader=true";
+		$form_action = "admin.php?page=vca-asm-outbox&noheader=true&todo=process";
 
 		wp_enqueue_script( 'vca-asm-admin-email-preview' );
 		$params = array(
 			'url' => get_option( 'siteurl' ),
+			'sendingAction' => $form_action,
 			'btnVal' => __( 'Preview', 'vca-asm' ),
 			'action' => $form_action
 		);
@@ -966,6 +1043,22 @@ class VCA_ASM_Admin_Emails {
 			'logout_buttons' => true
 		));
 
+		$confirm_text = __(
+				'Are you sure this newsletter is ready for sending?',
+				'vca-asm'
+			) .
+			'<br />' .
+			__(
+				'Make sure, <strong>times, dates and locations as well as links</strong> are correct.',
+				'vca-asm'
+			) .
+			'<br />' .
+			'<br />' .
+			__(
+				'Sending the same (or a similar) mail several times can result in getting categorized as <strong>spam</strong> by the receipient!',
+				'vca-asm'
+			);
+
 		$form = new VCA_ASM_Admin_Form( array(
 			'echo' => false,
 			'form' => true,
@@ -981,7 +1074,9 @@ class VCA_ASM_Admin_Emails {
 			'button_id' => 'sendmail-submit',
 			'top_button' => false,
 			'confirm' => true,
-			'confirm_text' => __( 'Send Email now?', 'vca-asm' ),
+			'confirm_text' => $confirm_text,
+			'confirm_button_affirmative' => __( 'Send!', 'vca-asm' ),
+			'confirm_button_negative' =>__( 'Nopes, let me check again...', 'vca-asm' ),
 			'has_cap' => true,
 			'fields' => 'activity' === $active_tab ? $activity_boxes : $newsletter_boxes
 		));
@@ -995,7 +1090,11 @@ class VCA_ASM_Admin_Emails {
 
 		$output .= $adminpage->top();
 
-		$output .= $form->output();
+		if ( ! $blocked ) {
+			$output .= $form->output();
+		} else {
+			$output .= $waiting_message;
+		}
 
 		$output .= $mb_env->top();
 		$output .= $mb_env->mb_top();

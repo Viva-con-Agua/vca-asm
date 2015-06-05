@@ -35,6 +35,9 @@ class VCA_ASM_Admin_Form {
 		'top_button' => true,
 		'confirm' => false,
 		'confirm_text' => 'Really?',
+		'confirm_button_affirmative' => 'OK',
+		'confirm_button_negative' => 'Nopes',
+		'confirm_button_first' => 'negative',
 		'back' => false,
 		'back_url' => '#',
 		'submitted_field' => true,
@@ -51,12 +54,27 @@ class VCA_ASM_Admin_Form {
 	 */
 	public function __construct( $args ) {
 		$this->default_args['button'] = __( 'Save', 'vca-asm' );
+		$this->default_args['confirm_text'] = __( 'Really?', 'vca-asm' );
+		$this->default_args['confirm_button_affirmative'] = __( 'OK', 'vca-asm' );
+		$this->default_args['confirm_button_negative'] = __( 'Nopes', 'vca-asm' );
 
 		$this->args = wp_parse_args( $args, $this->default_args );
 
 		if ( true === $this->args['js'] ) {
 			wp_enqueue_script( 'postbox' );
 			add_action( 'admin_footer', array( $this, 'print_script' ) );
+		}
+
+		if ( true === $this->args['confirm'] ) {
+			$dialog_params = array(
+				'btnID' => $this->args['button_id'],
+				'text' => $this->args['confirm_text'],
+				'btnYes' => $this->args['confirm_button_affirmative'],
+				'btnNo' => $this->args['confirm_button_negative'],
+				'btnFirst' => $this->args['confirm_button_first']
+			);
+			wp_localize_script( 'vca-asm-admin-dialog', 'dialogParams', $dialog_params );
+			wp_enqueue_script( 'vca-asm-admin-dialog' );
 		}
 	}
 	public function print_script() {
@@ -75,14 +93,7 @@ class VCA_ASM_Admin_Form {
 
 		$output = '';
 
-		$the_button = '<input type="submit" name="submit" id="' . $button_id . '" class="button-primary" value="' . $button . '"';
-		if ( $confirm ) {
-			$the_button .= ' onclick="' .
-				'if ( confirm(\'' .
-					$confirm_text .
-				'\') ) { return true; } return false;"';
-		}
-		$the_button .= '>';
+		$the_button = '<input type="submit" name="submit" id="' . $button_id . '" class="button-primary" value="' . $button . '">';
 
 		if ( $form ) {
 			$output .= '<form name="' . $name . '" method="' . $method . '" action="' . $action . '">';

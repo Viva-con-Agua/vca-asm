@@ -20,7 +20,7 @@ $(document).ready( function() {
 			return false;
 		} else {
 			$('form[name="vca-asm-groupmail-form"]').removeAttr('target');
-			$('form[name="vca-asm-groupmail-form"]').attr('action', 'admin.php?page=vca-asm-outbox&todo=process');
+			$('form[name="vca-asm-groupmail-form"]').attr('action', emailParams.sendingAction);
 		}
 		return true;
 	});

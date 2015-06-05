@@ -203,7 +203,8 @@ class VCA_ASM {
 			)
 		);
 
-		wp_register_script( 'vca-asm-admin-email-preview', VCA_ASM_RELPATH . 'js/admin-email-preview.js', array( 'jquery' ), '2013.11.6.1', true );
+		wp_register_script( 'vca-asm-admin-dialog', VCA_ASM_RELPATH . 'js/admin-dialog.js', array( 'jquery', 'jquery-ui-dialog' ), '2015.06.05.66', true );
+		wp_register_script( 'vca-asm-admin-email-preview', VCA_ASM_RELPATH . 'js/admin-email-preview.js', array( 'jquery' ), '2015.06.05.1', true );
 		wp_register_script( 'vca-asm-admin-email-compose', VCA_ASM_RELPATH . 'js/admin-email-compose.js', array( 'jquery' ), '2014.06.08.1', true );
 		wp_register_script( 'vca-asm-admin-finances', VCA_ASM_RELPATH . 'js/admin-finances.js', array( 'jquery' ), '2014.04.02.3', true );
 		wp_register_script( 'vca-asm-admin-finances-spreadsheet-form', VCA_ASM_RELPATH . 'js/admin-finances-spreadsheet-form.js', array( 'jquery' ), '2014.04.02.3', true );
@@ -224,6 +225,7 @@ class VCA_ASM {
 		/* used throughout the backend, enqueued everywhere */
 		wp_enqueue_script( 'jquery-ui-datepicker' );
 		wp_enqueue_script( 'jquery-ui-slider' );
+		wp_enqueue_script( 'jquery-ui-dialog' );
 		wp_enqueue_script( 'vca-asm-admin-jquery-ui-integration' );
 		wp_enqueue_script( 'vca-asm-admin-generic' );
 		wp_enqueue_script( 'vca-asm-tooltip' );
