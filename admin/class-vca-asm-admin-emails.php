@@ -654,7 +654,7 @@ class VCA_ASM_Admin_Emails {
 		switch ( $editor_type ) {
 			case 'html':
 				$editor_field = array(
-					'id' => 'newsletter-editor',
+					'id' => 'newsletter_editor',
 					'type' => 'tinymce',
 					'label' =>  _x( 'Message', 'Admin Email Interface', 'vca-asm' ),
 					'desc' => _x( 'Message Body', 'Admin Email Interface', 'vca-asm' ),
@@ -666,19 +666,55 @@ class VCA_ASM_Admin_Emails {
 						'tabindex' => 2,
 						'quicktags' => false,
 						'tinymce' => array(
-							'plugins' => 'fullscreen, paste, spellchecker, tabfocus',
+							'browser_spellcheck' => true,
+							'pugins' => 'advlist, emoticons, fullscreen, hr, paste, searchreplace, spellchecker, textcolor, wordcount',
 							'content_css' =>  VCA_ASM_RELPATH . 'css/tinymce.css?ver=' . time(),
-							'theme_advanced_buttons1' => 'bold,italic,underline,strikethrough,separator,styleselect,formatselect,separator,link,unlink,separator,forecolor',
-							'theme_advanced_buttons2' => 'justifyleft,justifycenter,justifyright,justifyfull,separator,bullist,numlist,separator,outdent,indent',
-							'theme_advanced_buttons3' => 'charmap,hr,separator,pastetext,pasteword,removeformat,separator,undo,redo,separator,spellchecker,separator,fullscreen',
-							'theme_advanced_blockformats' => 'p,h1,h2',
-							'theme_advanced_text_colors' => '000000,646567,8F9092,B6B7B9,C5C6C8,D5D6D7,E3E4E5,FFFFFF,008FC1,00A8CF,7EC5E0,C4E3F0,E2007A,E9619C,F19FC1,F9D3E3,002A3D,00586C,588B9B,A9C4CE,A4D8E3,BEE3EB,D5ECF1,EBF7F9,584619,857043,B09E79,D9CDB8,BBA259,CCB882,DDD0AC,EEE7D5,E3CF9A,EBDBB3,F1E6CC,F9F3E6',
-							'theme_advanced_more_colors' => false,
+							'toolbar1' => 'styleselect formatselect bold italic underline strikethrough link unlink forecolor',
+							'toolbar2' => 'alignleft aligncenter alignright alignjustify outdent indent bullist numlist table emoticons',
+							'toolbar3' => 'charmap hr pastetext removeformat undo redo spellchecker searchreplace fullscreen',
+							'block_formats' => _x( 'Paragraph', 'TinyMCE', 'vca-asm' ) . '=p;' .
+												_x( 'Header 1', 'TinyMCE', 'vca-asm' ) . '=h1;' .
+												_x( 'Header 2', 'TinyMCE', 'vca-asm' ) . '=h2;',
+							'textcolor_map' => '[
+												"000000", "' . _x( 'Black', 'TinyMCE', 'vca-asm' ) . '",
+												"646567", "' . _x( 'Grey 1', 'TinyMCE', 'vca-asm' ) . '",
+												"8F9092", "' . _x( 'Grey 2', 'TinyMCE', 'vca-asm' ) . '",
+												"B6B7B9", "' . _x( 'Grey 3', 'TinyMCE', 'vca-asm' ) . '",
+												"C5C6C8", "' . _x( 'Grey 4', 'TinyMCE', 'vca-asm' ) . '",
+												"D5D6D7", "' . _x( 'Grey 5', 'TinyMCE', 'vca-asm' ) . '",
+												"E3E4E5", "' . _x( 'Grey 6', 'TinyMCE', 'vca-asm' ) . '",
+												"FFFFFF", "' . _x( 'White', 'TinyMCE', 'vca-asm' ) . '",
+												"008FC1", "' . _x( 'VcA Blue 100', 'TinyMCE', 'vca-asm' ) . '",
+												"00A8CF", "' . _x( 'VcA Blue 75', 'TinyMCE', 'vca-asm' ) . '",
+												"7EC5E0", "' . _x( 'VcA Blue 50', 'TinyMCE', 'vca-asm' ) . '",
+												"C4E3F0", "' . _x( 'VcA Blue 25', 'TinyMCE', 'vca-asm' ) . '",
+												"E2007A", "' . _x( 'VcA Magenta 100', 'TinyMCE', 'vca-asm' ) . '",
+												"E9619C", "' . _x( 'VcA Magenta 75', 'TinyMCE', 'vca-asm' ) . '",
+												"F19FC1", "' . _x( 'VcA Magenta 50', 'TinyMCE', 'vca-asm' ) . '",
+												"F9D3E3", "' . _x( 'VcA Magenta 25', 'TinyMCE', 'vca-asm' ) . '",
+												"002A3D", "' . _x( 'VcA Dark Blue 100', 'TinyMCE', 'vca-asm' ) . '",
+												"00586C", "' . _x( 'VcA Dark Blue 75', 'TinyMCE', 'vca-asm' ) . '",
+												"588B9B", "' . _x( 'VcA Dark Blue 50', 'TinyMCE', 'vca-asm' ) . '",
+												"A9C4CE", "' . _x( 'VcA Dark Blue 25', 'TinyMCE', 'vca-asm' ) . '",
+												"A4D8E3", "' . _x( 'VcA Light Blue 100', 'TinyMCE', 'vca-asm' ) . '",
+												"BEE3EB", "' . _x( 'VcA Light Blue 75', 'TinyMCE', 'vca-asm' ) . '",
+												"D5ECF1", "' . _x( 'VcA Light Blue 50', 'TinyMCE', 'vca-asm' ) . '",
+												"EBF7F9", "' . _x( 'VcA Light Blue 25', 'TinyMCE', 'vca-asm' ) . '",
+												"584619", "' . _x( 'VcA Dark Brown 100', 'TinyMCE', 'vca-asm' ) . '",
+												"857043", "' . _x( 'VcA Dark Brown 75', 'TinyMCE', 'vca-asm' ) . '",
+												"B09E79", "' . _x( 'VcA Dark Brown 50', 'TinyMCE', 'vca-asm' ) . '",
+												"D9CDB8", "' . _x( 'VcA Dark Brown 25', 'TinyMCE', 'vca-asm' ) . '",
+												"BBA259", "' . _x( 'VcA Light Brown 100', 'TinyMCE', 'vca-asm' ) . '",
+												"CCB882", "' . _x( 'VcA Light Brown 75', 'TinyMCE', 'vca-asm' ) . '",
+												"DDD0AC", "' . _x( 'VcA Light Brown 50', 'TinyMCE', 'vca-asm' ) . '",
+												"EEE7D5", "' . _x( 'VcA Light Brown 25', 'TinyMCE', 'vca-asm' ) . '",
+												"E3CF9A", "' . _x( 'VcA Beige 100', 'TinyMCE', 'vca-asm' ) . '",
+												"EBDBB3", "' . _x( 'VcA Beige 75', 'TinyMCE', 'vca-asm' ) . '",
+												"F1E6CC", "' . _x( 'VcA Beige 50', 'TinyMCE', 'vca-asm' ) . '",
+												"F9F3E6", "' . _x( 'VcA Beige 25', 'TinyMCE', 'vca-asm' ) . '"
+												]',
 							'invalid_elements' => 'form,frame,iframe,object,video',
 							'force_hex_style_colors' => true,
-							'theme_advanced_path' => false,
-							'theme_advanced_resizing' => true,
-							'theme_advanced_styles' => 'VcA Link=vca-link',
 							'style_formats' => '[{title:"VcA ' . _x( 'Headline', 'Editor Styles', 'vca-asm' ) . '",block:"h1",styles:{color:"#008FC1",background:"transparent",fontSize:"28px",fontWeight:"bold",lineHeight:"1",marginTop:"0",marginRight:"0",marginBottom:"14px",marginLeft:"0",paddingTop:"0",paddingRight:"0",paddingBottom:"0",paddingLeft:"0",fontFamily:"Verdana,Geneva,Arial,Helvetica,sans-serif;-webkit-text-size-adjust:none;"}},' .
 								'{title:"VcA ' . _x( 'Subline', 'Editor Styles', 'vca-asm' ) . '",block:"h2",styles:{color:"#002A3D",background:"transparent",fontSize:"18px",fontWeight:"bold",lineHeight:"1.1666667",marginTop:"0",marginRight:"0",marginBottom:"21px",marginLeft:"0",paddingTop:"0",paddingRight:"0",paddingBottom:"0",paddingLeft:"0",fontFamily:"Verdana,Geneva,Arial,Helvetica,sans-serif;-webkit-text-size-adjust:none;"}},' .
 								'{title:"VcA ' . _x( 'Lead Paragraph', 'Editor Styles', 'vca-asm' ) . '",block:"p",styles:{color:"#00586C",background:"transparent",fontSize:"14px",fontWeight:"bold",lineHeight:"1.5",marginTop:"0",marginRight:"0",marginBottom:"21px",marginLeft:"0",paddingTop:"0",paddingRight:"0",paddingBottom:"0",paddingLeft:"0",fontFamily:"Verdana,Geneva,Arial,Helvetica,sans-serif;-webkit-text-size-adjust:none;"}},' .
@@ -696,7 +732,7 @@ class VCA_ASM_Admin_Emails {
 								'o.content=o.content.replace(/<hr(?:[^>]*?)>/gi,"<hr style=\"margin-top:0;margin-right:0;margin-bottom:21px;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;\">");' .
 								'o.content=o.content.replace(/<li(?:[^>]*?)>/gi,"<li style=\"color:#0B0B0B;font-size:13px;line-height:21px;font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;\">");' .
 								'o.content=o.content.replace(/(<h[1-6][^>]*?>)((?:.(?!<\/h))*?)(<\/h[1-6]>)/gi,"$1<span style=\"font-family:\'Gill Sans Bold Condensed\',\'Gill Sans Condensed\',\'Gill Sans Bold\',\'Gill Sans\',\'Gill Sans MT\'\">$2</span>$3");});}'
-							)
+						)
 					)
 				);
 			break;

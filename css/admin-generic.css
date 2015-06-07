@@ -432,6 +432,9 @@ input[type="text"].wide-text {
 	 box-sizing: border-box;
 	 width: 99.7%;
 }
+div.mce-toolbar[style] {
+	display: block !important;
+}
 
 
 
