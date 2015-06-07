@@ -520,7 +520,7 @@ class VCA_ASM_Admin_Emails {
 
 
 		$blocked = false;
-		if ( 'newsletter' === $active_tab && 0 !== $waiting_period_seconds /*&& in_array( 'city', $current_user->roles )*/ )
+		if ( 'newsletter' === $active_tab && 0 !== $waiting_period_seconds && in_array( 'city', $current_user->roles ) )
 		{
 			$mails = $wpdb->get_results(
 				"SELECT time FROM " .
@@ -539,6 +539,21 @@ class VCA_ASM_Admin_Emails {
 
 			$left_string = '';
 			$left_to_wait = ( $newest_stamp + $waiting_period_seconds ) - time();
+
+			$periods = array(
+				1 => _x( '1 Hour', 'Settings Admin Menu', 'vca-asm' ),
+				2 => _x( '2 Hours', 'Settings Admin Menu', 'vca-asm' ),
+				3 => _x( '3 Hours', 'Settings Admin Menu', 'vca-asm' ),
+				6 => _x( '6 Hours', 'Settings Admin Menu', 'vca-asm' ),
+				12 => _x( '12 Hours', 'Settings Admin Menu', 'vca-asm' ),
+				24 => _x( '1 Day', 'Settings Admin Menu', 'vca-asm' ),
+				72 => _x( '3 Days', 'Settings Admin Menu', 'vca-asm' ),
+				144 => _x( '6 Days', 'Settings Admin Menu', 'vca-asm' ),
+				288 => _x( '12 Days', 'Settings Admin Menu', 'vca-asm' )
+			);
+
+			$period_string = ! empty( $periods[$waiting_period] ) ? $periods[$waiting_period] : $waiting_period . ' ' . _x( 'Hours', 'Settings Admin Menu', 'vca-asm' );
+
 			if ( 0 < $left_to_wait ) {
 				$blocked = true;
 
@@ -561,20 +576,6 @@ class VCA_ASM_Admin_Emails {
 				}
 
 				$newest_string = strftime( '%A, %d %B, %H:%M', $newest_stamp );
-
-				$periods = array(
-					1 => _x( '1 Hour', 'Settings Admin Menu', 'vca-asm' ),
-					2 => _x( '2 Hours', 'Settings Admin Menu', 'vca-asm' ),
-					3 => _x( '3 Hours', 'Settings Admin Menu', 'vca-asm' ),
-					6 => _x( '6 Hours', 'Settings Admin Menu', 'vca-asm' ),
-					12 => _x( '12 Hours', 'Settings Admin Menu', 'vca-asm' ),
-					24 => _x( '1 Day', 'Settings Admin Menu', 'vca-asm' ),
-					72 => _x( '3 Days', 'Settings Admin Menu', 'vca-asm' ),
-					144 => _x( '6 Days', 'Settings Admin Menu', 'vca-asm' ),
-					288 => _x( '12 Days', 'Settings Admin Menu', 'vca-asm' )
-				);
-
-				$period_string = ! empty( $periods[$waiting_period] ) ? $periods[$waiting_period] : $waiting_period . ' ' . _x( 'Hours', 'Settings Admin Menu', 'vca-asm' );
 
 				$waiting_message = '<div class="message">' .
 					'<p>' .
@@ -1057,6 +1058,15 @@ class VCA_ASM_Admin_Emails {
 			__(
 				'Sending the same (or a similar) mail several times can result in getting categorized as <strong>spam</strong> by the receipient!',
 				'vca-asm'
+			) .
+			'<br />' .
+			'<br />' .
+			sprintf(
+				__(
+					'Remember, you will have to wait %s before sending another one...',
+					'vca-asm'
+				  ),
+				$period_string
 			);
 
 		$form = new VCA_ASM_Admin_Form( array(
