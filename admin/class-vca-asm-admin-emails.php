@@ -415,54 +415,91 @@ class VCA_ASM_Admin_Emails {
 					'</a>' .
 				'</p>';
 
-		$output .= '<h3 class="title title-top-pa">' . _x( 'Search', 'Admin Emails', 'vca-asm' ) . '</h3>' .
-			'<form name="vca_asm_email_search" method="post" action="'.$url .'&amp;search=1';
-						if( isset( $sbf ) ) {
-							$output .= '&amp;filter=1';
-						}
-					$output .= '">' .
-				'<input type="hidden" name="search-submitted" value="y"/>';
-				if( isset( $sbf ) ) {
-					$output .= '<input type="hidden" name="sent-by-filter" value="' . $sbf . '"/>';
-				}
-				$fields = $search_fields;
-				require( VCA_ASM_ABSPATH . '/templates/admin-form.php' );
-				$output .= '<input type="submit" name="submit" id="submit" class="button-primary"' .
-						' value="' . _x( 'Search', 'Admin Emails', 'vca-asm' ) .
-					'"></form>';
+		$output .= '<h3 class="title title-top-pa">' . _x( 'Search', 'Admin Emails', 'vca-asm' ) . '</h3>';
 
-				if( current_user_can( 'vca_asm_send_global_emails' ) ) {
-					$output .= '<h3 class="title title-top-pa">' . _x( 'Filter', 'Admin Supporters', 'vca-asm' ) . '</h3>' .
-					'<form name="vca_asm_supporter_filter" method="post" action="'.$url .'&amp;filter=1';
-						if( isset( $term ) ) {
-							$output .= '&amp;search=1';
-						}
-					$output .= '">' .
-						'<input type="hidden" name="filter-submitted" value="y"/>';
-					if( isset( $term ) ) {
-						$output .= '<input type="hidden" name="term" value="' . $term . '"/>';
-					}
-					$fields = $filter_fields;
-					require( VCA_ASM_ABSPATH . '/templates/admin-form.php' );
-					$output .= '<input type="submit" name="submit" id="submit" class="button-primary"' .
-						' value="' . _x( 'Filter', 'Admin Supporters', 'vca-asm' ) .
-						'"></form>';
-				}
+		$fields = $search_fields;
+		$fields[] = array(
+			'type' => 'hidden',
+			'id' => 'search-submitted',
+			'value' => 'y'
+		);
+		if( isset( $sbf ) ) {
+			$fields[] = array(
+				'type' => 'hidden',
+				'id' => 'sent-by-filter',
+				'value' => $sbf
+			);
+		}
+		$form_action = $url . '&search=1' . ( isset( $sbf ) ? '&filter=1' : '' );
+		$args = array(
+			'echo' => false,
+			'form' => true,
+			'metaboxes' => false,
+			'action' => $form_action,
+			'id' => 'vca_asm_email_search',
+			'back' => false,
+			'fields' => $fields,
+			'top_button' => false,
+			'button' => _x( 'Search', 'Admin Emails', 'vca-asm' )
+		);
+		$form = new VCA_ASM_Admin_Form( $args );
+		$output .= $form->output();
 
-				$output .= '<h3 id="tbl" class="title title-top-pa">' . $table_headline . '</h3>' .
-					'<form action="" class="bulk-action-form" method="get">' .
-					'<input type="hidden" name="page" value="vca-asm-emails" />' .
-					'<div class="tablenav top">' .
-						'<div class="tablenav-pages">' .
-						'<span class="displaying-num">' . sprintf( __( '%d Sent Items', 'vca-asm' ), $email_count ) . '</span>' .
-						'<span class="pagination-links">' . $pagination_html . '</span></div>' .
-					'</div>';
-				require( VCA_ASM_ABSPATH . '/templates/admin-table.php' );
-				$output .= '<div class="tablenav bottom">' .
-						'<div class="tablenav-pages">' .
-						'<span class="displaying-num">' . sprintf( __( '%d Sent Items', 'vca-asm' ), $email_count ) . '</span>' .
-						'<span class="pagination-links">' . $pagination_html . '</span></div>' .
-					'</div></form>';
+		if( current_user_can( 'vca_asm_send_global_emails' ) ) {
+
+			$output .= '<h3 class="title title-top-pa">' . _x( 'Filter', 'Admin Supporters', 'vca-asm' ) . '</h3>';
+
+			$fields = $filter_fields;
+			$fields[] = array(
+				'type' => 'hidden',
+				'id' => 'search-submitted',
+				'value' => 'y'
+			);
+			if( isset( $term ) ) {
+				$fields[] = array(
+					'type' => 'hidden',
+					'id' => 'term',
+					'value' => $term
+				);
+			}
+			$form_action = $url . '&filter=1' . ( isset( $term ) ? '&search=1' : '' );
+			$args = array(
+				'echo' => false,
+				'form' => true,
+				'metaboxes' => false,
+				'action' => $form_action,
+				'id' => 'vca_asm_supporter_filter',
+				'back' => false,
+				'fields' => $fields,
+				'top_button' => false,
+				'button' => _x( 'Filter', 'Admin Supporters', 'vca-asm' )
+			);
+			$form = new VCA_ASM_Admin_Form( $args );
+			$output .= $form->output();
+		}
+
+		$output .= '<h3 id="tbl" class="title title-top-pa">' . $table_headline . '</h3>' .
+			'<form action="" class="bulk-action-form" method="get">' .
+			'<input type="hidden" name="page" value="vca-asm-emails" />' .
+			'<div class="tablenav top">' .
+				'<div class="tablenav-pages">' .
+				'<span class="displaying-num">' . sprintf( __( '%d Sent Items', 'vca-asm' ), $email_count ) . '</span>' .
+				'<span class="pagination-links">' . $pagination_html . '</span></div>' .
+			'</div>';
+
+		$args = array(
+			'base_url' => 'admin.php?page=vca-asm-emails',
+			'sort_url' => 'admin.php?page=vca-asm-emails',
+			'echo' => false
+		);
+		$the_table = new VCA_ASM_Admin_Table( $args, $columns, $rows );
+		$output .= $the_table->output();
+
+		$output .= '<div class="tablenav bottom">' .
+				'<div class="tablenav-pages">' .
+				'<span class="displaying-num">' . sprintf( __( '%d Sent Items', 'vca-asm' ), $email_count ) . '</span>' .
+				'<span class="pagination-links">' . $pagination_html . '</span></div>' .
+			'</div></form>';
 
 		$output .= '</div>';
 
