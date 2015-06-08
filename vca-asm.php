@@ -74,6 +74,15 @@ if ( !defined( 'VCA_ASM_DIRNAME' ) ) {
 }
 
 /**
+ * Utility Constants
+ *
+ * @since 1.6
+ */
+if ( !defined( 'VCA_ASM_PROFILE_URI' ) ) {
+	define( 'VCA_ASM_PROFILE_URI', 'profile' );
+}
+
+/**
  * Require needed files
  *
  * @since 1.0

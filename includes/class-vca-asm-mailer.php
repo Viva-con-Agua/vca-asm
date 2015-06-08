@@ -142,7 +142,7 @@ class VCA_ASM_Mailer {
 			case 'smtp':
 				$return = $this->send_smtp( $args );
 			break;
-		
+
 			case 'sendmail':
 			default:
 				$return = $this->send_sendmail( $args );
@@ -247,24 +247,6 @@ class VCA_ASM_Mailer {
 			}
 		}
 
-		/***** PRE- AND APPEND MESSAGE BODY W/ STANDARDIZED HEADER & FOOTER *****/
-
-		if ( 'html' === $content_type ) {
-			$html_generator = new VCA_ASM_Email_Html( array(
-				'mail_id' => $mail_id,
-				'message' => $html_message,
-				'subject' => $subject,
-				'from_name' => $from_name,
-				'time' => $time,
-				'mail_nation' => $mail_nation,
-				'for' => $for,
-				'reason' => $reason,
-				'auto_action' => $auto_action,
-				'user_id' => $user_id
-			));
-			$html_message = $html_generator->output();
-		} //add else / plain alternative
-
 		/***** SETUP PHPMailer *****/
 
 		$mailer = new PHPMailer();
@@ -294,8 +276,8 @@ class VCA_ASM_Mailer {
 
 		foreach ( $receipients as $receipient ) {
 
-			/* Translation of User ID into readable information */
 			$receipient_data = get_userdata( $receipient );
+
 			if( ! empty( $receipient_data->user_firstname ) && ! empty( $receipient_data->user_lastname ) ) {
 				$receipient_name = $receipient_data->user_firstname . ' ' . $receipient_data->user_lastname;
 			} elseif( ! empty( $receipient_data->user_firstname ) ) {
@@ -305,12 +287,33 @@ class VCA_ASM_Mailer {
 			} else {
 				$receipient_name = __( 'Supporter', 'vca-asm' );
 			}
-			// DEBUG SPOT
+
 			$receipient_email = $receipient_data->user_email;
+
+			/***** PRE- AND APPEND MESSAGE BODY W/ STANDARDIZED HEADER & FOOTER *****/
+			if ( 'html' === $content_type ) {
+				$html_generator = new VCA_ASM_Email_Html( array(
+					'mail_id' => $mail_id,
+					'message' => $html_message,
+					'subject' => $subject,
+					'from_name' => $from_name,
+					'time' => $time,
+					'mail_nation' => $mail_nation,
+					'for' => $for,
+					'reason' => $reason,
+					'auto_action' => $auto_action,
+					'user_id' => $user_id,
+					'receipient_id' => $receipient,
+					'receipient_email_address' => $receipient_email
+				));
+				$mailer_message = $html_generator->output();
+			} //add else / plain alternative
+
+			// DEBUG SPOT
 
 			if ( 'html' === $content_type ) {
 				$mailer->AltBody = $plain_message;
-				$mailer->MsgHTML( $html_message );
+				$mailer->MsgHTML( $mailer_message );
 			} else {
 				$mailer->Body = $plain_message;
 			}

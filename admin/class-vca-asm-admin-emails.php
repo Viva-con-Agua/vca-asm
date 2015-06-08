@@ -1160,6 +1160,7 @@ class VCA_ASM_Admin_Emails {
 			'confirm_text' => $confirm_text,
 			'confirm_button_affirmative' => __( 'Send!', 'vca-asm' ),
 			'confirm_button_negative' =>__( 'Nopes, let me check again...', 'vca-asm' ),
+			'loading_text' => __( 'The newsletter is being sent.<br />Please be patient and do not close the browser window until done...', 'vca-asm' ),
 			'has_cap' => true,
 			'fields' => 'activity' === $active_tab ? $activity_boxes : $newsletter_boxes
 		));

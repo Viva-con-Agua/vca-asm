@@ -35,7 +35,9 @@ class VCA_ASM_Email_Html {
 		'echo' => false,
 		'auto_action' => '',
 		'in_browser' => false,
-		'user_id' => 0
+		'user_id' => 0,
+		'receipient_id' => 0,
+		'receipient_email_address' => 'no-reply@vivaconagua.org'
 	);
 	private $args = array();
 
@@ -107,6 +109,8 @@ class VCA_ASM_Email_Html {
 			}
 			$pool_link .= 'title="' . __( 'To the Pool!', 'vca-asm' ) . '" href="' . get_option( 'siteurl' ) . '" style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span>' . __( 'Pool', 'vca-asm' ) . '</span></span></a>';
 
+			$direct_cancellation_link = '<a title="' . __( 'Click to cancel newsletter', 'vca-asm' ) . '" href="' . get_option( 'siteurl' ) . '/newsletter-preferences?uid=' . $receipient_id . '&hash=' . md5( $receipient_email_address ) . '" style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span>';
+
 			switch ( $reason ) {
 				case 'activity':
 					$reason_string = str_replace( '%POOL%', $pool_link, __( 'You are getting this message because are registered to the %POOL% and have applied to or are participating in an activity.', 'vca-asm' ) );
@@ -118,7 +122,9 @@ class VCA_ASM_Email_Html {
 
 				case 'newsletter':
 				default:
-					$reason_string = str_replace( '%POOL%', $pool_link, __( 'You are getting this message because are registered to the %POOL% and have chosen to receive newsletters.<br />You can change your newsletter preferences on your &quot;Profile &amp; Settings&quot; page.', 'vca-asm' ) );
+					$reason_string = str_replace( '%POOL%', $pool_link, __( 'You are getting this message because are registered to the %POOL% and have chosen to receive newsletters.', 'vca-asm' ) ) .
+					'<br />' .
+					str_replace( '%LINK_CLOSE%', '</span></span></a>', str_replace( '%LINK_OPEN%', $direct_cancellation_link, __( 'If you do not want receive anymore newsletters, you can %LINK_OPEN%cancel it%LINK_CLOSE% here.', 'vca-asm' ) ) );
 			}
 
 			$append_reason = '<hr style="margin-top:0;margin-right:0;margin-bottom:21px;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;"><p style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:21px;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;font-size:13px;line-height:21px;font-family:Verdana,Geneva,Arial,Helvetica,sans-serif;">' .

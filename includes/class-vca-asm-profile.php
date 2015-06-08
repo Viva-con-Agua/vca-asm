@@ -539,17 +539,78 @@ class VCA_ASM_Profile {
 	}
 
 	/**
-	 * PHP4 style constructor
+	 * Shortcode handler for setting newsletter preferences
 	 *
-	 * @since 1.0
+	 * @since 1.6
 	 * @access public
 	 */
-	public function VCA_ASM_Profile() {
-		$this->__construct();
+	public function newsletter_preferences( $atts ) {
+
+		if ( is_user_logged_in() )
+		{
+			// to do: edge case handling
+		}
+
+		$uid = $_GET['uid'];
+		$hash = $_GET['hash'];
+		$valid = false;
+
+		if ( ! empty( $uid ) && is_numeric( $uid ) && ! empty( $hash ) )
+		{
+			$user = get_userdata( $uid );
+
+			if ( $user && $hash === md5( $user->user_email ) )
+			{
+				update_user_meta( $uid, 'mail_switch', 'none' );
+				$valid = true;
+			}
+		}
+
+		if ( $valid )
+		{
+			$firstname = get_user_meta( $uid, 'first_name', true );
+
+			$output = '<div class="system-message">' .
+					'<h3>' .
+						__( 'Successfully cancelled!', 'vca-asm' ) .
+					'</h3>' .
+					'<p>' .
+						str_replace(
+							'%LINK_CLOSE%',
+							'</a>',
+							str_replace(
+								'%LINK_OPEN%',
+								'<a href="' . get_option( 'siteurl' ) . '/' . VCA_ASM_PROFILE_URI . '" title="' . __( 'Click to check your profile', 'vca-asm' ) . '">',
+								str_replace(
+									'%NAME%',
+									$firstname,
+									__(
+										'Hi %NAME%,<br />you have successfully cancelled your newsletter.<br />You can reenable it in your %LINK_OPEN%profile preferences%LINK_CLOSE% anytime you like.',
+										'vca-asm'
+									)
+								)
+							)
+						) .
+					'</p>' .
+				'</div>';
+		}
+		else
+		{
+			$output = '<div class="system-error">' .
+					'<h3>' .
+						__( 'User ID and/or hash wrong...', 'vca-asm' ) .
+					'</h3>' .
+					'<p>' .
+						__( 'Either the user ID you supplied does not exist or the hash does not match up. Either way, not this way buddy!', 'vca-asm' ) .
+					'</p>' .
+				'</div>';
+		}
+
+		return $output;
 	}
 
 	/**
-	 * PHP5 style constructor
+	 * Constructor
 	 *
 	 * @since 1.0
 	 * @access public
@@ -566,6 +627,7 @@ class VCA_ASM_Profile {
 		add_action( 'personal_options_update', array( $this, 'save_extra_profile_fields' ) );
 		add_action( 'edit_user_profile_update', array( $this, 'save_extra_profile_fields' ) );
 		add_shortcode( 'vca-asm-supporter-vcard', array( $this, 'supporter_vcard' ) );
+		add_shortcode( 'vca-asm-newsletter-preferences', array( $this, 'newsletter_preferences' ) );
 	}
 }
 
