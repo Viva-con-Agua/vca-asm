@@ -20,17 +20,19 @@
 			var action = $( '#' + dialogParams.btnID ).closest( 'form' ).attr('action');
 			tinyMCE.triggerSave();
 			$('div#wpbody-content').append(
-				'<div id="vca-loading-overlay"><h2 class="vca-loading-message">'+
+				'<div id="vca-asm-loading-overlay"><div class="modal"><img src="'+
+				dialogParams.loadingImgSrc+
+				'" title="Loading..." alt="Loading animation" /><h2 class="vca-asm-loading-message">'+
 				dialogParams.loadingText+
-				'</h2><img src="" title="Loading..." alt="Loading animation" /></div>'
+				'</h2></div></div>'
 			);
-			$('div#vca-loading-overlay').show();
+			$('div#vca-asm-loading-overlay').show();
 			$.post(
 				action,
 				$( '#' + dialogParams.btnID ).closest( 'form' ).serialize(),
 				function(data){
 					$('div#wpbody-content').append(data);
-					$('div#vca-loading-overlay').hide();
+					//$('div#vca-asm-loading-overlay').hide();
 					if ( $('span#processed-url').length ) {
 						window.location = $('span#processed-url').first().text();
 					} else {
@@ -52,13 +54,13 @@
 				dialogParams.loadingText+
 				'</h2><img src="" title="Loading..." alt="Loading animation" /></div>'
 			);
-			$('div#vca-loading-overlay').show();
+			$('div#vca-asm-loading-overlay').show();
 			$.post(
 				action,
 				$( '#' + dialogParams.btnID ).closest( 'form' ).serialize(),
 				function(data){
 					$('div#wpbody-content').append(data);
-					$('div#vca-loading-overlay').hide();
+					//$('div#vca-asm-loading-overlay').hide();
 					if ( $('span#processed-url').length ) {
 						window.location = $('span#processed-url').first().text();
 					} else {

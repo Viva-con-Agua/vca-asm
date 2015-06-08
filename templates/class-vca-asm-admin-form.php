@@ -39,6 +39,7 @@ class VCA_ASM_Admin_Form {
 		'confirm_button_negative' => 'Nopes',
 		'confirm_button_first' => 'negative',
 		'loading_text' => 'Please be patient...',
+		'loading_img_src' => 'loading.svg',
 		'back' => false,
 		'back_url' => '#',
 		'submitted_field' => true,
@@ -59,6 +60,7 @@ class VCA_ASM_Admin_Form {
 		$this->default_args['confirm_button_affirmative'] = __( 'OK', 'vca-asm' );
 		$this->default_args['confirm_button_negative'] = __( 'Nopes', 'vca-asm' );
 		$this->default_args['loading_text'] = __( 'Please be patient...', 'vca-asm' );
+		$this->default_args['loading_img_src'] = VCA_ASM_RELPATH . 'img/loading.gif';
 
 		$this->args = wp_parse_args( $args, $this->default_args );
 
@@ -74,7 +76,8 @@ class VCA_ASM_Admin_Form {
 				'btnYes' => $this->args['confirm_button_affirmative'],
 				'btnNo' => $this->args['confirm_button_negative'],
 				'btnFirst' => $this->args['confirm_button_first'],
-				'loadingText' => $this->args['loading_text']
+				'loadingText' => $this->args['loading_text'],
+				'loadingImgSrc' => $this->args['loading_img_src']
 			);
 			wp_localize_script( 'vca-asm-admin-dialog', 'dialogParams', $dialog_params );
 			wp_enqueue_script( 'vca-asm-admin-dialog' );

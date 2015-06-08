@@ -437,7 +437,6 @@ div.mce-toolbar[style] {
 }
 
 
-
 /* ICONS
 ----------------------------------------- */
 
@@ -933,6 +932,45 @@ a:hover .tbl-icon-warning {
 a:hover .nt-icon-goldeimer {
 	background-position: -752px -16px;
 }
+
+
+/* AJAX LOADING OVERLAY
+----------------------------------------- */
+
+div#vca-asm-loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    background-color: rgba(255,255,255,0.9);
+    z-index: 999998;
+}
+
+div#vca-asm-loading-overlay  div.modal {
+    width: 60%;
+    height: auto;
+	margin: 10%  auto 0;
+	padding: 3%;
+	background-color: #f1e6cc !important;
+	border: 2px solid #ccb882 !important;
+    border-radius: 5px;
+    text-align: center;
+    z-index: 999999;
+}
+
+/* just some content with arbitrary styles for explanation purposes */
+div#vca-asm-loading-overlay  div.modal img {
+	 margin: 0 auto 1.5em !important;
+}
+div#vca-asm-loading-overlay  div.modal h2 {
+	 margin: 0 auto !important;
+}
+div#vca-asm-loading-overlay  div.modal h2 {
+	 line-height: 1.5;
+	 color: #002a3d;
+}
+
 
 
 
