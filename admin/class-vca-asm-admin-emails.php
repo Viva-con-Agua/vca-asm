@@ -370,7 +370,7 @@ class VCA_ASM_Admin_Emails {
 			'id' => 'subject',
 			'title' => __( 'Subject', 'vca-asm' ),
 			'sortable' => true,
-			'actions' => 'emails'
+			'actions' => array( 'emails_read' )
 		);
 
 		$search_fields = array(

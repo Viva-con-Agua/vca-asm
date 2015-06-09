@@ -943,7 +943,7 @@ div#vca-asm-loading-overlay {
     left: 0;
     height: 100%;
     width: 100%;
-    background-color: rgba(255,255,255,0.9);
+    background-color: rgba(255,255,255,0.7);
     z-index: 999998;
 }
 

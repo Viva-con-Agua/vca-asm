@@ -109,7 +109,11 @@ class VCA_ASM_Email_Html {
 			}
 			$pool_link .= 'title="' . __( 'To the Pool!', 'vca-asm' ) . '" href="' . get_option( 'siteurl' ) . '" style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span>' . __( 'Pool', 'vca-asm' ) . '</span></span></a>';
 
-			$direct_cancellation_link = '<a title="' . __( 'Click to cancel newsletter', 'vca-asm' ) . '" href="' . get_option( 'siteurl' ) . '/newsletter-preferences?uid=' . $receipient_id . '&hash=' . md5( $receipient_email_address ) . '" style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span>';
+			$direct_cancellation_link = '<a ';
+			if ( true === $in_browser ) {
+				$direct_cancellation_link .= 'onclick="preventIt(event)" ';
+			}
+			$direct_cancellation_link .= 'title="' . __( 'Click to cancel newsletter', 'vca-asm' ) . '" href="' . get_option( 'siteurl' ) . '/newsletter-preferences?uid=' . $receipient_id . '&hash=' . md5( $receipient_email_address ) . '" style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span>';
 
 			switch ( $reason ) {
 				case 'activity':
@@ -463,13 +467,20 @@ class VCA_ASM_Email_Html {
 		if ( true === $in_browser ) {
 			$output .= '</div>' . $lf .
 					'</div>' . $lf .
-				'</body>' . $lf .
+				'<script src="' . get_option( 'siteurl' ) . '/wp-includes/js/jquery/jquery.js"></script>' . $lf .
 				'<script type="text/javascript">' . $lf .
 				'	function preventIt(e) {' . $lf .
 				'		e.preventDefault();' . $lf .
-				'		alert( "' . __( 'These links do not work in Preview-Mode.', 'vca-asm' ) . '" );' . $lf .
+				'		alert( "' . __( 'These links do not work in In-Browser-Mode.', 'vca-asm' ) . '" );' . $lf .
 				'	}' . $lf .
+				'	jQuery("div.message-wrapper").find("p:empty").each(function() {' .$lf .
+				'		jQuery(this).html("&nbsp;");' .$lf .
+				'	});' . $lf .
+				'	jQuery("div.message-wrapper").find(":header:empty").each(function() {' .$lf .
+				'		jQuery(this).html("&nbsp;");' . $lf .
+				'	});' .$lf .
 				'</script>' . $lf .
+				'</body>' . $lf .
 				'</html>';
 		} else {
 			$output .= '</center></body></html>';

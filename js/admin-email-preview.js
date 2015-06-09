@@ -7,22 +7,25 @@ $(document).ready( function() {
 		);
 	}
 
-	$('form[name="vca-asm-groupmail-form"] input[type=submit]').click(function() {
+	$('form[name="vca-asm-groupmail-form"] input[type=submit]').mouseup(function() {
+		tinyMCE.triggerSave();
+		var theMessage = $('<div></div>').append($('textarea[name=message]').val());
+		theMessage.find('p:empty').each(function() {
+			$(this).html('&nbsp;');
+		});
+		theMessage.find(':header:empty').each(function() {
+			$(this).html('&nbsp;');
+		});
+		$('textarea[name=message]').val(theMessage.html());
 		$('input[type=submit]', $(this).parents('form')).removeAttr('clicked');
 	    $(this).attr('clicked', 'true');
-	});
-
-	$('form[name="vca-asm-groupmail-form"]').submit( function() {
-		if ( $(this).find('input[type=submit][clicked=true]').attr('id') == 'preview' ) {
+		if ( $(this).attr('id') == 'preview' ) {
 			$('form[name="vca-asm-groupmail-form"]').attr('target', '_blank');
 			$('form[name="vca-asm-groupmail-form"]').attr('action', emailParams.url + '/email');
-			$('form[name="vca-asm-groupmail-form"]').submit();
-			return false;
 		} else {
 			$('form[name="vca-asm-groupmail-form"]').removeAttr('target');
 			$('form[name="vca-asm-groupmail-form"]').attr('action', emailParams.sendingAction);
 		}
-		return true;
 	});
 });
 

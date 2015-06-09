@@ -544,8 +544,8 @@ class VCA_ASM_Admin_Table {
 	 * @access private
 	 */
 	private function actions( $actions, $row, $column, $cap = '' ) {
-		global $current_user, $vca_asm_geography, $vca_asm_roles;
-		get_currentuserinfo();
+		global $current_user,
+			$vca_asm_geography, $vca_asm_roles;
 
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
 		$admin_nation = $vca_asm_geography->has_nation( $admin_city );
