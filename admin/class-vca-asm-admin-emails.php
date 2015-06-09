@@ -555,7 +555,6 @@ class VCA_ASM_Admin_Emails {
 		$waiting_period = intval( ( ! empty( $this->emails_options['email_restrictions_city'] ) ? $this->emails_options['email_restrictions_city'] : 0 ) );
 		$waiting_period_seconds = $waiting_period * 3600;
 
-
 		$blocked = false;
 		if ( 'newsletter' === $active_tab && 0 !== $waiting_period_seconds && in_array( 'city', $current_user->roles ) )
 		{
@@ -640,7 +639,8 @@ class VCA_ASM_Admin_Emails {
 			foreach ( $phases as $phase ) {
 				$act_sel_options[$type][$phase] = $vca_asm_activities->options_array_activities(array(
 					'type' => $type,
-					'phase' => $phase
+					'phase' => $phase,
+					'check_caps' => true
 				));
 			}
 		}
