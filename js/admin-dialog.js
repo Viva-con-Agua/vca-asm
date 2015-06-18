@@ -16,59 +16,13 @@
 			$( this ).dialog( 'close' );
 		};
 		args.buttons[dialogParams.btnYes] = function() {
-			$( this ).dialog( 'close' );
-			var action = $( '#' + dialogParams.btnID ).closest( 'form' ).attr('action');
-			$('div#wpbody-content').append(
-				'<div id="vca-asm-loading-overlay"><div class="modal"><img src="'+
-				dialogParams.loadingImgSrc+
-				'" title="Loading..." alt="Loading animation" /><h2 class="vca-asm-loading-message">'+
-				dialogParams.loadingText+
-				'</h2></div></div>'
-			);
-			$('div#vca-asm-loading-overlay').show();
-			$.post(
-				action,
-				$( '#' + dialogParams.btnID ).closest( 'form' ).serialize(),
-				function(data){
-					$('div#wpbody-content').append('<div id="processed-url-wrap" class="utility-hidden" style="display:none;"></div>');
-					$('div#processed-url-wrap').append(data);
-					//$('div#vca-asm-loading-overlay').hide();
-					if ( $('span#processed-url').length ) {
-						window.location = $('span#processed-url').first().text();
-					} else {
-						window.location = action;
-					}
-				}
-			);
-			return false;
+			yesButtonCallback( $( this ) );
 		};
 	}
 	else
 	{
 		args.buttons[dialogParams.btnYes] = function() {
-			$( this ).dialog( 'close' );
-			var action = $( '#' + dialogParams.btnID ).closest( 'form' ).attr('action');
-			$('div#wpbody-content').append(
-				'<div id="vca-loading-overlay"><h2 class="vca-loading-message">'+
-				dialogParams.loadingText+
-				'</h2><img src="" title="Loading..." alt="Loading animation" /></div>'
-			);
-			$('div#vca-asm-loading-overlay').show();
-			$.post(
-				action,
-				$( '#' + dialogParams.btnID ).closest( 'form' ).serialize(),
-				function(data){
-					$('div#wpbody-content').append('<div id="processed-url-wrap" class="utility-hidden" style="display:none;"></div>');
-					$('div#processed-url-wrap').append(data);
-					//$('div#vca-asm-loading-overlay').hide();
-					if ( $('span#processed-url').length ) {
-						window.location = $('span#processed-url').first().text();
-					} else {
-						window.location = action;
-					}
-				}
-			);
-			return false;
+			yesButtonCallback( $( this ) );
 		};
 		args.buttons[dialogParams.btnNo] = function() {
 			$( this ).dialog( 'close' );
@@ -85,5 +39,30 @@
 		$( "div#the-dialog" ).dialog('open');
 		return false;
 	});
+
+	function yesButtonCallback( $this ) {
+		$this.dialog( 'close' );
+		var action = $( '#' + dialogParams.btnID ).closest( 'form' ).attr('action');
+		$('div#wpbody-content').append(
+			'<div id="vca-loading-overlay"><h2 class="vca-loading-message">'+
+			dialogParams.loadingText+
+			'</h2><img src="" title="Loading..." alt="Loading animation" /></div>'
+		);
+		$('div#vca-asm-loading-overlay').show();
+		$.post(
+			action,
+			$( '#' + dialogParams.btnID ).closest( 'form' ).serialize(),
+			function(data){
+				$('div#wpbody-content').append('<div id="processed-url-wrap" class="utility-hidden" style="display:none;"></div>');
+				$('div#processed-url-wrap').append(data);
+				if ( $('span#processed-url').length ) {
+					window.location = $('span#processed-url').first().text();
+				} else {
+					window.location = action;
+				}
+			}
+		);
+		return false;
+	}
 
 })(jQuery); // closure

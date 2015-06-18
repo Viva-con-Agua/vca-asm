@@ -151,19 +151,16 @@ class VCA_ASM_Admin_Form {
 				}
 				$output .= '</tbody></table></div></div>';
 			}
+			if ( $js ) {
+				$output .= '</div>';
+			}
+			$output .= '</div></div></div>';
 		} else {
 			$output .= '<table class="form-table pool-form"><tbody>';
 			foreach ( $fields as $field ) {
 				$output .= $this->field( $field );
 			}
 			$output .= '</tbody></table>';
-		}
-
-		if ( $metaboxes ) {
-			if ( $js ) {
-				$output .= '</div>';
-			}
-			$output .= '</div></div></div>';
 		}
 
 		if ( $form ) {

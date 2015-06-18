@@ -203,7 +203,7 @@ class VCA_ASM {
 			)
 		);
 
-		wp_register_script( 'vca-asm-admin-dialog', VCA_ASM_RELPATH . 'js/admin-dialog.js', array( 'jquery', 'jquery-ui-dialog' ), '2015.06.05.84', true );
+		wp_register_script( 'vca-asm-admin-dialog', VCA_ASM_RELPATH . 'js/admin-dialog.js', array( 'jquery', 'jquery-ui-dialog' ), '2015.06.15.6', true );
 		wp_register_script( 'vca-asm-admin-email-preview', VCA_ASM_RELPATH . 'js/admin-email-preview.js', array( 'jquery' ), '2015.06.09.12', true );
 		wp_register_script( 'vca-asm-admin-email-compose', VCA_ASM_RELPATH . 'js/admin-email-compose.js', array( 'jquery' ), '2014.06.08.1', true );
 		wp_register_script( 'vca-asm-admin-finances', VCA_ASM_RELPATH . 'js/admin-finances.js', array( 'jquery' ), '2014.04.02.3', true );

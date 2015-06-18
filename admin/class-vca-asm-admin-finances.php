@@ -239,7 +239,7 @@ class VCA_ASM_Admin_Finances
 				'nonce' => 'vca-asm',
 				'id' => 0,
 				'button' => __( 'Balance now!', 'vca-asm' ),
-				'button_id' => 'submit',
+				'button_id' => 'submit-balance',
 				'top_button' => false,
 				'confirm' => true,
 				'confirm_text' => __( 'Are you sure? This process is irreversible...', 'vca-asm' ),
@@ -456,13 +456,12 @@ class VCA_ASM_Admin_Finances
 		}
 		$output .= '</td></tr>';
 		if ( $balanced !== 2 ) {
-			$output .= $form->output();
+			$output .= '</table>' . $form->output();
 		} else {
 			$output .= '<tr><td><em>' .
 					__( 'The account is up to date!', 'vca-asm' ) .
-				'</em></td></tr>';
+				'</em></td></tr></table>';
 		}
-		$output .= '</table>';
 
 		$output .= $mbs->mb_bottom();
 
