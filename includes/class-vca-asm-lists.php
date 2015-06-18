@@ -400,17 +400,7 @@ class VCA_ASM_Lists
 	}
 
 	/**
-	 * PHP4 style constructor
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function VcA_ASM_Lists() {
-		$this->__construct();
-	}
-
-	/**
-	 * PHP5 style constructor
+	 * Constructor
 	 *
 	 * @since 1.0
 	 * @access public
