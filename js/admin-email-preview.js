@@ -10,11 +10,14 @@ $(document).ready( function() {
 	$('form[name="vca-asm-groupmail-form"] input[type=submit]').mouseup(function() {
 		tinyMCE.triggerSave();
 		var theMessage = $('<div></div>').append($('textarea[name=message]').val());
-		theMessage.find('p:empty').each(function() {
-			$(this).html('&nbsp;');
-		});
-		theMessage.find(':header:empty').each(function() {
-			$(this).html('&nbsp;');
+		theMessage.find('p,:header').each(function() {
+			if( $(this).is(':empty') ) {
+				$(this).html('&nbsp;');
+			} else {
+				var elementContent = $(this).html();
+				elementContent = elementContent.replace(/(?:\r\n|\r|\n)/g, '<br />');
+				$(this).html(elementContent);
+			}
 		});
 		$('textarea[name=message]').val(theMessage.html());
 		$('input[type=submit]', $(this).parents('form')).removeAttr('clicked');

@@ -44,7 +44,7 @@
 		$this.dialog( 'close' );
 		var action = $( '#' + dialogParams.btnID ).closest( 'form' ).attr('action');
 		$('div#wpbody-content').append(
-			'<div id="vca-loading-overlay"><h2 class="vca-loading-message">'+
+			'<div id="vca-asm-loading-overlay"><h2 class="vca-asm-loading-message">'+
 			dialogParams.loadingText+
 			'</h2><img src="" title="Loading..." alt="Loading animation" /></div>'
 		);
@@ -62,7 +62,6 @@
 				}
 			}
 		);
-		return false;
 	}
 
 })(jQuery); // closure

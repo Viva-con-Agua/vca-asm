@@ -309,8 +309,6 @@ class VCA_ASM_Mailer {
 				$mailer_message = $html_generator->output();
 			} //add else / plain alternative
 
-			// DEBUG SPOT
-
 			if ( 'html' === $content_type ) {
 				$mailer->AltBody = $plain_message;
 				$mailer->MsgHTML( $mailer_message );
@@ -320,7 +318,6 @@ class VCA_ASM_Mailer {
 
 			$mailer->AddAddress( $receipient_email, $receipient_name );
 
-			// DEBUG SPOT
 			$results['total']++;
 			if ( ! $mailer->Send() ) {
 				$results['failures']++;
@@ -875,7 +872,7 @@ class VCA_ASM_Mailer {
 	 * @since 1.4
 	 * @access public
 	 */
-	public function receipient_id_from_group( $receipient_group, $with_users = false, $ignore_switch, $membership ) {
+	public function receipient_id_from_group( $receipient_group, $with_users = false, $ignore_switch = false, $membership = 'all' ) {
 		global $current_user,
 			$vca_asm_activities, $vca_asm_geography;
 
