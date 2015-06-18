@@ -129,7 +129,7 @@ class VCA_ASM_Admin_Finances
 	{
 		global $vca_asm_finances;
 
-		$url = '?page=vca-asm-finances';
+		$url = 'admin.php?page=vca-asm-finances';
 
 		$city = ! empty( $id ) ? $id : ( ! empty( $_GET['city'] ) && in_array( $this->cap_lvl, array( 'global', 'national' ) ) ? $_GET['city'] : $this->admin_city );
 
@@ -243,6 +243,9 @@ class VCA_ASM_Admin_Finances
 				'top_button' => false,
 				'confirm' => true,
 				'confirm_text' => __( 'Are you sure? This process is irreversible...', 'vca-asm' ),
+				'confirm_button_affirmative' => __( 'Balance it!', 'vca-asm' ),
+				'confirm_button_negative' => __( 'Not sure...', 'vca-asm' ),
+				'loading_text' => __( 'Months are being balanced...', 'vca-asm' ),
 				'back' => false,
 				'has_cap' => true,
 				'fields' => $fields
