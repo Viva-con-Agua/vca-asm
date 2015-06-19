@@ -422,34 +422,34 @@ class VCA_ASM_Admin_Form {
 								$output .= ' required';
 							}
 							$output .= '" value="' . $option['value'] . '" ';
-					if (
-						(
-							isset( $field['value'] ) &&
+						if (
 							(
+								isset( $field['value'] ) &&
 								(
-									$field['value'] == $option['value'] &&
 									(
-										$option['value'] === 0 ||
-										$option['value'] === '0'
-									)
-								) ||
-								$field['value'] === $option['value']
-							)
-						) || (
-							(
+										$field['value'] == $option['value'] &&
+										(
+											$option['value'] === 0 ||
+											$option['value'] === '0'
+										)
+									) ||
+									$field['value'] === $option['value']
+								)
+							) || (
 								(
-									! isset( $field['value'] ) ||
 									(
-										empty( $field['value'] ) &&
-										0 !== $field['value'] &&
-										'0' !== $field['value']
-									)
-								) &&
-								! empty( $field['default'] ) &&
-								$field['default'] == $option['value']
+										! isset( $field['value'] ) ||
+										(
+											empty( $field['value'] ) &&
+											0 !== $field['value'] &&
+											'0' !== $field['value']
+										)
+									) &&
+									! empty( $field['default'] ) &&
+									$field['default'] == $option['value']
+								)
 							)
-						)
-					) {
+						) {
 							$output .= ' checked="checked"';
 						}
 						if( isset( $field['disabled'] ) && $field['disabled'] === true ) {

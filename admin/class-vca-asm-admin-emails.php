@@ -901,7 +901,7 @@ class VCA_ASM_Admin_Emails {
 						'value' => 'inactive'
 					)
 				),
-				'value' => 0,
+				'default' => 'active',
 				'desc' => _x( 'Select whether to send the email to all users of the selected group or a partial selection based on  &quot;active membership&quot; status.', 'Admin Email Interface', 'vca-asm' )
 			)
 		);
