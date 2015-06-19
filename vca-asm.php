@@ -3,14 +3,14 @@
 /*
 Plugin Name: VcA Activity & Supporter Management
 Plugin URI: http://pool.vivaconagua.org
-Description: Tool for Viva con Agua (NGO) to manage its supporters and their activities within their network
-Version: 1.5
+Description: Tool for Viva con Agua (NGO) to manage its supporters and the activities within their network
+Version: 1.6
 Author: Johannes Pilkahn
-Author URI: http://tramprennen.org // subject to change
+Author URI: http://karlgehttanzen.de // subject to change
 License: GPL3
 */
 
-/*  Copyright 2012  Johannes Pilkahn  (email : j.pilkahn@vivaconagua.org)
+/*  Copyright 2011  Johannes Pilkahn  (email : j.pilkahn@vivaconagua.org)
 
     This program is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License, version 3, as

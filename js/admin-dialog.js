@@ -44,9 +44,11 @@
 		$this.dialog( 'close' );
 		var action = $( '#' + dialogParams.btnID ).closest( 'form' ).attr('action');
 		$('div#wpbody-content').append(
-			'<div id="vca-asm-loading-overlay"><h2 class="vca-asm-loading-message">'+
+			'<div id="vca-asm-loading-overlay"><div class="modal"><h2 class="vca-asm-loading-message">'+
 			dialogParams.loadingText+
-			'</h2><img src="" title="Loading..." alt="Loading animation" /></div>'
+			'</h2><img src="'+
+			dialogParams.loadingImgSrc+
+			'" title="Loading..." alt="Loading animation" /></div></div>'
 		);
 		$('div#vca-asm-loading-overlay').show();
 		$.post(

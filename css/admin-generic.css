@@ -959,7 +959,6 @@ div#vca-asm-loading-overlay  div.modal {
     z-index: 999999;
 }
 
-/* just some content with arbitrary styles for explanation purposes */
 div#vca-asm-loading-overlay  div.modal img {
 	 margin: 0 auto 1.5em !important;
 }
