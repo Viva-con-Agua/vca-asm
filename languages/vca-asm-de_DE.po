@@ -2,9 +2,9 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VcA Activity & Supporter Management v1.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-19 13:50+0100\n"
-"PO-Revision-Date: 2015-06-19 13:52+0100\n"
-"Last-Translator: Johannes Pilkahn <j.pilkahn@vivaconagua.org>\n"
+"POT-Creation-Date: 2015-06-23 12:37+0100\n"
+"PO-Revision-Date: 2015-06-23 12:37+0100\n"
+"Last-Translator: Johannes Pilkahn <johannes@pilkahn.org>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
 "MIME-Version: 1.0\n"
@@ -1294,7 +1294,7 @@ msgstr "Bestätigte Bewerbungen"
 #: ../includes/class-vca-asm-activities.php:1107
 #: ../includes/class-vca-asm-activities.php:2049
 #: ../includes/class-vca-asm-activities.php:2077
-#: ../includes/class-vca-asm-mailer.php:568
+#: ../includes/class-vca-asm-mailer.php:569
 #: ../models/class-vca-asm-activity.php:127
 msgid "Festival"
 msgstr "Festival"
@@ -1694,6 +1694,7 @@ msgstr "Nicht mehr Mitglied des Pools.."
 #: ../admin/class-vca-asm-admin.php:135 ../admin/class-vca-asm-admin.php:136
 #: ../admin/class-vca-asm-admin-settings.php:1096
 #: ../admin/class-vca-asm-admin-settings.php:1108
+#: ../templates/class-vca-asm-email-html.php:101
 msgid "Goldeimer"
 msgstr "Goldeimer"
 
@@ -1937,13 +1938,13 @@ msgstr "Supporter"
 # @ vca-asm
 #: ../includes/class-vca-asm-mailer.php:288
 #: ../includes/class-vca-asm-mailer.php:526
-#: ../includes/class-vca-asm-mailer.php:571
-#: ../includes/class-vca-asm-mailer.php:590
+#: ../includes/class-vca-asm-mailer.php:572
+#: ../includes/class-vca-asm-mailer.php:591
 msgid "Supporter"
 msgstr "Supporter"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:570
+#: ../includes/class-vca-asm-mailer.php:571
 #: ../includes/class-vca-asm-geography.php:541
 #: ../admin/class-vca-asm-admin-finances.php:3208
 #: ../admin/class-vca-asm-admin-geography.php:915
@@ -1952,24 +1953,24 @@ msgid "Cell"
 msgstr "Zelle"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:604
+#: ../includes/class-vca-asm-mailer.php:605
 msgid "Successful application!"
 msgstr "Erfolgreiche Bewerbung!"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:605
+#: ../includes/class-vca-asm-mailer.php:606
 #, php-format
 msgid "You have successfully applied to support Viva con Agua at \"%s\""
 msgstr ""
 "Du hast dich erfolgreich beworben, Viva con Agua bei \"%s\" zu unterstützen."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:608
+#: ../includes/class-vca-asm-mailer.php:609
 msgid "Your application has been accepted!"
 msgstr "Deine Bewerbung wurde angenommen!"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:609
+#: ../includes/class-vca-asm-mailer.php:610
 #, php-format
 msgid ""
 "Your application to support us at \"%s\" has been accepted. Please login to "
@@ -1979,12 +1980,12 @@ msgstr ""
 "log' dich in den Pool ein, um deine(n) Ansprechpartner_innen zu erfahren."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:612
+#: ../includes/class-vca-asm-mailer.php:613
 msgid "Your application has been denied."
 msgstr "Deine Bewerbung wurde leider abgelehnt."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:613
+#: ../includes/class-vca-asm-mailer.php:614
 #, php-format
 msgid ""
 "Sorry this time there weren't enough open slots for \"%s\" and your "
@@ -1994,45 +1995,45 @@ msgstr ""
 "deine Bewerbung ablehnen. Du stehst jetzt auf der Warteliste."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:616
+#: ../includes/class-vca-asm-mailer.php:617
 msgid "Registration revoked."
 msgstr "Zusage zurückgezogen."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:617
+#: ../includes/class-vca-asm-mailer.php:618
 #, php-format
 msgid "Your registration to \"%s\" has been revoked."
 msgstr "Deine Registrierung zu \"%s\" wurde zurückgezogen."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:620
+#: ../includes/class-vca-asm-mailer.php:621
 msgid "Membership confirmed."
 msgstr "Mitgliedsschaft akzeptiert."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:621
+#: ../includes/class-vca-asm-mailer.php:622
 #, php-format
 msgid "Your membership to \"%s\" has been confirmed."
 msgstr "Deine Mitgliedsschaft bei \"%s\" wurde bestätigt."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:624
+#: ../includes/class-vca-asm-mailer.php:625
 msgid "Membership denied."
 msgstr "Mitgliedsschaft nicht akzeptiert."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:625
+#: ../includes/class-vca-asm-mailer.php:626
 #, php-format
 msgid "Your membership to \"%s\" has been denied."
 msgstr "Deine Mitgliedsschaft bei \"%s\" wurde nicht akzeptiert. Sorry."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:628
+#: ../includes/class-vca-asm-mailer.php:629
 msgid "Membership cancelled."
 msgstr "Mitgliedsschaft beendet."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:629
+#: ../includes/class-vca-asm-mailer.php:630
 #, php-format
 msgid ""
 "Your membership to &quot;%s&quot; has been cencelled, either by yourself or "
@@ -2042,88 +2043,88 @@ msgstr ""
 "durch dich selbst oder einen Ansprechpartner deiner Stadt."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:799
+#: ../includes/class-vca-asm-mailer.php:823
 msgid "All Active Members"
 msgstr "Alle aktiven Mitglieder"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:801
+#: ../includes/class-vca-asm-mailer.php:825
 msgid "Pool Users"
 msgstr "Pool Benutzer"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:803
+#: ../includes/class-vca-asm-mailer.php:827
 msgid "All Supporters"
 msgstr "Alle Supporter"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:809
-#: ../includes/class-vca-asm-mailer.php:840
+#: ../includes/class-vca-asm-mailer.php:833
+#: ../includes/class-vca-asm-mailer.php:864
 #, php-format
 msgid "Active Members from %s"
 msgstr "Aktive Mitglieder aus %s"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:811
-#: ../includes/class-vca-asm-mailer.php:842
+#: ../includes/class-vca-asm-mailer.php:835
+#: ../includes/class-vca-asm-mailer.php:866
 #, php-format
 msgid "Pool Users from %s"
 msgstr "Pool Benutzer aus %s"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:813
+#: ../includes/class-vca-asm-mailer.php:837
 #, php-format
 msgid "All Supporters from %s"
 msgstr "Alle Supporter aus %s"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:819
+#: ../includes/class-vca-asm-mailer.php:843
 msgid "All City Users"
 msgstr "Alle Stadtbenutzer"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:823
+#: ../includes/class-vca-asm-mailer.php:847
 #, php-format
 msgid "All City Users from %s"
 msgstr "Alle Stadtbenutzer aus %s"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:827
+#: ../includes/class-vca-asm-mailer.php:851
 msgid "Office / Administrators"
 msgstr "Büro / Administratoren"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:831
+#: ../includes/class-vca-asm-mailer.php:855
 #, php-format
 msgid "Office / Administrators from %s"
 msgstr "Büro / Verwaltung aus %s"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:844
+#: ../includes/class-vca-asm-mailer.php:868
 #, php-format
 msgid "Supporters from %s"
 msgstr "Supporter aus %s"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:849
+#: ../includes/class-vca-asm-mailer.php:873
 #, php-format
 msgid "Applicants to %s"
 msgstr "Bewerber für %s"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:853
+#: ../includes/class-vca-asm-mailer.php:877
 #, php-format
 msgid "Participants of %s"
 msgstr "Teilnehmer von %s"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:857
+#: ../includes/class-vca-asm-mailer.php:881
 #, php-format
 msgid "Waiting List for %s"
 msgstr "Warteliste von %s"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-mailer.php:861
+#: ../includes/class-vca-asm-mailer.php:885
 msgid "Selection"
 msgstr "manuelle Auswahl"
 
@@ -4519,7 +4520,7 @@ msgstr "Übersicht"
 
 # @ vca-asm
 #: ../admin/class-vca-asm-admin.php:262
-#: ../templates/class-vca-asm-email-html.php:110
+#: ../templates/class-vca-asm-email-html.php:132
 msgid "Pool"
 msgstr "Pool"
 
@@ -8715,40 +8716,62 @@ msgid "Expected to be released with version %s"
 msgstr "Erwartetes Release mit Version %s"
 
 # @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:74
+#: ../templates/class-vca-asm-email-html.php:75
 msgctxt "utility translation"
 msgid "vivaconagua.ch"
 msgstr "vivaconagua.ch"
 
 # @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:75
+#: ../templates/class-vca-asm-email-html.php:76
+#: ../templates/class-vca-asm-email-html.php:84
+#: ../templates/class-vca-asm-email-html.php:92
+#: ../templates/class-vca-asm-email-html.php:109
+#: ../templates/class-vca-asm-email-html.php:483
+msgid "Visit the Viva con Agua website"
+msgstr "Die Webseite von Viva con Agua besuchen"
+
+# @ vca-asm
+#: ../templates/class-vca-asm-email-html.php:77
 msgid "Viva con Agua Switzerland"
 msgstr "Viva con Agua Schweiz"
 
 # @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:80
-#: ../templates/class-vca-asm-email-html.php:87
+#: ../templates/class-vca-asm-email-html.php:83
+#: ../templates/class-vca-asm-email-html.php:91
+#: ../templates/class-vca-asm-email-html.php:108
 msgctxt "utility translation"
 msgid "vivaconagua.org"
 msgstr "vivaconagua.org"
 
 # @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:81
-#: ../templates/class-vca-asm-email-html.php:88
+#: ../templates/class-vca-asm-email-html.php:85
+#: ../templates/class-vca-asm-email-html.php:93
+#: ../templates/class-vca-asm-email-html.php:110
 msgid "Viva con Agua de Sankt Pauli e.V."
 msgstr "Viva con Agua de Sankt Pauli e.V."
 
 # @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:110
+#: ../templates/class-vca-asm-email-html.php:99
+msgctxt "utility translation"
+msgid "goldeimer.vivaconagua.org"
+msgstr "goldeimer.vivaconagua.org"
+
+# @ vca-asm
+#: ../templates/class-vca-asm-email-html.php:100
+msgid "Visit the Goldeimer website"
+msgstr "Die Goldeimer Webseite besuchen"
+
+# @ vca-asm
+#: ../templates/class-vca-asm-email-html.php:132
 msgid "To the Pool!"
 msgstr "In den Pool!"
 
-#: ../templates/class-vca-asm-email-html.php:116
+#: ../templates/class-vca-asm-email-html.php:138
 msgid "Click to cancel newsletter"
 msgstr "Klicken, um den Newsletter abzubestellen"
 
 # @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:120
+#: ../templates/class-vca-asm-email-html.php:142
 msgid ""
 "You are getting this message because are registered to the %POOL% and have "
 "applied to or are participating in an activity."
@@ -8757,7 +8780,7 @@ msgstr ""
 "dich für eine Aktivität beworben hast, bzw. an einer teilnimmst."
 
 # @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:124
+#: ../templates/class-vca-asm-email-html.php:146
 msgid ""
 "You are getting this message because are registered to the %POOL% and your "
 "membership status just changed."
@@ -8766,7 +8789,7 @@ msgstr ""
 "Mitgliedsstatus sich soeben geändert hat."
 
 # @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:129
+#: ../templates/class-vca-asm-email-html.php:151
 msgid ""
 "You are getting this message because are registered to the %POOL% and have "
 "chosen to receive newsletters."
@@ -8774,7 +8797,7 @@ msgstr ""
 "Du bekommst diese Nachricht, weil du dich im %POOL% registriert hast und "
 "dich entschieden hast Newsletter zu erhalten."
 
-#: ../templates/class-vca-asm-email-html.php:131
+#: ../templates/class-vca-asm-email-html.php:153
 msgid ""
 "If you do not want receive anymore newsletters, you can %LINK_OPEN%cancel it"
 "%LINK_CLOSE% here."
@@ -8783,46 +8806,40 @@ msgstr ""
 "Newsletter hier abbestellen%LINK_CLOSE%."
 
 # @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:135
+#: ../templates/class-vca-asm-email-html.php:157
 msgid "Is this email not easily readable or otherwise obscured?"
 msgstr "Ist diese Mail nicht gut zu lesen?"
 
 # @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:140
+#: ../templates/class-vca-asm-email-html.php:162
 msgid "Read the mail in your browser"
 msgstr "Sieh dir die Mail in deinem Browser an"
 
 # @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:148
+#: ../templates/class-vca-asm-email-html.php:170
 msgid "Read it in your browser."
 msgstr "Lies sie in deinem Browser."
 
 # @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:377
+#: ../templates/class-vca-asm-email-html.php:399
 msgctxt "E-Mail"
 msgid "Subject"
 msgstr "Betreff"
 
 # @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:399
+#: ../templates/class-vca-asm-email-html.php:421
 msgctxt "Newsletter"
 msgid "from"
 msgstr "von"
 
 # @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:400
+#: ../templates/class-vca-asm-email-html.php:422
 msgctxt "Newsletter"
 msgid "to"
 msgstr "an"
 
 # @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:419
-#: ../templates/class-vca-asm-email-html.php:461
-msgid "Visit the Viva con Agua website"
-msgstr "Die Webseite von Viva con Agua besuchen"
-
-# @ vca-asm
-#: ../templates/class-vca-asm-email-html.php:474
+#: ../templates/class-vca-asm-email-html.php:496
 msgid "These links do not work in In-Browser-Mode."
 msgstr "Diese Links funktionieren im Browser-Modus nicht."
 

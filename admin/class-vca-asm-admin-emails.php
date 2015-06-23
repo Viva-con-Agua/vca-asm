@@ -1238,7 +1238,7 @@ class VCA_ASM_Admin_Emails {
 			} else {
 				$city_id = get_user_meta( $current_user->ID, 'city', true );
 				$city_name = $vca_asm_geography->get_name( $city_id );
-				$from_name =  $vca_asm_geography->get_status( $city_id ) . ' ' . $city_name;
+				$from_name = $vca_asm_geography->get_status( $city_id ) . ' ' . $city_name;
 				$format = ! empty( $this->emails_options['email_format_ho'] ) ? $this->emails_options['email_format_ho'] : 'html';
 			}
 

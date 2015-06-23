@@ -51,7 +51,7 @@ class VCA_ASM_Email_Html {
 		$this->default_args['time'] = time();
 
 		$this->args = wp_parse_args( $args, $this->default_args );
-		if ( ! in_array( $this->args['mail_nation'], array( 'de', 'ch', 'at' ) ) ) {
+		if ( ! in_array( $this->args['mail_nation'], array( 'de', 'ch', 'at', 'nl', 'goldeimer' ) ) ) {
 			$this->args['mail_nation'] = 'de';
 		}
 	}
@@ -71,20 +71,42 @@ class VCA_ASM_Email_Html {
 		switch ( $mail_nation ) {
 			case 'ch':
 				$logo = 'logo-ch@2x.gif';
+				$logo_height = '79';
 				$link_url = 'http://' . _x( 'vivaconagua.ch', 'utility translation', 'vca-asm' );
+				$link_title = __( 'Visit the Viva con Agua website', 'vca-asm' );
 				$organization_title = __( 'Viva con Agua Switzerland', 'vca-asm' );
 			break;
 
 			case 'at':
 				$logo = 'logo@2x.gif';
+				$logo_height = '79';
 				$link_url = 'http://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
+				$link_title = __( 'Visit the Viva con Agua website', 'vca-asm' );
 				$organization_title = __( 'Viva con Agua de Sankt Pauli e.V.', 'vca-asm' );
+			break;
+
+			case 'nl':
+				$logo = 'logo@2x.gif';
+				$logo_height = '79';
+				$link_url = 'http://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
+				$link_title = __( 'Visit the Viva con Agua website', 'vca-asm' );
+				$organization_title = __( 'Viva con Agua de Sankt Pauli e.V.', 'vca-asm' );
+			break;
+
+			case 'goldeimer':
+				$logo = 'logo-goldeimer@2x.gif';
+				$logo_height = '18';
+				$link_url = 'http://' . _x( 'goldeimer.vivaconagua.org', 'utility translation', 'vca-asm' );
+				$link_title = __( 'Visit the Goldeimer website', 'vca-asm' );
+				$organization_title = __( 'Goldeimer', 'vca-asm' );
 			break;
 
 			case 'de':
 			default:
 				$logo = 'logo@2x.gif';
+				$logo_height = '79';
 				$link_url = 'http://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
+				$link_title = __( 'Visit the Viva con Agua website', 'vca-asm' );
 				$organization_title = __( 'Viva con Agua de Sankt Pauli e.V.', 'vca-asm' );
 		}
 
@@ -416,7 +438,7 @@ class VCA_ASM_Email_Html {
 					'<h1 style="display:block;color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-weight:bold;font-size:30px;line-height:1;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;"><span style="font-family:\'Museo Sans\',Museo,\'Gill Sans Condensed\',\'Gill Sans MT Condensed\',\'Gill Sans\',\'Gill Sans MT\',Verdana,Helvetica,Arial,sans-serif;"><img alt="' . $center_alt . '" src="' . get_option( 'siteurl' ) . '/email_assets/' . $center_image . '" align="middle" style="border:0;height:auto;line-height:100%;outline:none;text-decoration:none;margin-top:0;margin-right:auto;margin-bottom:0;margin-left:auto;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;display:block;vertical-align:middle;" height="36" width="153"></span></h1>' .
 				'</td>' .
 				'<td class="header-right mobile-legacy-hide" width="33%" valign="baseline" style="width:33%;text-align:right;padding-top:21px;padding-right:21px;padding-bottom:16px;padding-left:0;border-collapse:collapse;vertical-align:baseline;">' .
-					'<a title="' . __( 'Visit the Viva con Agua website', 'vca-asm' ) . '" href="' . $link_url . '"><h1 style="display:block;color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-weight:bold;font-size:42px;line-height:1;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;"><span style="font-family:\'Museo Sans\',Museo,\'Gill Sans Condensed\',\'Gill Sans MT Condensed\',\'Gill Sans\',\'Gill Sans MT\',Verdana,Helvetica,Arial,sans-serif;"><img alt="VcA" src="' . get_option( 'siteurl' ) . '/email_assets/' . $logo . '" align="right" style="border:0;height:auto;line-height:100%;outline:none;text-decoration:none;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;display:block;" height="79" width="153"></span></h1></a>' .
+					'<a title="' . $link_title . '" href="' . $link_url . '"><h1 style="display:block;color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-weight:bold;font-size:42px;line-height:1;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;"><span style="font-family:\'Museo Sans\',Museo,\'Gill Sans Condensed\',\'Gill Sans MT Condensed\',\'Gill Sans\',\'Gill Sans MT\',Verdana,Helvetica,Arial,sans-serif;"><img alt="VcA" src="' . get_option( 'siteurl' ) . '/email_assets/' . $logo . '" align="right" style="border:0;height:auto;line-height:100%;outline:none;text-decoration:none;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;display:block;" height="' . $logo_height . '" width="153"></span></h1></a>' .
 				'</td>';
 		}
 

@@ -555,7 +555,8 @@ class VCA_ASM_Mailer {
 	 * @access public
 	 */
 	public function auto_response( $id, $action, $message_args = array() ) {
-		global $current_user, $wpdb;
+		global $current_user, $wpdb,
+			$vca_asm_geography;
 
 		$emails_options = get_option( 'vca_asm_emails_options' );
 		$format = ! empty( $emails_options['email_format_auto'] ) ? $emails_options['email_format_auto'] : 'plain';
@@ -658,8 +659,19 @@ class VCA_ASM_Mailer {
 			}
 
 			$mail_id = ! empty( $activity_id ) ? $activity_id : $city_id;
-			$mail_nation = get_post_meta( $action );
+
+			if ( ! empty( $activity_id ) ) {
+				$activity_type = get_post_type( $activity_id );
+				if ( 'goldeimerfestival' === $activity_type ) {
+					$mail_nation = 'goldeimer';
+				} else {
+					$mail_nation = $vca_asm_geography->get_alpha_code( get_post_meta( $activity_id, 'nation', true ) );
+				}
+			} elseif ( ! empty( $city_id ) ) {
+				$mail_nation = $vca_asm_geography->get_alpha_code( $vca_asm_geography->has_nation( $city_id ) );
+			}
 			$mail_nation = ! empty( $mail_nation ) ? $mail_nation : 'de';
+
 			$reason = in_array( $action, array( 'mem_accepted', 'mem_denied', 'mem_cancelled' ) ) ? 'membership' : 'activity';
 
 			$this->send_pre( array(
@@ -748,6 +760,18 @@ class VCA_ASM_Mailer {
 
 		$type = ( isset( $the_mail['type'] ) && in_array( $the_mail['type'], array( 'newsletter', 'activity' ) ) ) ? $the_mail['type'] : 'newsletter';
 
+		if ( 'activity' === $type ) {
+			$activity_type = get_post_type( $the_mail['receipient_id'] );
+			if ( 'goldeimerfestival' === $activity_type ) {
+				$mail_nation = 'goldeimer';
+			} else {
+				$mail_nation = $vca_asm_geography->get_alpha_code( get_post_meta( $the_mail['receipient_id'], 'nation', true ) );
+			}
+		} else {
+			$mail_nation = $vca_asm_geography->get_alpha_code( get_user_meta( $the_mail['sent_by'], 'nation', true ) );
+		}
+		$mail_nation = ! empty( $mail_nation ) ? $mail_nation : 'de';
+
 		$mailer_return = $this->send_pre( array(
 			'mail_id' => $queued['mail_id'],
 			'receipients' => $current_batch,
@@ -759,7 +783,7 @@ class VCA_ASM_Mailer {
 			'input_type' => $the_mail['format'],
 			'for' => $this->determine_for_field( $the_mail['receipient_group'], $the_mail['receipient_id'], $the_mail['membership'] ),
 			'time' => $the_mail['time'],
-			'mail_nation' => $vca_asm_geography->get_alpha_code( get_user_meta( $the_mail['sent_by'], 'nation', true ) ),
+			'mail_nation' => $mail_nation,
 			'reason' => $type
 		));
 
