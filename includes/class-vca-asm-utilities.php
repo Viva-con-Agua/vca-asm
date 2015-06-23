@@ -282,6 +282,20 @@ class VcA_ASM_Utilities {
 		return 'de';
 	}
 
+	/**
+	* @return bool
+	*/
+	function session_is_active()
+	{
+		$setting = 'session.use_trans_sid';
+		$current = ini_get($setting);
+		if (FALSE === $current) {
+			throw new UnexpectedValueException(sprintf('Setting %s does not exists.', $setting));
+		}
+		$result = @ini_set($setting, $current);
+		return $result !== $current;
+	}
+
 } // class
 
 endif; // class exists

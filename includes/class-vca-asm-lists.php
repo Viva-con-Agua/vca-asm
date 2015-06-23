@@ -358,13 +358,15 @@ class VCA_ASM_Lists
 	 * @access private
 	 */
 	private function handle_applications() {
-		global $vca_asm_registrations;
+		global $vca_asm_registrations, $vca_asm_utilities;
 
 		if ( ! is_admin() ) {
 			if ( isset( $_POST['todo'] ) && $_POST['todo'] == 'apply' && isset( $_POST['activity'] ) && is_numeric( $_POST['activity'] ) ) {
 
 				/* Avoid form resubmission after page refresh */
-				session_start();
+				if ( ! $vca_asm_utilities->session_is_active() ) {
+					session_start();
+				}
 				if( isset( $_POST['unique_id'] ) ) {
 					$unique_id = $_POST['unique_id'];
 					$allow_submission = isset( $_SESSION['allow_submission'] ) ? $_SESSION['allow_submission'] : array();
