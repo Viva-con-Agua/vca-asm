@@ -701,6 +701,8 @@ class VCA_ASM_Admin_Finances
 	{
 		global $vca_asm_geography;
 
+		$output = '';
+
 		$cities = $vca_asm_geography->get_all( 'name', 'ASC', 'city' );
 
 		$surplus = array();
@@ -1135,7 +1137,8 @@ class VCA_ASM_Admin_Finances
 
 		$messages = array();
 		$page = isset( $_GET['page'] ) ? $_GET['page'] : 'vca-asm-finances-accounts-donations';
-		$acc_type = array_pop( explode( '-', $page ) );
+		$page_components = explode( '-', $page );
+		$acc_type = array_pop( $page_components );
 		$acc_type = isset( $_GET['acc_type'] ) ? $_GET['acc_type'] : $acc_type;
 		$type = isset( $_GET['type'] ) ? $_GET['type'] : '';
 		$cid = isset( $_GET['cid'] ) ? $_GET['cid'] : $this->admin_city;

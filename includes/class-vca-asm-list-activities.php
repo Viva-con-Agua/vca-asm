@@ -1,58 +1,115 @@
 <?php
 
 /**
- * VCA_ASM_Lists class.
+ * VCA_ASM_List_Activities class.
  * This class contains properties and methods for the listing (frontend) of events.
  *
  * Two wordpress shortcodes are defined here: One to list all events currently in the application phase
  * and one to list all events a user/supporter is registered for.
  *
- * @package VcA Activity & Supporter Management
  * @see VcA_ASM_Registrations
+ *
+ * @package VcA Activity & Supporter Management
  * @since 1.0
+ *
+ * Structure:
+ * - Constructor
+ * - Application Request Handler
+ * - Shortcode Handlers
+ * - Utility
  */
 
-if ( ! class_exists( 'VCA_ASM_Lists' ) ) :
+if ( ! class_exists( 'VCA_ASM_List_Activities' ) ) :
 
-class VCA_ASM_Lists
+class VCA_ASM_List_Activities
 {
 
+	/* ============================= CONSTRUCTOR ============================= */
+
 	/**
-	 * Verifies whether a supporter's profile contains
-	 * enough information to register for events
+	 * Constructor
 	 *
 	 * @since 1.0
 	 * @access public
 	 */
-	public function verify_profile()
-	{
-		global $current_user;
-	    get_currentuserinfo();
+	public function __construct() {
+		$this->handle_applications();
+	}
 
-		$birthday = get_user_meta( $current_user->ID, 'birthday', true );
-		$nation = get_user_meta( $current_user->ID, 'nation', true );
-		$mobile = get_user_meta( $current_user->ID, 'mobile', true );
+	/* ============================= APPLICATION REQUEST HANDLER ============================= */
 
-		if (
-			! empty( $current_user->user_firstname ) &&
-			! empty( $current_user->user_lastname ) &&
-			! empty( $mobile ) &&
-			$birthday !== '' &&
-			( ! empty( $nation ) || 0 === $nation || '0' === $nation )
-		) {
-			return true;
-		} else {
-			return __( "In order to be able to register for activities, you should at least have filled out first- and lastname, your mobile phone and date of birth, as well as selected a country in your user profile.", 'vca-asm' );
+	/**
+	 * Checks for application requests before adding listing shortcodes
+	 *
+	 * Calls neccessary application method, if applicable
+	 *
+	 * @global object $vca_asm_registration
+	 * @global object $vca_asm_utilities
+	 *
+	 * @see constructor
+	 *
+	 * @since 1.0
+	 * @access private
+	 */
+	private function handle_applications() {
+		global $vca_asm_registrations, $vca_asm_utilities;
+
+		if ( ! is_admin() ) {
+			if ( isset( $_POST['todo'] ) && $_POST['todo'] == 'apply' && isset( $_POST['activity'] ) && is_numeric( $_POST['activity'] ) ) {
+
+				/* Avoid form resubmission after page refresh */
+				if ( ! $vca_asm_utilities->session_is_active() ) {
+					session_start();
+				}
+				if( isset( $_POST['unique_id'] ) ) {
+					$unique_id = $_POST['unique_id'];
+					$allow_submission = isset( $_SESSION['allow_submission'] ) ? $_SESSION['allow_submission'] : array();
+					if(isset($allow_submission[$unique_id])){
+						unset($_POST['submit_form']);
+						session_destroy();
+						header('Location: ' . $_SERVER['HTTP_REFERER']);
+					} else{
+						$allow_submission[$unique_id] = TRUE;
+						$_SESSION['allow_submission'] = $allow_submission;
+					}
+				}
+
+				if( 'If you wish to send' === mb_substr( $_POST['notes'], 0, 19 ) ||
+				   'Wenn du eine Nachri' === mb_substr( $_POST['notes'], 0, 19 ) ) {
+					$notes = '';
+				} else {
+					$notes = $_POST['notes'];
+				}
+
+				if( isset( $_POST['submit_form'] ) ) {
+					$vca_asm_registrations->set_application( $_POST['activity'], $notes );
+				}
+			}
+
+			if( isset( $_POST['todo'] ) && $_POST['todo'] == 'revoke_app' && isset( $_POST['activity'] ) && is_numeric( $_POST['activity'] ) ) {
+				$vca_asm_registrations->revoke_application( $_POST['activity'] );
+			}
+
+			add_shortcode( 'vca-asm-list-activities', array( $this, 'list_activities' ) );
+			add_shortcode( 'vca-asm-my-activities', array( $this, 'my_activities' ) );
 		}
 	}
+
+	/* ============================= SHORTCODE HANDLERS ============================= */
 
 	/**
 	 * Returns the list of all activities with open applications
 	 *
-	 * @since 1.0
-	 * @access public
+	 * @param array $atts		(optional) shortcode attributes
+	 * @return string $output	formatted HTML output
+	 *
+	 * @see handle_applications
+	 *
+	 * @global object $vca_asm_activities
+	 * @global object $vca_asm_registration
 	 */
-	public function list_activities( $atts ) {
+	public function list_activities( $atts = array() )
+	{
 		global $vca_asm_activities, $vca_asm_registrations;
 
 		$faq_link = '<a href="' . get_bloginfo( 'url' ) . '/faq" title="' . __( 'Read the FAQ', 'vca-asm' ) . '">' . __( 'FAQ', 'vca-asm' ) . '</a>';
@@ -150,10 +207,19 @@ class VCA_ASM_Lists
 	/**
 	 * Returns the list of all activities a user is registered to
 	 *
+	 * @param array $atts		(optional) shortcode attributes
+	 * @return string $output	formatted HTML output
+	 *
+	 * @global object $vca_asm_activities
+	 * @global object $vca_asm_registrations
+	 *
+	 * @see handle_applications
+	 *
 	 * @since 1.0
 	 * @access public
 	 */
-	public function my_activities( $atts ) {
+	public function my_activities( $atts = array() )
+	{
 		global $vca_asm_activities, $vca_asm_registrations;
 
 		wp_enqueue_style( 'vca-asm-activities-style' );
@@ -349,66 +415,37 @@ class VCA_ASM_Lists
 		return $output;
 	}
 
-	/**
-	 * Checks for application requests before adding listing shortcodes
-	 *
-	 * Calls neccessary application method, if applicable
-	 *
-	 * @since 1.0
-	 * @access private
-	 */
-	private function handle_applications() {
-		global $vca_asm_registrations, $vca_asm_utilities;
-
-		if ( ! is_admin() ) {
-			if ( isset( $_POST['todo'] ) && $_POST['todo'] == 'apply' && isset( $_POST['activity'] ) && is_numeric( $_POST['activity'] ) ) {
-
-				/* Avoid form resubmission after page refresh */
-				if ( ! $vca_asm_utilities->session_is_active() ) {
-					session_start();
-				}
-				if( isset( $_POST['unique_id'] ) ) {
-					$unique_id = $_POST['unique_id'];
-					$allow_submission = isset( $_SESSION['allow_submission'] ) ? $_SESSION['allow_submission'] : array();
-					if(isset($allow_submission[$unique_id])){
-						unset($_POST['submit_form']);
-						session_destroy();
-						header('Location: ' . $_SERVER['HTTP_REFERER']);
-					} else{
-						$allow_submission[$unique_id] = TRUE;
-						$_SESSION['allow_submission'] = $allow_submission;
-					}
-				}
-
-				if( 'If you wish to send' === mb_substr( $_POST['notes'], 0, 19 ) ||
-				   'Wenn du eine Nachri' === mb_substr( $_POST['notes'], 0, 19 ) ) {
-					$notes = '';
-				} else {
-					$notes = $_POST['notes'];
-				}
-
-				if( isset( $_POST['submit_form'] ) ) {
-					$vca_asm_registrations->set_application( $_POST['activity'], $notes );
-				}
-			}
-
-			if( isset( $_POST['todo'] ) && $_POST['todo'] == 'revoke_app' && isset( $_POST['activity'] ) && is_numeric( $_POST['activity'] ) ) {
-				$vca_asm_registrations->revoke_application( $_POST['activity'] );
-			}
-
-			add_shortcode( 'vca-asm-list-activities', array( &$this, 'list_activities' ) );
-			add_shortcode( 'vca-asm-my-activities', array( &$this, 'my_activities' ) );
-		}
-	}
+	/* ============================= UTILITY METHODS ============================= */
 
 	/**
-	 * Constructor
+	 * Verifies whether a supporter's profile contains enough information to register for events
+	 *
+	 * @return bool|string 		true if profile is complete enough to apply for activities, message string if not
+	 *
+	 * @global object $current_user
 	 *
 	 * @since 1.0
 	 * @access public
 	 */
-	public function __construct() {
-		$this->handle_applications();
+	public function verify_profile()
+	{
+		global $current_user;
+
+		$birthday = get_user_meta( $current_user->ID, 'birthday', true );
+		$nation = get_user_meta( $current_user->ID, 'nation', true );
+		$mobile = get_user_meta( $current_user->ID, 'mobile', true );
+
+		if (
+			! empty( $current_user->user_firstname ) &&
+			! empty( $current_user->user_lastname ) &&
+			! empty( $mobile ) &&
+			$birthday !== '' &&
+			( ! empty( $nation ) || 0 === $nation || '0' === $nation )
+		) {
+			return true;
+		} else {
+			return __( 'In order to be able to register for activities, you should at least have filled out first- and lastname, your mobile phone and date of birth, as well as selected a country in your user profile.', 'vca-asm' );
+		}
 	}
 
 } // class

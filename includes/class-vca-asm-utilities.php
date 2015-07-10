@@ -1,33 +1,52 @@
 <?php
 
 /**
- * VcA_ASM_Utilities class.
+ * VCA_ASM_Utilities class.
  *
  * This class contains utility methods used here and there.
  *
  * @package VcA Activity & Supporter Management
  * @since 1.0
+ *
+ * Structure:
+ * - Properties
+ * - Various Methods (no sensible sections - entire class is utilitarian)
  */
 
-if ( ! class_exists( 'VcA_ASM_Utilities' ) ) :
+if ( ! class_exists( 'VCA_ASM_Utilities' ) ) :
 
-class VcA_ASM_Utilities {
+class VCA_ASM_Utilities
+{
+
+	/* ============================= CLASS PROPERTIES ============================= */
 
 	/**
-	 * Class Properties
+	 * Array key to sort by
 	 *
+	 * Used in 3 different methods and not passable - hence a property
+	 *
+	 * @var string $sort_key
+	 * @see method sort_by_key
 	 * @since 1.3
+	 * @access private
 	 */
 	private $sort_key = '';
+
+	/* ============================= METHODS ============================= */
 
 	/**
 	 * Calculates age,
 	 * i.e. the difference between two Unix Timestamps
 	 *
+	 * @param int $d1			timestamp, date one
+	 * @param int $d2			timestamp, date two
+	 * @return array $diff		difference as array of time units (seconds to years)
+	 *
 	 * @since 1.0
 	 * @access public
 	 */
-	public function date_diff( $d1, $d2 ) {
+	public function date_diff( $d1, $d2 )
+	{
 		if( $d1 < $d2 ) {
 				$temp = $d2;
 				$d2 = $d1;
@@ -37,42 +56,42 @@ class VcA_ASM_Utilities {
 		}
 		$d1 = date_parse( date( "Y-m-d H:i:s", $d1 ) );
 		$d2 = date_parse( date( "Y-m-d H:i:s", $d2 ) );
-		//seconds
+		/* seconds */
 		if ( $d1['second'] >= $d2['second'] ){
 				$diff['second'] = $d1['second'] - $d2['second'];
 		} else {
 				$d1['minute']--;
 				$diff['second'] = 60-$d2['second']+$d1['second'];
 		}
-		//minutes
+		/* minutes */
 		if ( $d1['minute'] >= $d2['minute'] ){
 				$diff['minute'] = $d1['minute'] - $d2['minute'];
 		} else {
 				$d1['hour']--;
 				$diff['minute'] = 60-$d2['minute']+$d1['minute'];
 		}
-		//hours
+		/* hours */
 		if ( $d1['hour'] >= $d2['hour'] ){
 				$diff['hour'] = $d1['hour'] - $d2['hour'];
 		} else {
 				$d1['day']--;
 				$diff['hour'] = 24-$d2['hour']+$d1['hour'];
 		}
-		//days
+		/* days */
 		if ( $d1['day'] >= $d2['day'] ){
 				$diff['day'] = $d1['day'] - $d2['day'];
 		} else {
 				$d1['month']--;
 				$diff['day'] = date("t",$temp)-$d2['day']+$d1['day'];
 		}
-		//months
+		/* months */
 		if ( $d1['month'] >= $d2['month'] ){
 				$diff['month'] = $d1['month'] - $d2['month'];
 		} else {
 				$d1['year']--;
 				$diff['month'] = 12-$d2['month']+$d1['month'];
 		}
-		//years
+		/* years */
 		$diff['year'] = $d1['year'] - $d2['year'];
 		return $diff;
 	}
@@ -80,14 +99,18 @@ class VcA_ASM_Utilities {
 	/**
 	 * Replaces in-text URLs with working Links
 	 *
+	 * @param string $string		URL / URI
+	 * @return string $string		properly formatted link (ready for insertion as href attribute)
+	 *
 	 * @since 1.0
 	 * @access public
 	 */
-	public function urls_to_links( $string ) {
+	public function urls_to_links( $string )
+	{
 		/* make sure there is an http:// on all URLs */
 		$string = rtrim( preg_replace( "/([^\w\/])(www\.[a-z0-9\-]+\.[a-z0-9\-]+)/i", "$1http://$2", $string ), "/" );
 		/* create links */
-		$string = preg_replace( "/([\w]+:\/\/[\w-?&;%#~=\.\/\@]+[\w\/])/i", "<a target=\"_blank\" title=\"" . __( 'Visit Site', 'vca-asm' ) . "\" href=\"$1\">$1</a>", $string);
+		$string = preg_replace( "/([\w]+:\/\/[\w-?&;%#~=\.\/\@]+[\w\/])/i", "<a target=\"_blank\" title=\"" . __( 'Visit Site', 'vca-asm' ) . "\" href=\"$1\">$1</a>", $string );
 
 		return $string;
 	}
@@ -95,10 +118,14 @@ class VcA_ASM_Utilities {
 	/**
 	 * Converts DB gender strings into translatable strings
 	 *
+	 * @param string $string
+	 * @return string $string
+	 *
 	 * @since 1.0
 	 * @access public
 	 */
-	public function convert_strings( $string ) {
+	public function convert_strings( $string )
+	{
 		if( $string === 'male' ) {
 			$string = __( 'male', 'vca-asm' );
 		} elseif( $string === 'female' ) {
@@ -125,10 +152,17 @@ class VcA_ASM_Utilities {
 	/**
 	 * Returns a phone number without whitespaces, zeroes or a plus sign
 	 *
+	 * @param int|string $number		the phone number
+	 * @param array $args				(optional) parameters determining how to format the generated output
+	 * @return string $number
+	 *
+	 * @global object $vca_asm_geography
+	 *
 	 * @since 1.2
 	 * @access public
 	 */
-	public function normalize_phone_number( $number, $args = array() ) {
+	public function normalize_phone_number( $number, $args = array() )
+	{
 		global $vca_asm_geography;
 
 		$default_args = array(
@@ -167,11 +201,14 @@ class VcA_ASM_Utilities {
 	 * Handles determination of how to order tabular data
 	 * (Often recurring code block in Administrative Backend)
 	 *
+	 * @param string $default_orderby		(optional) DB column to sort by, used if $_GET['orderby'] is not set, defaults to 'name'
+	 * @return
+	 *
 	 * @since 1.3
 	 * @access public
 	 */
-	public function table_order( $default_orderby = 'name' ) {
-
+	public function table_order( $default_orderby = 'name' )
+	{
 		if( isset( $_GET['orderby'] ) ) {
 			$orderby = $_GET['orderby'];
 		} else {
@@ -197,12 +234,17 @@ class VcA_ASM_Utilities {
 	}
 
 	/**
-	 * Sorting Methods
+	 * Sort a nested associative array by the value of a given key
+	 *
+	 * @param array @arr		the array to sort
+	 * @param string $key		the key of whose value to sort by
+	 * @param string $order		(optional) what direction to sort in (either 'ASC' oder 'DESC')
 	 *
 	 * @since 1.3
 	 * @access public
 	 */
-	public function sort_by_key( $arr, $key, $order = 'ASC' ) {
+	public function sort_by_key( $arr, $key, $order = 'ASC' )
+	{
 		$this->sort_key = $key;
 		if ( 'DESC' === $order ) {
 			usort( $arr, array( $this, 'sbk_cmp_desc' ) );
@@ -211,33 +253,55 @@ class VcA_ASM_Utilities {
 		}
 		return ( $arr );
 	}
-	private function sbk_cmp_asc( $a, $b ) {
+
+	/**
+	 * usort callback
+	 *
+	 * @param array $a			one (sub-)array
+	 * @param array $b			the other (sub-)array
+	 * @return int
+	 *
+	 * @since 1.3
+	 * @access private
+	 */
+	private function sbk_cmp_asc( $a, $b )
+	{
 		$encoding = mb_internal_encoding();
 		return strcmp( mb_strtolower( $a[$this->sort_key], $encoding ), mb_strtolower( $b[$this->sort_key], $encoding ) );
 	}
-	private function sbk_cmp_desc( $b, $a ) {
+
+	/**
+	 * usort callback
+	 *
+	 * @param array $a			one (sub-)array
+	 * @param array $b			the other (sub-)array
+	 * @return int
+	 *
+	 * @since 1.3
+	 * @access private
+	 */
+	private function sbk_cmp_desc( $b, $a )
+	{
 		$encoding = mb_internal_encoding();
 		return strcmp( mb_strtolower( $a[$this->sort_key], $encoding ), mb_strtolower( $b[$this->sort_key], $encoding ) );
 	}
-	//private function sbk_cmp_asc( $a, $b ) {
-	//	$encoding = mb_internal_encoding();
-	//	return strcmp( iconv( 'utf-8', 'ascii//TRANSLIT', mb_strtolower( $a[$this->sort_key], $encoding ) ), iconv( 'utf-8', 'ascii//TRANSLIT', mb_strtolower( $b[$this->sort_key], $encoding ) ) );
-	//}
-	//private function sbk_cmp_desc( $b, $a ) {
-	//	$encoding = mb_internal_encoding();
-	//	return strcmp( iconv( 'utf-8', 'ascii//TRANSLIT', mb_strtolower( $a[$this->sort_key], $encoding ) ), iconv( 'utf-8', 'ascii//TRANSLIT', mb_strtolower( $b[$this->sort_key], $encoding ) ) );
-	//}
 
 	/**
 	 * Custom do_settings_sections (originally WP-core function)
 	 *
+	 * @param object $page				WP_Post object
+	 *
+	 * @global $wp_settings_sections
+	 * @global $wp_settings_fields
+	 *
 	 * @since 1.3
 	 * @access public
 	 */
-	public function do_settings_sections( $page ) {
+	public function do_settings_sections( $page )
+	{
 		global $wp_settings_sections, $wp_settings_fields;
 
-		if ( ! isset( $wp_settings_sections ) || !isset( $wp_settings_sections[$page] ) ) {
+		if ( ! isset( $wp_settings_sections ) || ! isset( $wp_settings_sections[$page] ) ) {
 			return;
 		}
 
@@ -261,14 +325,16 @@ class VcA_ASM_Utilities {
 	 * Returns a country-alpha-code (ISO 3166-1-alpha-2),
 	 * depending on the URL/Domain used to reach the site
 	 *
-	 * @see http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
+	 * @return string
 	 *
-	 * @return string $alpha
+	 * @todo this feels hacky!
+	 * @see http://en.wikipedia.org/wiki/ISO_3166-1_alpha-2
 	 *
 	 * @since 1.3
 	 * @access public
 	 */
-	public function current_country() {
+	public function current_country()
+	{
 		if ( ! empty( $_SERVER['SERVER_NAME'] ) ) {
 			$domain = $_SERVER['SERVER_NAME'];
 		} elseif ( ! isset( $domain ) && ! empty( $_SERVER['HTTP_HOST'] ) ) {
@@ -283,16 +349,22 @@ class VcA_ASM_Utilities {
 	}
 
 	/**
-	* @return bool
-	*/
+	 * Checks whether a session has already been started
+	 * (pre PHP 5.4)
+	 *
+	 * @return void
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
 	function session_is_active()
 	{
 		$setting = 'session.use_trans_sid';
-		$current = ini_get($setting);
-		if (FALSE === $current) {
+		$current = ini_get( $setting );
+		if ( false === $current ) {
 			throw new UnexpectedValueException(sprintf('Setting %s does not exists.', $setting));
 		}
-		$result = @ini_set($setting, $current);
+		$result = @ini_set( $setting, $current );
 		return $result !== $current;
 	}
 

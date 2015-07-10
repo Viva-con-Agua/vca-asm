@@ -7,17 +7,17 @@
  *
  * @package VcA Activity & Supporter Management
  * @since 1.3.3
+ *
+ * Structure:
+ * - Properties
  */
 
 if ( ! class_exists( 'VCA_ASM_Mail' ) ) :
 
-class VCA_ASM_Mail {
+class VCA_ASM_Mail
+{
 
-	/**
-	 * Class Properties
-	 *
-	 * @since 1.3.3
-	 */
+	/* ============================= CLASS PROPERTIES ============================= */
 	private $default_args = array(
 		'minimalistic' => false
 	);
@@ -47,6 +47,8 @@ class VCA_ASM_Mail {
 
 	public $subject = 'Newsletter';
 	public $message_body = 'Lipsum';
+
+	/* ============================= CLASS PROPERTIES ============================= */
 
 	/**
 	 * Checks whether an activity of id exists

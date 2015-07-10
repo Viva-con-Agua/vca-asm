@@ -8,6 +8,12 @@
  *
  * @package VcA Activity & Supporter Management
  * @since 1.5
+ *
+ * Structure:
+ * - Properties
+ * - Constructor
+ * - Worksheet & Data
+ * - Utility
  */
 
 if ( ! class_exists( 'VCA_ASM_Workbook_Finances' ) ) :
@@ -15,10 +21,15 @@ if ( ! class_exists( 'VCA_ASM_Workbook_Finances' ) ) :
 class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 {
 
+	/* ============================= CLASS PROPERTIES ============================= */
+
 	/**
-	 * Class Properties
+	 * Default arguments used if not set and passed externally
 	 *
+	 * @var array $default_args
+	 * @see constructor
 	 * @since 1.5
+	 * @access public
 	 */
 	public $default_args = array(
 		'scope' => 'nation',
@@ -30,26 +41,125 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 		'format' => 'xlsx',
 		'gridlines' => true
 	);
+
+	/**
+	 * Arguments passed to the object in the constructor
+	 *
+	 * @var array $args
+	 * @see constructor
+	 * @since 1.5
+	 * @access public
+	 */
 	public $args = array();
 
+	/**
+	 *
+	 *
+	 * @var NULL|int $initial_time
+	 * @since 1.5
+	 * @access public
+	 */
 	private $initial_time = NULL;
 
+	/**
+	 *
+	 *
+	 * @var string $nation_name
+	 * @since 1.5
+	 * @access public
+	 */
 	public $nation_name = 'Germany';
 
+	/**
+	 * Row count, that the table header spans
+	 *
+	 * @var int $top_row_range
+	 * @since 1.5
+	 * @access public
+	 */
 	public $top_row_range = 0;
 
+	/**
+	 *
+	 *
+	 * @var string $title_start
+	 * @since 1.5
+	 * @access public
+	 */
 	public $title_start = '';
+
+	/**
+	 *
+	 *
+	 * @var string $title_frame_name
+	 * @since 1.5
+	 * @access public
+	 */
 	public $title_frame_name = '';
+
+	/**
+	 *
+	 *
+	 * @var string $title_frame_data
+	 * @since 1.5
+	 * @access public
+	 */
 	public $title_frame_data = '';
+
+	/**
+	 *
+	 *
+	 * @var string $title_type
+	 * @since 1.5
+	 * @access public
+	 */
 	public $title_type = '';
+
+	/**
+	 *
+	 *
+	 * @var string $title_scope
+	 * @since 1.5
+	 * @access public
+	 */
 	public $title_scope = '';
 
+	/**
+	 * Holds the column identifier, where the amount is calculated
+	 *
+	 * @var string $col_amount
+	 * @since 1.5
+	 * @access public
+	 */
 	public static $col_amount = 'N';
+
+	/**
+	 * Holds the column identifier, where the tax is calculated
+	 *
+	 * @var string $col_tax
+	 * @since 1.5
+	 * @access public
+	 */
 	public static $col_tax = 'O';
+
+	/**
+	 * Holds the column identifier, where the balance is calculated
+	 *
+	 * @var string $col_balance
+	 * @since 1.5
+	 * @access public
+	 */
 	public static $col_balance = 'P';
+
+	/* ============================= CONSTRUCTOR ============================= */
 
 	/**
 	 * Constructor
+	 *
+	 * @param array $args		(optional) paramters passed to the object, see code
+	 *
+	 * @global object $current_user
+	 * @global object $vca_asm_geography
 	 *
 	 * @since 1.5
 	 * @access public
@@ -114,8 +224,13 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 		}
 	}
 
+	/* ============================= WORKSHEET & DATA ============================= */
+
 	/**
 	 * Adds to the template worksheet
+	 *
+	 * @param string $type		(optional) whether the generated sheet is for a single city or the entire network
+	 * @return void
 	 *
 	 * @since 1.5
 	 * @access public
@@ -194,7 +309,14 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 	}
 
 	/**
-	 * Iterates over cities
+	 * Generates a set of strings for each worksheet/city
+	 *
+	 * Iterates over all cities,
+	 * generates and sorts sheets
+	 * (void of data but with tables and labels)
+	 *
+	 * @param int $parent		(geographical) ID of the parent unit (i.e. nation)
+	 * @return array $sheets
 	 *
 	 * @since 1.5
 	 * @access public
@@ -202,7 +324,6 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 	public function cities( $parent = 0 )
 	{
 		global $vca_asm_finances, $vca_asm_geography;
-		extract( $this->args );
 
 		$sheets = array();
 
@@ -267,7 +388,12 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 	}
 
 	/**
+	 * Adds data to worksheet arrays
+	 *
 	 * Iterates over ready-prepped sheets
+	 *
+	 * @param array $sheets		(optional)
+	 * @return bool				whether at least one sheet was iterated over
 	 *
 	 * @since 1.5
 	 * @access public
@@ -275,6 +401,7 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 	public function sheets( $sheets = array() )
 	{
 		global $vca_asm_finances;
+
 		extract( $this->args );
 
 		$i = 0;
@@ -363,7 +490,6 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 			$sheet->setCellValue( self::$col_balance . $this->top_row_range, ( $sheet_params['initial_balance'] / 100 ) )
 				/* Static Values */
 				//->setCellValue( self::$col_balance . $cur_row, number_format( $sum/100, 2, '.', ',' ) )
-				// ...
 				/* Excel Formulae */
 				->setCellValue( self::$col_balance . $cur_row, '=SUMIF(' .
 						'M' . $this->top_row_range . ':M' . ( $cur_row - 1 ) . ',' .
@@ -401,8 +527,13 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 		return ( 0 < $i );
 	}
 
+	/* ============================= UTILITY METHODS ============================= */
+
 	/**
-	 * A single Worksheet
+	 * Styling a single Worksheet
+	 *
+	 * @param int $index		the position of the worksheet in the document
+	 * @return void
 	 *
 	 * @since 1.5
 	 * @access public
@@ -448,12 +579,17 @@ class VCA_ASM_Workbook_Finances extends VCA_ASM_Workbook
 	}
 
 	/**
-	 * Does what the method name suggests
+	 * Grabs the previously set column identifiers as array keys
+	 *
+	 * Returns what later populates a property of the parent class
+	 *
+	 * @return array $non_autosized_columns
 	 *
 	 * @since 1.5
 	 * @access public
 	 */
-	public static function grab_non_autosized_columns() {
+	public static function grab_non_autosized_columns()
+	{
         $non_autosized_columns = array(
 			self::$col_amount => 10,
 			self::$col_tax => 10,

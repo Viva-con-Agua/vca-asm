@@ -8,25 +8,44 @@
  *
  * @package VcA Activity & Supporter Management
  * @since 1.3
+ *
+ * Structure:
+ * - Properties
+ * - Constructor
+ * - Utility
  */
 
 if ( ! class_exists( 'VCA_ASM_Roles' ) ) :
 
-class VCA_ASM_Roles {
+class VCA_ASM_Roles
+{
+
+	/* ============================= CLASS PROPERTIES ============================= */
 
 	/**
-	 * Class Properties
+	 * List of administrative roles with complete backend access (where relevant to the department)
 	 *
+	 * @var array $global_admin_roles
 	 * @since 1.3
+	 * @access public
 	 */
 	public $global_admin_roles = array(
 		'actions_global',
 		'education_global',
 		'financial_global',
+		'goldeimer_global',
 		'management_global',
 		'network_global',
 		'administrator'
 	);
+
+	/**
+	 * List of administrative roles with complete as well as limited backend access
+	 *
+	 * @var array $admin_roles
+	 * @since 1.3
+	 * @access public
+	 */
 	public $admin_roles = array(
 		'actions_global',
 		'actions_national',
@@ -34,24 +53,71 @@ class VCA_ASM_Roles {
 		'education_national',
 		'financial_global',
 		'financial_national',
+		'goldeimer_global',
+		'goldeimer_national',
 		'management_global',
 		'management_national',
 		'network_global',
 		'network_national',
 		'administrator'
 	);
-	public $translated_roles = array();
 
 	/**
-	 * This method returns an array of roles,
-	 * that a user can manage
+	 * List of translatable, human-readable names of administrative roles
+	 * populated inside the constructor
+	 *
+	 * @var array $admin_roles
+	 * @see constructor
+	 * @since 1.3
+	 * @access public
+	 */
+	public $translated_roles = array();
+
+	/* ============================= CONSTRUCTOR ============================= */
+
+	/**
+	 * Constructor
 	 *
 	 * @since 1.3
 	 * @access public
 	 */
-	public function user_sub_roles( $user_id = 0 ) {
+	public function __construct()
+	{
+		/* define the translatable roles here */
+		$this->translated_roles = array(
+			'administrator' => _x( 'Pool Manager', 'Role Names', 'vca-asm' ) . ' (' . _x( 'admin', 'Role Scope', 'vca-asm' ) . ')',
+			'supporter' => _x( 'Supporter', 'Role Names', 'vca-asm' ),
+			'head_of' => _x( 'City User', 'Role Names', 'vca-asm' ),
+			'city' => _x( 'City User', 'Role Names', 'vca-asm' ),
+			'actions_national' => _x( 'Action Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'national', 'Role Scope', 'vca-asm' ) . ')',
+			'actions_global' => _x( 'Action Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'global', 'Role Scope', 'vca-asm' ) . ')',
+			'education_national' => _x( 'Education Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'national', 'Role Scope', 'vca-asm' ) . ')',
+			'education_global' => _x( 'Education Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'global', 'Role Scope', 'vca-asm' ) . ')',
+			'financial_national' => _x( 'Financial Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'national', 'Role Scope', 'vca-asm' ) . ')',
+			'financial_global' => _x( 'Financial Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'global', 'Role Scope', 'vca-asm' ) . ')',
+			'management_national' => _x( 'Pool Manager', 'Role Names', 'vca-asm' ) . ' (' . _x( 'national', 'Role Scope', 'vca-asm' ) . ')',
+			'management_global' => _x( 'Pool Manager', 'Role Names', 'vca-asm' ) . ' (' . _x( 'global', 'Role Scope', 'vca-asm' ) . ')',
+			'network_national' => _x( 'Network Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'national', 'Role Scope', 'vca-asm' ) . ')',
+			'network_global' => _x( 'Network Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'global', 'Role Scope', 'vca-asm' ) . ')',
+			'watchdog_national' => _x( 'Watchdog', 'Role Names', 'vca-asm' ) . ' (' . _x( 'national', 'Role Scope', 'vca-asm' ) . ')',
+			'watchdog_global' => _x( 'Watchdog', 'Role Names', 'vca-asm' ) . ' (' . _x( 'global', 'Role Scope', 'vca-asm' ) . ')'
+		);
+	}
+
+	/* ============================= UTILITY METHODS ============================= */
+
+	/**
+	 * This method returns an array of roles, that a given user can manage
+	 *
+	 * @param int $user_id			(optional) the (user-)ID the data is requested for, defaults to
+	 * @return string[] $sub_roles	array of user roles (slugs/strings) the given user can manage
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function user_sub_roles( $user_id = 0 )
+	{
 		global $current_user;
-		get_currentuserinfo();
 
 		$user_id = ! empty( $user_id ) ? $user_id : $current_user->ID;
 		$user = $user_id === $current_user->ID ? $current_user : get_userdata( $user_id );
@@ -85,6 +151,13 @@ class VCA_ASM_Roles {
 				$sub_roles = array( 'supporter', 'financial_national' );
 			break;
 
+			case 'goldeimer_global':
+				$sub_roles = array( 'supporter', 'goldeimer_national', 'goldeimer_global' );
+			break;
+			case 'goldeimer_national':
+				$sub_roles = array( 'supporter', 'goldeimer_national' );
+			break;
+
 			case 'network_global':
 				$sub_roles = array( 'supporter', 'network_national', 'network_global' );
 			break;
@@ -103,6 +176,8 @@ class VCA_ASM_Roles {
 					'actions_global',
 					'education_national',
 					'education_global',
+					'goldeimer_global',
+					'goldeimer_national',
 					'network_national',
 					'network_global',
 					'financial_national',
@@ -117,8 +192,9 @@ class VCA_ASM_Roles {
 					'watchdog_national',
 					'actions_national',
 					'education_national',
-					'network_national',
 					'financial_national',
+					'network_national',
+					'goldeimer_national',
 					'management_national'
 				);
 			break;
@@ -130,15 +206,18 @@ class VCA_ASM_Roles {
 		return $sub_roles;
 	}
 
-
 	/**
-	 * This method makes static DB entries of role names
-	 * gettext translatable
+	 * This method makes static DB entries of role names gettext translatable
+	 *
+	 * @return array $roles
+	 *
+	 * @global object $wp_roles
 	 *
 	 * @since 1.3
 	 * @access public
 	 */
-	public function translatable_role_names() {
+	public function translatable_role_names()
+	{
 		global $wp_roles;
 
 		$roles = $wp_roles->roles;
@@ -157,34 +236,6 @@ class VCA_ASM_Roles {
 		$wp_roles->role_names = $role_names;
 
 		return $roles;
-	}
-
-	/**
-	 * Constructor
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
-	public function __construct() {
-		/* define the translatable roles here */
-		$this->translated_roles = array(
-			'administrator' => _x( 'Pool Manager', 'Role Names', 'vca-asm' ) . ' (' . _x( 'admin', 'Role Scope', 'vca-asm' ) . ')',
-			'supporter' => _x( 'Supporter', 'Role Names', 'vca-asm' ),
-			'head_of' => _x( 'City User', 'Role Names', 'vca-asm' ),
-			'city' => _x( 'City User', 'Role Names', 'vca-asm' ),
-			'actions_national' => _x( 'Action Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'national', 'Role Scope', 'vca-asm' ) . ')',
-			'actions_global' => _x( 'Action Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'global', 'Role Scope', 'vca-asm' ) . ')',
-			'education_national' => _x( 'Education Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'national', 'Role Scope', 'vca-asm' ) . ')',
-			'education_global' => _x( 'Education Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'global', 'Role Scope', 'vca-asm' ) . ')',
-			'financial_national' => _x( 'Financial Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'national', 'Role Scope', 'vca-asm' ) . ')',
-			'financial_global' => _x( 'Financial Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'global', 'Role Scope', 'vca-asm' ) . ')',
-			'management_national' => _x( 'Pool Manager', 'Role Names', 'vca-asm' ) . ' (' . _x( 'national', 'Role Scope', 'vca-asm' ) . ')',
-			'management_global' => _x( 'Pool Manager', 'Role Names', 'vca-asm' ) . ' (' . _x( 'global', 'Role Scope', 'vca-asm' ) . ')',
-			'network_national' => _x( 'Network Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'national', 'Role Scope', 'vca-asm' ) . ')',
-			'network_global' => _x( 'Network Department', 'Role Names', 'vca-asm' ) . ' (' . _x( 'global', 'Role Scope', 'vca-asm' ) . ')',
-			'watchdog_national' => _x( 'Watchdog', 'Role Names', 'vca-asm' ) . ' (' . _x( 'national', 'Role Scope', 'vca-asm' ) . ')',
-			'watchdog_global' => _x( 'Watchdog', 'Role Names', 'vca-asm' ) . ' (' . _x( 'global', 'Role Scope', 'vca-asm' ) . ')'
-		);
 	}
 
 } // class

@@ -3,7 +3,8 @@
 /**
  * VCA_ASM class.
  *
- * This class holds all VCA_ASM components.
+ * This is the initial class of VCA_ASM
+ * and holds all its components.
  *
  * @package VcA Activity & Supporter Management
  * @since 1.0
@@ -11,15 +12,23 @@
 
 if ( ! class_exists( 'VCA_ASM' ) ) :
 
-class VCA_ASM {
+class VCA_ASM
+{
 
 	/**
 	 * Initializes the plugin
 	 *
+	 * Hooked with 'wp_loaded'
+	 *
+	 * @return void
+	 *
+	 * @see constructor
+	 *
 	 * @since 1.0
 	 * @access public
 	 */
-	public function init() {
+	public function init()
+	{
 		date_default_timezone_set( 'Europe/Berlin' );
 
 		/* add multilinguality support */
@@ -42,7 +51,7 @@ class VCA_ASM {
 		$GLOBALS['vca_asm_registrations'] = new VCA_ASM_Registrations();
 
 		/* other objects */
-		$vca_asm_lists = new VCA_ASM_Lists();
+		$vca_asm_list_activities = new VCA_ASM_List_Activities();
 		$vca_asm_profile = new VCA_ASM_Profile();
 		$vca_asm_security = new VCA_ASM_Security();
 
@@ -72,10 +81,14 @@ class VCA_ASM {
 	/**
 	 * Adds plugin-specific user capabilities
 	 *
+	 * @var array $caps		all of the current WordPress install's capabilities
+	 * @return array $caps	Input array including the capabilities added by this method
+	 *
 	 * @since 1.0
 	 * @access public
 	 */
-	public function extra_caps( $caps ) {
+	public function extra_caps( $caps )
+	{
 		$caps[] = 'vca_asm_view_options';
 		$caps[] = 'vca_asm_manage_options';
 		$caps[] = 'vca_asm_set_mode';
@@ -164,11 +177,21 @@ class VCA_ASM {
 	}
 
 	/**
-	 * Enqueue the plugin's javascript & styles
+	 * Enqueue the plugin's javascript & styles (backend)
+	 *
+	 * Enqueues all scripts and stylesheets used in the administrative backend.
+	 * Hooked with 'admin_enqueue_scripts'
+	 *
+	 * @global string $pagenow	Holds the page filename (including .php extension) while in the admin area
+	 * @return void
+	 *
+	 * @see constructor
 	 *
 	 * @since 1.0
+	 * @access public
 	 */
-	public function vca_asm_admin_enqueue() {
+	public function vca_asm_admin_enqueue()
+	{
 		global $pagenow;
 
 		$jqui_params = array(
@@ -256,7 +279,20 @@ class VCA_ASM {
 		wp_enqueue_style( 'vca-asm-tooltips' );
 	}
 
-
+	/**
+	 * Enqueue the plugin's javascript & styles (frontend)
+	 *
+	 * Enqueues all scripts and stylesheets used throughout the site.
+	 * Hooked with 'wp_enqueue_scripts'
+	 *
+	 * @global object $vca_asm_activities
+	 * @return void
+	 *
+	 * @see constructor
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
 	public function vca_asm_frontend_enqueue() {
 		global $vca_asm_activities;
 
@@ -276,7 +312,23 @@ class VCA_ASM {
 		}
 	}
 
-	function clean_unwanted_caps(){
+	/**
+	 * Utility method to remove superfluous capabilities
+	 *
+	 * This method removes previously added and obsolete capabilities.
+	 * I belive I remember it needs to only run once and removes them hard from the database.
+	 * Not certain though.
+	 * Hooked with 'admin_init'
+	 *
+	 * @return void
+	 *
+	 * @see constructor
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
+	public function clean_unwanted_caps()
+	{
 		$delete_caps = array(
 			'vca_asm_submit_finances'
 		);
@@ -288,13 +340,39 @@ class VCA_ASM {
 		}
 	}
 
-	public function start_session() {
+	/**
+	 * Session start wrapper
+	 *
+	 * Hooked with 'init'
+	 *
+	 * @return void
+	 *
+	 * @see constructor
+	 *
+	 * @since 1.2
+	 * @access public
+	 */
+	public function start_session()
+	{
 		if( ! session_id() ) {
 			session_start();
 		}
 	}
 
-	function end_session() {
+	/**
+	 * Session destroy wrapper
+	 *
+	 * Hooked with 'wp_logout' and 'wp_login'
+	 *
+	 * @return void
+	 *
+	 * @see constructor
+	 *
+	 * @since 1.2
+	 * @access public
+	 */
+	public function end_session()
+	{
 		session_destroy ();
 	}
 
@@ -313,6 +391,7 @@ class VCA_ASM {
 		add_action( 'wp_logout', array( $this, 'end_session' ) );
 		add_action( 'wp_login', array( $this, 'end_session' ) );
 	}
+
 } // class
 
 endif; // class exists

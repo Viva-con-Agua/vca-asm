@@ -3,10 +3,22 @@
 /**
  * VCA_ASM_City_Finances class.
  *
+ * Model
  * An instance of this class holds all information on the financial situation of a city
  *
  * @package VcA Activity & Supporter Management
  * @since 1.5
+ *
+ * Structure:
+ * - Properties
+ * --- Initial
+ * --- Geography
+ * --- Financial Data
+ * --- Attention Flags
+ * --- Messages
+ * - Constructor
+ * - Property Population
+ * - Secondaray Parameters
  */
 
 if ( ! class_exists( 'VCA_ASM_City_Finances' ) ) :
@@ -14,13 +26,10 @@ if ( ! class_exists( 'VCA_ASM_City_Finances' ) ) :
 class VCA_ASM_City_Finances
 {
 
-	/**
-	 * Class Properties
-	 *
-	 * @since 1.5
-	 */
+	/* ============================= CLASS PROPERTIES ============================= */
 
-	/* initial */
+	/* +++++++++ INITIAL +++++++++ */
+
 	public $id = 0;
 	public $default_args = array(
 		'url' => '?page=vca-asm-finances',
@@ -35,7 +44,8 @@ class VCA_ASM_City_Finances
 	public $link_title = '';
 	public $referrer = '';
 
-	/* geography */
+	/* +++++++++ GEOGRAPHY +++++++++ */
+
 	public $name = '';
 	public $type = '';
 	public $type_nice = '';
@@ -45,7 +55,8 @@ class VCA_ASM_City_Finances
 	public $currency_minor = 'Cent';
 	public $currency_symbol = '&euro;';
 
-	/* financial data */
+	/* +++++++++ FINANCIAL DATA +++++++++ */
+
 	public $donations_total = 0;
 	public $donations_by_years = array();
 	public $donations_current_year = 0;
@@ -86,7 +97,8 @@ class VCA_ASM_City_Finances
 	public $confirmable_econ_transfers = array();
 	public $confirmable_external_transfers = array();
 
-	/* (boolean) attention flags */
+	/* +++++++++ ATTENTION FLAGS +++++++++ */
+
 	public $action_required = false;
 
 	public $action_required_city = false;
@@ -114,7 +126,8 @@ class VCA_ASM_City_Finances
 	public $action_required_econ_send_receipts_late = false;
 	public $action_required_econ_confirm_receipts = false;
 
-	/* messages */
+	/* +++++++++ MESSAGES +++++++++ */
+
 	public $message_strings = array();
 	public $message_strings_short = array();
 
@@ -130,6 +143,36 @@ class VCA_ASM_City_Finances
 	public $messages_econ_city = array();
 	public $messages_don_office = array();
 	public $messages_econ_office = array();
+
+	/* ============================= CONSTRUCTOR ============================= */
+
+	/**
+	 * Constructor
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	public function __construct( $city_id, $args = array() )
+	{
+		$this->id = $city_id;
+
+		$this->default_args['link_title'] = __( 'Do something about it!', 'vca-asm' );
+		$this->args = wp_parse_args( $args, $this->default_args );
+		extract( $this->args );
+
+		if ( isset( $this->args['js'] ) && true === $this->args['js'] ) {
+			wp_enqueue_script( 'postbox' );
+			add_action( 'admin_footer', array( $this, 'print_script' ) );
+		}
+
+		$this->url = $url;
+		$this->link_title = $link_title;
+		$this->referrer = $referrer;
+		$this->translatable_messages();
+		$this->gather_meta( $this->id );
+		$this->set_action_flags();
+		$this->set_messages( $short, $formatted, $linked );
+	}
 
 	/**
 	 * Assigns values to $message_strings property
@@ -197,6 +240,8 @@ class VCA_ASM_City_Finances
 			'don_confirm_external_transfer' => __( 'Donations account: External transfers need confirmation', 'vca-asm' )
 		);
 	}
+
+	/* ============================= GATHERING DATA & POPULATING PROPERTIES ============================= */
 
 	/**
 	 * Assigns values to class properties
@@ -285,6 +330,8 @@ class VCA_ASM_City_Finances
 			'receipt_status' => 2
 		));
 	}
+
+	/* ============================= SETTING SECONDARY PARAMETERS ============================= */
 
 	/**
 	 * Sets boolean action flags
@@ -468,34 +515,6 @@ class VCA_ASM_City_Finances
 			$this->messages_econ['econ_confirm_receipts'] = $span_warning . $anchor_econ_expenditure . $this->{'message_strings'.$append_key}['econ_confirm_receipts'] . $anchor_close . $span_close;
 			$this->messages_econ_office['econ_confirm_receipts'] = $span_warning . $anchor_econ_expenditure . $this->{'message_strings'.$append_key}['econ_confirm_receipts'] . $anchor_close . $span_close;
 		}
-	}
-
-	/**
-	 * Constructor
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
-	public function __construct( $city_id, $args = array() )
-	{
-		$this->id = $city_id;
-
-		$this->default_args['link_title'] = __( 'Do something about it!', 'vca-asm' );
-		$this->args = wp_parse_args( $args, $this->default_args );
-		extract( $this->args );
-
-		if ( true === $this->args['js'] ) {
-			wp_enqueue_script( 'postbox' );
-			add_action( 'admin_footer', array( $this, 'print_script' ) );
-		}
-
-		$this->url = $url;
-		$this->link_title = $link_title;
-		$this->referrer = $referrer;
-		$this->translatable_messages();
-		$this->gather_meta( $this->id );
-		$this->set_action_flags();
-		$this->set_messages( $short, $formatted, $linked );
 	}
 
 } // class

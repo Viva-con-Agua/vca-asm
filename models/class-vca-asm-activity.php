@@ -1,119 +1,596 @@
 <?php
 
 /**
- * VCA_ASM_Activity class.
+ * VCA_ASM_Activity class
  *
+ * Model
  * An instance of this class holds all information on a single activity
+ *
+ * Terminology
+ * "Quota": Cumulative slots of a geographical unit
+ * "Slots": Direct slots of a geographical unit
+ *
+ * Example
+ * Germany has been allocated a quota of 15 tickets for supporters.
+ * The event is a festival in northern Germany
+ * and 4 tickets have been allocated to Bremen, 4 to Hamburg and 4 to Kiel.
+ * 3 tickets are available to supporters from other cells.
+ * Hence Germany's got a quota of 15, but only 3 slots.
+ * The other slots are assigned to a city ID.
  *
  * @package VcA Activity & Supporter Management
  * @since 1.3
+ *
+ * Structure:
+ * - Properties
+ * - Constructor
+ * - Property Population
+ * - Reset
+ * - Utility
  */
 
 if ( ! class_exists( 'VCA_ASM_Activity' ) ) :
 
-class VCA_ASM_Activity {
+class VCA_ASM_Activity
+{
+
+	/* ============================= CLASS PROPERTIES ============================= */
 
 	/**
-	 * Class Properties
+	 * Default arguments used if not set and passed externally
 	 *
-	 * @since 1.3
+	 * @var array $default_args
+	 * @see constructor
+	 * @since 1.5
+	 * @access private
 	 */
 	private $default_args = array(
 		'minimalistic' => false
 	);
+
+	/**
+	 * Arguments passed to the object in the constructor
+	 *
+	 * @var array $args
+	 * @see constructor
+	 * @since 1.5
+	 * @access private
+	 */
 	private $args = array();
 
+	/**
+	 * Holds the ID of the post (activity) in question
+	 *
+	 * @var int $id
+	 * @see constructor
+	 * @since 1.5
+	 * @access public
+	 */
 	public $id = 0;
+
+	/**
+	 * Holds the ID of the post (activity) in question
+	 *
+	 * @var int $ID
+	 * @see constructor
+	 * @since 1.5
+	 * @access public
+	 */
 	public $ID = 0;
 
+	/**
+	 * Whether a post of the passed ID exists
+	 *
+	 * @var bool $exists
+	 * @see method exists
+	 * @since 1.5
+	 * @access public
+	 */
 	public $exists = false;
+
+	/**
+	 * Whether the post is of type "activity"
+	 *
+	 * @var bool $is_activity
+	 * @see method is_activity
+	 * @since 1.5
+	 * @access public
+	 */
 	public $is_activity = false;
 
+	/**
+	 * The department the activity belongs to
+	 *
+	 * @var string $department
+	 * @since 1.5
+	 * @access public
+	 */
 	public $department = 'actions';
 
+	/**
+	 * WordPress post object
+	 *
+	 * @var object $post_object			WP_Post object
+	 * @since 1.5
+	 * @access public
+	 */
 	public $post_object = object;
+
+	/**
+	 * The name of the event / activity
+	 *
+	 * @var string $name
+	 * @since 1.5
+	 * @access public
+	 */
 	public $name = '';
+
+	/**
+	 * The activity's metadata
+	 *
+	 * @var array $meta
+	 * @since 1.5
+	 * @access public
+	 */
 	public $meta = array();
 
+	/**
+	 * The type of activity
+	 *
+	 * @var string $type
+	 * @since 1.5
+	 * @access public
+	 */
 	public $type = 'festival';
+
+	/**
+	 * The type of activity in translatable, human-readable form
+	 *
+	 * @var string $nice_type
+	 * @since 1.5
+	 * @access public
+	 */
 	public $nice_type = 'Festival';
+
+	/**
+	 * URL of the icon image representing the activity
+	 *
+	 * @var string $icon_url
+	 * @since 1.5
+	 * @access public
+	 */
 	public $icon_url = 'http://vivaconagua.org/wp-content/plugins/vca-asm/img/icon-festival_32.png';
 
+	/**
+	 * The ID of the nation the activity is associated with
+	 *
+	 * @var int $nation
+	 * @since 1.5
+	 * @access public
+	 */
 	public $nation = 0;
+
+	/**
+	 * The name of the nation the activity is associated with, in translatable, human-readable form
+	 *
+	 * @var string $nice_type
+	 * @since 1.5
+	 * @access public
+	 */
 	public $nation_name = '';
+
+	/**
+	 * The ID of the city the activity is associated with
+	 *
+	 * @var int $city
+	 * @since 1.5
+	 * @access public
+	 */
 	public $city = 0;
+
+	/**
+	 * The name of the city the activity is associated with, in translatable, human-readable form
+	 *
+	 * @var string $nice_type
+	 * @since 1.5
+	 * @access public
+	 */
 	public $city_name = '';
+
+	/**
+	 * Whether the activity has been delegated to a city account
+	 *
+	 * @var bool $delegation
+	 * @since 1.5
+	 * @access public
+	 */
 	public $delegation = false;
 
+	/**
+	 * Whether only supporters with "membership status" can apply
+	 *
+	 * @var bool $membership_required
+	 * @since 1.5
+	 * @access public
+	 */
 	public $membership_required = false;
 
+	/**
+	 * Timestamp of the start of the application phase
+	 *
+	 * @var int $start_app
+	 * @since 1.5
+	 * @access public
+	 */
 	public $start_app = 0;
-	public $end_app = 0;
-	public $start_act = 0;
-	public $end_act = 0;
-	public $upcoming = true;
 
+	/**
+	 * Timestamp of the end of the application phase
+	 *
+	 * @var int $end_app
+	 * @since 1.5
+	 * @access public
+	 */
+	public $end_app = 0;
+
+	/**
+	 * Timestamp of the start of the activity itself
+	 *
+	 * @var int $start_act
+	 * @since 1.5
+	 * @access public
+	 */
+	public $start_act = 0;
+
+	/**
+	 * Timestamp of the end of the activity itself
+	 *
+	 * @var int $end_act
+	 * @since 1.5
+	 * @access public
+	 */
+	public $end_act = 0;
+
+	/**
+	 * Whether the start of the activity lies in the future
+	 *
+	 * @var bool $upcoming
+	 * @since 1.5
+	 * @access public
+	 */	public $upcoming = true;
+
+	/**
+	 * Holds all participants of the activity
+	 *
+	 * Supporters with accepted applications
+	 *
+	 * @var int[] $participants						array of user IDs
+	 * @since 1.5
+	 * @access public
+	 */
 	public $participants = array();
+
+	/**
+	 * Count of all participants of the activity
+	 *
+	 * Supporters with accepted applications
+	 *
+	 * @var int $participants_count
+	 * @since 1.5
+	 * @access public
+	 */
 	public $participants_count = 0;
+
+	/**
+	 * Holds all supporters on the waiting list for the activity
+	 *
+	 * Supporters with denied applications
+	 *
+	 * @var int[] $waiting							array of user IDs
+	 * @since 1.5
+	 * @access public
+	 */
 	public $waiting = array();
+
+	/**
+	 * Count of all supporters on the waiting list for the activity
+	 *
+	 * Supporters with denied applications
+	 *
+	 * @var int $waiting_count
+	 * @since 1.5
+	 * @access public
+	 */
 	public $waiting_count = 0;
+
+	/**
+	 * Holds all supporters currently applying for the activity
+	 *
+	 * Supporters with unadministered applications
+	 *
+	 * @var int[] $applicants						array of user IDs
+	 * @since 1.5
+	 * @access public
+	 */
 	public $applicants = array();
+
+	/**
+	 * Count of all supporters currently applying for the activity
+	 *
+	 * Supporters with unadministered applications
+	 *
+	 * @var int $applicants_count
+	 * @since 1.5
+	 * @access public
+	 */
 	public $applicants_count = 0;
 
+	/**
+	 * Holds all participants of the activity
+	 *
+	 * Supporters with accepted applications
+	 * Slots (geographical IDs) as keys
+	 *
+	 * @var int[] $participants_by_slots			array of user IDs
+	 * @since 1.5
+	 * @access public
+	 */
 	public $participants_by_slots = array();
+
+	/**
+	 * Holds counts of participants of the activity
+	 *
+	 * Supporters with accepted applications
+	 * Slots (geographical IDs) as keys
+	 *
+	 * @var int[] $participants_count_by_slots
+	 * @since 1.5
+	 * @access public
+	 */
 	public $participants_count_by_slots = array();
+
+	/**
+	 * Holds all supporters on the waiting list for the activity
+	 *
+	 * Supporters with denied applications
+	 * Slots (geographical IDs) as keys
+	 *
+	 * @var int[] $waiting_by_slots					array of user IDs
+	 * @since 1.5
+	 * @access public
+	 */
 	public $waiting_by_slots = array();
+
+	/**
+	 * Holds counts of supporters on the waiting list for the activity
+	 *
+	 * Supporters with denied applications
+	 * Slots (geographical IDs) as keys
+	 *
+	 * @var int[] $waiting_count_by_slots
+	 * @since 1.5
+	 * @access public
+	 */
 	public $waiting_count_by_slots = array();
+
+	/**
+	 * Holds all applicants for the activity
+	 *
+	 * Supporters with unadministered applications
+	 * Slots (geographical IDs) as keys
+	 *
+	 * @var int[] $applicants_by_slots				array of user IDs
+	 * @since 1.5
+	 * @access public
+	 */
 	public $applicants_by_slots = array();
+
+	/**
+	 * Holds counts of all applicants for the activity
+	 *
+	 * Supporters with unadministered applications
+	 * Slots (geographical IDs) as keys
+	 *
+	 * @var int[] $applicants_count_by_slots
+	 * @since 1.5
+	 * @access public
+	 */
 	public $applicants_count_by_slots = array();
 
+	/**
+	 * Holds all participants of the activity
+	 *
+	 * Supporters with accepted applications
+	 * Quotas (geographical IDs, cumulative slots) as keys
+	 *
+	 * @var array $participants_by_quota
+	 * @since 1.5
+	 * @access public
+	 */
 	public $participants_by_quota = array( 0 => array() );
+
+	/**
+	 * Holds counts of participants of the activity
+	 *
+	 * Supporters with accepted applications
+	 * Quotas (geographical IDs, cumulative slots) as keys
+	 *
+	 * @var int[] $participants_count_by_quota
+	 * @since 1.5
+	 * @access public
+	 */
 	public $participants_count_by_quota = array( 0 => 0 );
+
+	/**
+	 * Holds all supporters on the waiting list for the activity
+	 *
+	 * Supporters with denied applications
+	 * Quotas (geographical IDs, cumulative slots) as keys
+	 *
+	 * @var int[] $waiting_by_quota					array of user IDs
+	 * @since 1.5
+	 * @access public
+	 */
 	public $waiting_by_quota = array( 0 => array() );
+
+	/**
+	 * Holds counts of supporters on the waiting list for the activity
+	 *
+	 * Supporters with denied applications
+	 * Quotas (geographical IDs, cumulative slots) as keys
+	 *
+	 * @var int[] $waiting_count_by_quota
+	 * @since 1.5
+	 * @access public
+	 */
 	public $waiting_count_by_quota = array( 0 => 0 );
+
+	/**
+	 * Holds all applicants for the activity
+	 *
+	 * Supporters with unadministered applications
+	 * Quotas (geographical IDs, cumulative slots) as keys
+	 *
+	 * @var int[] $applicants_by_quota				array of user IDs
+	 * @since 1.5
+	 * @access public
+	 */
 	public $applicants_by_quota = array( 0 => array() );
+
+	/**
+	 * Holds counts of all applicants for the activity
+	 *
+	 * Supporters with unadministered applications
+	 * Quotas (geographical IDs, cumulative slots) as keys
+	 *
+	 * @var int[] $applicants_count_by_quota
+	 * @since 1.5
+	 * @access public
+	 */
 	public $applicants_count_by_quota = array( 0 => 0 );
 
+	/**
+	 *
+	 *
+	 * @var array $
+	 * @since 1.5
+	 * @access public
+	 */
 	public $minimum_quotas = array();
 	public $non_global_participants = false;
 
+	/**
+	 *
+	 *
+	 * @var int $
+	 * @since 1.5
+	 * @access public
+	 */
 	public $total_slots = 0;
-	public $global_slots = 0;
-	public $ctr_quotas = array();
-	public $ctr_slots = array();
-	public $ctr_quotas_switch = 'nay';
-	public $cty_slots = array();
-	public $ctr_cty_switch = array();
-	public $slots = array();
 
 	/**
-	 * Checks whether an activity of id exists
+	 *
+	 *
+	 * @var int $
+	 * @since 1.5
+	 * @access public
+	 */
+	public $global_slots = 0;
+
+	/**
+	 *
+	 *
+	 * @var array $
+	 * @since 1.5
+	 * @access public
+	 */
+	public $ctr_quotas = array();
+
+	/**
+	 *
+	 *
+	 * @var array $
+	 * @since 1.5
+	 * @access public
+	 */
+	public $ctr_slots = array();
+
+	/**
+	 *
+	 *
+	 * @var string $
+	 * @since 1.5
+	 * @access public
+	 */
+	public $ctr_quotas_switch = 'nay';
+
+	/**
+	 *
+	 *
+	 * @var array $
+	 * @since 1.5
+	 * @access public
+	 */
+	public $cty_slots = array();
+
+	/**
+	 *
+	 *
+	 * @var array $
+	 * @since 1.5
+	 * @access public
+	 */
+	public $ctr_cty_switch = array();
+
+	/**
+	 *
+	 *
+	 * @var array $
+	 * @since 1.5
+	 * @access public
+	 */
+	public $slots = array();
+
+	/* ============================= CONSTRUCTOR ============================= */
+
+	/**
+	 * Constructor
+	 *
+	 * @param int $id						(post-)ID of the activity post type
+	 * @param array $args					(optional) array of arguments, see property $default_args
 	 *
 	 * @since 1.3
 	 * @access public
 	 */
-	public function is_activity( $id ) {
-		global $wpdb, $vca_asm_activities;
-
-		$post_type = get_post_type( $id );
-
-		if ( $post_type ) {
-			$this->exists = true;
-			if ( in_array( $post_type, $vca_asm_activities->activity_types ) ) {
-				$this->is_activity = true;
-				$this->gather_meta( $id );
-			}
-		}
+	public function __construct( $id, $args = array() )
+	{
+		$this->args = wp_parse_args( $args, $this->default_args );
+		$this->id = intval( $id );
+		$this->ID = $this->id;
+		$this->is_activity( $this->id );
 	}
+
+	/* ============================= POPULATE PROPERTIES ============================= */
 
 	/**
 	 * Assigns values to class properties
 	 *
+	 * @param int $id						(post-)ID of the activity post type
+	 * @return void
+	 *
+	 * @global object $wpdb
+	 * @global object $vca_asm_activities
+	 * @global object $vca_asm_geography
+	 * @global object $vca_asm_registrations
+	 * @global object $vca_asm_utilities
+	 *
 	 * @since 1.3
 	 * @access public
 	 */
-	public function gather_meta( $id ) {
-		global $wpdb, $vca_asm_activities, $vca_asm_geography, $vca_asm_registrations, $vca_asm_utilities;
+	public function gather_meta( $id )
+	{
+		global $wpdb,
+			$vca_asm_activities, $vca_asm_geography, $vca_asm_registrations, $vca_asm_utilities;
 
 		$this->post_object = get_post( $id );
 		$this->name = $this->post_object->post_title;
@@ -488,75 +965,20 @@ class VCA_ASM_Activity {
 		}
 	}
 
-	/**
-	 * Determines whether a supporter has applied for this activity
-	 *
-	 * @param int $supporter_id
-	 *
-	 * @return (bool)
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
-	public function has_applied( $supporter_id ) {
-		return in_array( $supporter_id, $this->applicants );
-	}
-
-	/**
-	 * Determines whether a supporter is a partcipant of this activity
-	 *
-	 * @param int $supporter_id
-	 *
-	 * @return (bool)
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
-	public function is_participant( $supporter_id ) {
-		return in_array( $supporter_id, $this->participants );
-	}
-
-	/**
-	 * Determines whether a supporter is eligible to this activity
-	 *
-	 * @param int $supporter_id
-	 *
-	 * @return mixed (bool) false if not, (int) quota (geo-unit) id if so
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
-	public function is_eligible( $supporter_id )
-	{
-		global $vca_asm_geography;
-
-		$membership_status = get_user_meta( $supporter_id, 'membership', true );
-		$city = get_user_meta( $supporter_id, 'city', true );
-		$nation = get_user_meta( $supporter_id, 'nation', true );
-
-		if (
-			! $this->membership_required ||
-			2 == $membership_status
-		) {
-			if ( array_key_exists( $city, $this->cty_slots ) && 0 < intval( $this->cty_slots[$city] ) ) {
-				return $city;
-			} elseif ( array_key_exists( $nation, $this->ctr_slots ) && 0 < intval( $this->ctr_slots[$nation] ) ) {
-				return $nation;
-			} elseif ( 0 < $this->global_slots ) {
-				return 0;
-			}
-		}
-		return false;
-	}
+	/* ============================= RESET OBJECT ============================= */
 
 	/**
 	 * Resets object
 	 *
+	 * Calls gather_meta after clean up
+	 *
+	 * @return void
+	 *
 	 * @since 1.3
 	 * @access public
 	 */
-	public function reset() {
-
+	public function reset()
+	{
 		$this->department = 'actions';
 
 		$this->post_object = object;
@@ -617,28 +1039,100 @@ class VCA_ASM_Activity {
 		$this->gather_meta( $this->id );
 	}
 
+	/* ============================= UTILITY METHODS ============================= */
+
 	/**
-	 * Dumps class properties as associative array
+	 * Checks whether an activity of id exists
+	 *
+	 * Calls gather_meta method if supplied post ID matches an activity
+	 *
+	 * @param int $id						(post-)ID of the activity post type
+	 *
+	 * @global object $wpdb
+	 * @global object $vca_asm_activities
 	 *
 	 * @since 1.3
 	 * @access public
 	 */
-	public function array_dump() {
+	public function is_activity( $id )
+	{
+		global $wpdb,
+			$vca_asm_activities;
 
-		return get_object_vars( $this );
+		$post_type = get_post_type( $id );
+
+		if ( $post_type ) {
+			$this->exists = true;
+			if ( in_array( $post_type, $vca_asm_activities->activity_types ) ) {
+				$this->is_activity = true;
+				$this->gather_meta( $id );
+			}
+		}
+
+		return $this->is_activity;
 	}
 
 	/**
-	 * PHP5 style constructor
+	 * Determines whether a supporter has applied for this activity
+	 *
+	 * @param int $supporter_id
+	 *
+	 * @return (bool)
 	 *
 	 * @since 1.3
 	 * @access public
 	 */
-	public function __construct( $id, $args = array() ) {
-		$this->args = wp_parse_args( $args, $this->default_args );
-		$this->id = intval( $id );
-		$this->ID = $this->id;
-		$this->is_activity( $this->id );
+	public function has_applied( $supporter_id )
+	{
+		return in_array( $supporter_id, $this->applicants );
+	}
+
+	/**
+	 * Determines whether a supporter is a partcipant of this activity
+	 *
+	 * @param int $supporter_id
+	 *
+	 * @return (bool)
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function is_participant( $supporter_id )
+	{
+		return in_array( $supporter_id, $this->participants );
+	}
+
+	/**
+	 * Determines whether a supporter is eligible to this activity
+	 *
+	 * @param int $supporter_id
+	 *
+	 * @return mixed (bool) false if not, (int) quota (geo-unit) id if so
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function is_eligible( $supporter_id )
+	{
+		global $vca_asm_geography;
+
+		$membership_status = get_user_meta( $supporter_id, 'membership', true );
+		$city = get_user_meta( $supporter_id, 'city', true );
+		$nation = get_user_meta( $supporter_id, 'nation', true );
+
+		if (
+			! $this->membership_required ||
+			2 == $membership_status
+		) {
+			if ( array_key_exists( $city, $this->cty_slots ) && 0 < intval( $this->cty_slots[$city] ) ) {
+				return $city;
+			} elseif ( array_key_exists( $nation, $this->ctr_slots ) && 0 < intval( $this->ctr_slots[$nation] ) ) {
+				return $nation;
+			} elseif ( 0 < $this->global_slots ) {
+				return 0;
+			}
+		}
+		return false;
 	}
 
 } // class

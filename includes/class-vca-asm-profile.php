@@ -1,24 +1,234 @@
 <?php
 
 /**
- * VCA_ASM_Profile class.
+ * VCA_ASM_Profile class
+ *
  * This class contains properties and methods for additional user profile fields.
  *
  * @package VcA Activity & Supporter Management
  * @since 1.0
+ *
+ * Structure:
+ * - Constructor
+ * - WP Integration & Saving
+ * - Custom Fields
+ * - Utility
  */
 
 if ( ! class_exists( 'VCA_ASM_Profile' ) ) :
 
-class VCA_ASM_Profile {
+class VCA_ASM_Profile
+{
+
+	/* ============================= CONSTRUCTOR ============================= */
+
+	/**
+	 * Constructor
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
+	public function __construct()
+	{
+		add_action( 'register_post', array( $this, 'verify_tc_acceptance' ), 1, 3 );
+		add_action( 'user_register', array( $this, 'save_on_registration' ), 100 );
+		add_action( 'show_user_profile', array( $this, 'user_extra_profile_fields' ) );
+		add_action( 'edit_user_profile', array( $this, 'admin_extra_profile_fields' ) );
+		add_action( 'vca_theme_show_user_profile', array( $this, 'user_extra_profile_fields_custom' ) );
+		add_action( 'wp_enqueue_scripts', array( $this, 'set_script_params' ), 20 );
+		add_action( 'admin_enqueue_scripts', array( $this, 'set_script_params' ), 20 );
+		add_action( 'vca_theme_show_user_settings', array( $this, 'user_extra_profile_fields_settings' ) );
+		add_action( 'personal_options_update', array( $this, 'save_extra_profile_fields' ) );
+		add_action( 'edit_user_profile_update', array( $this, 'save_extra_profile_fields' ) );
+		add_shortcode( 'vca-asm-supporter-vcard', array( $this, 'supporter_vcard' ) );
+		add_shortcode( 'vca-asm-newsletter-preferences', array( $this, 'newsletter_preferences' ) );
+	}
+
+	/* ============================= WORDPRESS INTEGRATION & SAVING ============================= */
+
+	/**
+	 * Add to user's profile view
+	 * Hooked with 'show_user_profile'
+	 *
+	 * @param object $user		WP_User object
+	 * @return void
+	 *
+	 * @see constructor
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
+	public function user_extra_profile_fields( $user )
+	{
+		$fields = $this->create_extra_profile_fields();
+		require_once( VCA_ASM_ABSPATH . '/templates/frontend-profile.php' );
+	}
+
+	/**
+	 * Add to user's profile view
+	 * Hooked with 'vca_theme_show_user_profile'
+	 *
+	 * @param object $user		WP_User object
+	 * @return void
+	 *
+	 * @see constructor
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
+	public function user_extra_profile_fields_custom( $user )
+	{
+		$fields = $this->create_extra_profile_fields( 'custom' );
+		require( VCA_ASM_ABSPATH . '/templates/frontend-profile.php' );
+	}
+
+	/**
+	 * Add to user's profile view
+	 * Hooked with 'vca_theme_show_user_settings'
+	 *
+	 * @param object $user		WP_User object
+	 * @return void
+	 *
+	 * @see constructor
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
+	public function user_extra_profile_fields_settings( $user )
+	{
+		$fields = $this->create_extra_profile_fields( 'settings' );
+		require( VCA_ASM_ABSPATH . '/templates/frontend-profile.php' );
+	}
+
+	/**
+	 * Adds to admin's userprofile view
+	 * Hooked with 'edit_user_profile'
+	 *
+	 * @param object $user		WP_User object
+	 * @return void
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
+	public function admin_extra_profile_fields( $user )
+	{
+		$fields = $this->create_extra_profile_fields();
+		require_once( VCA_ASM_ABSPATH . '/templates/admin-profile.php' );
+	}
+
+	/**
+	 * Saves additional data when updating a profile
+	 * Hooked with 'edit_user_profile_update' and 'personal_options_update'
+	 *
+	 * @param object $user		WP_User object
+	 * @return void
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
+	public function save_extra_profile_fields( $user_id )
+	{
+		global $vca_asm_geography, $vca_asm_mailer;
+
+		if ( ! current_user_can( 'edit_user', $user_id ) ) {
+			return false;
+		}
+
+		if ( isset( $_POST['deleteme'] ) && $_POST['deleteme'] == 'forever' ) {
+			wp_delete_user( $user_id );
+			wp_redirect( get_bloginfo('url'), 200 );
+			exit;
+			return false;
+		}
+
+		$fields = $this->create_extra_profile_fields();
+		if ( ! empty( $fields ) ) {
+			foreach ( $fields as $field ) {
+				switch( $field['type'] ) {
+					case 'date':
+						update_user_meta(
+							$user_id,
+							$field['id'],
+							mktime( 0, 0, 0,
+								$_POST[ $field['id'] . '-month' ],
+								$_POST[ $field['id'] . '-day' ],
+								$_POST[ $field['id'] . '-year' ]
+							)
+						);
+					break;
+
+					case 'membership':
+						$this_user = new WP_User( $user_id );
+						if( in_array( 'city', $this_user->roles ) ) {
+							update_user_meta( $user_id, $field['id'], '2' );
+						} else {
+							$regions = $vca_asm_geography->get_names();
+							$city_id = get_user_meta( $user_id, 'city', true );
+							$geo_name = isset( $_POST['city'] ) ? $regions[$_POST['city']] : $regions[$city_id];
+							$old = get_user_meta( $user_id, $field['id'], true );
+							if( isset( $_POST[ $field['id'] ] ) ) {
+								if( ( ( is_array( $this_user->roles ) && ! in_array( 'supporter', $this_user->roles ) ) || ( ! is_array( $this_user->roles ) && 'supporter' != $this_user->roles ) ) && $old != '2' ) {
+									update_user_meta( $user_id, $field['id'], '2' );
+									$vca_asm_mailer->auto_response(
+										$user_id,
+										'mem_accepted',
+										array(
+											'city' => $geo_name,
+											'city_id' => $city_id
+										)
+									);
+								} elseif( empty( $old ) ) {
+									update_user_meta( $user_id, $field['id'], '1' );
+								}
+							} elseif( ! isset( $_POST[ $field['id'] ] ) && ( $old !== '0' || $old !== 0 ) ) {
+								update_user_meta( $user_id, $field['id'], '0' );
+								if( $old == '2' ) {
+									$vca_asm_mailer->auto_response(
+										$user_id,
+										'mem_cancelled',
+										array(
+											'city' => $geo_name,
+											'city_id' => $city_id
+										)
+									);
+								}
+							}
+						}
+					break;
+
+					default:
+						if( isset( $field['id'] ) && ( ! isset( $field['disabled'] ) || $field['disabled'] !== true ) ) {
+							$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : '';
+							update_user_meta( $user_id, $field['id'], $new );
+							if ( 'city' === $field['id'] ) {
+								update_user_meta( $user_id, 'region', $new );
+							} else if ( 'region' === $field['id'] ) {
+								update_user_meta( $user_id, 'city', $new );
+							}
+						}
+					break;
+				}
+			}
+		}
+	}
+
+	/* ============================= CUSTOM PROFILE FIELDS ============================= */
 
 	/**
 	 * Returns an array containing new profile fields
 	 *
+	 * @param string $part			the part of the profile (settings/profile) fields are output for
+	 * @return array $fields		the standardized way fields are given in this plugin
+	 *
+	 * @global object $current_user
+	 *
+	 * @todo rename and possibly refactor method
+	 *
 	 * @since 1.0
 	 * @access private
 	 */
-	private function create_extra_profile_fields( $part = false ) {
+	private function create_extra_profile_fields( $part = '' )
+	{
 		global $current_user;
 
 		if ( in_array( 'city', $current_user->roles ) ) {
@@ -165,13 +375,16 @@ class VCA_ASM_Profile {
 	 * A supporter may cancel his or her membership whenever he or she likes,
 	 * he or she however cannot join a cell (or local crew) without approval.
 	 *
+	 * @return array				three fields: nation dropdown, city dropdown, membership checkbox
+	 *
 	 * @global object vca_asm_geography
 	 * @global object vca_asm_utilities
 	 *
 	 * @since 1.0
 	 * @access private
 	 */
-	private function geo_options() {
+	private function geo_options()
+	{
 		global $vca_asm_geography, $vca_asm_utilities;
 
 		$disable_field = false;
@@ -319,16 +532,27 @@ class VCA_ASM_Profile {
 				);
 			break;
 		}
+
 		return array( $nation_field, $city_field, $membership_field );
 	}
 
+	/* ============================= UTILITY METHODS ============================= */
+
 	/**
 	 * Localizes JS
+	 * Hooked with 'admin_enqueue_scripts'
+	 *
+	 * @return void
+	 *
+	 * @global object $vca_asm_geography
+	 *
+	 * @see constructor
 	 *
 	 * @since 1.3
 	 * @access public
 	 */
-	public function set_script_params( $user ) {
+	public function set_script_params()
+	{
 		global $vca_asm_geography;
 
 		if ( is_admin() ) {
@@ -339,128 +563,20 @@ class VCA_ASM_Profile {
 	}
 
 	/**
-	 * Adds to user's profile view
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function user_extra_profile_fields( $user ) {
-		$fields = $this->create_extra_profile_fields();
-		require_once( VCA_ASM_ABSPATH . '/templates/frontend-profile.php' );
-	}
-	public function user_extra_profile_fields_custom( $user ) {
-		$fields = $this->create_extra_profile_fields( 'custom' );
-		require( VCA_ASM_ABSPATH . '/templates/frontend-profile.php' );
-	}
-	public function user_extra_profile_fields_settings( $user ) {
-		$fields = $this->create_extra_profile_fields( 'settings' );
-		require( VCA_ASM_ABSPATH . '/templates/frontend-profile.php' );
-	}
-
-	/**
-	 * Adds to admin's userprofile view
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function admin_extra_profile_fields( $user ) {
-		$fields = $this->create_extra_profile_fields();
-		require_once( VCA_ASM_ABSPATH . '/templates/admin-profile.php' );
-	}
-
-	public function save_extra_profile_fields( $user_id ) {
-		global $vca_asm_geography, $vca_asm_mailer;
-
-		if ( ! current_user_can( 'edit_user', $user_id ) ) {
-			return false;
-		}
-
-		if ( isset( $_POST['deleteme'] ) && $_POST['deleteme'] == 'forever' ) {
-			wp_delete_user( $user_id );
-			wp_redirect( get_bloginfo('url'), 200 );
-			exit;
-			return false;
-		}
-
-		$fields = $this->create_extra_profile_fields();
-		if ( ! empty( $fields ) ) {
-			foreach ( $fields as $field ) {
-				switch( $field['type'] ) {
-					case 'date':
-						update_user_meta(
-							$user_id,
-							$field['id'],
-							mktime( 0, 0, 0,
-								$_POST[ $field['id'] . '-month' ],
-								$_POST[ $field['id'] . '-day' ],
-								$_POST[ $field['id'] . '-year' ]
-							)
-						);
-					break;
-
-					case 'membership':
-						$this_user = new WP_User( $user_id );
-						if( in_array( 'city', $this_user->roles ) ) {
-							update_user_meta( $user_id, $field['id'], '2' );
-						} else {
-							$regions = $vca_asm_geography->get_ids();
-							$city_id = get_user_meta( $user_id, 'city', true );
-							$geo_name = isset( $_POST['city'] ) ? $regions[$_POST['city']] : $regions[$city_id];
-							$old = get_user_meta( $user_id, $field['id'], true );
-							if( isset( $_POST[ $field['id'] ] ) ) {
-								if( ( ( is_array( $this_user->roles ) && ! in_array( 'supporter', $this_user->roles ) ) || ( ! is_array( $this_user->roles ) && 'supporter' != $this_user->roles ) ) && $old != '2' ) {
-									update_user_meta( $user_id, $field['id'], '2' );
-									$vca_asm_mailer->auto_response(
-										$user_id,
-										'mem_accepted',
-										array(
-											'city' => $geo_name,
-											'city_id' => $city_id
-										)
-									);
-								} elseif( empty( $old ) ) {
-									update_user_meta( $user_id, $field['id'], '1' );
-								}
-							} elseif( ! isset( $_POST[ $field['id'] ] ) && ( $old !== '0' || $old !== 0 ) ) {
-								update_user_meta( $user_id, $field['id'], '0' );
-								if( $old == '2' ) {
-									$vca_asm_mailer->auto_response(
-										$user_id,
-										'mem_cancelled',
-										array(
-											'city' => $geo_name,
-											'city_id' => $city_id
-										)
-									);
-								}
-							}
-						}
-					break;
-
-					default:
-						if( isset( $field['id'] ) && ( ! isset( $field['disabled'] ) || $field['disabled'] !== true ) ) {
-							$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : '';
-							update_user_meta( $user_id, $field['id'], $new );
-							if ( 'city' === $field['id'] ) {
-								update_user_meta( $user_id, 'region', $new );
-							} else if ( 'region' === $field['id'] ) {
-								update_user_meta( $user_id, 'city', $new );
-							}
-						}
-					break;
-				}
-			}
-		}
-	}
-
-	/**
 	 * Verifies whether a new user has accepted the terms & conditions (upon registration)
 	 * otherwise stops execution of registration process
+	 * Hooked with 'register_post'
+	 *
+	 * @param string $sanitized_user_login		the sanitized username as entered by the user
+	 * @param string $user_email				the user's e-mail address
+	 * @param object $errors					WP_Error object
+	 * @return void
 	 *
 	 * @since 1.0
 	 * @access public
 	 */
-	public function verify_tc_acceptance( $sanitized_user_login, $user_email, $errors ) {
+	public function verify_tc_acceptance( $sanitized_user_login, $user_email, $errors )
+	{
 		if( ! isset( $_POST['terms_conditions'] ) || $_POST['terms_conditions'] != 'agreed' ) {
 			$errors->add( 'tc_not_accepted', __( 'Please confirm that you agree to the terms &amp; conditions.', 'vca-asm' ) );
 		}
@@ -468,11 +584,18 @@ class VCA_ASM_Profile {
 
 	/**
 	 * Saves the acceptance of the terms & conditions to the database
+	 * Hooked with 'user_register'
+	 *
+	 * @param int $user_id
+	 * @return void
+	 *
+	 * @see constructor
 	 *
 	 * @since 1.0
 	 * @access public
 	 */
-	public function save_on_registration( $user_id ) {
+	public function save_on_registration( $user_id )
+	{
 		update_user_meta( $user_id, 'mail_switch', 'all' );
 		update_user_meta( $user_id, 'membership', 0 );
 		update_user_meta( $user_id, 'nation', NULL );
@@ -484,10 +607,16 @@ class VCA_ASM_Profile {
 	/**
 	 * Shortcode handler for the supporter vCard
 	 *
+	 * @param array $atts			shortcode attributes
+	 * @return string $output		HTML formatted output
+	 *
+	 * @see constructor
+	 *
 	 * @since 1.2
 	 * @access public
 	 */
-	public function supporter_vcard( $atts ) {
+	public function supporter_vcard( $atts )
+	{
 		global $current_user, $vca_asm_utilities;
 
 		$supporter = new VCA_ASM_Supporter( $current_user->ID );
@@ -541,11 +670,17 @@ class VCA_ASM_Profile {
 	/**
 	 * Shortcode handler for setting newsletter preferences
 	 *
+	 * @param array $atts			shortcode attributes
+	 * @return string $output		HTML formatted output
+	 *
+	 * @see constructor
+	 * @todo edge-cases, see in-line comments
+	 *
 	 * @since 1.6
 	 * @access public
 	 */
-	public function newsletter_preferences( $atts ) {
-
+	public function newsletter_preferences( $atts )
+	{
 		if ( is_user_logged_in() )
 		{
 			// to do: edge case handling
@@ -607,27 +742,6 @@ class VCA_ASM_Profile {
 		}
 
 		return $output;
-	}
-
-	/**
-	 * Constructor
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function __construct() {
-		add_action( 'register_post', array( $this, 'verify_tc_acceptance' ), 1, 3 );
-		add_action( 'user_register', array( $this, 'save_on_registration' ), 100 );
-		add_action( 'show_user_profile', array( $this, 'user_extra_profile_fields' ) );
-		add_action( 'edit_user_profile', array( $this, 'admin_extra_profile_fields' ) );
-		add_action( 'vca_theme_show_user_profile', array( $this, 'user_extra_profile_fields_custom' ) );
-		add_action( 'wp_enqueue_scripts', array( $this, 'set_script_params' ), 20 );
-		add_action( 'admin_enqueue_scripts', array( $this, 'set_script_params' ), 20 );
-		add_action( 'vca_theme_show_user_settings', array( $this, 'user_extra_profile_fields_settings' ) );
-		add_action( 'personal_options_update', array( $this, 'save_extra_profile_fields' ) );
-		add_action( 'edit_user_profile_update', array( $this, 'save_extra_profile_fields' ) );
-		add_shortcode( 'vca-asm-supporter-vcard', array( $this, 'supporter_vcard' ) );
-		add_shortcode( 'vca-asm-newsletter-preferences', array( $this, 'newsletter_preferences' ) );
 	}
 }
 

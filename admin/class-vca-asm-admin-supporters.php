@@ -42,8 +42,8 @@ class VCA_ASM_Admin_Supporters {
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
 		$admin_nation = $vca_asm_geography->has_nation( $admin_city );
 
-		$cities = $vca_asm_geography->get_ids( 'city' );
-		$nations = $vca_asm_geography->get_ids( 'nation' );
+		$cities = $vca_asm_geography->get_names( 'city' );
+		$nations = $vca_asm_geography->get_names( 'nation' );
 
 		$messages = array();
 
@@ -683,7 +683,7 @@ class VCA_ASM_Admin_Supporters {
 		get_currentuserinfo();
 
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
-		$status = $vca_asm_geography->get_status( $admin_city );
+		$status = $vca_asm_geography->get_type( $admin_city );
 		$admin_nation = $vca_asm_geography->has_nation( $admin_city );
 		$admin_nation_name = $vca_asm_geography->get_name( $admin_nation );
 
@@ -884,10 +884,10 @@ class VCA_ASM_Admin_Supporters {
 
 		$profile_url = $sort_url . '&orderby=' . $orderby . '&order=' . $order;
 
-		$cities = $vca_asm_geography->get_ids( 'city' );
-		$nations = $vca_asm_geography->get_ids( 'nation' );
-		$stati = $vca_asm_geography->get_stati();
-		$stati_conv = $vca_asm_geography->get_stati_conv();
+		$cities = $vca_asm_geography->get_names( 'city' );
+		$nations = $vca_asm_geography->get_names( 'nation' );
+		$stati = $vca_asm_geography->get_types();
+		$stati_conv = $vca_asm_geography->get_region_id_to_type();
 
 		$supporters_ordered = array();
 		$i = 0;

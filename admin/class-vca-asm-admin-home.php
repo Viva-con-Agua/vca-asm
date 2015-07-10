@@ -96,7 +96,7 @@ class VCA_ASM_Admin_Home {
 		$stats = new VCA_ASM_Stats();
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
 		$admin_city_name = $vca_asm_geography->get_name( $admin_city );
-		$admin_city_status = $vca_asm_geography->get_status( $admin_city );
+		$admin_city_status = $vca_asm_geography->get_type( $admin_city );
 
 		$output = '<div id="poststuff">' .
 			'<div id="post-body" class="metabox-holder columns-1">' .

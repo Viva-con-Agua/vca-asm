@@ -270,7 +270,7 @@ class VCA_ASM_Admin_Emails {
 
 			$user = new WP_User( $mail['sent_by'] );
 			if( 'Head' === mb_substr( $user->first_name, 0, 4 ) ) { //legacy
-				$by =  $vca_asm_geography->get_status( get_user_meta( $user->ID, 'city', true ) ) . ' ' . $user->last_name;
+				$by =  $vca_asm_geography->get_type( get_user_meta( $user->ID, 'city', true ) ) . ' ' . $user->last_name;
 			} else {
 				$by = trim( $user->first_name . ' ' .$user->last_name );
 			}
@@ -1238,7 +1238,7 @@ class VCA_ASM_Admin_Emails {
 			} else {
 				$city_id = get_user_meta( $current_user->ID, 'city', true );
 				$city_name = $vca_asm_geography->get_name( $city_id );
-				$from_name = $vca_asm_geography->get_status( $city_id ) . ' ' . $city_name;
+				$from_name = $vca_asm_geography->get_type( $city_id ) . ' ' . $city_name;
 				$format = ! empty( $this->emails_options['email_format_ho'] ) ? $this->emails_options['email_format_ho'] : 'html';
 			}
 

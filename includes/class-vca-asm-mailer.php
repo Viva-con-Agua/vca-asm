@@ -1,43 +1,171 @@
 <?php
 
 /**
- * VCA_ASM_Mailer class.
+ * VCA_ASM_Mailer class
  *
- * This class contains properties and methods to
- * send emails.
+ * This class contains properties and methods to send emails.
  *
  * It receives instructions from
  * @see class VCA_ASM_Admin_Emails
- * and
  * @see class VCA_ASM_Registrations
  *
  * @since 1.0
+ *
+ * Structure:
+ * - Properties
+ * - Constructor
+ * - Queuing mails & checking outbox
+ * - Sending chain
+ * - Autoresponse handler
+ * - Utility
  */
 
 if ( ! class_exists( 'VCA_ASM_Mailer' ) ) :
 
-class VCA_ASM_Mailer {
+class VCA_ASM_Mailer
+{
+
+	/* ============================= CLASS PROPERTIES ============================= */
 
 	/**
-	 * Class Properties
+	 * Whether to split the sending process into sizeable chunks
 	 *
-	 * @since 1.2
-	 * @access private
+	 * @var bool $use_packets
+	 * @since 1.5
+	 * @access public
 	 */
 	public $use_packets = true;
 
+	/**
+	 * Size of the packets
+	 *
+	 * @var int $packet_size
+	 * @since 1.5
+	 * @access public
+	 */
 	public $packet_size = 100;
+
+	/**
+	 * Interval in which to send packets (in minutes)
+	 *
+	 * @var int $sending_interval
+	 * @since 1.5
+	 * @access private
+	 */
 	private $sending_interval = 2;
 
+	/**
+	 * The protocol to use (smtp or sendmail - the latter is not a protocol, I know - use SMTP anyway, for fuck's sake!)
+	 *
+	 * @var string $protocol
+	 * @since 1.5
+	 * @access private
+	 */
 	private $protocol = 'sendmail';
+
+	/**
+	 * URL of the SMTP server (Use SMTP, for fuck's sake! Again!)
+	 *
+	 * @var string $url
+	 * @since 1.5
+	 * @access private
+	 */
 	private $url = 'smtp.vivaconagua.org';
+
+	/**
+	 * The (SMTP!) port to use
+	 *
+	 * @var int $port
+	 * @since 1.5
+	 * @access private
+	 */
 	private $port = 25;
+
+	/**
+	 * The (SMTP!) username
+	 *
+	 * @var string $user
+	 * @since 1.5
+	 * @access private
+	 */
 	private $user = 'no-reply@vivaconagua.org';
+
+	/**
+	 * The (SMTP!) password
+	 *
+	 * @var string $pass
+	 * @since 1.5
+	 * @access private
+	 */
 	private $pass = '';
 
+	/**
+	 * How to format the e-mail (plaintext 'plain' or HTML 'html') when administrators send them
+	 *
+	 * @var string $format_admin
+	 * @since 1.3
+	 * @access private
+	 */
 	private $format_admin = 'plain';
+
+	/**
+	 * How to format the e-mail (plaintext 'plain' or HTML 'html') when city users send them
+	 *
+	 * @var string $format_city
+	 * @since 1.3
+	 * @access private
+	 */
 	private $format_city = 'plain';
+
+	/**
+	 * How to format automatically sent e-mails (plaintext 'plain' or HTML 'html')
+	 *
+	 * @var string $format_auto
+	 * @since 1.3
+	 * @access private
+	 */
 	private $format_auto = 'plain';
+
+	/* ============================= CONSTRUCTOR ============================= */
+
+	/**
+	 * Constructor
+	 *
+	 * @global object $vca_asm_cron
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function __construct()
+	{
+		global $vca_asm_cron;
+
+		$options = get_option( 'vca_asm_emails_options' );
+		$this->use_packets = ! empty( $options['email_sending_packet_switch'] ) && 1 == $options['email_sending_packet_switch'];
+		$this->packet_size = ! empty( $options['email_sending_packet_size'] ) ? $options['email_sending_packet_size'] : $this->packet_size;
+		$this->sending_interval = ! empty( $options['email_sending_interval'] ) ? $options['email_sending_interval'] : $this->sending_interval;
+		$this->protocol = ! empty( $options['email_protocol_type'] ) ? $options['email_protocol_type'] : $this->protocol;
+		$this->url = ! empty( $options['email_protocol_url'] ) ? $options['email_protocol_url'] : $this->url;
+		$this->port = ! empty( $options['email_protocol_port'] ) ? $options['email_protocol_port'] : $this->port;
+		$this->user = ! empty( $options['email_protocol_username'] ) ? $options['email_protocol_username'] : $this->user;
+		$this->pass = ! empty( $options['email_protocol_pass'] ) ? $options['email_protocol_pass'] : $this->pass;
+		$this->format_admin = ! empty( $options['email_format_admin'] ) ? $options['email_format_admin'] : $this->format_admin;
+		$this->format_city = ! empty( $options['email_format_city'] ) ? $options['email_format_city'] : $this->format_city;
+		$this->format_auto = ! empty( $options['email_format_auto'] ) ? $options['email_format_auto'] : $this->format_auto;
+
+		add_action( 'vca_asm_check_outbox', array( $this, 'check_outbox' ) );
+		/* $vca_asm_cron holds all active cron hooks */
+		$vca_asm_cron->hooks[] = 'vca_asm_check_outbox';
+		if ( ! wp_next_scheduled( 'vca_asm_check_outbox' ) ) {
+			wp_schedule_event( time(), $this->sending_interval.'minutely', 'vca_asm_check_outbox' );
+		} elseif ( rtrim( wp_get_schedule( 'vca_asm_check_outbox' ), 'minutely' ) != $this->sending_interval ) {
+			wp_unschedule_event( wp_next_scheduled( 'vca_asm_check_outbox' ), 'vca_asm_check_outbox' );
+			wp_schedule_event( time(), $this->sending_interval.'minutely', 'vca_asm_check_outbox' );
+		}
+		//wp_unschedule_event( wp_next_scheduled( 'vca_asm_check_outbox' ), 'vca_asm_check_outbox' );
+	}
+
+	/* ============================= QUEUING MAILS & CHECKING THE OUTBOX ============================= */
 
 	/**
 	 * Queues Mails in the outbox
@@ -45,13 +173,14 @@ class VCA_ASM_Mailer {
 	 * Bulk Mails are not sent directly, but placed in
 	 * an outbox queue and sent in concrete packages by a cronjob.
 	 *
-	 * @param array $args
-	 * @return array Maildata: DB ID, counts
+	 * @param array $args			(optional) but must have e-mail related parameters, see code
+	 * @return int $mail_id			database ID of the freshly inserted mail
 	 *
 	 * @since 1.4
 	 * @access public
 	 */
-	public function queue( $args = array() ) {
+	public function queue( $args = array() )
+	{
 		global $current_user, $wpdb,
 			$vca_asm_geography;
 
@@ -108,16 +237,135 @@ class VCA_ASM_Mailer {
 	}
 
 	/**
-	 * Determines which sending callback to call
+	 * WP-Cron Callback
+	 * Checks for queued mails.
+	 * Sends a parcel, if mails are scheduled for sending.
 	 *
-	 * @param array $args
-	 * @return array $return what the callbacks return
+	 * @return void
+	 *
+	 * @global object $wpdb
+	 * @global object $vca_asm_geography
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function check_outbox()
+	{
+		global $wpdb,
+			$vca_asm_geography;
+
+		$queued = $wpdb->get_results(
+			"SELECT * FROM " .
+			$wpdb->prefix . "vca_asm_emails_queue " .
+			"ORDER BY id ASC LIMIT 1", ARRAY_A
+		);
+		$queued = isset( $queued[0] ) ? $queued[0] : NULL;
+		if ( empty( $queued ) ) {
+			return false;
+		}
+
+		$the_mail = $wpdb->get_results(
+			"SELECT * FROM " .
+			$wpdb->prefix . "vca_asm_emails " .
+			"WHERE id = " . $queued['mail_id'] . " LIMIT 1", ARRAY_A
+		);
+		$the_mail = isset( $the_mail[0] ) ? $the_mail[0] : NULL;
+		if ( empty( $the_mail ) ) {
+			return false;
+		}
+
+		$receipients = unserialize( $queued['receipients'] );
+
+		$queue_count = count( $receipients );
+
+		$end = $this->packet_size < $queue_count ? $this->packet_size : $queue_count;
+		$end = $this->use_packets ? $end : $queue_count;
+
+		if ( $end === $queue_count ) {
+			$current_batch = $receipients;
+			$wpdb->query(
+				"DELETE FROM " . $wpdb->prefix."vca_asm_emails_queue " .
+				"WHERE id = " . $queued['id']
+			);
+		} else {
+			$current_batch = array_slice( $receipients, 0, $end );
+			$receipients = array_slice( $receipients, $end );
+			$wpdb->update(
+				$wpdb->prefix.'vca_asm_emails_queue',
+				array(
+					'receipients' => serialize( $receipients )
+				),
+				array( 'id' => $queued['id'] ),
+				array( '%s' ),
+				array( '%d' )
+			);
+		}
+
+		$log_file = VCA_ASM_ABSPATH . '/logs/mailer.log';
+		$log_msg = 'logged';
+		file_put_contents( $log_file, $log_msg . "\n\n", FILE_APPEND | LOCK_EX );
+
+		$type = ( isset( $the_mail['type'] ) && in_array( $the_mail['type'], array( 'newsletter', 'activity' ) ) ) ? $the_mail['type'] : 'newsletter';
+
+		if ( 'activity' === $type ) {
+			$activity_type = get_post_type( $the_mail['receipient_id'] );
+			if ( 'goldeimerfestival' === $activity_type ) {
+				$mail_nation = 'goldeimer';
+			} else {
+				$mail_nation = $vca_asm_geography->get_alpha_code( get_post_meta( $the_mail['receipient_id'], 'nation', true ) );
+			}
+		} else {
+			$mail_nation = $vca_asm_geography->get_alpha_code( get_user_meta( $the_mail['sent_by'], 'nation', true ) );
+		}
+		$mail_nation = ! empty( $mail_nation ) ? $mail_nation : 'de';
+
+		$mailer_return = $this->send_pre( array(
+			'mail_id' => $queued['mail_id'],
+			'receipients' => $current_batch,
+			'subject' => $the_mail['subject'],
+			'message' => $the_mail['message'],
+			'from_name' => $the_mail['from_name'],
+			'from_email' => $the_mail['from'],
+			'content_type' => $the_mail['format'],
+			'input_type' => $the_mail['format'],
+			'for' => $this->determine_for_field( $the_mail['receipient_group'], $the_mail['receipient_id'], $the_mail['membership'] ),
+			'time' => $the_mail['time'],
+			'mail_nation' => $mail_nation,
+			'reason' => $type
+		));
+
+		$log_file = VCA_ASM_ABSPATH . '/logs/mailer.log';
+		$log_msg = 'Time: ' . time() . "\n" .
+			'Total sent: ' . $mailer_return[total] . "\n" .
+			'Successes: ' . $mailer_return[successes] . "\n" .
+			'Failures: ' . $mailer_return[failures];
+		if ( ! empty( $mailer_return[failures] ) ) {
+			$i = 1;
+			foreach ( $mailer_return[failed_ids] as $user_id ) {
+				$log_msg .= "\n" . 'Failure #' . $i . ', User ID: ' . $user_id;
+				if ( isset( $mailer_return[error_msgs][$i-1] ) ) {
+					$log_msg .= "\n" . 'Failure #' . $i . ', msg: ' . $mailer_return[error_msgs][$i-1];
+				}
+				$i++;
+			}
+		}
+		file_put_contents( $log_file, $log_msg . "\n\n", FILE_APPEND | LOCK_EX );
+	}
+
+	/* ============================= SENDING PROCESS ============================= */
+
+	/**
+	 * Entry point to sending chain:
+	 * Determines which sending callback to call.
+	 *
+	 * @param array $args				(optional) but must have e-mail related parameters, see code
+	 * @return array $return
 	 *
 	 * @since 1.4
 	 * @access public
 	 */
-	public function send_pre( $args = array() ) {
-
+	public function send_pre( $args = array() )
+	{
 		$default_args = array(
 			'mail_id' => 1,
 			'receipients' => array( 1 ),
@@ -152,17 +400,22 @@ class VCA_ASM_Mailer {
 	}
 
 	/**
-	 * Sends mails
+	 * Sends mails via SMTP
 	 *
 	 * First abstraction layer ontop of phpMailer.
 	 *
-	 * @param array $args
-	 * @return array $results
+	 * @param array $args			(optional) but must have e-mail related parameters, passed from send_pre
+	 * @return array $results		success and fail counts and the like
+	 *
+	 * @global object $current_user;
+	 * @global object $vca_asm_geography;
+	 * @global object $vca_asm_utilities;
 	 *
 	 * @since 1.4
 	 * @access public
 	 */
-	public function send_smtp( $args = array() ) {
+	public function send_smtp( $args = array() )
+	{
 		global $current_user,
 			$vca_asm_geography, $vca_asm_utilities;
 
@@ -290,7 +543,7 @@ class VCA_ASM_Mailer {
 
 			$receipient_email = $receipient_data->user_email;
 
-			/***** PRE- AND APPEND MESSAGE BODY W/ STANDARDIZED HEADER & FOOTER *****/
+			/* pre- & append message body with standardized header and footer */
 			if ( 'html' === $content_type ) {
 				$html_generator = new VCA_ASM_Email_Html( array(
 					'mail_id' => $mail_id,
@@ -337,10 +590,18 @@ class VCA_ASM_Mailer {
 	 * Sends mails via unix sendmail
 	 * should not be used anymore in favor of send_smtp
 	 *
+	 * @param array $args			(optional) but must have e-mail related parameters, passed from send_pre
+	 * @return array $results		success and fail counts and the like
+	 *
+	 * @global object $current_user;
+	 * @global object $vca_asm_geography;
+	 * @global object $vca_asm_utilities;
+	 *
 	 * @since 1.0
 	 * @access public
 	 */
-	public function send_sendmail( $args = array() ) {
+	public function send_sendmail( $args = array() )
+	{
 		global $current_user,
 			$vca_asm_geography, $vca_asm_utilities;
 
@@ -385,7 +646,7 @@ class VCA_ASM_Mailer {
 		);
 		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
 
-		/***** PREPARE MESSAGE BODY *****/
+		/* prepare message body */
 
 		$message = trim( $message );
 		if ( 'html' === $content_type ) {
@@ -430,7 +691,7 @@ class VCA_ASM_Mailer {
 			}
 		}
 
-		/***** PRE- AND APPEND MESSAGE BODY W/ STANDARDIZED HEADER & FOOTER *****/
+		/* pre- & append message body with standardized header and footer */
 
 		if ( 'html' === $content_type ) {
 			$html_generator = new VCA_ASM_Email_Html( array(
@@ -448,7 +709,7 @@ class VCA_ASM_Mailer {
 			$html_message = $html_generator->output();
 		} //add else / plain alternative
 
-		/***** SENDMAIL *****/
+		/* Sendmail*/
 
 		$lf = "\n";
 		$eol = "\r\n";
@@ -545,16 +806,27 @@ class VCA_ASM_Mailer {
 		return $results;
 	}
 
+	/* ============================= AUTORESPONSE HANDLER ============================= */
+
 	/**
 	 * Is called from other objects to send auto responses for user actions.
 	 *
-	 * Checks database for custom auto response texts,
-	 * otherwise sends generic mail.
+	 * Checks database for custom auto response texts, otherwise sends generic mail.
+	 *
+	 * @param int $user_id				the ID of the user getting the mail
+	 * @param string $action			action/activity slug / array key
+	 * @param array $message_args		(optional) the parameters of the message, see code
+	 * @return void
+	 *
+	 * @global object $current_user
+	 * @global object $wpdb
+	 * @global object $vca_asm_geography
 	 *
 	 * @since 1.0
 	 * @access public
 	 */
-	public function auto_response( $id, $action, $message_args = array() ) {
+	public function auto_response( $user_id, $action, $message_args = array() )
+	{
 		global $current_user, $wpdb,
 			$vca_asm_geography;
 
@@ -585,7 +857,7 @@ class VCA_ASM_Mailer {
 		/* lagacy | backwards compatibility */
 		$scope = empty( $scope ) ? get_user_meta( $current_user->ID, 'nation', true ) : $scope;
 
-		$this_user = new WP_User( intval( $id ) );
+		$this_user = new WP_User( intval( $user_id ) );
 
 		/* construct name, if not given in args */
 		if ( $name === __( 'Supporter', 'vca-asm' ) ) {
@@ -670,13 +942,14 @@ class VCA_ASM_Mailer {
 			} elseif ( ! empty( $city_id ) ) {
 				$mail_nation = $vca_asm_geography->get_alpha_code( $vca_asm_geography->has_nation( $city_id ) );
 			}
+
 			$mail_nation = ! empty( $mail_nation ) ? $mail_nation : 'de';
 
 			$reason = in_array( $action, array( 'mem_accepted', 'mem_denied', 'mem_cancelled' ) ) ? 'membership' : 'activity';
 
 			$this->send_pre( array(
 				'mail_id' => $mail_id,
-				'receipients' => $id,
+				'receipients' => $user_id,
 				'subject' => stripcslashes( $subject ),
 				'message' => stripcslashes( $message ),
 				'from_name' => $from_name,
@@ -688,133 +961,29 @@ class VCA_ASM_Mailer {
 				'mail_nation' => $mail_nation,
 				'reason' => $reason,
 				'auto_action' => $action,
-				'user_id' => $id
+				'user_id' => $user_id
 			));
 		}
 	}
 
-	/******************** THE OUTBOX ********************/
-
-	/**
-	 * WP-Cron Callback
-	 * Checks for queued mails.
-	 * Sends a parcel, if mails are scheduled for sending.
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
-	public function check_outbox() {
-		global $wpdb,
-			$vca_asm_geography;
-
-		$queued = $wpdb->get_results(
-			"SELECT * FROM " .
-			$wpdb->prefix . "vca_asm_emails_queue " .
-			"ORDER BY id ASC LIMIT 1", ARRAY_A
-		);
-		$queued = isset( $queued[0] ) ? $queued[0] : NULL;
-		if ( empty( $queued ) ) {
-			return false;
-		}
-
-		$the_mail = $wpdb->get_results(
-			"SELECT * FROM " .
-			$wpdb->prefix . "vca_asm_emails " .
-			"WHERE id = " . $queued['mail_id'] . " LIMIT 1", ARRAY_A
-		);
-		$the_mail = isset( $the_mail[0] ) ? $the_mail[0] : NULL;
-		if ( empty( $the_mail ) ) {
-			return false;
-		}
-
-		$receipients = unserialize( $queued['receipients'] );
-
-		$queue_count = count( $receipients );
-
-		$end = $this->packet_size < $queue_count ? $this->packet_size : $queue_count;
-		$end = $this->use_packets ? $end : $queue_count;
-
-		if ( $end === $queue_count ) {
-			$current_batch = $receipients;
-			$wpdb->query(
-				"DELETE FROM " . $wpdb->prefix."vca_asm_emails_queue " .
-				"WHERE id = " . $queued['id']
-			);
-		} else {
-			$current_batch = array_slice( $receipients, 0, $end );
-			$receipients = array_slice( $receipients, $end );
-			$wpdb->update(
-				$wpdb->prefix.'vca_asm_emails_queue',
-				array(
-					'receipients' => serialize( $receipients )
-				),
-				array( 'id' => $queued['id'] ),
-				array( '%s' ),
-				array( '%d' )
-			);
-		}
-
-		$log_file = VCA_ASM_ABSPATH . '/logs/mailer.log';
-		$log_msg = 'logged';
-		file_put_contents( $log_file, $log_msg . "\n\n", FILE_APPEND | LOCK_EX );
-
-		$type = ( isset( $the_mail['type'] ) && in_array( $the_mail['type'], array( 'newsletter', 'activity' ) ) ) ? $the_mail['type'] : 'newsletter';
-
-		if ( 'activity' === $type ) {
-			$activity_type = get_post_type( $the_mail['receipient_id'] );
-			if ( 'goldeimerfestival' === $activity_type ) {
-				$mail_nation = 'goldeimer';
-			} else {
-				$mail_nation = $vca_asm_geography->get_alpha_code( get_post_meta( $the_mail['receipient_id'], 'nation', true ) );
-			}
-		} else {
-			$mail_nation = $vca_asm_geography->get_alpha_code( get_user_meta( $the_mail['sent_by'], 'nation', true ) );
-		}
-		$mail_nation = ! empty( $mail_nation ) ? $mail_nation : 'de';
-
-		$mailer_return = $this->send_pre( array(
-			'mail_id' => $queued['mail_id'],
-			'receipients' => $current_batch,
-			'subject' => $the_mail['subject'],
-			'message' => $the_mail['message'],
-			'from_name' => $the_mail['from_name'],
-			'from_email' => $the_mail['from'],
-			'content_type' => $the_mail['format'],
-			'input_type' => $the_mail['format'],
-			'for' => $this->determine_for_field( $the_mail['receipient_group'], $the_mail['receipient_id'], $the_mail['membership'] ),
-			'time' => $the_mail['time'],
-			'mail_nation' => $mail_nation,
-			'reason' => $type
-		));
-
-		$log_file = VCA_ASM_ABSPATH . '/logs/mailer.log';
-		$log_msg = 'Time: ' . time() . "\n" .
-			'Total sent: ' . $mailer_return[total] . "\n" .
-			'Successes: ' . $mailer_return[successes] . "\n" .
-			'Failures: ' . $mailer_return[failures];
-		if ( ! empty( $mailer_return[failures] ) ) {
-			$i = 1;
-			foreach ( $mailer_return[failed_ids] as $user_id ) {
-				$log_msg .= "\n" . 'Failure #' . $i . ', User ID: ' . $user_id;
-				if ( isset( $mailer_return[error_msgs][$i-1] ) ) {
-					$log_msg .= "\n" . 'Failure #' . $i . ', msg: ' . $mailer_return[error_msgs][$i-1];
-				}
-				$i++;
-			}
-		}
-		file_put_contents( $log_file, $log_msg . "\n\n", FILE_APPEND | LOCK_EX );
-	}
-
-	/******************** UTILITY METHODS ********************/
+	/* ============================= UTILITY METHODS ============================= */
 
 	/**
 	 * Returns a string for the "for" field for the e-mail body's headline
 	 * previously done within template file
 	 *
+	 * @param string $receipient_group		here: type of delimiter (activity, city, nation), little ambiguous
+	 * @param int $receipient_id			ID of the receipient group
+	 * @param string $membership			limit membership
+	 * @return string $for					what the damn method name suggests: the contents of the "for" field in e-mail headers
+	 *
+	 * @global object $vca_asm_geography
+	 *
 	 * @since 1.4
 	 * @access public
 	 */
-	public function determine_for_field( $receipient_group, $receipient_id, $membership ) {
+	public function determine_for_field( $receipient_group, $receipient_id, $membership )
+	{
 		global $vca_asm_geography;
 
 		switch( $receipient_group ) {
@@ -890,13 +1059,28 @@ class VCA_ASM_Mailer {
 	}
 
 	/**
-	 * Returns the id of a receipient group
-	 * based on the kind of group
+	 * Returns the id of a receipient group based on the kind of group
+	 *
+	 * @param string receipient_group		here: type of delimiter (activity, city, nation), little ambiguous
+	 * @param bool $with_users				(optional) whether to return only an ID or an array including all useres also
+	 * @param bool $ignore_switch			(optional) whether to ignore a users newsletter settings
+	 * @param string|int $membership		(optional) limit results by membership status, defaults to 'all'
+	 * @return int|array					ID (possible in an array with relevant users)
+	 *
+	 * @global object $current_user
+	 * @global object $vca_asm_activities
+	 * @global object $vca_asm_geography
 	 *
 	 * @since 1.4
 	 * @access public
 	 */
-	public function receipient_id_from_group( $receipient_group, $with_users = false, $ignore_switch = false, $membership = 'all' ) {
+	public function receipient_id_from_group(
+			$receipient_group,
+			$with_users = false,
+			$ignore_switch = false,
+			$membership = 'all'
+		)
+	{
 		global $current_user,
 			$vca_asm_activities, $vca_asm_geography;
 
@@ -1214,42 +1398,6 @@ class VCA_ASM_Mailer {
 		}
 
 		return $receipient_id;
-	}
-
-	/******************** CLASS CONSTRUCTOR ********************/
-
-	/**
-	 * Constructor
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
-	public function __construct() {
-		global $vca_asm_cron;
-
-		$options = get_option( 'vca_asm_emails_options' );
-		$this->use_packets = ! empty( $options['email_sending_packet_switch'] ) && 1 == $options['email_sending_packet_switch'];
-		$this->packet_size = ! empty( $options['email_sending_packet_size'] ) ? $options['email_sending_packet_size'] : $this->packet_size;
-		$this->sending_interval = ! empty( $options['email_sending_interval'] ) ? $options['email_sending_interval'] : $this->sending_interval;
-		$this->protocol = ! empty( $options['email_protocol_type'] ) ? $options['email_protocol_type'] : $this->protocol;
-		$this->url = ! empty( $options['email_protocol_url'] ) ? $options['email_protocol_url'] : $this->url;
-		$this->port = ! empty( $options['email_protocol_port'] ) ? $options['email_protocol_port'] : $this->port;
-		$this->user = ! empty( $options['email_protocol_username'] ) ? $options['email_protocol_username'] : $this->user;
-		$this->pass = ! empty( $options['email_protocol_pass'] ) ? $options['email_protocol_pass'] : $this->pass;
-		$this->format_admin = ! empty( $options['email_format_admin'] ) ? $options['email_format_admin'] : $this->format_admin;
-		$this->format_city = ! empty( $options['email_format_city'] ) ? $options['email_format_city'] : $this->format_city;
-		$this->format_auto = ! empty( $options['email_format_auto'] ) ? $options['email_format_auto'] : $this->format_auto;
-
-		add_action( 'vca_asm_check_outbox', array( $this, 'check_outbox' ) );
-		/* $vca_asm_cron holds all active cron hooks */
-		$vca_asm_cron->hooks[] = 'vca_asm_check_outbox';
-		if ( ! wp_next_scheduled( 'vca_asm_check_outbox' ) ) {
-			wp_schedule_event( time(), $this->sending_interval.'minutely', 'vca_asm_check_outbox' );
-		} elseif ( rtrim( wp_get_schedule( 'vca_asm_check_outbox' ), 'minutely' ) != $this->sending_interval ) {
-			wp_unschedule_event( wp_next_scheduled( 'vca_asm_check_outbox' ), 'vca_asm_check_outbox' );
-			wp_schedule_event( time(), $this->sending_interval.'minutely', 'vca_asm_check_outbox' );
-		}
-		//wp_unschedule_event( wp_next_scheduled( 'vca_asm_check_outbox' ), 'vca_asm_check_outbox' );
 	}
 
 } // class

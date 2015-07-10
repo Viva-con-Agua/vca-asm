@@ -3,12 +3,19 @@
 /**
  * VCA_ASM_Activities class.
  *
- * This class contains properties and methods for the activity post types.
+ * This class contains properties and methods for the activity post types,
+ * namely defining its metadata, a saving routine, restrictions based on user capabilities and the like.
  *
  * @link http://codex.wordpress.org/Post_Types Intro to Custom Post Types (in the following: CPT)
  *
  * @package VcA Activity & Supporter Management
  * @since 1.0
+ *
+ * Structure:
+ * - Properties
+ * - Constructor
+ * - Custom Post Types
+ * - Utility
  */
 
 if ( ! class_exists( 'VCA_ASM_Activities' ) ) :
@@ -16,9 +23,7 @@ if ( ! class_exists( 'VCA_ASM_Activities' ) ) :
 class VCA_ASM_Activities
 {
 
-	/**
-	 * Class Properties
-	 */
+	/* ============================= CLASS PROPERTIES ============================= */
 
 	/**
 	 * Holds the current activity
@@ -32,7 +37,7 @@ class VCA_ASM_Activities
 	public $the_activity = false;
 
 	/**
-	 * Holds (slugs of) valid CPTs
+	 * Array of (slugs of) valid CPTs
 	 *
 	 * @var array $activity_types
 	 * @since 1.3
@@ -76,13 +81,32 @@ class VCA_ASM_Activities
 	/**
 	 * Pairs acticity slugs with activity nice names (as translatable strings)
 	 *
-	 * @var array $activities_to_nicename
+	 * @var array $to_nicename
 	 * @see constructor
 	 * @since 1.3
 	 * @access public
 	 */
 	public $to_nicename = array();
+
+	/**
+	 * Pairs acticity slugs with activity nice names (as translatable strings)
+	 *
+	 * @var array $activities_to_nicename
+	 * @see constructor
+	 * @since 1.3
+	 * @access public
+	 */
 	public $activities_to_nicename = array();
+
+	/**
+	 * Pairs activity slugs with plural forms of their nice names (as translatable strings)
+	 *
+	 * @var array $to_plural_nicename
+	 * @see constructor
+	 * @since 1.3
+	 * @access public
+	 */
+	public $to_plural_nicename = array();
 
 	/**
 	 * Pairs activity slugs with plural forms of their nice names (as translatable strings)
@@ -92,13 +116,12 @@ class VCA_ASM_Activities
 	 * @since 1.3
 	 * @access public
 	 */
-	public $to_plural_nicename = array();
 	public $activities_to_plural_nicename = array();
 
 	/**
 	 * Holds all activity types in a standardized format,
 	 * such that it will be readily accepted by the plugins template classes
-	 * for use  in a dropdown menu
+	 * for use  in a dropdown menu.
 	 *
 	 * @var array $options_array
 	 * @see constructor
@@ -106,23 +129,145 @@ class VCA_ASM_Activities
 	 * @access public
 	 */
 	public $options_array = array();
+
+	/**
+	 * Holds all activity types in a standardized format,
+	 * such that it will be readily accepted by the plugins template classes
+	 * for use  in a dropdown menu.
+	 * Includes an "all" option in the list.
+	 *
+	 * @var array $options_array_with_all
+	 * @see constructor
+	 * @since 1.3
+	 * @access public
+	 */
 	public $options_array_with_all = array();
 
-	/****************************** CUSTOM POST TYPES ******************************/
+	/* ============================= CONSTRUCTOR ============================= */
+
+	/**
+	 * Constructor
+	 *
+	 * @global object $post
+	 * @global object $vca_asm_utilities
+	 *
+	 * @since 1.0
+	 * @access public
+	 */
+	public function __construct()
+	{
+		global $post,
+			$vca_asm_utilities;
+
+		/* Populate translatable/dynamic class properties, which can't be set in the class head */
+
+		$this->activities_by_department = array(
+			'actions' => array(
+				array(
+					'slug' => 'festival',
+					'name' => __( 'Festival', 'vca-asm' )
+				),
+				array(
+					'slug' => 'concert',
+					'name' => __( 'Concert', 'vca-asm' )
+				),
+				array(
+					'slug' => 'miscactions',
+					'name' => __( 'Miscellaneous Activities', 'vca-asm' )
+				)
+			),
+			'education' => array(),
+			'network' => array(
+				array(
+					'slug' => 'nwgathering',
+					'name' => __( 'Network Gathering', 'vca-asm' )
+				)
+			),
+			'goldeimer' => array(
+				array(
+					'slug' => 'goldeimerfestival',
+					'name' => __( 'Goldeimer Festival', 'vca-asm' )
+				)
+			)
+		);
+
+		$this->to_nicename = array(
+			'concert' => __( 'Concert', 'vca-asm' ),
+			'festival' => __( 'Festival', 'vca-asm' ),
+			'miscactions' => __( 'Miscellaneous action', 'vca-asm' ),
+			'misceducation' => __( 'Miscellaneous education activity', 'vca-asm' ),
+			'miscnetwork' => __( 'Miscellaneous network activity', 'vca-asm' ),
+			'nwgathering' => __( 'Network Gathering', 'vca-asm' ),
+			'goldeimerfestival' => __( 'Goldeimer Festival', 'vca-asm' )
+		);
+		asort( $this->to_nicename );
+		$this->activities_to_nicename = $this->to_nicename;
+
+		$this->to_plural_nicename = array(
+			'concert' => __( 'Concerts', 'vca-asm' ),
+			'festival' => __( 'Festivals', 'vca-asm' ),
+			'miscactions' => __( 'Miscellaneous activities', 'vca-asm' ),
+			'misceducation' => __( 'Miscellaneous activities', 'vca-asm' ),
+			'miscnetwork' => __( 'Miscellaneous activities', 'vca-asm' ),
+			'nwgathering' => __( 'Network Gatherings', 'vca-asm' ),
+			'goldeimerfestival' => __( 'Goldeimer Festivals', 'vca-asm' )
+		);
+		asort( $this->to_plural_nicename );
+		$this->activities_to_plural_nicename = $this->to_plural_nicename;
+
+		foreach ( $this->to_plural_nicename as $type => $nicename ) {
+			if ( in_array( $type, $this->activity_types ) ) {
+				$this->options_array[] = array(
+					'label' => $nicename,
+					'value' => $type
+				);
+			}
+		}
+
+		$this->options_array_with_all[] = array(
+			'label' => __( 'All', 'vca-asm' ),
+			'value' => 'all'
+		);
+		$this->options_array_with_all = array_merge( $this->options_array_with_all, $this->options_array );
+
+		$acts_by_dep = array();
+		foreach ( $this->activities_by_department as $dep => $acts ) {
+			$acts_by_dep[$dep] = $vca_asm_utilities->sort_by_key( $acts, 'name' );
+		}
+		$this->activities_by_department = $acts_by_dep;
+
+		if ( ! empty( $post->ID ) ) {
+			$this->the_activity = new VCA_ASM_Activity( $post->ID );
+		}
+
+		/* Action Hooks */
+
+		add_action( 'admin_notices', array( $this, 'notice_handler' ), 11 );
+		add_action( 'admin_footer', array( $this, 'clear_notices' ) );
+		$this->setup_activities();
+	}
+
+	/* ============================= CUSTOM POST TYPES ============================= */
 
 	/**
 	 * Returns nested arrays of custom fields
 	 *
-	 * @param string $group Return either 'all' custom fields or those in a specific subset
+	 * @param string $group				return either 'all' custom fields or those in a specific subset
 	 * @return array $custom_fields
+	 *
+	 * @global object $current_user
+	 * @global string $post_type
+	 * @global object $vca_asm_geography
+	 *
+	 * @see templates/admin-custom fields.php
 	 *
 	 * @since 1.0
 	 * @access private
 	 */
 	private function custom_fields( $group = 'all' )
 	{
-		global $current_user, $post_type, $vca_asm_geography;
-		get_currentuserinfo();
+		global $current_user, $post_type,
+			$vca_asm_geography;
 
 		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
@@ -135,7 +280,6 @@ class VCA_ASM_Activities
 				$admin_level = 'city';
 			}
 		}
-
 
 		$custom_fields = array(
 			'tools' => array (
@@ -455,17 +599,20 @@ class VCA_ASM_Activities
 	/**
 	 * Sets up all activities
 	 *
-	 * Registers all activity post types
+	 * Registers all activity post types.
 	 * Initiates creation of custom fields and metaboxes, initiates meta capability mapping.
 	 *
-	 * @param void
 	 * @return void
+	 *
+	 * @see constructor
 	 *
 	 * @since 1.0
 	 * @access public
 	 */
 	public function setup_activities()
 	{
+
+		/* Capabilities */
 
 		$actions_capabilities = array(
 			'publish_posts' => 'vca_asm_publish_actions_activities',
@@ -511,6 +658,8 @@ class VCA_ASM_Activities
 			'delete_post' => 'vca_asm_delete_goldeimer_activity',
 			'read_post' => 'vca_asm_read_goldeimer_activity'
 		);
+
+		/* Labels */
 
 		$actions_concert_labels = array(
 			'name' => _x( 'Concerts', 'post type general name', 'vca-asm' ),
@@ -587,6 +736,8 @@ class VCA_ASM_Activities
 			'not_found_in_trash' => __( 'No Goldeimer Festivals found in Trash', 'vca-asm' ),
 			'parent_item_colon' => ''
 		);
+
+		/* Arguments/Parameters to be used in register_post_type() calls */
 
 		$concert_args = array(
 			'labels' => $actions_concert_labels,
@@ -699,9 +850,11 @@ class VCA_ASM_Activities
 	/**
 	 * Alters UI strings to fit post type
 	 *
+	 * 'gettext' filter callback
+	 *
 	 * @param string $translation
 	 * @param string $text
-	 * $return string $translation
+	 * @return string $translation
 	 *
 	 * @since 1.1
 	 * @access public
@@ -778,6 +931,8 @@ class VCA_ASM_Activities
 
 	/**
 	 * Alters message strings to fit post type
+	 *
+	 * 'post_updated_messages' filter callback
 	 *
 	 * @param array $messages Holds default translatable strings
 	 * @return array $messages Takes up new strings depending on post type
@@ -872,19 +1027,24 @@ class VCA_ASM_Activities
 	/**
 	 * Localize enqueued Javascript with post specific parameters
 	 *
-	 * @param void
+	 * Hooked with 'admin_enqueue_scripts'
+	 *
 	 * @return void
+	 *
+	 * @global object $current_user
+	 * @global object $pagenow
+	 * @global object $post
+	 * @global object $vca_asm_geography
 	 *
 	 * @since 1.3
 	 * @access public
 	 */
 	public function set_script_params()
 	{
-		global $current_user, $pagenow, $post, $vca_asm_geography;
-		get_currentuserinfo();
+		global $current_user, $pagenow, $post,
+			$vca_asm_geography;
 
-
-		if( is_admin() && ( 'post.php' == $pagenow || 'post-new.php' == $pagenow ) ) {
+		if( is_admin() && ( 'post.php' === $pagenow || 'post-new.php' === $pagenow ) ) {
 
 			$validation_params = array(
 				'errors' => array(
@@ -1002,6 +1162,9 @@ class VCA_ASM_Activities
 	/**
 	 * Columns of post type tables in the backend
 	 *
+	 * Here: concerts
+	 * 'manage_edit-%post_type%_columns' filter callback
+	 *
 	 * @param array $columns
 	 * @return array $columns
 	 *
@@ -1024,6 +1187,9 @@ class VCA_ASM_Activities
 
 	/**
 	 * Columns of post type tables in the backend
+	 *
+	 * Here: festivals
+	 * 'manage_edit-%post_type%_columns' filter callback
 	 *
 	 * @param array $columns
 	 * @return array $columns
@@ -1048,6 +1214,9 @@ class VCA_ASM_Activities
 	/**
 	 * Columns of post type tables in the backend
 	 *
+	 * Here: miscellaneous actions
+	 * 'manage_edit-%post_type%_columns' filter callback
+	 *
 	 * @param array $columns
 	 * @return array $columns
 	 *
@@ -1070,6 +1239,9 @@ class VCA_ASM_Activities
 
 	/**
 	 * Columns of post type tables in the backend
+	 *
+	 * Here: network gathering
+	 * 'manage_edit-%post_type%_columns' filter callback
 	 *
 	 * @param array $columns
 	 * @return array $columns
@@ -1094,6 +1266,9 @@ class VCA_ASM_Activities
 	/**
 	 * Columns of post type tables in the backend
 	 *
+	 * Here: goldeimer events
+	 * 'manage_edit-%post_type%_columns' filter callback
+	 *
 	 * @param array $columns
 	 * @return array $columns
 	 *
@@ -1116,6 +1291,8 @@ class VCA_ASM_Activities
 
 	/**
 	 * Populate custom columns
+	 *
+	 * Hooked with 'manage_posts_custom_column'
 	 *
 	 * @param string $column
 	 * @return void
@@ -1161,7 +1338,6 @@ class VCA_ASM_Activities
 	/**
 	 * Meta Boxes
 	 *
-	 * @param void
 	 * @return void
 	 *
 	 * @since 1.0
@@ -1292,9 +1468,9 @@ class VCA_ASM_Activities
 
 	/**
 	 * Custom Fields / Meta Box Content
-	 * Tools
 	 *
-	 * @param void
+	 * "Tools" Metabox
+	 *
 	 * @return void
 	 *
 	 * @since 1.0
@@ -1309,9 +1485,9 @@ class VCA_ASM_Activities
 
 	/**
 	 * Custom Fields / Meta Box Content
-	 * Slots Settings
 	 *
-	 * @param void
+	 * "Slots Settings" Metabox
+	 *
 	 * @return void
 	 *
 	 * @since 1.0
@@ -1326,9 +1502,9 @@ class VCA_ASM_Activities
 
 	/**
 	 * Custom Fields / Meta Box Content
-	 * Slots (Network Gathering)
 	 *
-	 * @param void
+	 * "Slots (Network Gathering)" Metabox
+	 *
 	 * @return void
 	 *
 	 * @since 1.0
@@ -1343,9 +1519,9 @@ class VCA_ASM_Activities
 
 	/**
 	 * Custom Fields / Meta Box Content
-	 * Application Phase
 	 *
-	 * @param void
+	 * "Application Phase" Metabox
+	 *
 	 * @return void
 	 *
 	 * @since 1.0
@@ -1360,9 +1536,9 @@ class VCA_ASM_Activities
 
 	/**
 	 * Custom Fields / Meta Box Content
-	 * Participants
 	 *
-	 * @param void
+	 * "Participants" Metabox
+	 *
 	 * @return void
 	 *
 	 * @since 1.0
@@ -1377,9 +1553,9 @@ class VCA_ASM_Activities
 
 	/**
 	 * Custom Fields / Meta Box Content
-	 * Date / Timeframe
 	 *
-	 * @param void
+	 * "Date / Timeframe" Metabox
+	 *
 	 * @return void
 	 *
 	 * @since 1.0
@@ -1394,9 +1570,9 @@ class VCA_ASM_Activities
 
 	/**
 	 * Custom Fields / Meta Box Content
-	 * Matadata
 	 *
-	 * @param void
+	 * "Metadata" Metabox
+	 *
 	 * @return void
 	 *
 	 * @since 1.0
@@ -1411,9 +1587,9 @@ class VCA_ASM_Activities
 
 	/**
 	 * Custom Fields / Meta Box Content
-	 * Geographical Affiliation
 	 *
-	 * @param void
+	 * "Geographical Affiliation" Metabox
+	 *
 	 * @return void
 	 *
 	 * @since 1.0
@@ -1428,9 +1604,9 @@ class VCA_ASM_Activities
 
 	/**
 	 * Custom Fields / Meta Box Content
-	 * Contact
 	 *
-	 * @param void
+	 * "Contact" Metabox
+	 *
 	 * @return void
 	 *
 	 * @since 1.0
@@ -1529,6 +1705,9 @@ class VCA_ASM_Activities
 
 	/**
 	 * Saves the data
+	 *
+	 * @param bool|int $ID			Post ID
+	 * @param bool|object $post		WordPress Post Object
 	 *
 	 * @since 1.0
 	 * @access public
@@ -1749,6 +1928,10 @@ class VCA_ASM_Activities
 	/**
 	 * Displays errors, if any
 	 *
+	 * Hooked with 'admin_notices'
+	 *
+	 * @return void
+	 *
 	 * @since 1.3
 	 * @access public
 	 */
@@ -1772,8 +1955,11 @@ class VCA_ASM_Activities
 	/**
 	 * Clears errors from the database
 	 *
-	 * (Posts are saved by Post/Redirect/Get),
+	 * Posts are saved (by Post/Redirect/Get),
 	 * errors are generated and output during consecutive but different requests.
+	 * Hooked with 'admin_footer'
+	 *
+	 * @return void
 	 *
 	 * @since 1.3
 	 * @access public
@@ -1785,16 +1971,16 @@ class VCA_ASM_Activities
 		delete_transient( 'admin_notices_'.$current_user->ID );
 	}
 
-	/****************************** UTILITY METHODS ******************************/
+	/* ============================= UTILITY METHODS ============================= */
 
 	/**
 	 * Determines whether an activity is relevant to an (administrative) user
 	 *
-	 * @var int $activity ID of the activity checked against
-	 * @var mixed $user WP_User Object or ID of the user in question
-	 * @var array $args (Optional) arguments, i.e. what to check for
+	 * @param int $activity	ID of the activity checked against
+	 * @param mixed $user		(optional) WP_User Object or ID of the user in question
+	 * @param array $args		(optional) arguments, i.e. what to check for
 	 *
-	 * @return bool Is the activity relevant to the user?
+	 * @return bool		Is the activity relevant to the user?
 	 *
 	 * @since 1.5
 	 * @access public
@@ -1859,6 +2045,9 @@ class VCA_ASM_Activities
 
 	/**
 	 * Returns array of activity IDs based on phase & type
+	 *
+	 * @param array $args				(optional) arguments - phase and type
+	 * @return array $activities	Array of (int) activity IDs
 	 *
 	 * @since 1.3
 	 * @access public
@@ -1952,8 +2141,12 @@ class VCA_ASM_Activities
 	}
 
 	/**
-	 * Returns "options array" of activities to populate dropdown menu
-	 * based on phase & type
+	 * Returns activities to populate dropdown menu
+	 *
+	 * Based on phase & type
+	 *
+	 * @param array $args				(optional) arguments - phase, type, and whether capabilities matter
+	 * @return array $options_array		Nested array of strings to populate HTML select tags
 	 *
 	 * @since 1.3
 	 * @access public
@@ -2025,105 +2218,6 @@ class VCA_ASM_Activities
 		} else {
 			return 'bf';
 		}
-	}
-
-
-
-	/****************************** CONSTRUCTOR ******************************/
-
-	/**
-	 * Constructor
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function __construct()
-	{
-		global $post,
-			$vca_asm_utilities;
-
-		$this->activities_by_department = array(
-			'actions' => array(
-				array(
-					'slug' => 'festival',
-					'name' => __( 'Festival', 'vca-asm' )
-				),
-				array(
-					'slug' => 'concert',
-					'name' => __( 'Concert', 'vca-asm' )
-				),
-				array(
-					'slug' => 'miscactions',
-					'name' => __( 'Miscellaneous Activities', 'vca-asm' )
-				)
-			),
-			'education' => array(),
-			'network' => array(
-				array(
-					'slug' => 'nwgathering',
-					'name' => __( 'Network Gathering', 'vca-asm' )
-				)
-			),
-			'goldeimer' => array(
-				array(
-					'slug' => 'goldeimerfestival',
-					'name' => __( 'Goldeimer Festival', 'vca-asm' )
-				)
-			)
-		);
-
-		$this->to_nicename = array(
-			'concert' => __( 'Concert', 'vca-asm' ),
-			'festival' => __( 'Festival', 'vca-asm' ),
-			'miscactions' => __( 'Miscellaneous action', 'vca-asm' ),
-			'misceducation' => __( 'Miscellaneous education activity', 'vca-asm' ),
-			'miscnetwork' => __( 'Miscellaneous network activity', 'vca-asm' ),
-			'nwgathering' => __( 'Network Gathering', 'vca-asm' ),
-			'goldeimerfestival' => __( 'Goldeimer Festival', 'vca-asm' )
-		);
-		asort( $this->to_nicename );
-		$this->activities_to_nicename = $this->to_nicename;
-
-		$this->to_plural_nicename = array(
-			'concert' => __( 'Concerts', 'vca-asm' ),
-			'festival' => __( 'Festivals', 'vca-asm' ),
-			'miscactions' => __( 'Miscellaneous activities', 'vca-asm' ),
-			'misceducation' => __( 'Miscellaneous activities', 'vca-asm' ),
-			'miscnetwork' => __( 'Miscellaneous activities', 'vca-asm' ),
-			'nwgathering' => __( 'Network Gatherings', 'vca-asm' ),
-			'goldeimerfestival' => __( 'Goldeimer Festivals', 'vca-asm' )
-		);
-		asort( $this->to_plural_nicename );
-		$this->activities_to_plural_nicename = $this->to_plural_nicename;
-
-		foreach ( $this->to_plural_nicename as $type => $nicename ) {
-			if ( in_array( $type, $this->activity_types ) ) {
-				$this->options_array[] = array(
-					'label' => $nicename,
-					'value' => $type
-				);
-			}
-		}
-
-		$this->options_array_with_all[] = array(
-			'label' => __( 'All', 'vca-asm' ),
-			'value' => 'all'
-		);
-		$this->options_array_with_all = array_merge( $this->options_array_with_all, $this->options_array );
-
-		$acts_by_dep = array();
-		foreach ( $this->activities_by_department as $dep => $acts ) {
-			$acts_by_dep[$dep] = $vca_asm_utilities->sort_by_key( $acts, 'name' );
-		}
-		$this->activities_by_department = $acts_by_dep;
-
-		if ( ! empty( $post->ID ) ) {
-			$this->the_activity = new VCA_ASM_Activity( $post->ID );
-		}
-
-		add_action( 'admin_notices', array( $this, 'notice_handler' ), 11 );
-		add_action( 'admin_footer', array( $this, 'clear_notices' ) );
-		$this->setup_activities();
 	}
 }
 

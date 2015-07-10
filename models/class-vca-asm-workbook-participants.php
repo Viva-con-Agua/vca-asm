@@ -8,6 +8,12 @@
  *
  * @package VcA Activity & Supporter Management
  * @since 1.5
+ *
+ * Structure:
+ * - Properties
+ * - Constructor
+ * - Worksheet & Data
+ * - Utility
  */
 
 if ( ! class_exists( 'VCA_ASM_Workbook_Participants' ) ) :
@@ -15,10 +21,15 @@ if ( ! class_exists( 'VCA_ASM_Workbook_Participants' ) ) :
 class VCA_ASM_Workbook_Participants extends VCA_ASM_Workbook
 {
 
+	/* ============================= CLASS PROPERTIES ============================= */
+
 	/**
-	 * Class Properties
+	 * Default arguments used if not set and passed externally
 	 *
+	 * @var array $default_args
+	 * @see constructor
 	 * @since 1.5
+	 * @access public
 	 */
 	public $default_args = array(
 		'scope' => 'public',
@@ -26,6 +37,15 @@ class VCA_ASM_Workbook_Participants extends VCA_ASM_Workbook
 		'group' => 'participants',
 		'format' => 'xlsx'
 	);
+
+	/**
+	 * Arguments passed to the object in the constructor
+	 *
+	 * @var array $args
+	 * @see constructor
+	 * @since 1.5
+	 * @access public
+	 */
 	public $args = array();
 
 	private $name = 'Some Activity';
@@ -40,8 +60,15 @@ class VCA_ASM_Workbook_Participants extends VCA_ASM_Workbook
 
 	public static $local_non_autosized_columns = array();
 
+	/* ============================= CONSTRUCTOR ============================= */
+
 	/**
 	 * Constructor
+	 *
+	 * @param array $args		(optional) parameters passed to the object
+	 *
+	 * @global object $current_user
+	 * @global object $vca_asm_geography
 	 *
 	 * @since 1.5
 	 * @access public
@@ -100,8 +127,14 @@ class VCA_ASM_Workbook_Participants extends VCA_ASM_Workbook
 		$this->style_sheet();
 	}
 
+	/* ============================= WORKSHEET & DATA ============================= */
+
 	/**
 	 * Adds to the template worksheet
+	 *
+	 * @return int $cur_row
+	 *
+	 * @global object $vca_asm_geography
 	 *
 	 * @since 1.5
 	 * @access public
@@ -163,7 +196,15 @@ class VCA_ASM_Workbook_Participants extends VCA_ASM_Workbook
 	}
 
 	/**
-	 * Iterates over supporters
+	 * Generates worksheet and adds data
+	 *
+	 * @param int $initial_row		(optional) the row to start at, defaults to 1
+	 * @return array $sheet			the sheet
+	 *
+	 * @global object $wpdb
+	 * @global object $vca_asm_geography
+	 * @global object $vca_asm_registrations
+	 * @global object $vca_asm_utilities
 	 *
 	 * @since 1.5
 	 * @access public
@@ -271,7 +312,9 @@ class VCA_ASM_Workbook_Participants extends VCA_ASM_Workbook
 	}
 
 	/**
-	 * A single Worksheet
+	 * Styles a single Worksheet
+	 *
+	 * @return void
 	 *
 	 * @since 1.5
 	 * @access public
@@ -298,20 +341,37 @@ class VCA_ASM_Workbook_Participants extends VCA_ASM_Workbook
 		)->applyFromArray( $this->styles['leftbound'] );
 	}
 
+	/* ============================= UTILITY METHODS ============================= */
+
 	/**
-	 * Does what the method name suggests
+	 * Conditionally sets a property
+	 *
+	 * @return void
 	 *
 	 * @since 1.5
 	 * @access public
 	 */
-	public function define_non_autosized_columns() {
+	public function define_non_autosized_columns()
+	{
 		if ( 'private' === $this->args['scope'] ) {
 			self::$local_non_autosized_columns = array(
 				'E' => 6
 			);
 		}
 	}
-	public static function grab_non_autosized_columns() {
+
+	/**
+	 * Grabs the previously set column identifiers as array keys
+	 *
+	 * Returns what later populates a property of the parent class
+	 *
+	 * @return array $non_autosized_columns
+	 *
+	 * @since 1.5
+	 * @access public
+	 */
+	public static function grab_non_autosized_columns()
+	{
 		return self::$local_non_autosized_columns;
     }
 

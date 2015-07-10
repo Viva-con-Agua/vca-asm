@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VcA Activity & Supporter Management v1.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-06-23 12:37+0100\n"
-"PO-Revision-Date: 2015-06-23 12:37+0100\n"
+"POT-Creation-Date: 2015-07-01 17:02+0100\n"
+"PO-Revision-Date: 2015-07-01 17:02+0100\n"
 "Last-Translator: Johannes Pilkahn <johannes@pilkahn.org>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -21,55 +21,55 @@ msgstr ""
 "X-Poedit-SearchPath-0: ..\n"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:143
+#: ../includes/class-vca-asm-activities.php:183
 msgctxt "Tools Meta Box"
 msgid "What tools do we employ?"
 msgstr "Welche VcA-Werkzeuge werden eingesetzt?"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:144
+#: ../includes/class-vca-asm-activities.php:184
 msgctxt "Tools Meta Box"
 msgid "Choose which of the common VcA Activities are employed this time."
 msgstr "Wähle aus, welche der gängigen VcA Aktivitäten hier verwandt werden."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:149
+#: ../includes/class-vca-asm-activities.php:189
 msgctxt "Tools Meta Box"
 msgid "Cups"
 msgstr "Pfandbecher Sammeln"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:153
+#: ../includes/class-vca-asm-activities.php:193
 msgctxt "Tools Meta Box"
 msgid "Guest List"
 msgstr "Gästelisten-Euros"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:157
+#: ../includes/class-vca-asm-activities.php:197
 msgctxt "Tools Meta Box"
 msgid "Info Counter"
 msgstr "Infostand"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:161
+#: ../includes/class-vca-asm-activities.php:201
 msgctxt "Tools Meta Box"
 msgid "Water Bottles"
 msgstr "Quellwasser"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:165
+#: ../includes/class-vca-asm-activities.php:205
 msgctxt "Tools Meta Box"
 msgid "Special"
 msgstr "Special (z.B. Theater, Schlauchboot, etc.)"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:171
+#: ../includes/class-vca-asm-activities.php:211
 msgctxt "Tools Meta Box"
 msgid "What special action?"
 msgstr "Welche Spezialaktion?"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:172
+#: ../includes/class-vca-asm-activities.php:212
 msgctxt "Tools Meta Box"
 msgid ""
 "Description of the special action. If \"Special\" is checked above and you "
@@ -84,57 +84,57 @@ msgstr ""
 "ist dieses Feld irrelevant."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:179
+#: ../includes/class-vca-asm-activities.php:219
 msgctxt "Applications Meta Box"
 msgid "Start of application phase"
 msgstr "Start der Bewerbungsphase"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:180
+#: ../includes/class-vca-asm-activities.php:220
 msgctxt "Applications"
 msgid "Before this date, the activity will not be displayed to supporters"
 msgstr "Vor diesem Datum wird die Aktivität den Supportern nicht angezeigt"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:187
+#: ../includes/class-vca-asm-activities.php:227
 msgctxt "Applications Meta Box"
 msgid "Application Deadline"
 msgstr "Bewerbungs Deadline"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:188
+#: ../includes/class-vca-asm-activities.php:228
 msgctxt "Applications"
 msgid "The end of the application phase"
 msgstr "Ende der Bewerbungsphase"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:197
+#: ../includes/class-vca-asm-activities.php:237
 msgctxt "Timeframe Meta Box"
 msgid "Start"
 msgstr "Beginn"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:198
+#: ../includes/class-vca-asm-activities.php:238
 msgctxt "Timeframe"
 msgid "The beginning of the activity"
 msgstr "Zu diesem Zeitpunkt beginnt die Aktivität"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:205
+#: ../includes/class-vca-asm-activities.php:245
 msgctxt "Timeframe Meta Box"
 msgid "End"
 msgstr "Ende"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:206
+#: ../includes/class-vca-asm-activities.php:246
 msgctxt "Timeframe"
 msgid "The end of the activity"
 msgstr "Zu diesem Zeitpunkt endet die Aktivität"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:215
+#: ../includes/class-vca-asm-activities.php:255
 #: ../includes/class-vca-asm-workbook-participants.php:122
-#: ../includes/class-vca-asm-geography.php:550
+#: ../includes/class-vca-asm-geography.php:736
 #: ../includes/class-vca-asm-workbook-finances.php:146
 #: ../admin/class-vca-asm-admin-finances.php:619
 #: ../admin/class-vca-asm-admin-geography.php:673
@@ -148,14 +148,14 @@ msgid "Country"
 msgstr "Land"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:216
+#: ../includes/class-vca-asm-activities.php:256
 msgctxt "Geo Meta Box"
 msgid "Associate the activity with a country."
 msgstr "Assoziiere die Aktivität mit einem Land."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:216
-#: ../includes/class-vca-asm-activities.php:225
+#: ../includes/class-vca-asm-activities.php:256
+#: ../includes/class-vca-asm-activities.php:265
 msgctxt "Geo Meta Box"
 msgid ""
 "This is irrelevant to slots &amp; participants and only matters for "
@@ -165,31 +165,31 @@ msgstr ""
 "dient nur der Kategorisierung und Sortierung."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:224
+#: ../includes/class-vca-asm-activities.php:264
 msgctxt "Geo Meta Box"
 msgid "City"
 msgstr "Stadt"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:225
+#: ../includes/class-vca-asm-activities.php:265
 msgctxt "Geo Meta Box"
 msgid "Associate the activity with a city."
 msgstr "Assoziiere die Aktivität mit einer Stadt."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:229
+#: ../includes/class-vca-asm-activities.php:269
 msgctxt "Regions"
 msgid "no specific city"
 msgstr "keine spezifische Stadt"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:238
+#: ../includes/class-vca-asm-activities.php:278
 msgctxt "Region Meta Box"
 msgid "Delegation"
 msgstr "Delegierung"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:239
+#: ../includes/class-vca-asm-activities.php:279
 msgctxt "Region Meta Box"
 msgid ""
 "Delegate to the selected city's SPOCs (Single Person(s) of Contact). If you "
@@ -205,68 +205,68 @@ msgstr ""
 "Benutzerkonto hat, wird diese Option ignoriert."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:242
-#: ../includes/class-vca-asm-activities.php:435
+#: ../includes/class-vca-asm-activities.php:282
+#: ../includes/class-vca-asm-activities.php:475
 msgctxt "Region Meta Box"
 msgid "Yes, delegate"
 msgstr "Ja, delegieren"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:249
+#: ../includes/class-vca-asm-activities.php:289
 msgctxt "Festival Data Meta Box"
 msgid "Location"
 msgstr "Ort"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:250
+#: ../includes/class-vca-asm-activities.php:290
 msgctxt "Festival Data Meta Box"
 msgid "Where the activity takes place"
 msgstr "Wo findet die Aktivität statt?"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:257
+#: ../includes/class-vca-asm-activities.php:297
 msgctxt "Festival Data Meta Box"
 msgid "Website"
 msgstr "Webseite"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:258
+#: ../includes/class-vca-asm-activities.php:298
 msgctxt "Festival Data Meta Box"
 msgid "The activities&apos; Website"
 msgstr "Der Webauftritt der Aktivität, sofern vorhanden"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:263
+#: ../includes/class-vca-asm-activities.php:303
 msgctxt "Festival Data Meta Box"
 msgid "Directions"
 msgstr "Anfahrt"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:264
+#: ../includes/class-vca-asm-activities.php:304
 msgctxt "Festival Data Meta Box"
 msgid "Description of how to reach the festival grounds"
 msgstr "Wie kommt man da hin?"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:269
+#: ../includes/class-vca-asm-activities.php:309
 msgctxt "Activity Data Meta Box"
 msgid "additional Notes"
 msgstr "zusätzliche Bemerkungen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:270
+#: ../includes/class-vca-asm-activities.php:310
 msgctxt "Festival Data Meta Box"
 msgid "Got anything else to say?"
 msgstr "Hast du noch was zu sagen?"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:277
+#: ../includes/class-vca-asm-activities.php:317
 msgctxt "Quotas Meta Box"
 msgid "Membership"
 msgstr "Mitgliedschaft"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:278
+#: ../includes/class-vca-asm-activities.php:318
 msgctxt "Quotas Meta Box"
 msgid ""
 "Should this activity be limited to &quot;active members&quot; or open to all "
@@ -276,73 +276,73 @@ msgstr ""
 "alle Supporter offen sein?"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:283
+#: ../includes/class-vca-asm-activities.php:323
 msgctxt "Slot Allocation Meta Box"
 msgid "all"
 msgstr "alle"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:287
+#: ../includes/class-vca-asm-activities.php:327
 msgctxt "Slot Allocation Meta Box"
 msgid "&quot;active members&quot; only"
 msgstr "nur &quot;aktive Mitglieder&quot;"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:294
+#: ../includes/class-vca-asm-activities.php:334
 msgctxt "Quotas Meta Box"
 msgid "Total Slots"
 msgstr "Plätze insgesamt"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:295
+#: ../includes/class-vca-asm-activities.php:335
 msgctxt "Quotas Meta Box"
 msgid "Set the total amount of open slots for this activity"
 msgstr "Wieviele Plätze gibt es für diese Aktivität?"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:305
+#: ../includes/class-vca-asm-activities.php:345
 msgctxt "Quotas Meta Box"
 msgid "Global Slots"
 msgstr "Globale Plätze"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:306
+#: ../includes/class-vca-asm-activities.php:346
 msgctxt "Quotas Meta Box"
 msgid "These slots are open to applications from the entire network."
 msgstr "Diese Plätze stehen dem gesamten Netzwerk zur Verfügung."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:311
+#: ../includes/class-vca-asm-activities.php:351
 msgctxt "Quotas Meta Box"
 msgid "Country Quotas?"
 msgstr "Länderkontingente?"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:312
+#: ../includes/class-vca-asm-activities.php:352
 msgctxt "Quotas Meta Box"
 msgid "Split some or all of the total slots into country specific quotas?"
 msgstr "Einige oder alle der Plätze in länderspezifische Kontingente teilen?"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:317
+#: ../includes/class-vca-asm-activities.php:357
 msgctxt "Slot Allocation Meta Box"
 msgid "No, the entire network may apply for all slots"
 msgstr "Nein, das gesamte Netzwerk kann sich auf alle Plätze bewerben"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:322
+#: ../includes/class-vca-asm-activities.php:362
 msgctxt "Slot Allocation Meta Box"
 msgid "Yes, split into country quotas"
 msgstr "Ja, in Länderkontingente teilen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:328
+#: ../includes/class-vca-asm-activities.php:368
 msgctxt "Quotas Meta Box"
 msgid "Country Quotas"
 msgstr "Länderkontingente"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:329
+#: ../includes/class-vca-asm-activities.php:369
 msgctxt "Quotas Meta Box"
 msgid ""
 "You may define individual quotas per country. These slots can only be given "
@@ -357,13 +357,13 @@ msgstr ""
 "globale Kontingent auf &quot;null&quot; steht."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:337
+#: ../includes/class-vca-asm-activities.php:377
 msgctxt "Quotas Meta Box"
 msgid "City Quotas"
 msgstr "Städtekontingente"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:338
+#: ../includes/class-vca-asm-activities.php:378
 msgctxt "Quotas Meta Box"
 msgid ""
 "You may define individual quotas per city. These slots can only be given to "
@@ -380,7 +380,7 @@ msgstr ""
 "Länderkontingent verfügbaren Plätze &quot;null&quot; ist."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:357
+#: ../includes/class-vca-asm-activities.php:397
 msgctxt "Contact Person Meta Box"
 msgid ""
 "First or full name, email address and mobile phone number of the contact "
@@ -390,7 +390,7 @@ msgstr ""
 "Ansprechpartner_innen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:357
+#: ../includes/class-vca-asm-activities.php:397
 msgctxt "Contact Person Meta Box"
 msgid "(This information will be visible to registered supporters only)"
 msgstr ""
@@ -398,38 +398,38 @@ msgstr ""
 "gezeigt)"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:375
+#: ../includes/class-vca-asm-activities.php:415
 msgctxt "Registrations Meta Box"
 msgid "Applicants"
 msgstr "Bewerber"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:378
+#: ../includes/class-vca-asm-activities.php:418
 msgid "Supporters currently applying to this activity"
 msgstr "Supporter, die sich aktuell auf Teilnahme an dieser Aktivität bewerben"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:381
+#: ../includes/class-vca-asm-activities.php:421
 msgctxt "Registrations Meta Box"
 msgid "Waiting List"
 msgstr "Warteliste"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:384
+#: ../includes/class-vca-asm-activities.php:424
 msgid "Supporters currently on the Waiting List to this activity"
 msgstr ""
 "Supporter, die sich derzeit auf der Warteliste für diese Aktivität befinden, "
 "bzw. deren Bewerbung (vorerst) abgelehnt worden ist"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:387
-#: ../includes/class-vca-asm-activities.php:408
+#: ../includes/class-vca-asm-activities.php:427
+#: ../includes/class-vca-asm-activities.php:448
 msgctxt "Registrations Meta Box"
 msgid "Participants"
 msgstr "Teilnehmer"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:390
+#: ../includes/class-vca-asm-activities.php:430
 msgid ""
 "Supporters that are participating in this activity (i.e. accepted "
 "applications)"
@@ -438,448 +438,448 @@ msgstr ""
 "angenommen worden ist"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:393
-#: ../includes/class-vca-asm-activities.php:414
+#: ../includes/class-vca-asm-activities.php:433
+#: ../includes/class-vca-asm-activities.php:454
 msgctxt "Registrations Meta Box"
 msgid "Lists &amp; Mailing"
 msgstr "Listen &amp; Mails"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:396
-#: ../includes/class-vca-asm-activities.php:417
+#: ../includes/class-vca-asm-activities.php:436
+#: ../includes/class-vca-asm-activities.php:457
 msgid "Contact the supporters"
 msgstr "Kontaktiere die Supporter_innen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:402
+#: ../includes/class-vca-asm-activities.php:442
 msgctxt "Registrations Meta Box"
 msgid "(denied) Applicants"
 msgstr "(abgelehnte) Bewerber"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:405
+#: ../includes/class-vca-asm-activities.php:445
 msgid "Supporters that had unsuccessfully applied to this activity"
 msgstr "Supporter, die sich unerfolgreich beworben hatten"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:411
+#: ../includes/class-vca-asm-activities.php:451
 msgid "Supporters that participated in this activity"
 msgstr "Supporter, die an dieser Aktivität teilgenommen haben"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:516
-#: ../includes/class-vca-asm-activities.php:518
-msgctxt "post type general name"
-msgid "Concerts"
-msgstr "Konzerte"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:517
-msgctxt "post type singular name"
-msgid "Concert"
-msgstr "Konzert"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:519
-#: ../includes/class-vca-asm-activities.php:534
-#: ../includes/class-vca-asm-activities.php:549
-#: ../includes/class-vca-asm-activities.php:564
-#: ../includes/class-vca-asm-activities.php:579
-msgctxt "activity"
-msgid "Add New"
-msgstr "Hinzufügen"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:520
-msgid "Add New Concert"
-msgstr "Konzert hinzufügen"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:521
-msgid "Edit Concert"
-msgstr "Konzert editieren"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:522
-msgid "New Concert"
-msgstr "Neues Konzert"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:523
-#: ../includes/class-vca-asm-activities.php:2088
-msgid "Concerts"
-msgstr "Konzerte"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:524
-msgid "View Concert"
-msgstr "Konzert ansehen"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:525
-msgid "Search Concerts"
-msgstr "Konzerte durchsuchen"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:526
-msgid "No Concerts found"
-msgstr "Keine Konzerte gefunden"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:527
-msgid "No Concerts found in Trash"
-msgstr "Keine Konzerte im Papierkorb"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:531
-#: ../includes/class-vca-asm-activities.php:533
-msgctxt "post type general name"
-msgid "Festivals"
-msgstr "Festivals"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:532
-msgctxt "post type singular name"
-msgid "Festival"
-msgstr "Festival"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:535
-msgid "Add New Festival"
-msgstr "Neues Festival"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:536
-msgid "Edit Festival"
-msgstr "Festival Editieren"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:537
-msgid "New Festival"
-msgstr "Neues Festival"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:538
-#: ../includes/class-vca-asm-activities.php:2089
-msgid "Festivals"
-msgstr "Festivals"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:539
-msgid "View Festival"
-msgstr "Festival Ansehen"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:540
-msgid "Search Festivals"
-msgstr "Festivals Durchsuchen"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:541
-msgid "No Festivals found"
-msgstr "Keine Festivals gefunden..."
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:542
-msgid "No Festivals found in Trash"
-msgstr "Keine Festivals im Papierkorb..."
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:546
-msgctxt "post type general name"
-msgid "Miscellaneous activities"
-msgstr "Sonstige Aktivitäten"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:547
-msgctxt "post type singular name"
-msgid "Miscellaneous Activity"
-msgstr "Sonstige Aktivität"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:548
-msgctxt "activity"
-msgid "Miscellaneous"
-msgstr "Sonstige"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:550
-msgid "Add New miscellaneous activity"
-msgstr "Sonstige Aktivität hinzufügen"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:551
-msgid "Edit miscellaneous activity"
-msgstr "Sonstige Aktivität editieren"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:552
-msgid "New miscellaneous activity"
-msgstr "Neue sonstige Aktivität"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:553
-#: ../models/class-vca-asm-activity.php:133
-msgid "Miscellaneous"
-msgstr "Sonstige"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:554
-msgid "View miscellaneous activity"
-msgstr "Sonstige Aktivität ansehen"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:555
-msgid "Search miscellaneous activities"
-msgstr "Sonstige Aktivitäten durchsuchen"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:556
-msgid "No miscellaneous activities found"
-msgstr "Keine sonstigen Aktivitäten gefunden"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-activities.php:557
-msgid "No miscellaneous activities found in Trash"
-msgstr "Keine sonstigen Aktivitäten im Papierkorb"
 
 # @ vca-asm
 #: ../includes/class-vca-asm-activities.php:561
 #: ../includes/class-vca-asm-activities.php:563
 msgctxt "post type general name"
+msgid "Concerts"
+msgstr "Konzerte"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:562
+msgctxt "post type singular name"
+msgid "Concert"
+msgstr "Konzert"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:564
+#: ../includes/class-vca-asm-activities.php:579
+#: ../includes/class-vca-asm-activities.php:594
+#: ../includes/class-vca-asm-activities.php:609
+#: ../includes/class-vca-asm-activities.php:624
+msgctxt "activity"
+msgid "Add New"
+msgstr "Hinzufügen"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:565
+msgid "Add New Concert"
+msgstr "Konzert hinzufügen"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:566
+msgid "Edit Concert"
+msgstr "Konzert editieren"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:567
+msgid "New Concert"
+msgstr "Neues Konzert"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:568
+#: ../includes/class-vca-asm-activities.php:2180
+msgid "Concerts"
+msgstr "Konzerte"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:569
+msgid "View Concert"
+msgstr "Konzert ansehen"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:570
+msgid "Search Concerts"
+msgstr "Konzerte durchsuchen"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:571
+msgid "No Concerts found"
+msgstr "Keine Konzerte gefunden"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:572
+msgid "No Concerts found in Trash"
+msgstr "Keine Konzerte im Papierkorb"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:576
+#: ../includes/class-vca-asm-activities.php:578
+msgctxt "post type general name"
+msgid "Festivals"
+msgstr "Festivals"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:577
+msgctxt "post type singular name"
+msgid "Festival"
+msgstr "Festival"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:580
+msgid "Add New Festival"
+msgstr "Neues Festival"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:581
+msgid "Edit Festival"
+msgstr "Festival Editieren"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:582
+msgid "New Festival"
+msgstr "Neues Festival"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:583
+#: ../includes/class-vca-asm-activities.php:2181
+msgid "Festivals"
+msgstr "Festivals"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:584
+msgid "View Festival"
+msgstr "Festival Ansehen"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:585
+msgid "Search Festivals"
+msgstr "Festivals Durchsuchen"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:586
+msgid "No Festivals found"
+msgstr "Keine Festivals gefunden..."
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:587
+msgid "No Festivals found in Trash"
+msgstr "Keine Festivals im Papierkorb..."
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:591
+msgctxt "post type general name"
+msgid "Miscellaneous activities"
+msgstr "Sonstige Aktivitäten"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:592
+msgctxt "post type singular name"
+msgid "Miscellaneous Activity"
+msgstr "Sonstige Aktivität"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:593
+msgctxt "activity"
+msgid "Miscellaneous"
+msgstr "Sonstige"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:595
+msgid "Add New miscellaneous activity"
+msgstr "Sonstige Aktivität hinzufügen"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:596
+msgid "Edit miscellaneous activity"
+msgstr "Sonstige Aktivität editieren"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:597
+msgid "New miscellaneous activity"
+msgstr "Neue sonstige Aktivität"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:598
+#: ../models/class-vca-asm-activity.php:133
+msgid "Miscellaneous"
+msgstr "Sonstige"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:599
+msgid "View miscellaneous activity"
+msgstr "Sonstige Aktivität ansehen"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:600
+msgid "Search miscellaneous activities"
+msgstr "Sonstige Aktivitäten durchsuchen"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:601
+msgid "No miscellaneous activities found"
+msgstr "Keine sonstigen Aktivitäten gefunden"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:602
+msgid "No miscellaneous activities found in Trash"
+msgstr "Keine sonstigen Aktivitäten im Papierkorb"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-activities.php:606
+#: ../includes/class-vca-asm-activities.php:608
+msgctxt "post type general name"
 msgid "Network Gatherings"
 msgstr "Netzwerktreffen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:562
+#: ../includes/class-vca-asm-activities.php:607
 msgctxt "post type singular name"
 msgid "Network Gathering"
 msgstr "Netzwerktreffen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:565
+#: ../includes/class-vca-asm-activities.php:610
 msgid "Add New Network Gathering"
 msgstr "Netzwerktreffen hinzufügen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:566
+#: ../includes/class-vca-asm-activities.php:611
 msgid "Edit Network Gathering"
 msgstr "Netzwerktreffen editieren"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:567
+#: ../includes/class-vca-asm-activities.php:612
 msgid "New Network Gathering"
 msgstr "Neues Netzwerktreffen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:568
-#: ../includes/class-vca-asm-activities.php:2093
+#: ../includes/class-vca-asm-activities.php:613
+#: ../includes/class-vca-asm-activities.php:2185
 msgid "Network Gatherings"
 msgstr "Netzwerktreffen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:569
+#: ../includes/class-vca-asm-activities.php:614
 msgid "View Network Gathering"
 msgstr "Netzwerktreffen ansehen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:570
+#: ../includes/class-vca-asm-activities.php:615
 msgid "Search Network Gatherings"
 msgstr "Netzwerktreffen durchsuchen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:571
+#: ../includes/class-vca-asm-activities.php:616
 msgid "No Network Gatherings found"
 msgstr "Keine Netzwerktreffen gefunden"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:572
+#: ../includes/class-vca-asm-activities.php:617
 msgid "No Network Gatherings found in Trash"
 msgstr "Keine Netzwerktreffen im Papierkorb"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:576
+#: ../includes/class-vca-asm-activities.php:621
 msgctxt "post type general name"
 msgid "Goldeimer Festivals"
 msgstr "Goldeimer Festivals"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:577
+#: ../includes/class-vca-asm-activities.php:622
 msgctxt "post type singular name"
 msgid "Goldeimer Festival"
 msgstr "Goldeimer Festival"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:578
+#: ../includes/class-vca-asm-activities.php:623
 msgctxt "post type general name"
 msgid "Goldeimer Festival"
 msgstr "Goldeimer Festival"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:580
+#: ../includes/class-vca-asm-activities.php:625
 msgid "Add New Goldeimer Festival"
 msgstr "Goldeimer Festival hinzufügen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:581
+#: ../includes/class-vca-asm-activities.php:626
 msgid "Edit Goldeimer Festival"
 msgstr "Goldeimer Festival editieren"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:582
+#: ../includes/class-vca-asm-activities.php:627
 msgid "New Goldeimer Festival"
 msgstr "Neues Goldeimer Festival"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:583
-#: ../includes/class-vca-asm-activities.php:2094
+#: ../includes/class-vca-asm-activities.php:628
+#: ../includes/class-vca-asm-activities.php:2186
 msgid "Goldeimer Festivals"
 msgstr "Goldeimer Festivals"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:584
+#: ../includes/class-vca-asm-activities.php:629
 msgid "View Goldeimer Festival"
 msgstr "Goldeimer Festival anschauen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:585
+#: ../includes/class-vca-asm-activities.php:630
 msgid "Search Goldeimer Festivals"
 msgstr "Goldeimer Festivals durchsuchen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:586
+#: ../includes/class-vca-asm-activities.php:631
 msgid "No Goldeimer Festivals found"
 msgstr "Keine Goldeimer Festivals gefunden"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:587
+#: ../includes/class-vca-asm-activities.php:632
 msgid "No Goldeimer Festivals found in Trash"
 msgstr "Goldeimer Festivals im Papierkorb"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:717
+#: ../includes/class-vca-asm-activities.php:766
 msgid "Name of Concert"
 msgstr "Name des Konzertes"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:720
+#: ../includes/class-vca-asm-activities.php:769
 msgid "Update Concert"
 msgstr "Konzert aktualisieren"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:723
+#: ../includes/class-vca-asm-activities.php:772
 msgid "Publish Concert"
 msgstr "Konzert veröffentlichen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:728
-#: ../includes/class-vca-asm-activities.php:761
+#: ../includes/class-vca-asm-activities.php:777
+#: ../includes/class-vca-asm-activities.php:810
 msgid "Name of Festival"
 msgstr "Name des Festivals"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:731
+#: ../includes/class-vca-asm-activities.php:780
 msgid "Update Festival"
 msgstr "Festival aktualisieren"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:734
+#: ../includes/class-vca-asm-activities.php:783
 msgid "Publish Festival"
 msgstr "Festival veröffentlichen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:739
+#: ../includes/class-vca-asm-activities.php:788
 msgid "Name of miscellaneous activity"
 msgstr "Name der sonstigen Aktivität"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:742
+#: ../includes/class-vca-asm-activities.php:791
 msgid "Update miscellaneous activity"
 msgstr "Sonstige Aktivität aktualisieren"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:745
+#: ../includes/class-vca-asm-activities.php:794
 msgid "Publish miscellaneous activity"
 msgstr "Sonstige Aktivität veröffentlichen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:750
+#: ../includes/class-vca-asm-activities.php:799
 msgid "Name of Network Gathering"
 msgstr "Name des Treffens"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:753
+#: ../includes/class-vca-asm-activities.php:802
 msgid "Update Network Gathering"
 msgstr "Netzwerktreffen aktualisieren"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:756
+#: ../includes/class-vca-asm-activities.php:805
 msgid "Publish Network Gathering"
 msgstr "Netzwerktreffen veröffentlichen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:764
+#: ../includes/class-vca-asm-activities.php:813
 msgid "Update Goldeimer Festival"
 msgstr "Goldeimer Festival aktualisieren"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:767
+#: ../includes/class-vca-asm-activities.php:816
 msgid "Publish Goldeimer Festival"
 msgstr "Goldeimer Festival veröffentlichen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:772
+#: ../includes/class-vca-asm-activities.php:821
 msgid "Submit for review"
 msgstr "Zur Revision vorlegen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:794
+#: ../includes/class-vca-asm-activities.php:845
 #, php-format
 msgid "Concert updated. <a href=\"%s\">View Concert</a>"
 msgstr "Konzert aktualisiert. <a href=\"%s\">Konzert ansehen</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:795
-#: ../includes/class-vca-asm-activities.php:810
-#: ../includes/class-vca-asm-activities.php:825
-#: ../includes/class-vca-asm-activities.php:842
-#: ../includes/class-vca-asm-activities.php:857
+#: ../includes/class-vca-asm-activities.php:846
+#: ../includes/class-vca-asm-activities.php:861
+#: ../includes/class-vca-asm-activities.php:876
+#: ../includes/class-vca-asm-activities.php:893
+#: ../includes/class-vca-asm-activities.php:908
 msgid "Custom field updated."
 msgstr "Feld aktualisiert."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:796
-#: ../includes/class-vca-asm-activities.php:811
-#: ../includes/class-vca-asm-activities.php:826
-#: ../includes/class-vca-asm-activities.php:843
-#: ../includes/class-vca-asm-activities.php:858
+#: ../includes/class-vca-asm-activities.php:847
+#: ../includes/class-vca-asm-activities.php:862
+#: ../includes/class-vca-asm-activities.php:877
+#: ../includes/class-vca-asm-activities.php:894
+#: ../includes/class-vca-asm-activities.php:909
 msgid "Custom field deleted."
 msgstr "Feld gelöscht."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:797
+#: ../includes/class-vca-asm-activities.php:848
 msgid "Concert updated."
 msgstr "Konzert aktualisiert."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:798
+#: ../includes/class-vca-asm-activities.php:849
 #, php-format
 msgid "Concert restored to revision from %s"
 msgstr "Revision des Konzerts von %s wiederhergestellt"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:799
+#: ../includes/class-vca-asm-activities.php:850
 #, php-format
 msgid "Concert published. <a href=\"%s\">View Concert</a>"
 msgstr "Konzert veröffentlicht. <a href=\"%s\">Konzert ansehen</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:800
+#: ../includes/class-vca-asm-activities.php:851
 msgid "Concert saved."
 msgstr "Konzert gespeichert."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:801
+#: ../includes/class-vca-asm-activities.php:852
 #, php-format
 msgid "Concert submitted. <a target=\"_blank\" href=\"%s\">Preview Concert</a>"
 msgstr ""
@@ -887,7 +887,7 @@ msgstr ""
 "Konzertes</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:802
+#: ../includes/class-vca-asm-activities.php:853
 #, php-format
 msgid ""
 "Concert scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href="
@@ -897,7 +897,7 @@ msgstr ""
 "target=\"_blank\" href=\"%2$s\">Vorschau des Konzertes</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:804
+#: ../includes/class-vca-asm-activities.php:855
 #, php-format
 msgid ""
 "Concert draft updated. <a target=\"_blank\" href=\"%s\">Preview Concert</a>"
@@ -906,41 +906,41 @@ msgstr ""
 "\">Vorschau des Konzertes</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:809
-#: ../includes/class-vca-asm-activities.php:856
+#: ../includes/class-vca-asm-activities.php:860
+#: ../includes/class-vca-asm-activities.php:907
 #, php-format
 msgid "Festival updated. <a href=\"%s\">View Festival</a>"
 msgstr "Festival aktualisiert. <a href=\"%s\">Festival ansehen</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:812
-#: ../includes/class-vca-asm-activities.php:859
+#: ../includes/class-vca-asm-activities.php:863
+#: ../includes/class-vca-asm-activities.php:910
 msgid "Festival updated."
 msgstr "Festival aktualisiert."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:813
-#: ../includes/class-vca-asm-activities.php:860
+#: ../includes/class-vca-asm-activities.php:864
+#: ../includes/class-vca-asm-activities.php:911
 #, php-format
 msgid "Festival restored to revision from %s"
 msgstr "Festival Revision vom %s wiederhergestellt"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:814
-#: ../includes/class-vca-asm-activities.php:861
+#: ../includes/class-vca-asm-activities.php:865
+#: ../includes/class-vca-asm-activities.php:912
 #, php-format
 msgid "Festival published. <a href=\"%s\">View Festival</a>"
 msgstr "Festival veröffentlicht. <a href=\"%s\">Festival ansehen</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:815
-#: ../includes/class-vca-asm-activities.php:862
+#: ../includes/class-vca-asm-activities.php:866
+#: ../includes/class-vca-asm-activities.php:913
 msgid "Festival saved."
 msgstr "Festival gespeichert."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:816
-#: ../includes/class-vca-asm-activities.php:863
+#: ../includes/class-vca-asm-activities.php:867
+#: ../includes/class-vca-asm-activities.php:914
 #, php-format
 msgid ""
 "Festival submitted. <a target=\"_blank\" href=\"%s\">Preview Festival</a>"
@@ -949,8 +949,8 @@ msgstr ""
 "Festivals</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:817
-#: ../includes/class-vca-asm-activities.php:864
+#: ../includes/class-vca-asm-activities.php:868
+#: ../includes/class-vca-asm-activities.php:915
 #, php-format
 msgid ""
 "Festival scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" href="
@@ -960,8 +960,8 @@ msgstr ""
 "target=\"_blank\" href=\"%2$s\">Vorschau des Festivals</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:819
-#: ../includes/class-vca-asm-activities.php:866
+#: ../includes/class-vca-asm-activities.php:870
+#: ../includes/class-vca-asm-activities.php:917
 #, php-format
 msgid ""
 "Festival draft updated. <a target=\"_blank\" href=\"%s\">Preview Festival</a>"
@@ -970,7 +970,7 @@ msgstr ""
 "\">Vorschau des Festivals</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:824
+#: ../includes/class-vca-asm-activities.php:875
 #, php-format
 msgid ""
 "Miscellaneous activity updated. <a href=\"%s\">View miscellaneous activity</"
@@ -978,18 +978,18 @@ msgid ""
 msgstr "Aktivität aktualisiert. <a href=\"%s\">Aktivität ansehen</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:827
+#: ../includes/class-vca-asm-activities.php:878
 msgid "Miscellaneous activity updated."
 msgstr "Sonstige Aktivität aktualisiert."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:828
+#: ../includes/class-vca-asm-activities.php:879
 #, php-format
 msgid "miscellaneous activity restored to revision from %s"
 msgstr "Revision von %s der sonstigen Aktivität wiederhergestellt."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:829
+#: ../includes/class-vca-asm-activities.php:880
 #, php-format
 msgid ""
 "Miscellaneous activity published. <a href=\"%s\">View miscellaneous "
@@ -997,12 +997,12 @@ msgid ""
 msgstr "Aktivität veröffentlicht. <a href=\"%s\">Aktivität ansehen</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:830
+#: ../includes/class-vca-asm-activities.php:881
 msgid "Miscellaneous activity saved."
 msgstr "Sonstige Aktivität gespeichert."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:831
+#: ../includes/class-vca-asm-activities.php:882
 #, php-format
 msgid ""
 "Miscellaneous activity submitted. <a target=\"_blank\" href=\"%s\">Preview "
@@ -1012,7 +1012,7 @@ msgstr ""
 "Aktivität</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:832
+#: ../includes/class-vca-asm-activities.php:883
 #, php-format
 msgid ""
 "Miscellaneous activity scheduled for: <strong>%1$s</strong>. <a target="
@@ -1022,7 +1022,7 @@ msgstr ""
 "target=\"_blank\" href=\"%2$s\">Vorschau der Aktivität</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:834
+#: ../includes/class-vca-asm-activities.php:885
 #, php-format
 msgid ""
 "Miscellaneous activity draft updated. <a target=\"_blank\" href=\"%s"
@@ -1032,37 +1032,37 @@ msgstr ""
 "\">Vorschau der Aktivität</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:841
+#: ../includes/class-vca-asm-activities.php:892
 #, php-format
 msgid "Network Gathering updated. <a href=\"%s\">View Network Gathering</a>"
 msgstr ""
 "Netzwerktreffen aktualisiert. <a href=\"%s\">Netzwerktreffen ansehen</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:844
+#: ../includes/class-vca-asm-activities.php:895
 msgid "Network Gathering updated."
 msgstr "Netzwerktreffen aktualisiert."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:845
+#: ../includes/class-vca-asm-activities.php:896
 #, php-format
 msgid "Network Gathering restored to revision from %s"
 msgstr "Revision von %s des Netzwerktreffens wiederhergestellt."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:846
+#: ../includes/class-vca-asm-activities.php:897
 #, php-format
 msgid "Network Gathering published. <a href=\"%s\">View Network Gathering</a>"
 msgstr ""
 "Netzwerktreffen veröffentlicht. <a href=\"%s\">Netzwerktreffen ansehen</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:847
+#: ../includes/class-vca-asm-activities.php:898
 msgid "Network Gathering saved."
 msgstr "Netzwerktreffen gespeichert."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:848
+#: ../includes/class-vca-asm-activities.php:899
 #, php-format
 msgid ""
 "Network Gathering submitted. <a target=\"_blank\" href=\"%s\">Preview "
@@ -1072,7 +1072,7 @@ msgstr ""
 "Netzwerktreffens</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:849
+#: ../includes/class-vca-asm-activities.php:900
 #, php-format
 msgid ""
 "Network Gathering scheduled for: <strong>%1$s</strong>. <a target=\"_blank\" "
@@ -1082,7 +1082,7 @@ msgstr ""
 "<a target=\"_blank\" href=\"%2$s\">Vorschau des Netzwerktreffens</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:851
+#: ../includes/class-vca-asm-activities.php:902
 #, php-format
 msgid ""
 "Network Gathering draft updated. <a target=\"_blank\" href=\"%s\">Preview "
@@ -1092,7 +1092,7 @@ msgstr ""
 "\">Vorschau des Netzwerktreffens</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:891
+#: ../includes/class-vca-asm-activities.php:947
 #: ../includes/class-vca-asm-validation.php:335
 #: ../admin/class-vca-asm-admin-finances.php:2073
 msgctxt "Validation Error"
@@ -1100,7 +1100,7 @@ msgid "You have not filled out all the required fields"
 msgstr "Du hast nicht alle Pflichtfelder ausgefüllt"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:892
+#: ../includes/class-vca-asm-activities.php:948
 #: ../includes/class-vca-asm-validation.php:336
 #: ../admin/class-vca-asm-admin-finances.php:2074
 msgctxt "Validation Error"
@@ -1108,7 +1108,7 @@ msgid "Some fields only accept numeric values"
 msgstr "Einige Felder akzeptieren nur numerische Werte"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:893
+#: ../includes/class-vca-asm-activities.php:949
 #: ../includes/class-vca-asm-validation.php:337
 #: ../admin/class-vca-asm-admin-finances.php:2075
 msgctxt "Validation Error"
@@ -1116,7 +1116,7 @@ msgid "A phone number you have entered is not valid"
 msgstr "Eine eingegebene Telefonnummer hat keine valides Format"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:894
+#: ../includes/class-vca-asm-activities.php:950
 #: ../includes/class-vca-asm-validation.php:338
 #: ../admin/class-vca-asm-admin-finances.php:2076
 msgctxt "Validation Error"
@@ -1124,7 +1124,7 @@ msgid "The end of the application phase must come after its beginning"
 msgstr "Das Ende der Bewerbungsphase muss nach deren Start liegen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:895
+#: ../includes/class-vca-asm-activities.php:951
 #: ../admin/class-vca-asm-admin-finances.php:2077
 msgctxt "Validation Error"
 msgid "Some of the entered dates are in an invalid order"
@@ -1132,26 +1132,26 @@ msgstr ""
 "Einige der eingegebenen Daten/Zeitpunkte sind in realitätsferner Reihenfolge"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:911
+#: ../includes/class-vca-asm-activities.php:967
 #: ../templates/admin-custom-fields.php:484
 #: ../templates/admin-custom-fields.php:493
 msgid "confirmed participants"
 msgstr "bestätigte Teilnehmer"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:912
+#: ../includes/class-vca-asm-activities.php:968
 msgctxt "Quotas"
 msgid "Split into city quotas?"
 msgstr "In Kontingente teilen?"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:913
+#: ../includes/class-vca-asm-activities.php:969
 msgctxt "Quotas"
 msgid "City Quotas have been enabled."
 msgstr "Städtekontingente sind bereits festgelegt."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:914
+#: ../includes/class-vca-asm-activities.php:970
 msgctxt "Quotas"
 msgid ""
 "Currently, %participants% participants are already registered by city "
@@ -1160,7 +1160,7 @@ msgstr ""
 "Es sind bereits %participants% Teilnehmer via Stadtkontingent registriert."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:915
+#: ../includes/class-vca-asm-activities.php:971
 msgctxt "Quotas"
 msgid ""
 "Quotas cannot be disabled anymore, unless those participants are removed "
@@ -1170,26 +1170,26 @@ msgstr ""
 "Teilnehmer werden wieder entfernt..."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:916
+#: ../includes/class-vca-asm-activities.php:972
 msgctxt "Quotas"
 msgid "Total slots"
 msgstr "Plätze insgesamt"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:917
+#: ../includes/class-vca-asm-activities.php:973
 msgctxt "Quotas"
 msgid "Available via country quota"
 msgstr "Verfügbar via Länderkontingent"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:918
+#: ../includes/class-vca-asm-activities.php:974
 #: ../templates/admin-custom-fields.php:262
 msgctxt "Quotas"
 msgid "add"
 msgstr "hinzufügen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:919
+#: ../includes/class-vca-asm-activities.php:975
 #: ../templates/admin-custom-fields.php:246
 #: ../templates/admin-custom-fields.php:258
 msgctxt "Quotas"
@@ -1197,63 +1197,63 @@ msgid "remove"
 msgstr "entfernen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:920
+#: ../includes/class-vca-asm-activities.php:976
 msgctxt "Quotas"
 msgid "Can't."
 msgstr "Geht nicht."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:920
+#: ../includes/class-vca-asm-activities.php:976
 msgctxt "Quotas"
 msgid "This country does not have cities associated with it..."
 msgstr "Diesem Land sind (noch) keine Städte zugeordnet..."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:961
+#: ../includes/class-vca-asm-activities.php:1017
 msgctxt "Slots Selection"
 msgid "No"
 msgstr "Nein"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:965
+#: ../includes/class-vca-asm-activities.php:1021
 msgctxt "Slots Selection"
 msgid "Yes, define city quotas myself"
 msgstr "Ja, Städtekontingente selbst festlegen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:969
+#: ../includes/class-vca-asm-activities.php:1025
 msgctxt "Slots Selection"
 msgid "Yes, notify relevant countries&apos; users to split available slots"
 msgstr "Ja, die relevanten Benutzer des jeweiligen Landes benachrichtigen"
 
-#: ../includes/class-vca-asm-activities.php:969
+#: ../includes/class-vca-asm-activities.php:1025
 msgid "(not yet implemented...)"
 msgstr "(noch nicht implementiert...)"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1015
-#: ../includes/class-vca-asm-activities.php:2053
-#: ../includes/class-vca-asm-activities.php:2076
+#: ../includes/class-vca-asm-activities.php:1074
+#: ../includes/class-vca-asm-activities.php:2145
+#: ../includes/class-vca-asm-activities.php:2168
 #: ../models/class-vca-asm-activity.php:124
 msgid "Concert"
 msgstr "Konzert"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1016
-#: ../includes/class-vca-asm-activities.php:1039
-#: ../includes/class-vca-asm-activities.php:1062
-#: ../includes/class-vca-asm-activities.php:1085
-#: ../includes/class-vca-asm-activities.php:1108
+#: ../includes/class-vca-asm-activities.php:1075
+#: ../includes/class-vca-asm-activities.php:1101
+#: ../includes/class-vca-asm-activities.php:1127
+#: ../includes/class-vca-asm-activities.php:1153
+#: ../includes/class-vca-asm-activities.php:1179
 #: ../templates/class-vca-asm-frontend-activities.php:425
 msgid "Location"
 msgstr "Ort"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1017
-#: ../includes/class-vca-asm-activities.php:1040
-#: ../includes/class-vca-asm-activities.php:1063
-#: ../includes/class-vca-asm-activities.php:1086
-#: ../includes/class-vca-asm-activities.php:1109
+#: ../includes/class-vca-asm-activities.php:1076
+#: ../includes/class-vca-asm-activities.php:1102
+#: ../includes/class-vca-asm-activities.php:1128
+#: ../includes/class-vca-asm-activities.php:1154
+#: ../includes/class-vca-asm-activities.php:1180
 #: ../admin/class-vca-asm-admin-finances.php:591
 #: ../admin/class-vca-asm-admin-slot-allocation.php:392
 #: ../templates/class-vca-asm-frontend-activities.php:409
@@ -1261,161 +1261,161 @@ msgid "Timeframe"
 msgstr "Zeitraum"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1018
-#: ../includes/class-vca-asm-activities.php:1041
-#: ../includes/class-vca-asm-activities.php:1064
-#: ../includes/class-vca-asm-activities.php:1087
-#: ../includes/class-vca-asm-activities.php:1110
+#: ../includes/class-vca-asm-activities.php:1077
+#: ../includes/class-vca-asm-activities.php:1103
+#: ../includes/class-vca-asm-activities.php:1129
+#: ../includes/class-vca-asm-activities.php:1155
+#: ../includes/class-vca-asm-activities.php:1181
 #: ../admin/class-vca-asm-admin-slot-allocation.php:397
 #: ../admin/class-vca-asm-admin-slot-allocation.php:402
 msgid "Application Phase"
 msgstr "Bewerbungsphase"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1019
-#: ../includes/class-vca-asm-activities.php:1042
-#: ../includes/class-vca-asm-activities.php:1065
-#: ../includes/class-vca-asm-activities.php:1088
-#: ../includes/class-vca-asm-activities.php:1111
+#: ../includes/class-vca-asm-activities.php:1078
+#: ../includes/class-vca-asm-activities.php:1104
+#: ../includes/class-vca-asm-activities.php:1130
+#: ../includes/class-vca-asm-activities.php:1156
+#: ../includes/class-vca-asm-activities.php:1182
 msgid "Slots (Apps)"
 msgstr "Plätze (Bewerbungen)"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1020
-#: ../includes/class-vca-asm-activities.php:1043
-#: ../includes/class-vca-asm-activities.php:1066
-#: ../includes/class-vca-asm-activities.php:1089
-#: ../includes/class-vca-asm-activities.php:1112
+#: ../includes/class-vca-asm-activities.php:1079
+#: ../includes/class-vca-asm-activities.php:1105
+#: ../includes/class-vca-asm-activities.php:1131
+#: ../includes/class-vca-asm-activities.php:1157
+#: ../includes/class-vca-asm-activities.php:1183
 msgid "Accepted Applications"
 msgstr "Bestätigte Bewerbungen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1038
-#: ../includes/class-vca-asm-activities.php:1107
-#: ../includes/class-vca-asm-activities.php:2049
-#: ../includes/class-vca-asm-activities.php:2077
+#: ../includes/class-vca-asm-activities.php:1100
+#: ../includes/class-vca-asm-activities.php:1178
+#: ../includes/class-vca-asm-activities.php:2141
+#: ../includes/class-vca-asm-activities.php:2169
 #: ../includes/class-vca-asm-mailer.php:569
 #: ../models/class-vca-asm-activity.php:127
 msgid "Festival"
 msgstr "Festival"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1061
+#: ../includes/class-vca-asm-activities.php:1126
 #: ../admin/class-vca-asm-admin-slot-allocation.php:371
 msgid "Activity"
 msgstr "Aktivität"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1084
-#: ../includes/class-vca-asm-activities.php:2064
-#: ../includes/class-vca-asm-activities.php:2081
+#: ../includes/class-vca-asm-activities.php:1152
+#: ../includes/class-vca-asm-activities.php:2156
+#: ../includes/class-vca-asm-activities.php:2173
 #: ../models/class-vca-asm-activity.php:130
 msgid "Network Gathering"
 msgstr "Netzwerktreffen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1179
+#: ../includes/class-vca-asm-activities.php:1251
 msgctxt "meta box title, concert"
 msgid "The Concert"
 msgstr "Das Konzert"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1187
-#: ../includes/class-vca-asm-activities.php:1211
+#: ../includes/class-vca-asm-activities.php:1259
+#: ../includes/class-vca-asm-activities.php:1283
 msgctxt "meta box title, festival"
 msgid "The Festival"
 msgstr "Das Festival"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1195
+#: ../includes/class-vca-asm-activities.php:1267
 msgctxt "meta box title, miscellaneous activity"
 msgid "The miscellaneous activity"
 msgstr "Die sonstige Aktivität"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1203
+#: ../includes/class-vca-asm-activities.php:1275
 msgctxt "meta box title, network gathering"
 msgid "The Network Gathering"
 msgstr "Das Netzwerktreffen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1221
+#: ../includes/class-vca-asm-activities.php:1293
 msgctxt "meta box title, festival"
 msgid "Timeframe"
 msgstr "Zeitraum"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1229
+#: ../includes/class-vca-asm-activities.php:1301
 msgctxt "meta box title, festival"
 msgid "Association with Network Geography"
 msgstr "Assoziation mit der Netzwerk-Geographie"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1237
+#: ../includes/class-vca-asm-activities.php:1309
 msgctxt "meta box title, festival"
 msgid "Contact Person"
 msgstr "Ansprechpartner_innen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1246
+#: ../includes/class-vca-asm-activities.php:1318
 msgctxt "meta box title, festival"
 msgid "Tools"
 msgstr "Werkzeuge"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1255
+#: ../includes/class-vca-asm-activities.php:1327
 msgctxt "meta box title, festival"
 msgid "Application Phase"
 msgstr "Bewerbungsphase"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1264
-#: ../includes/class-vca-asm-activities.php:1273
+#: ../includes/class-vca-asm-activities.php:1336
+#: ../includes/class-vca-asm-activities.php:1345
 msgctxt "meta box title, festival"
 msgid "Applicant Pool &amp; Participant Slots"
 msgstr "Bewerberpool &amp; Teilnehmer Plätze"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:1283
+#: ../includes/class-vca-asm-activities.php:1355
 msgctxt "meta box title, festival"
 msgid "Applicants &amp; Participants"
 msgstr "Bewerber &amp; Teilnehmer"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:2057
+#: ../includes/class-vca-asm-activities.php:2149
 msgid "Miscellaneous Activities"
 msgstr "Sonstige Aktivitäten"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:2070
-#: ../includes/class-vca-asm-activities.php:2082
+#: ../includes/class-vca-asm-activities.php:2162
+#: ../includes/class-vca-asm-activities.php:2174
 msgid "Goldeimer Festival"
 msgstr "Goldeimer Festival"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:2078
+#: ../includes/class-vca-asm-activities.php:2170
 msgid "Miscellaneous action"
 msgstr "Sonstige Aktion"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:2079
+#: ../includes/class-vca-asm-activities.php:2171
 msgid "Miscellaneous education activity"
 msgstr "Sonstige Bildungsaktivität"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:2080
+#: ../includes/class-vca-asm-activities.php:2172
 msgid "Miscellaneous network activity"
 msgstr "Sonstige Netzwerkaktivität"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:2090
-#: ../includes/class-vca-asm-activities.php:2091
-#: ../includes/class-vca-asm-activities.php:2092
+#: ../includes/class-vca-asm-activities.php:2182
+#: ../includes/class-vca-asm-activities.php:2183
+#: ../includes/class-vca-asm-activities.php:2184
 msgid "Miscellaneous activities"
 msgstr "Sonstige Aktivitäten"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-activities.php:2109
+#: ../includes/class-vca-asm-activities.php:2201
 #: ../admin/class-vca-asm-admin-emails.php:892
 #: ../admin/class-vca-asm-admin-emails.php:1023
 #: ../templates/class-vca-asm-frontend-activities.php:607
@@ -1423,141 +1423,6 @@ msgstr "Sonstige Aktivitäten"
 #: ../templates/class-vca-asm-frontend-activities.php:709
 msgid "All"
 msgstr "Alle"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:45
-msgid ""
-"In order to be able to register for activities, you should at least have "
-"filled out first- and lastname, your mobile phone and date of birth, as well "
-"as selected a country in your user profile."
-msgstr ""
-"Um dich für Aktivitäten anmelden, bzw. bewerben, zu können, musst du deinen "
-"Vor- und Nachnamen, deine Telefonnummer und dein Geburtsdatum in deinem "
-"Profil angegeben, sowie ein Land gewählt haben."
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:58
-msgid "Read the FAQ"
-msgstr "Die FAQ Lesen"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:58
-msgid "FAQ"
-msgstr "FAQ"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:63
-#, php-format
-msgid "Why this is a neccessity is explained in the %s."
-msgstr "Warum dies notwendig ist erfährst du in den %s."
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:134
-msgid "Current Activities"
-msgstr "Aktuelle Aktivitäten"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:135
-#, php-format
-msgid ""
-"Before you apply for an activity, please make sure you will indeed have "
-"spare time on your hands in the given timeframe. For general infos about "
-"festivals and VcA, please refer to the %s."
-msgstr ""
-"Bevor du dich für eine Aktivität bewirbst, check bitte nochmal deinen "
-"Terminkalender, ob du auch wirklich Zeit hast. Für generelle Infos über VcA "
-"und die Festivals, kuck bitte in die %s."
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:135
-msgid "The following activities are currently in the application phase:"
-msgstr "Die folgenden Aktivitäten sind in der Bewerbungsphase:"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:143
-msgid "Currently there are no activities in the registration phase."
-msgstr "Aktuell sind keine Aktivitäten in der Bewerbungsphase."
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:174
-msgid "My Activities"
-msgstr "Meine Aktivitäten"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:177
-msgid "Activities you are participating in"
-msgstr "Aktivitäten an denen du teilnimmst"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:183
-msgid "These are the future activities you are participating in."
-msgstr ""
-"Für diese zukünftigen Aktivitäten ist deine Bewerbung angenommen und du als "
-"Teilnehmer registriert worden."
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:212
-msgid "You are currently not registered for future activities."
-msgstr "Du bist aktuell für keine zukünftigen Aktivitäten angemeldet."
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:219
-msgid "Current Applications"
-msgstr "Aktuelle Bewerbungen"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:225
-msgid ""
-"You have applied to participate in the following activities. You will get an "
-"answer at the latest one day after the application deadline has passed."
-msgstr ""
-"Du hast dich für die folgenden Aktivitäten beworben. Dir wird spätestens "
-"kurz nach Ende der Bewerbungsphase Bescheid gesagt."
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:254
-msgid "You currently have not applied to any future activities."
-msgstr "Du hast dich aktuell nicht auf zukünftige Aktivitäten beworben."
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:261
-#: ../includes/class-vca-asm-workbook-participants.php:79
-#: ../admin/class-vca-asm-admin-slot-allocation.php:912
-#: ../admin/class-vca-asm-admin-slot-allocation.php:1051
-#: ../admin/class-vca-asm-admin-slot-allocation.php:1231
-#: ../admin/class-vca-asm-admin-emails.php:1086
-msgid "Waiting List"
-msgstr "Warteliste"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:267
-msgid ""
-"Your application to these activites was denied. You are now on the waiting "
-"list and will be contacted, if slots open up again."
-msgstr ""
-"Deine Bewerbung für diese Aktivitäten ist (vorläufig) abgelehnt worden. Du "
-"stehst jetzt auf der Warteliste und wirst kontaktiert werden, sollten Plätze "
-"wieder frei werden."
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:296
-msgid "You currently are not on any waiting lists."
-msgstr "Du stehst derzeit auf keiner Warteliste."
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:303
-msgid "Past Activities"
-msgstr "Vergangene Aktivitäten"
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:309
-msgid "These are the activities you have participated in in the past."
-msgstr "An diesen Aktivitäten hast du teilgenommen."
-
-# @ vca-asm
-#: ../includes/class-vca-asm-lists.php:338
-msgid "So far, you have not participated in any activities."
-msgstr "Bis jetzt hast du an keinen Aktivitäten teilgenommen."
 
 # @ vca-asm
 #: ../includes/class-vca-asm-validation.php:275
@@ -1596,6 +1461,16 @@ msgid "List of supporters applying to an activity"
 msgstr "Liste der Supporter, die sich auf eine Aktivität bewerben"
 
 # @ vca-asm
+#: ../includes/class-vca-asm-workbook-participants.php:79
+#: ../includes/class-vca-asm-list-activities.php:327
+#: ../admin/class-vca-asm-admin-slot-allocation.php:912
+#: ../admin/class-vca-asm-admin-slot-allocation.php:1051
+#: ../admin/class-vca-asm-admin-slot-allocation.php:1231
+#: ../admin/class-vca-asm-admin-emails.php:1086
+msgid "Waiting List"
+msgstr "Warteliste"
+
+# @ vca-asm
 #: ../includes/class-vca-asm-workbook-participants.php:80
 msgid "List of supporters on the Waiting List for an activity"
 msgstr "Liste der Supporter, die auf der Warteliste für eine Aktivität"
@@ -1613,7 +1488,7 @@ msgstr "Liste der Supporter, die an einer Aktivität teilnehmen"
 # @ vca-asm
 #: ../includes/class-vca-asm-workbook-participants.php:121
 #: ../includes/class-vca-asm-workbook-participants.php:133
-#: ../includes/class-vca-asm-geography.php:560
+#: ../includes/class-vca-asm-geography.php:746
 #: ../includes/class-vca-asm-workbook-finances.php:145
 #: ../includes/class-vca-asm-workbook-finances.php:173
 #: ../admin/class-vca-asm-admin-finances.php:615
@@ -1773,143 +1648,143 @@ msgid "not set"
 msgstr "nicht angegeben"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-cron.php:35
+#: ../includes/class-vca-asm-cron.php:42
 msgid "Every minute"
 msgstr "Jede Minute"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-cron.php:40
+#: ../includes/class-vca-asm-cron.php:47
 #, php-format
 msgid "Every %d minutes"
 msgstr "Alle %d Minuten"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-cron.php:45
+#: ../includes/class-vca-asm-cron.php:52
 msgid "Every half an hour"
 msgstr "Jede halbe Stunde"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:176
+#: ../includes/class-vca-asm.php:199
 msgctxt "Months"
 msgid "January"
 msgstr "Januar"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:177
+#: ../includes/class-vca-asm.php:200
 msgctxt "Months"
 msgid "February"
 msgstr "Februar"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:178
+#: ../includes/class-vca-asm.php:201
 msgctxt "Months"
 msgid "March"
 msgstr "März"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:179
+#: ../includes/class-vca-asm.php:202
 msgctxt "Months"
 msgid "April"
 msgstr "April"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:180
+#: ../includes/class-vca-asm.php:203
 msgctxt "Months"
 msgid "May"
 msgstr "Mai"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:181
+#: ../includes/class-vca-asm.php:204
 msgctxt "Months"
 msgid "June"
 msgstr "Juni"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:182
+#: ../includes/class-vca-asm.php:205
 msgctxt "Months"
 msgid "July"
 msgstr "Juli"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:183
+#: ../includes/class-vca-asm.php:206
 msgctxt "Months"
 msgid "August"
 msgstr "August"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:184
+#: ../includes/class-vca-asm.php:207
 msgctxt "Months"
 msgid "September"
 msgstr "September"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:185
+#: ../includes/class-vca-asm.php:208
 msgctxt "Months"
 msgid "October"
 msgstr "Oktober"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:186
+#: ../includes/class-vca-asm.php:209
 msgctxt "Months"
 msgid "November"
 msgstr "November"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:187
+#: ../includes/class-vca-asm.php:210
 msgctxt "Months"
 msgid "December"
 msgstr "Dezember"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:190
+#: ../includes/class-vca-asm.php:213
 msgctxt "Weekdays, Shortform"
 msgid "Sun"
 msgstr "So"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:191
+#: ../includes/class-vca-asm.php:214
 msgctxt "Weekdays, Shortform"
 msgid "Mon"
 msgstr "Mo"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:192
+#: ../includes/class-vca-asm.php:215
 msgctxt "Weekdays, Shortform"
 msgid "Tue"
 msgstr "Di"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:193
+#: ../includes/class-vca-asm.php:216
 msgctxt "Weekdays, Shortform"
 msgid "Wed"
 msgstr "Mi"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:194
+#: ../includes/class-vca-asm.php:217
 msgctxt "Weekdays, Shortform"
 msgid "Thu"
 msgstr "Do"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:195
+#: ../includes/class-vca-asm.php:218
 msgctxt "Weekdays, Shortform"
 msgid "Fri"
 msgstr "Fr"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:196
+#: ../includes/class-vca-asm.php:219
 msgctxt "Weekdays, Shortform"
 msgid "Sat"
 msgstr "Sa"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:201
+#: ../includes/class-vca-asm.php:224
 #: ../templates/class-vca-asm-admin-form.php:606
 msgid "Deselect all"
 msgstr "Alle deaktivieren"
 
 # @ vca-asm
-#: ../includes/class-vca-asm.php:202
+#: ../includes/class-vca-asm.php:225
 msgid "Select all"
 msgstr "Alle auswählen"
 
@@ -1924,6 +1799,131 @@ msgstr "Buchführung"
 msgctxt "Excel Locale"
 msgid "en_us"
 msgstr "de_de"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:115
+msgid "Read the FAQ"
+msgstr "Die FAQ Lesen"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:115
+msgid "FAQ"
+msgstr "FAQ"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:120
+#, php-format
+msgid "Why this is a neccessity is explained in the %s."
+msgstr "Warum dies notwendig ist erfährst du in den %s."
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:191
+msgid "Current Activities"
+msgstr "Aktuelle Aktivitäten"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:192
+#, php-format
+msgid ""
+"Before you apply for an activity, please make sure you will indeed have "
+"spare time on your hands in the given timeframe. For general infos about "
+"festivals and VcA, please refer to the %s."
+msgstr ""
+"Bevor du dich für eine Aktivität bewirbst, check bitte nochmal deinen "
+"Terminkalender, ob du auch wirklich Zeit hast. Für generelle Infos über VcA "
+"und die Festivals, kuck bitte in die %s."
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:192
+msgid "The following activities are currently in the application phase:"
+msgstr "Die folgenden Aktivitäten sind in der Bewerbungsphase:"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:200
+msgid "Currently there are no activities in the registration phase."
+msgstr "Aktuell sind keine Aktivitäten in der Bewerbungsphase."
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:240
+msgid "My Activities"
+msgstr "Meine Aktivitäten"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:243
+msgid "Activities you are participating in"
+msgstr "Aktivitäten an denen du teilnimmst"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:249
+msgid "These are the future activities you are participating in."
+msgstr ""
+"Für diese zukünftigen Aktivitäten ist deine Bewerbung angenommen und du als "
+"Teilnehmer registriert worden."
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:278
+msgid "You are currently not registered for future activities."
+msgstr "Du bist aktuell für keine zukünftigen Aktivitäten angemeldet."
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:285
+msgid "Current Applications"
+msgstr "Aktuelle Bewerbungen"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:291
+msgid ""
+"You have applied to participate in the following activities. You will get an "
+"answer at the latest one day after the application deadline has passed."
+msgstr ""
+"Du hast dich für die folgenden Aktivitäten beworben. Dir wird spätestens "
+"kurz nach Ende der Bewerbungsphase Bescheid gesagt."
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:320
+msgid "You currently have not applied to any future activities."
+msgstr "Du hast dich aktuell nicht auf zukünftige Aktivitäten beworben."
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:333
+msgid ""
+"Your application to these activites was denied. You are now on the waiting "
+"list and will be contacted, if slots open up again."
+msgstr ""
+"Deine Bewerbung für diese Aktivitäten ist (vorläufig) abgelehnt worden. Du "
+"stehst jetzt auf der Warteliste und wirst kontaktiert werden, sollten Plätze "
+"wieder frei werden."
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:362
+msgid "You currently are not on any waiting lists."
+msgstr "Du stehst derzeit auf keiner Warteliste."
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:369
+msgid "Past Activities"
+msgstr "Vergangene Aktivitäten"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:375
+msgid "These are the activities you have participated in in the past."
+msgstr "An diesen Aktivitäten hast du teilgenommen."
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:404
+msgid "So far, you have not participated in any activities."
+msgstr "Bis jetzt hast du an keinen Aktivitäten teilgenommen."
+
+# @ vca-asm
+#: ../includes/class-vca-asm-list-activities.php:447
+msgid ""
+"In order to be able to register for activities, you should at least have "
+"filled out first- and lastname, your mobile phone and date of birth, as well "
+"as selected a country in your user profile."
+msgstr ""
+"Um dich für Aktivitäten anmelden, bzw. bewerben, zu können, musst du deinen "
+"Vor- und Nachnamen, deine Telefonnummer und dein Geburtsdatum in deinem "
+"Profil angegeben, sowie ein Land gewählt haben."
 
 # @ vca-asm
 #: ../includes/class-vca-asm-mailer.php:130
@@ -1945,7 +1945,7 @@ msgstr "Supporter"
 
 # @ vca-asm
 #: ../includes/class-vca-asm-mailer.php:571
-#: ../includes/class-vca-asm-geography.php:541
+#: ../includes/class-vca-asm-geography.php:727
 #: ../admin/class-vca-asm-admin-finances.php:3208
 #: ../admin/class-vca-asm-admin-geography.php:915
 #: ../templates/class-vca-asm-admin-table.php:1250
@@ -2129,59 +2129,58 @@ msgid "Selection"
 msgstr "manuelle Auswahl"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-finances.php:44
+#: ../includes/class-vca-asm-finances.php:75
 #: ../admin/class-vca-asm-admin-finances.php:2116
 msgid "Donation"
 msgstr "Spende"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-finances.php:45
+#: ../includes/class-vca-asm-finances.php:76
 #: ../admin/class-vca-asm-admin-finances.php:2138
 msgid "Expenditure"
 msgstr "Ausgabe"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-finances.php:46
+#: ../includes/class-vca-asm-finances.php:77
 #: ../admin/class-vca-asm-admin-finances.php:2132
 msgid "Revenue"
 msgstr "Einnahme"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-finances.php:47
+#: ../includes/class-vca-asm-finances.php:78
 #: ../admin/class-vca-asm-admin-finances.php:2122
 #: ../admin/class-vca-asm-admin-finances.php:2144
 msgid "Transfer"
 msgstr "Überweisung"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-finances.php:48
+#: ../includes/class-vca-asm-finances.php:79
 msgid "Income Account"
 msgstr "Ertragskonto"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-finances.php:49
+#: ../includes/class-vca-asm-finances.php:80
 msgid "Expense Account"
 msgstr "Aufwandskonto"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-finances.php:682
-#: ../includes/class-vca-asm-finances.php:736
-#: ../includes/class-vca-asm-finances.php:791
-#: ../includes/class-vca-asm-geography.php:908
-#: ../includes/class-vca-asm-geography.php:950
+#: ../includes/class-vca-asm-finances.php:924
+#: ../includes/class-vca-asm-finances.php:984
+#: ../includes/class-vca-asm-finances.php:1044
+#: ../includes/class-vca-asm-geography.php:1042
 msgid "Please select..."
 msgstr "Bitte wählen..."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-finances.php:685
-msgid "I don&apos;t know..."
-msgstr "Ich hab' keine Ahnung..."
-
-# @ vca-asm
-#: ../includes/class-vca-asm-finances.php:739
+#: ../includes/class-vca-asm-finances.php:987
 msgctxt "Occasions"
 msgid "Miscellaneous"
 msgstr "Sonstiges"
+
+# @ vca-asm
+#: ../includes/class-vca-asm-finances.php:1047
+msgid "I don&apos;t know..."
+msgstr "Ich hab' keine Ahnung..."
 
 # @ vca-asm
 #: ../includes/class-vca-asm-roles.php:171
@@ -2268,18 +2267,18 @@ msgid "Watchdog"
 msgstr "Beobachter"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-geography.php:51
+#: ../includes/class-vca-asm-geography.php:489
 #, php-format
 msgid "Error: Geographical unit of ID %s does not exist."
 msgstr "Fehler: Geographische Einheit mit ID #%s existiert nicht."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-geography.php:544
+#: ../includes/class-vca-asm-geography.php:730
 msgid "LC"
 msgstr "LC"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-geography.php:544
+#: ../includes/class-vca-asm-geography.php:730
 #: ../admin/class-vca-asm-admin-finances.php:3201
 #: ../admin/class-vca-asm-admin-geography.php:911
 #: ../templates/class-vca-asm-admin-table.php:1252
@@ -2287,27 +2286,27 @@ msgid "Local Crew"
 msgstr "Local Crew"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-geography.php:547
+#: ../includes/class-vca-asm-geography.php:733
 #: ../admin/class-vca-asm-admin-geography.php:666
 #: ../admin/class-vca-asm-admin-emails.php:943
 msgid "City Group"
 msgstr "Städtegruppe"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-geography.php:553
+#: ../includes/class-vca-asm-geography.php:739
 #: ../admin/class-vca-asm-admin-geography.php:679
 #: ../admin/class-vca-asm-admin-emails.php:967
 msgid "Country Group"
 msgstr "Ländergruppe"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-geography.php:556
+#: ../includes/class-vca-asm-geography.php:742
 msgid "does not exist"
 msgstr "existiert nicht"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-geography.php:580
-#: ../includes/class-vca-asm-geography.php:583
+#: ../includes/class-vca-asm-geography.php:769
+#: ../includes/class-vca-asm-geography.php:772
 #: ../includes/class-vca-asm-profile.php:222
 #: ../includes/class-vca-asm-profile.php:262
 #: ../includes/class-vca-asm-profile.php:303
@@ -2316,7 +2315,7 @@ msgid "not chosen..."
 msgstr "nicht gewählt..."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-geography.php:582
+#: ../includes/class-vca-asm-geography.php:771
 #: ../includes/class-vca-asm-profile.php:208
 #: ../includes/class-vca-asm-profile.php:248
 #: ../includes/class-vca-asm-profile.php:289
@@ -2325,7 +2324,7 @@ msgid "other, non-listed country"
 msgstr "anderes, nicht gelistetes Land"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-geography.php:585
+#: ../includes/class-vca-asm-geography.php:774
 msgctxt "Geography"
 msgid "no regional info"
 msgstr "keine geographischen Informationen"

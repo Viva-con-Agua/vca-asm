@@ -10,27 +10,34 @@ Author URI: http://karlgehttanzen.de // subject to change
 License: GPL3
 */
 
-/*  Copyright 2011  Johannes Pilkahn  (email : j.pilkahn@vivaconagua.org)
-
-    This program is free software; you can redistribute it and/or modify
-    it under the terms of the GNU General Public License, version 3, as
-    published by the Free Software Foundation.
-
-    You should have received a copy of the GNU General Public License
-    along with this program; if not, write to the Free Software
-    Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
-*/
+/**
+ * Copyright 2011  Johannes Pilkahn  (email : j.pilkahn@vivaconagua.org)
+ *
+ * This program is free software; you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License, version 3, as
+ * published by the Free Software Foundation.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with this program; if not, write to the Free Software
+ * Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
+ *
+ * @author     Johannes Pilkahn <j.pilkahn@vivaconagua.org>
+ * @copyright  2011-2015 Johannes Pilkahn
+ * @license    http://www.gnu.org/licenses/gpl-3.0.en.html  GPL v3
+ * @version    Release: 1.6
+ * @link       http://pool.vivaconagua.org
+ */
 
 /**
- *	This file is the root of the plugin,
- *	initially read by WordPress.
+ * This file is the root of the plugin,
+ * initially read by WordPress.
  *
- *	It sets a few global constants,
- *	conditionally includes/requires other logical files,
- *	sets the locale,
- *	holds an installation routine (and its triggering hook),
- *	holds a routine to update the database (and its triggering hook),
- *	as well as a clean up routine run on plugin deactivation.
+ * It sets a few global constants,
+ * conditionally includes/requires other logical files,
+ * sets the locale,
+ * holds an installation routine (and its triggering hook),
+ * holds a routine to update the database (and its triggering hook),
+ * as well as a clean up routine run on plugin deactivation.
  */
 
 /**
@@ -74,8 +81,9 @@ if ( !defined( 'VCA_ASM_DIRNAME' ) ) {
 }
 
 /**
- * Utility Constants
+ * Utility Constant: Profile URI
  *
+ * @var const VCA_ASM_PROFILE_URI
  * @since 1.6
  */
 if ( !defined( 'VCA_ASM_PROFILE_URI' ) ) {
@@ -87,31 +95,37 @@ if ( !defined( 'VCA_ASM_PROFILE_URI' ) ) {
  *
  * @since 1.0
  */
+
 /* E-Mail Template, used in cronjob (callback in mailer class), needs to be included before */
 require_once( VCA_ASM_ABSPATH . '/templates/class-vca-asm-email-html.php' );
+
 /* core of the plugin, frontend (usually insantiated only once)*/
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-activities.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-cron.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-finances.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-geography.php' );
-require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-lists.php' );
+require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-list-activities.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-mailer.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-profile.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-registrations.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-security.php' );
 require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-utilities.php' );
+
 /* classes that hold data sets (multiple instances) */
 require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-activity.php' );
 require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-city-finances.php' );
 require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-stats.php' );
 require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-supporter.php' );
+
 /* 2nd party code */
 require_once( VCA_ASM_ABSPATH . '/lib/PHPExcel.php' );
+
 /* Download Generators */
-require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-workbook.php' );
-require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-workbook-finances.php' );
-require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-workbook-participants.php' );
+require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-workbook.php' );
+require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-workbook-finances.php' );
+require_once( VCA_ASM_ABSPATH . '/models/class-vca-asm-workbook-participants.php' );
+
 /* template classes (non-OOP templates are included on the spot) */
 if ( ! is_admin() ) {
 	require_once( VCA_ASM_ABSPATH . '/templates/class-vca-asm-frontend-activities.php' );
@@ -123,6 +137,7 @@ if ( ! is_admin() ) {
  * @since 1.0
  */
 if ( is_admin() ) {
+
 	/* functional classes (usually insantiated only once) */
 	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin.php' );
 	require_once( VCA_ASM_ABSPATH . '/admin/class-vca-asm-admin-actions.php' );
@@ -158,6 +173,8 @@ if ( is_admin() ) {
 /**
  * Sets the locale depending on a user's settings
  *
+ * @return void
+ *
  * @since 1.3
  */
 function vca_asm_user_locale()
@@ -165,6 +182,13 @@ function vca_asm_user_locale()
 	add_filter( 'locale', 'vca_asm_set_locale', 1 );
 }
 
+/**
+ * Sets the locale depending on a user's settings
+ *
+ * @return void
+ *
+ * @since 1.3
+ */
 function vca_asm_set_locale( $locale )
 {
 	global $current_user;

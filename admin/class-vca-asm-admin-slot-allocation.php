@@ -1107,7 +1107,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 		get_currentuserinfo();
 
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
-		$admin_city_status = $vca_asm_geography->get_status( $admin_city );
+		$admin_city_status = $vca_asm_geography->get_type( $admin_city );
 		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
 
 		$columns = array(
@@ -1324,7 +1324,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 			foreach ( $the_activity->cty_slots as $cty => $slots ) {
 				if ( 0 < $slots ) {
 					$tables[] = array(
-						'headline' => $list_nicename . ', ' . $vca_asm_geography->get_status( $cty ) . ' ' . $vca_asm_geography->get_name( $cty ),
+						'headline' => $list_nicename . ', ' . $vca_asm_geography->get_type( $cty ) . ' ' . $vca_asm_geography->get_name( $cty ),
 						'quota' => $cty,
 						'slots' => $slots,
 						'supps_of_quota' => isset( $supporters_by_quota[$cty] ) ? $supporters_by_quota[$cty] : array()
@@ -1346,7 +1346,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 					$cty_ctr = $vca_asm_geography->has_nation( $cty );
 					if ( $cty_ctr && $cty_ctr === $admin_nation && 0 < $slots ) {
 						$tables[] = array(
-							'headline' => $list_nicename . ', ' . $vca_asm_geography->get_status( $cty ) . ' ' . $vca_asm_geography->get_name( $cty ),
+							'headline' => $list_nicename . ', ' . $vca_asm_geography->get_type( $cty ) . ' ' . $vca_asm_geography->get_name( $cty ),
 							'quota' => $cty,
 							'slots' => $slots,
 							'supps_of_quota' => isset( $supporters_by_quota[$cty] ) ? $supporters_by_quota[$cty] : array()
@@ -1357,7 +1357,7 @@ class VCA_ASM_Admin_Slot_Allocation {
 		} elseif ( current_user_can( 'vca_asm_manage_' . $this->department ) ) {
 			if ( isset( $the_activity->cty_slots[$admin_city] ) && 0 < $the_activity->cty_slots[$admin_city] ) {
 				$tables[] = array(
-					'headline' => $list_nicename . ', ' . $vca_asm_geography->get_status( $admin_city ) . ' ' . $vca_asm_geography->get_name( $admin_city ),
+					'headline' => $list_nicename . ', ' . $vca_asm_geography->get_type( $admin_city ) . ' ' . $vca_asm_geography->get_name( $admin_city ),
 					'quota' => $admin_city,
 					'slots' => $the_activity->cty_slots[$admin_city],
 					'supps_of_quota' => isset( $supporters_by_quota[$admin_city] ) ? $supporters_by_quota[$admin_city] : array()
@@ -1441,11 +1441,11 @@ class VCA_ASM_Admin_Slot_Allocation {
 		$rows = array();
 		$soq_count = count( $supps_of_quota );
 
-		$cities = $vca_asm_geography->get_ids();
-		$stati = $vca_asm_geography->get_stati();
-		$stati_conv = $vca_asm_geography->get_stati_conv();
+		$cities = $vca_asm_geography->get_names();
+		$stati = $vca_asm_geography->get_types();
+		$stati_conv = $vca_asm_geography->get_region_id_to_type();
 
-		$stati = $vca_asm_geography->get_stati();
+		$stati = $vca_asm_geography->get_types();
 
 		for ( $i = 0; $i < $soq_count; $i++ ) {
 			$supp_id = intval( $supps_of_quota[$i] );
