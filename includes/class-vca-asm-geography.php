@@ -1043,7 +1043,8 @@ class VCA_ASM_Geography
 			'type' => 'all',						// (string) type of geographical unit, i.e 'city', default: all
 			'descendants_of' => false,				// (bool|int) only list the descendents of parent ID
 			'not_has_nation' => false,				// (bool) only list cities without nation (utility used once)
-			'grouped' => true						// whether type should be 'city' or split into 'cell' & 'lc', if applicable
+			'grouped' => true,						// (bool) whether type should be 'city' or split into 'cell' & 'lc', if applicable
+			'omit' => false							// (bool|int) whether to omit a certain geographical unit
 		);
 		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
 
@@ -1087,11 +1088,13 @@ class VCA_ASM_Geography
 		}
 
 		foreach( $raw as $geo_unit ) {
-			$options_array[] = array(
-				'label' => $vca_asm_utilities->convert_strings( $geo_unit['name'] ),
-				'value' => $geo_unit['id'],
-				'class' => $geo_unit['type']
-			);
+			if ( $geo_unit['id'] !== $omit ) {
+				$options_array[] = array(
+					'label' => $vca_asm_utilities->convert_strings( $geo_unit['name'] ),
+					'value' => $geo_unit['id'],
+					'class' => $geo_unit['type']
+				);
+			}
 		}
 
 		$first = array();

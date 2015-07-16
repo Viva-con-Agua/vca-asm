@@ -2690,7 +2690,7 @@ class VCA_ASM_Admin_Finances
 					$nations = $vca_asm_geography->get_all( 'name', 'ASC', 'nation' );
 
 					foreach ( $nations as $nation ) {
-						foreach( array( 'lc', 'cell' ) as $type ) {
+						foreach( array( 'city', 'lc', 'cell' ) as $type ) {
 							if ( isset( $_POST['limit-' . $type . '-'.$nation['id']] ) ) {
 								$value_exists = $vca_asm_finances->get_limit( $nation['id'], $type );
 								if ( false !== $value_exists ) {
@@ -3179,6 +3179,13 @@ class VCA_ASM_Admin_Finances
 						'fields' => array(
 							array(
 								'type' => 'text',
+								'label' => __( 'Structural Cash, City', 'vca-asm' ),
+								'id' => 'limit-city-' . $nation['id'],
+								'value' => $vca_asm_finances->get_limit( $nation['id'], 'city' ),
+								'unit' => $vca_asm_geography->get_currency( $nation['id'], 'name' )
+							),
+							array(
+								'type' => 'text',
 								'label' => __( 'Structural Cash, Local Crew', 'vca-asm' ),
 								'id' => 'limit-lc-' . $nation['id'],
 								'value' => $vca_asm_finances->get_limit( $nation['id'], 'lc' ),
@@ -3199,6 +3206,13 @@ class VCA_ASM_Admin_Finances
 			$fields[] = array(
 				'title' => __( 'Maximum Structural Cash', 'vca-asm' ),
 				'fields' => array(
+					array(
+						'type' => 'text',
+						'label' => __( 'City', 'vca-asm' ),
+						'id' => 'limit-city-' . $this->admin_nation,
+						'value' => $vca_asm_finances->get_limit( $this->admin_nation, 'city' ),
+						'unit' => $vca_asm_geography->get_currency( $this->admin_nation, 'name' )
+					),
 					array(
 						'type' => 'text',
 						'label' => __( 'Local Crew', 'vca-asm' ),

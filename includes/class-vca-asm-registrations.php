@@ -505,14 +505,14 @@ class VCA_ASM_Registrations
 			$count = $wpdb->get_var( $wpdb->prepare(
 				"SELECT COUNT(*) FROM " .
 				$wpdb->prefix . "vca_asm_applications " .
-				"WHERE activity= %d AND state = 0", $activity
+				"WHERE activity= %d AND state = 0", $activity_id
 			) );
 		} else {
 			$count = 0;
 			$applications = $wpdb->get_results(
 				"SELECT supporter FROM " .
 				$wpdb->prefix . "vca_asm_applications " .
-				"WHERE activity=" . $activity . " AND state = 0", ARRAY_A
+				"WHERE activity=" . $activity_id . " AND state = 0", ARRAY_A
 			);
 			foreach( $applications as $supporter ) {
 				$supp_region = get_user_meta( $supporter['supporter'], 'city', true );

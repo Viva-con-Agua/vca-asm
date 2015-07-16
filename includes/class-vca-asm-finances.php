@@ -702,16 +702,16 @@ class VCA_ASM_Finances
 
 	/**
 	 * Fetch the maximum (positive) balance an account my have by type and nation
-	 * (if higher, cells need to transfer cash to the office)
+	 * (if higher, cities need to transfer cash to the office)
 	 *
 	 * @param int $nation			the ID of the nation the limit is set for
-	 * @param string $type			(optional) 'econ' or 'donations', defaults to 'econ'
+	 * @param string $type			(optional) 'econ' or 'donations', defaults to 'city'
 	 * @return int $limit			the account limit
 	 *
 	 * @since 1.5
 	 * @access public
 	 */
-	public function get_limit( $nation, $type = 'econ' )
+	public function get_limit( $nation, $type = 'city' )
 	{
 		global $wpdb;
 

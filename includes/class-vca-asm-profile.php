@@ -229,7 +229,8 @@ class VCA_ASM_Profile
 	 */
 	private function create_extra_profile_fields( $part = '' )
 	{
-		global $current_user;
+		global $current_user,
+			$vca_asm_geography;
 
 		if ( in_array( 'city', $current_user->roles ) ) {
 			$is_city = true;
@@ -333,6 +334,23 @@ class VCA_ASM_Profile
 					)
 				),
 				'desc' => __( 'Choose in what case to receive emails. News from your region, global news, both or none.', 'vca-asm' )
+			);
+			$fields[] =	array(
+				'label' => _x( 'Secondary Newsletter', 'User Profile', 'vca-asm' ),
+				'id' => 'secondary_nl',
+				'type' => 'select',
+				'disabled' => $disable_field,
+				'options' => $vca_asm_geography->options_array(
+					array(
+						'please_select' => true,
+						'please_select_value' => NULL,
+						'please_select_text' => __( 'No secondary newsletter', 'vca-asm' ),
+						'type' => 'city',
+						'grouped' => false,
+						'omit' => get_user_meta( $current_user->ID, 'city', true )
+					)
+				),
+				'desc' => __( 'Choose whether to receive a secondary newsletter of a city other than your own.', 'vca-asm' ) . ' ' . __( 'This option will obviously only take effect, if you&apos;ve selected to receive &quot;regional news&quot; above.', 'vca-asm' )
 			);
 		}
 		$fields[] =	array(

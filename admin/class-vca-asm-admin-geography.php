@@ -350,7 +350,7 @@ class VCA_ASM_Admin_Geography {
 							);
 							$region_id = $wpdb->insert_id;
 
-							if ( in_array( $_POST['type'], array( 'lc', 'cell' ) ) ) {
+							if ( in_array( $_POST['type'], array( 'city', 'lc', 'cell' ) ) ) {
 								$vca_asm_finances->create_account( $region_id, 'econ' );
 								$vca_asm_finances->create_account( $region_id, 'donations' );
 							}
