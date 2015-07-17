@@ -1135,6 +1135,17 @@ class VCA_ASM_Activity
 		return false;
 	}
 
+	/**
+	 * Dumps class properties as associative array
+	 *
+	 * @since 1.3
+	 * @access public
+	 */
+	public function array_dump() {
+
+		return get_object_vars( $this );
+	}
+
 } // class
 
 endif; // class exists
