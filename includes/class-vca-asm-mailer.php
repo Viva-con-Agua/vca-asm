@@ -1198,7 +1198,7 @@ class VCA_ASM_Mailer
 						'value' => $receipient_id
 					);
 					$args = array(
-						'meta_query' => $metaqueries
+						'meta_query' => $primary_metaqueries
 					);
 					$primary_users = get_users( $args );
 					/* secondary city newsletter */
@@ -1208,7 +1208,7 @@ class VCA_ASM_Mailer
 						'value' => $receipient_id
 					);
 					$args = array(
-						'meta_query' => $metaqueries
+						'meta_query' => $secondary_metaqueries
 					);
 					$secondary_users = get_users( $args );
 					/* loop through all grabbed users */
