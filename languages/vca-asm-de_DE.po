@@ -2,8 +2,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: VcA Activity & Supporter Management v1.5\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2015-07-16 18:13+0100\n"
-"PO-Revision-Date: 2015-07-16 18:13+0100\n"
+"POT-Creation-Date: 2015-07-19 14:49+0100\n"
+"PO-Revision-Date: 2015-07-19 14:51+0100\n"
 "Last-Translator: Johannes Pilkahn <johannes@pilkahn.org>\n"
 "Language-Team: \n"
 "Language: de_DE\n"
@@ -1472,13 +1472,13 @@ msgstr "Seite besuchen"
 
 # @ vca-asm
 #: ../includes/class-vca-asm-utilities.php:130
-#: ../includes/class-vca-asm-profile.php:281
+#: ../includes/class-vca-asm-profile.php:282
 msgid "male"
 msgstr "männlich"
 
 # @ vca-asm
 #: ../includes/class-vca-asm-utilities.php:132
-#: ../includes/class-vca-asm-profile.php:277
+#: ../includes/class-vca-asm-profile.php:278
 msgid "female"
 msgstr "weiblich"
 
@@ -2210,18 +2210,18 @@ msgstr "Stadt"
 # @ vca-asm
 #: ../includes/class-vca-asm-geography.php:769
 #: ../includes/class-vca-asm-geography.php:772
-#: ../includes/class-vca-asm-profile.php:435
-#: ../includes/class-vca-asm-profile.php:475
-#: ../includes/class-vca-asm-profile.php:516
+#: ../includes/class-vca-asm-profile.php:453
+#: ../includes/class-vca-asm-profile.php:493
+#: ../includes/class-vca-asm-profile.php:534
 #: ../admin/class-vca-asm-admin-supporters.php:1231
 msgid "not chosen..."
 msgstr "nicht gewählt..."
 
 # @ vca-asm
 #: ../includes/class-vca-asm-geography.php:771
-#: ../includes/class-vca-asm-profile.php:421
-#: ../includes/class-vca-asm-profile.php:461
-#: ../includes/class-vca-asm-profile.php:502
+#: ../includes/class-vca-asm-profile.php:439
+#: ../includes/class-vca-asm-profile.php:479
+#: ../includes/class-vca-asm-profile.php:520
 #: ../admin/class-vca-asm-admin-supporters.php:1228
 msgid "other, non-listed country"
 msgstr "anderes, nicht gelistetes Land"
@@ -2391,82 +2391,82 @@ msgstr ""
 "Pools automatisch rausgeloggt."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:249
+#: ../includes/class-vca-asm-profile.php:250
 msgctxt "User Profile"
 msgid "Mobile Phone"
 msgstr "Handy Nummer"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:254
+#: ../includes/class-vca-asm-profile.php:255
 msgctxt "User Profile"
 msgid "About you"
 msgstr "Über Dich"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:258
+#: ../includes/class-vca-asm-profile.php:259
 msgctxt "User Profile"
 msgid "Residence"
 msgstr "Wohnort"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:264
+#: ../includes/class-vca-asm-profile.php:265
 msgctxt "User Profile"
 msgid "Birthday"
 msgstr "Geburtstag"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:271
+#: ../includes/class-vca-asm-profile.php:272
 msgctxt "User Profile"
 msgid "Gender"
 msgstr "Geschlecht"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:290
+#: ../includes/class-vca-asm-profile.php:291
 msgctxt "User Profile"
 msgid "Avatar"
 msgstr "Profilbild"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:302
+#: ../includes/class-vca-asm-profile.php:303
 msgctxt "User Profile"
 msgid "Geography"
 msgstr "Geographie"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:309
+#: ../includes/class-vca-asm-profile.php:310
 msgctxt "User Profile"
 msgid "Newsletter"
 msgstr "Newsletter"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:313
+#: ../includes/class-vca-asm-profile.php:314
 msgctxt "User Profile"
 msgid "News Options"
 msgstr "News Optionen"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:319
+#: ../includes/class-vca-asm-profile.php:320
 msgid "Global &amp; regional news"
 msgstr "Allgemeine &amp; regionale News"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:323
+#: ../includes/class-vca-asm-profile.php:324
 msgid "Only global news"
 msgstr "Nur allgemeine News"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:327
+#: ../includes/class-vca-asm-profile.php:328
 msgid "Only regional news"
 msgstr "Nur regionale News"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:331
+#: ../includes/class-vca-asm-profile.php:332
 #: ../admin/class-vca-asm-admin-slot-allocation.php:1468
 msgid "None"
 msgstr "Keine"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:335
+#: ../includes/class-vca-asm-profile.php:336
 msgid ""
 "Choose in what case to receive emails. News from your region, global news, "
 "both or none."
@@ -2474,8 +2474,33 @@ msgstr ""
 "Wähle bitte ob und welche Neugikeiten aus dem VcA Kosmos Dir zugeschickt "
 "werden sollen."
 
+#: ../includes/class-vca-asm-profile.php:339
+msgctxt "User Profile"
+msgid "Secondary City Newsletter"
+msgstr "Zusätzlicher Stadtnewsletter"
+
+#: ../includes/class-vca-asm-profile.php:347
+msgid "No secondary newsletter"
+msgstr "Kein zweiter Newsletter"
+
+#: ../includes/class-vca-asm-profile.php:353
+msgid ""
+"Choose whether to receive a secondary newsletter of a city other than your "
+"own."
+msgstr ""
+"Wähle, on du einen zweiten Newsletter einer anderen Stadt als deiner eigenen "
+"bekommen willst."
+
+#: ../includes/class-vca-asm-profile.php:353
+msgid ""
+"This option will obviously only take effect, if you&apos;ve selected to "
+"receive &quot;regional news&quot; above."
+msgstr ""
+"Die Option zeigt nur Wirkung, wenn du oben &quot;regionale News&quot; "
+"ausgewählt hast."
+
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:407
+#: ../includes/class-vca-asm-profile.php:425
 msgctxt "User Profile"
 msgid ""
 "Choose your city (Cell or Local Crew), if applicable. Should you not be able "
@@ -2487,7 +2512,7 @@ msgstr ""
 "\" href=\"mailto:zellen@vivaconagua.org\">zellen@vivaconagua.org</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:410
+#: ../includes/class-vca-asm-profile.php:428
 msgctxt "User Profile"
 msgid ""
 "Choose your city (Cell or Local Crew), if applicable. Should you not be able "
@@ -2499,15 +2524,15 @@ msgstr ""
 "\" href=\"mailto:zellen@vivaconagua.ch\">zellen@vivaconagua.ch</a>"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:417
-#: ../includes/class-vca-asm-profile.php:457
-#: ../includes/class-vca-asm-profile.php:498
+#: ../includes/class-vca-asm-profile.php:435
+#: ../includes/class-vca-asm-profile.php:475
+#: ../includes/class-vca-asm-profile.php:516
 msgctxt "User Profile"
 msgid "Country"
 msgstr "Land"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:426
+#: ../includes/class-vca-asm-profile.php:444
 msgctxt "User Profile"
 msgid ""
 "You currently are a confirmed member of this Cell or Local Crew. You can "
@@ -2521,29 +2546,29 @@ msgstr ""
 "Mitgliedsschaft bewerben."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:431
-#: ../includes/class-vca-asm-profile.php:471
-#: ../includes/class-vca-asm-profile.php:512
+#: ../includes/class-vca-asm-profile.php:449
+#: ../includes/class-vca-asm-profile.php:489
+#: ../includes/class-vca-asm-profile.php:530
 msgctxt "User Profile"
 msgid "City"
 msgstr "Stadt"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:446
-#: ../includes/class-vca-asm-profile.php:486
-#: ../includes/class-vca-asm-profile.php:527
+#: ../includes/class-vca-asm-profile.php:464
+#: ../includes/class-vca-asm-profile.php:504
+#: ../includes/class-vca-asm-profile.php:545
 msgctxt "User Profile"
 msgid "I am an active member of my region"
 msgstr "Ich bin aktiv in meiner Region"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:449
+#: ../includes/class-vca-asm-profile.php:467
 msgctxt "User Profile"
 msgid "Uncheck to cancel membership"
 msgstr "Entferne das Häkchen um die Mitgliedsschaft zu beenden"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:466
+#: ../includes/class-vca-asm-profile.php:484
 msgctxt "User Profile"
 msgid ""
 "You have applied for membership status in the selected region. You can "
@@ -2555,7 +2580,7 @@ msgstr ""
 "wieder ändern, wenn du die Bewerbung zurückziehst."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:489
+#: ../includes/class-vca-asm-profile.php:507
 msgctxt "User Profile"
 msgid ""
 "You have applied for membership of this region's Cell or Local Crew. To "
@@ -2565,7 +2590,7 @@ msgstr ""
 "zurückzuziehen."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:530
+#: ../includes/class-vca-asm-profile.php:548
 msgctxt "User Profile"
 msgid ""
 "<strong>Important:</strong> If you are an active member of this Cell or "
@@ -2576,40 +2601,40 @@ msgstr ""
 "dabei bist, Dich bei Aktionen einbringst oder im Bildungsbereich engagierst."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:581
+#: ../includes/class-vca-asm-profile.php:599
 msgid "Please confirm that you agree to the terms &amp; conditions."
 msgstr ""
 "Bitte bestätige, dass du die Nutzungsbedingungen und Datenschutzerklärung "
 "akzeptierst."
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:635
+#: ../includes/class-vca-asm-profile.php:653
 msgctxt "Admin Supporters"
 msgid "Country"
 msgstr "Land"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:638
+#: ../includes/class-vca-asm-profile.php:656
 #: ../admin/class-vca-asm-admin-supporters.php:498
 msgctxt "Admin Supporters"
 msgid "Registered since"
 msgstr "im Pool angemeldet seit"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:642
+#: ../includes/class-vca-asm-profile.php:660
 msgctxt "Admin Supporters"
 msgid "City"
 msgstr "Stadt"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:645
+#: ../includes/class-vca-asm-profile.php:663
 #: ../admin/class-vca-asm-admin-supporters.php:503
 msgctxt "Admin Supporters"
 msgid "Last Login"
 msgstr "Letzter Login"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:649
+#: ../includes/class-vca-asm-profile.php:667
 #: ../admin/class-vca-asm-admin-supporters.php:465
 #: ../admin/class-vca-asm-admin-supporters.php:1339
 msgctxt "Admin Supporters"
@@ -2617,27 +2642,27 @@ msgid "Membership"
 msgstr "Mitgliedsschaft"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:661
+#: ../includes/class-vca-asm-profile.php:679
 msgctxt "Admin Supporters"
 msgid "Edit your Profile &amp; Settings"
 msgstr "Dein Profil &amp; deine Einstellungen bearbeiten"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:662
+#: ../includes/class-vca-asm-profile.php:680
 msgctxt "Admin Supporters"
 msgid "Edit Profile"
 msgstr "Profil editieren"
 
 # @ vca-asm
-#: ../includes/class-vca-asm-profile.php:710
+#: ../includes/class-vca-asm-profile.php:728
 msgid "Successfully cancelled!"
 msgstr "Erfolgreich ausgeschaltet!"
 
-#: ../includes/class-vca-asm-profile.php:718
+#: ../includes/class-vca-asm-profile.php:736
 msgid "Click to check your profile"
 msgstr "Klicken, um dein Profil zu checken"
 
-#: ../includes/class-vca-asm-profile.php:723
+#: ../includes/class-vca-asm-profile.php:741
 msgid ""
 "Hi %NAME%,<br />you have successfully cancelled your newsletter.<br />You "
 "can reenable it in your %LINK_OPEN%profile preferences%LINK_CLOSE% anytime "
@@ -2647,11 +2672,11 @@ msgstr ""
 "kannst ihn in %LINK_OPEN%Benutzerprofil%LINK_CLOSE% jederzeit wieder "
 "aktivieren."
 
-#: ../includes/class-vca-asm-profile.php:736
+#: ../includes/class-vca-asm-profile.php:754
 msgid "User ID and/or hash wrong..."
 msgstr "Benutzer ID und/oder Hash falsch..."
 
-#: ../includes/class-vca-asm-profile.php:739
+#: ../includes/class-vca-asm-profile.php:757
 msgid ""
 "Either the user ID you supplied does not exist or the hash does not match "
 "up. Either way, not this way buddy!"

@@ -336,7 +336,7 @@ class VCA_ASM_Profile
 				'desc' => __( 'Choose in what case to receive emails. News from your region, global news, both or none.', 'vca-asm' )
 			);
 			$fields[] =	array(
-				'label' => _x( 'Secondary Newsletter', 'User Profile', 'vca-asm' ),
+				'label' => _x( 'Secondary City Newsletter', 'User Profile', 'vca-asm' ),
 				'id' => 'secondary_nl',
 				'type' => 'select',
 				'disabled' => $disable_field,

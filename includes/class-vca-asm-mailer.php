@@ -1192,14 +1192,27 @@ class VCA_ASM_Mailer
 							'compare' => 'IN'
 						);
 					}
-					$metaqueries[] = array(
+					$primary_metaqueries = $metaqueries;
+					$primary_metaqueries[] = array(
 						'key' => 'city',
 						'value' => $receipient_id
 					);
 					$args = array(
 						'meta_query' => $metaqueries
 					);
-					$users = get_users( $args );
+					$primary_users = get_users( $args );
+					/* secondary city newsletter */
+					$secondary_metaqueries = $metaqueries;
+					$secondary_metaqueries[] = array(
+						'key' => 'secondary_nl',
+						'value' => $receipient_id
+					);
+					$args = array(
+						'meta_query' => $metaqueries
+					);
+					$secondary_users = get_users( $args );
+					/* loop through all grabbed users */
+					$users = array_merge( $primary_users, $secondary_users );
 					foreach ( $users as $user ) {
 						if ( ! in_array( 'city', $user->roles ) && ! in_array( 'pending', $user->roles ) ) {
 							$receipients[] = $user->ID;
