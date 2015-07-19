@@ -81,8 +81,10 @@ class VCA_ASM_Supporter {
 	 * @since 1.2
 	 * @access public
 	 */
-	public function gather_meta( $supporter_id ) {
-		global $wpdb, $wp_roles, $vca_asm_geography, $vca_asm_utilities;
+	public function gather_meta( $supporter_id )
+	{
+		global $wpdb, $wp_roles,
+			$vca_asm_geography, $vca_asm_utilities;
 
 		$supp_region = get_user_meta( $supporter_id, 'city', true );
 		$supp_nation = get_user_meta( $supporter_id, 'nation', true );
@@ -116,7 +118,7 @@ class VCA_ASM_Supporter {
 		$this->email = $user_obj->user_email;
 		$this->gender = $vca_asm_utilities->convert_strings( get_user_meta( $supporter_id, 'gender', true ) );
 		$this->gender = ! empty( $this->gender ) ? $this->gender : __( 'not set', 'vca-asm' );
-		$this->last_activity = strftime ( '%e. %B %Y', time( get_user_meta( $supporter_id, 'vca_asm_last_activity', true ) ) );
+		$this->last_activity = strftime ( '%e. %B %Y', get_user_meta( $supporter_id, 'vca_asm_last_activity', true ) );
 		$this->membership_id = intval( get_user_meta( $supporter_id, 'membership', true ) );
 		$this->membership = $vca_asm_utilities->convert_strings( $this->membership_id );
 		$this->mobile = $vca_asm_utilities->normalize_phone_number(
