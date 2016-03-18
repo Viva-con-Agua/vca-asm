@@ -3186,7 +3186,7 @@ class VCA_ASM_Admin_Finances
 							),
 							array(
 								'type' => 'text',
-								'label' => __( 'Structural Cash, Local Crew', 'vca-asm' ),
+								'label' => __( 'Structural Cash, Crew', 'vca-asm' ),
 								'id' => 'limit-lc-' . $nation['id'],
 								'value' => $vca_asm_finances->get_limit( $nation['id'], 'lc' ),
 								'unit' => $vca_asm_geography->get_currency( $nation['id'], 'name' )
@@ -3215,14 +3215,14 @@ class VCA_ASM_Admin_Finances
 					),
 					array(
 						'type' => 'text',
-						'label' => __( 'Local Crew', 'vca-asm' ),
+						'label' => __( 'Crew', 'vca-asm' ),
 						'id' => 'limit-lc-' . $this->admin_nation,
 						'value' => $vca_asm_finances->get_limit( $this->admin_nation, 'lc' ),
 						'unit' => $vca_asm_geography->get_currency( $this->admin_nation, 'name' )
 					),
 					array(
 						'type' => 'text',
-						'label' => __( 'Cell', 'vca-asm' ),
+						'label' => __( '(old-school) Cell', 'vca-asm' ),
 						'id' => 'limit-cell-' . $this->admin_nation,
 						'value' => $vca_asm_finances->get_limit( $this->admin_nation, 'cell' ),
 						'unit' => $vca_asm_geography->get_currency( $this->admin_nation, 'name' )

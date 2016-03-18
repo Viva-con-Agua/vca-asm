@@ -391,7 +391,7 @@ class VCA_ASM_Profile
 	 *
 	 * Content depends on supporter's membership status.
 	 * A supporter may cancel his or her membership whenever he or she likes,
-	 * he or she however cannot join a cell (or local crew) without approval.
+	 * he or she however cannot join a crew (or old-style cell) without approval.
 	 *
 	 * @return array				three fields: nation dropdown, city dropdown, membership checkbox
 	 *
@@ -422,10 +422,10 @@ class VCA_ASM_Profile
 			}
 		}
 
-		$geo_desc = _x( 'Choose your city (Cell or Local Crew), if applicable. Should you not be able to find yours, please send an email to <a title="Send Mail" href="mailto:zellen@vivaconagua.org">zellen@vivaconagua.org</a>', 'User Profile', 'vca-asm' );
+		$geo_desc = _x( 'Choose your city (Crew), if applicable. Should you not be able to find yours, please send an email to <a title="Send Mail" href="mailto:zellen@vivaconagua.org">zellen@vivaconagua.org</a>', 'User Profile', 'vca-asm' );
 
 		if ( 'ch' === $vca_asm_utilities->current_country() ) {
-			$geo_desc = _x( 'Choose your city (Cell or Local Crew), if applicable. Should you not be able to find yours, please send an email to <a title="Send Mail" href="mailto:zellen@vivaconagua.ch">zellen@vivaconagua.ch</a>', 'User Profile', 'vca-asm' );
+			$geo_desc = _x( 'Choose your city (Crew), if applicable. Should you not be able to find yours, please send an email to <a title="Send Mail" href="mailto:zellen@vivaconagua.ch">zellen@vivaconagua.ch</a>', 'User Profile', 'vca-asm' );
 		}
 
 		switch( $mem ) {
@@ -441,7 +441,7 @@ class VCA_ASM_Profile
 						'please_select_value' => NULL,
 						'type' => 'nation'
 					)),
-					'desc' => _x( "You currently are a confirmed member of this Cell or Local Crew. You can change your regional affiliation again only if you choose to cancel your membership. You will have to apply for membership of the new region's Cell or Local Crew again.", 'User Profile', 'vca-asm' ),
+					'desc' => _x( "You currently are a confirmed member of this Crew. You can change your regional affiliation again only if you choose to cancel your membership. You will have to apply for membership of the new region's Crew again.", 'User Profile', 'vca-asm' ),
 					'disabled' => true
 				);
 				$city_field = array(
@@ -504,7 +504,7 @@ class VCA_ASM_Profile
 					'label' => _x( 'I am an active member of my region', 'User Profile', 'vca-asm' ),
 					'id' => 'membership',
 					'type' => 'membership',
-					'desc' => _x( "You have applied for membership of this region's Cell or Local Crew. To withdraw your application, simply uncheck the box.", 'User Profile', 'vca-asm' ),
+					'desc' => _x( "You have applied for membership of this region's Crew. To withdraw your application, simply uncheck the box.", 'User Profile', 'vca-asm' ),
 					'disabled' => $disable_field
 				);
 			break;
@@ -545,7 +545,7 @@ class VCA_ASM_Profile
 					'label' => _x( 'I am an active member of my region', 'User Profile', 'vca-asm' ),
 					'id' => 'membership',
 					'type' => 'membership',
-					'desc' => _x( '<strong>Important:</strong> If you are an active member of this Cell or Local Crew, set this checkmark to apply for member status.', 'User Profile', 'vca-asm' ),
+					'desc' => _x( '<strong>Important:</strong> If you are an active member of this Crew, set this checkmark to apply for member status.', 'User Profile', 'vca-asm' ),
 					'disabled' => $disable_field
 				);
 			break;

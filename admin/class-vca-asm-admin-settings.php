@@ -359,19 +359,19 @@ class VCA_ASM_Admin_Settings {
 						'type' => 'checkbox',
 						'label' => _x( 'Send Mail Switch', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'mem_accepted-switch',
-						'desc' => _x( 'Enable/disable notifications of accepted memberships to Cell / Local Crew', 'Admin Email Interface', 'vca-asm' ) . '<br />' . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Enable/disable notifications of accepted memberships to Crew', 'Admin Email Interface', 'vca-asm' ) . '<br />' . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
 					),
 					array(
 						'type' => 'text',
 						'label' => _x( 'Subject', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'mem_accepted-subject',
-						'desc' => _x( 'Subject line for notifications of accepted memberships to Cell / Local Crew', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Subject line for notifications of accepted memberships to Crew', 'Admin Email Interface', 'vca-asm' )
 					),
 					array(
 						'type' => 'textarea',
 						'label' => _x( 'Message', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'mem_accepted-message',
-						'desc' => _x( 'Message body for notifications of accepted memberships to Cell / Local Crew', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Message body for notifications of accepted memberships to Crew', 'Admin Email Interface', 'vca-asm' )
 					)
 				)
 			);
@@ -382,19 +382,19 @@ class VCA_ASM_Admin_Settings {
 						'type' => 'checkbox',
 						'label' => _x( 'Send Mail Switch', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'mem_denied-switch',
-						'desc' => _x( 'Enable/disable notifications of denied memberships to Cell / Local Crew', 'Admin Email Interface', 'vca-asm' ) . '<br />' . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Enable/disable notifications of denied memberships to Crew', 'Admin Email Interface', 'vca-asm' ) . '<br />' . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
 					),
 					array(
 						'type' => 'text',
 						'label' => _x( 'Subject', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'mem_denied-subject',
-						'desc' => _x( 'Subject line for notifications of denied memberships to Cell / Local Crew', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Subject line for notifications of denied memberships to Crew', 'Admin Email Interface', 'vca-asm' )
 					),
 					array(
 						'type' => 'textarea',
 						'label' => _x( 'Message', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'mem_denied-message',
-						'desc' => _x( 'Message body for notifications of denied memberships to Cell / Local Crew', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Message body for notifications of denied memberships to Crew', 'Admin Email Interface', 'vca-asm' )
 					)
 				)
 			);
@@ -405,19 +405,19 @@ class VCA_ASM_Admin_Settings {
 						'type' => 'checkbox',
 						'label' => _x( 'Send Mail Switch', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'mem_cancelled-switch',
-						'desc' => _x( 'Enable/disable notifications when memberships to Cell / Local Crew are cancelled', 'Admin Email Interface', 'vca-asm' ) . '<br />' . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Enable/disable notifications when memberships to Crew are cancelled', 'Admin Email Interface', 'vca-asm' ) . '<br />' . _x( '(this goes for the default responses as well)', 'Admin Email Interface', 'vca-asm' )
 					),
 					array(
 						'type' => 'text',
 						'label' => _x( 'Subject', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'mem_cancelled-subject',
-						'desc' => _x( 'Subject line for notifications when memberships to Cell / Local Crew are cancelled', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Subject line for notifications when memberships to Crew are cancelled', 'Admin Email Interface', 'vca-asm' )
 					),
 					array(
 						'type' => 'textarea',
 						'label' => _x( 'Message', 'Admin Email Interface', 'vca-asm' ),
 						'id' => 'mem_cancelled-message',
-						'desc' => _x( 'Message body for notifications when memberships to Cell / Local Crew are cancelled', 'Admin Email Interface', 'vca-asm' )
+						'desc' => _x( 'Message body for notifications when memberships to Crew are cancelled', 'Admin Email Interface', 'vca-asm' )
 					)
 				)
 			);

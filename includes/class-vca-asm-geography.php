@@ -727,7 +727,7 @@ class VCA_ASM_Geography
 				return __( 'Cell', 'vca-asm' );
 			break;
 			case 'lc':
-				return $short ? __( 'LC', 'vca-asm' ) : __( 'Local Crew', 'vca-asm' );
+				return __( 'Crew', 'vca-asm' );//$short ? __( 'LC', 'vca-asm' ) : __( 'Crew', 'vca-asm' );
 			break;
 			case 'cg':
 				return __( 'City Group', 'vca-asm' );
@@ -783,7 +783,7 @@ class VCA_ASM_Geography
 	 * @param int $id				the geographical ID
 	 * @param bool $converted		(optional) whether to convert into human readable form, defaults to true
 	 * @param bool $grouped			(optional) whether to split cities into LCs and cells, defaults to false
-	 * @param bool $short			(optional) whether to use short or long from ("LC" vs. "Local Crew"), defaults to false
+	 * @param bool $short			(optional) whether to use short or long from ("LC" vs. "Crew"), defaults to false
 	 * @return string $type
 	 *
 	 * @since 1.0

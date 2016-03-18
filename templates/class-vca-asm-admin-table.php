@@ -1249,7 +1249,7 @@ class VCA_ASM_Admin_Table {
 				if( 'cell' === $data ) {
 					$output = '<span class="cell-color">' . __( 'Cell', 'vca-asm' ) . '</span>';
 				} elseif( 'lc' === $data ) {
-					$output = '<span class="lc-color">' . __( 'Local Crew', 'vca-asm' ) . '</span>';
+					$output = '<span class="lc-color">' . __( 'Crew', 'vca-asm' ) . '</span>';
 				} else {
 					$output = '<span class="geo-color">' . __( 'City', 'vca-asm' ) . '</span>';
 				}

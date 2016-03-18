@@ -448,7 +448,7 @@ class VCA_ASM_Admin_Geography {
 			'url' => '?page=vca-asm-geography',
 			'tabs' => array(
 				array(
-					'title' => _x( 'Cities (Cells &amp; Local Crews)', 'Geography Admin Menu', 'vca-asm' ),
+					'title' => _x( 'Cities (Crews)', 'Geography Admin Menu', 'vca-asm' ),
 					'value' => 'city',
 					'icon' => 'icon-city'
 				),
@@ -655,7 +655,7 @@ class VCA_ASM_Admin_Geography {
 						__( 'Add new', 'vca-asm' ) . ': ' .
 					'</li>' .
 					'<li>' .
-						'<a title="' . __( 'New city (and/or Local Crew or Cell)', 'vca-asm' ) . '" ' .
+						'<a title="' . __( 'New city (Crew)', 'vca-asm' ) . '" ' .
 						'href="admin.php?page=vca-asm-geography&amp;todo=new&amp;type=city">' .
 							__( 'City', 'vca-asm' ) .
 						'</a>' .
@@ -908,11 +908,11 @@ class VCA_ASM_Admin_Geography {
 								'id' => 'type',
 								'options' => array(
 									array(
-										'label' => __( 'Local Crew', 'vca-asm' ),
+										'label' => __( 'Crew', 'vca-asm' ),
 										'value' => 'lc'
 									),
 									array(
-										'label' => __( 'Cell', 'vca-asm' ),
+										'label' => __( '(old-school) Cell', 'vca-asm' ),
 										'value' => 'cell'
 									),
 									array(
@@ -920,7 +920,7 @@ class VCA_ASM_Admin_Geography {
 										'value' => 'city'
 									)
 								),
-								'desc' => __( 'Select the type of the region - is it just a city or also a Cell or Local Crew?', 'vca-asm' )
+								'desc' => __( 'Select the type of the region - is it just a city or also a Crew?', 'vca-asm' )
 							),
 							array(
 								'type' => 'text',

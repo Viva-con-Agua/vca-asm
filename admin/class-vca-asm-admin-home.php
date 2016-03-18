@@ -152,10 +152,10 @@ class VCA_ASM_Admin_Home {
 					'<p>' .
 						sprintf( _x( '%s Cities', 'Statistics', 'vca-asm' ),
 								'<strong>' . $stats->cities_total . '</strong>' ) . '<br />' .
-						sprintf( _x( '%1$s of those are Cells', 'Statistics', 'vca-asm' ),
-								'<strong>' . $stats->cities_cells . '</strong>' ) . '<br />' .
-						sprintf( _x( '%1$s of those are Local Crews', 'Statistics', 'vca-asm' ),
-								'<strong>' . $stats->cities_crews . '</strong>' ) .
+						sprintf( _x( '%1$s of those are Crews', 'Statistics', 'vca-asm' ),
+								'<strong>' . $stats->cities_crews . '</strong>' ) . '<br />' .
+						sprintf( _x( '%1$s of those are (old-school) Cells', 'Statistics', 'vca-asm' ),
+								'<strong>' . $stats->cities_cells . '</strong>' ) .
 					'</p>' .
 					'<p>' .
 						sprintf( _x( '%s City Groups', 'Statistics', 'vca-asm' ),

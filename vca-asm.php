@@ -4,9 +4,9 @@
 Plugin Name: VcA Activity & Supporter Management
 Plugin URI: http://pool.vivaconagua.org
 Description: Tool for Viva con Agua (NGO) to manage its supporters and the activities within their network
-Version: 1.6
+Version: 1.6.1
 Author: Johannes Pilkahn
-Author URI: http://karlgehttanzen.de // subject to change
+Author URI: http://karlgehttanzen.de
 License: GPL3
 */
 
