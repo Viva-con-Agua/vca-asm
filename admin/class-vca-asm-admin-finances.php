@@ -360,12 +360,6 @@ class VCA_ASM_Admin_Finances
 					'<td>' . __( 'Institute', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . 'Commerzbank' . '</td>' .
 				'</tr>' .
 				'<tr>' .
-					'<td>' . _x( 'Account Number', 'short form / acronym', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . '362 27 35' . '</td>' .
-				'</tr>' .
-				'<tr>' .
-					'<td>' . __( 'Bank ID', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . '200 400 00' . '</td>' .
-				'</tr>' .
-				'<tr>' .
 					'<td>' . __( 'IBAN', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . 'DE72200400000362273500' . '</td>' .
 				'</tr>' .
 				'<tr>' .
@@ -385,19 +379,13 @@ class VCA_ASM_Admin_Finances
 					'</em></td>' .
 				'</tr>' .
 				'<tr>' .
-					'<td>' . __( 'Institute', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . 'Hamburger Sparkasse' . '</td>' .
+					'<td>' . __( 'Institute', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . 'Commerzbank' . '</td>' .
 				'</tr>' .
 				'<tr>' .
-					'<td>' . _x( 'Account Number', 'short form / acronym', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . '126 813 51 65' . '</td>' .
+					'<td>' . __( 'IBAN', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . 'DE72200400000362273500' . '</td>' .
 				'</tr>' .
 				'<tr>' .
-					'<td>' . __( 'Bank ID', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . '200 505 50' . '</td>' .
-				'</tr>' .
-				'<tr>' .
-					'<td>' . __( 'IBAN', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . 'DE05200505501268135165' . '</td>' .
-				'</tr>' .
-				'<tr>' .
-					'<td>' . __( 'BIC', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . 'HASPDEHHXXX' . '</td>' .
+					'<td>' . __( 'BIC', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . 'COBADEFFXXX' . '</td>' .
 				'</tr>' .
 			'</table>';
 		}
