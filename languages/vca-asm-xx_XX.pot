@@ -2,9 +2,9 @@
 # This file is distributed under the same license as the VcA Activity & Supporter Management package.
 msgid ""
 msgstr ""
-"Project-Id-Version: VcA Activity & Supporter Management 1.6\n"
+"Project-Id-Version: VcA Activity & Supporter Management 1.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/vca-asm\n"
-"POT-Creation-Date: 2016-03-18 12:31:47+00:00\n"
+"POT-Creation-Date: 2016-03-21 05:04:48+00:00\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -683,10 +683,10 @@ msgid "Select the type of group this mail will be addressed to."
 msgstr ""
 
 #: admin/class-vca-asm-admin-emails.php:933
-#: admin/class-vca-asm-admin-finances.php:615
-#: admin/class-vca-asm-admin-finances.php:865
-#: admin/class-vca-asm-admin-finances.php:1587
-#: admin/class-vca-asm-admin-finances.php:3211
+#: admin/class-vca-asm-admin-finances.php:606
+#: admin/class-vca-asm-admin-finances.php:856
+#: admin/class-vca-asm-admin-finances.php:1578
+#: admin/class-vca-asm-admin-finances.php:3202
 #: admin/class-vca-asm-admin-geography.php:660
 #: admin/class-vca-asm-admin-slot-allocation.php:1159
 #: admin/class-vca-asm-admin-supporters.php:460
@@ -717,7 +717,7 @@ msgid "Select the city group you want to write to."
 msgstr ""
 
 #: admin/class-vca-asm-admin-emails.php:957
-#: admin/class-vca-asm-admin-finances.php:619
+#: admin/class-vca-asm-admin-finances.php:610
 #: admin/class-vca-asm-admin-geography.php:673
 #: admin/class-vca-asm-admin-geography.php:941
 #: admin/class-vca-asm-admin-geography.php:967
@@ -786,8 +786,8 @@ msgid "Narrow activity list by current phase"
 msgstr ""
 
 #: admin/class-vca-asm-admin-emails.php:1052
-#: admin/class-vca-asm-admin-finances.php:623
-#: admin/class-vca-asm-admin-finances.php:1866
+#: admin/class-vca-asm-admin-finances.php:614
+#: admin/class-vca-asm-admin-finances.php:1857
 #: admin/class-vca-asm-admin-geography.php:539
 #: admin/class-vca-asm-admin-slot-allocation.php:385
 #: models/class-vca-asm-workbook-finances.php:282
@@ -976,16 +976,16 @@ msgid ""
 msgstr ""
 
 #: admin/class-vca-asm-admin-finances.php:215
-#: admin/class-vca-asm-admin-finances.php:508
-#: admin/class-vca-asm-admin-finances.php:1558
-#: admin/class-vca-asm-admin-finances.php:1560
-#: admin/class-vca-asm-admin-finances.php:3089
+#: admin/class-vca-asm-admin-finances.php:499
+#: admin/class-vca-asm-admin-finances.php:1549
+#: admin/class-vca-asm-admin-finances.php:1551
+#: admin/class-vca-asm-admin-finances.php:3080
 msgctxt "Admin Menu"
 msgid "Finances"
 msgstr ""
 
 #: admin/class-vca-asm-admin-finances.php:215
-#: admin/class-vca-asm-admin-finances.php:508
+#: admin/class-vca-asm-admin-finances.php:499
 msgctxt "Admin Menu"
 msgid "Overview"
 msgstr ""
@@ -1027,7 +1027,7 @@ msgid "Donations (Cash) Account"
 msgstr ""
 
 #: admin/class-vca-asm-admin-finances.php:275
-#: admin/class-vca-asm-admin-finances.php:891
+#: admin/class-vca-asm-admin-finances.php:882
 msgctxt "Placeholder is a year"
 msgid "Donations in %s"
 msgstr ""
@@ -1048,14 +1048,14 @@ msgstr ""
 #: admin/class-vca-asm-admin-finances.php:290
 #: admin/class-vca-asm-admin-finances.php:311
 #: admin/class-vca-asm-admin-finances.php:332
-#: admin/class-vca-asm-admin-finances.php:412
-#: admin/class-vca-asm-admin-finances.php:430
-#: admin/class-vca-asm-admin-finances.php:724
-#: admin/class-vca-asm-admin-finances.php:725
-#: admin/class-vca-asm-admin-finances.php:726
-#: admin/class-vca-asm-admin-finances.php:727
-#: admin/class-vca-asm-admin-finances.php:728
-#: admin/class-vca-asm-admin-finances.php:729
+#: admin/class-vca-asm-admin-finances.php:403
+#: admin/class-vca-asm-admin-finances.php:421
+#: admin/class-vca-asm-admin-finances.php:715
+#: admin/class-vca-asm-admin-finances.php:716
+#: admin/class-vca-asm-admin-finances.php:717
+#: admin/class-vca-asm-admin-finances.php:718
+#: admin/class-vca-asm-admin-finances.php:719
+#: admin/class-vca-asm-admin-finances.php:720
 msgid "See details"
 msgstr ""
 
@@ -1083,120 +1083,117 @@ msgid "Please transfer / deposit them to:"
 msgstr ""
 
 #: admin/class-vca-asm-admin-finances.php:360
-#: admin/class-vca-asm-admin-finances.php:388
+#: admin/class-vca-asm-admin-finances.php:382
 msgid "Institute"
 msgstr ""
 
 #: admin/class-vca-asm-admin-finances.php:363
-#: admin/class-vca-asm-admin-finances.php:391
-msgctxt "short form / acronym"
-msgid "Account Number"
-msgstr ""
-
-#: admin/class-vca-asm-admin-finances.php:366
-#: admin/class-vca-asm-admin-finances.php:394
-msgid "Bank ID"
-msgstr ""
-
-#: admin/class-vca-asm-admin-finances.php:369
-#: admin/class-vca-asm-admin-finances.php:397
+#: admin/class-vca-asm-admin-finances.php:385
 msgid "IBAN"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:372
-#: admin/class-vca-asm-admin-finances.php:400
+#: admin/class-vca-asm-admin-finances.php:366
+#: admin/class-vca-asm-admin-finances.php:388
 msgid "BIC"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:381
+#: admin/class-vca-asm-admin-finances.php:375
 msgid "You have a structural cash surplus of %s."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:384
+#: admin/class-vca-asm-admin-finances.php:378
 msgid "Please transfer it to:"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:407
+#: admin/class-vca-asm-admin-finances.php:391
+msgid "Transaction Reference"
+msgstr ""
+
+#: admin/class-vca-asm-admin-finances.php:391
+msgid "Excess Funds"
+msgstr ""
+
+#: admin/class-vca-asm-admin-finances.php:398
 msgid "Receipts"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:408
+#: admin/class-vca-asm-admin-finances.php:399
 msgid "need to be sent"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:423
+#: admin/class-vca-asm-admin-finances.php:414
 msgid "No receipts that could be sent..."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:426
+#: admin/class-vca-asm-admin-finances.php:417
 msgid "have been sent"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:441
+#: admin/class-vca-asm-admin-finances.php:432
 msgid "No receipts waiting for confirmation..."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:447
+#: admin/class-vca-asm-admin-finances.php:438
 msgid "Monthly Balancing"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:448
+#: admin/class-vca-asm-admin-finances.php:439
 msgid "Last balanced month, Structural"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:450
-#: admin/class-vca-asm-admin-finances.php:455
+#: admin/class-vca-asm-admin-finances.php:441
+#: admin/class-vca-asm-admin-finances.php:446
 msgid "Needs Balancing!"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:453
+#: admin/class-vca-asm-admin-finances.php:444
 msgid "Last balanced month, Donations"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:462
+#: admin/class-vca-asm-admin-finances.php:453
 msgid "The account is up to date!"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:484
+#: admin/class-vca-asm-admin-finances.php:475
 msgctxt " Admin Menu"
 msgid "Summary"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:489
+#: admin/class-vca-asm-admin-finances.php:480
 msgctxt " Admin Menu"
 msgid "Cities"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:489
+#: admin/class-vca-asm-admin-finances.php:480
 msgctxt " Admin Menu"
 msgid "tabular"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:494
+#: admin/class-vca-asm-admin-finances.php:485
 msgctxt " Admin Menu"
 msgid "Download Data"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:554
+#: admin/class-vca-asm-admin-finances.php:545
 msgid "Structural Accounts for Tax Accounting"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:579
+#: admin/class-vca-asm-admin-finances.php:570
 msgid "Monthly"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:583
+#: admin/class-vca-asm-admin-finances.php:574
 msgid "Annually"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:587
+#: admin/class-vca-asm-admin-finances.php:578
 #: models/class-vca-asm-workbook-finances.php:198
 #: models/class-vca-asm-workbook-finances.php:304
 #: models/class-vca-asm-workbook-finances.php:342
 msgid "Total"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:591
+#: admin/class-vca-asm-admin-finances.php:582
 #: admin/class-vca-asm-admin-slot-allocation.php:392
 #: includes/class-vca-asm-activities.php:1180
 #: includes/class-vca-asm-activities.php:1206
@@ -1207,397 +1204,397 @@ msgstr ""
 msgid "Timeframe"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:592
+#: admin/class-vca-asm-admin-finances.php:583
 msgid ""
 "Output of structural revenues and expenditures in this kind of timeframe."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:598
+#: admin/class-vca-asm-admin-finances.php:589
 #: models/class-vca-asm-workbook-finances.php:191
 #: models/class-vca-asm-workbook-finances.php:263
 msgid "Year"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:599
+#: admin/class-vca-asm-admin-finances.php:590
 msgid "Data from this year."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:606
+#: admin/class-vca-asm-admin-finances.php:597
 #: models/class-vca-asm-workbook-finances.php:185
 #: models/class-vca-asm-workbook-finances.php:262
 msgid "Month"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:607
+#: admin/class-vca-asm-admin-finances.php:598
 msgid "Data from this month."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:624
+#: admin/class-vca-asm-admin-finances.php:615
 msgid "Group data by geography."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:632
+#: admin/class-vca-asm-admin-finances.php:623
 #: admin/class-vca-asm-admin-slot-allocation.php:948
 msgid "Office 2007 (.xlsx)"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:636
+#: admin/class-vca-asm-admin-finances.php:627
 #: admin/class-vca-asm-admin-slot-allocation.php:952
 msgid "Office 2003, (.xlsx)"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:640
+#: admin/class-vca-asm-admin-finances.php:631
 #: admin/class-vca-asm-admin-slot-allocation.php:956
 msgid "Office 95 to XP (.xls)"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:647
+#: admin/class-vca-asm-admin-finances.php:638
 #: admin/class-vca-asm-admin-slot-allocation.php:963
 msgctxt "Excel File Format"
 msgid "Format"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:648
+#: admin/class-vca-asm-admin-finances.php:639
 #: admin/class-vca-asm-admin-slot-allocation.php:964
 msgid "Download as this kind of file format."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:649
+#: admin/class-vca-asm-admin-finances.php:640
 #: admin/class-vca-asm-admin-slot-allocation.php:965
 msgid "Choose &quot;Office 2007&quot; for best results."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:658
+#: admin/class-vca-asm-admin-finances.php:649
 msgid "Show"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:662
+#: admin/class-vca-asm-admin-finances.php:653
 msgid "Hide"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:666
+#: admin/class-vca-asm-admin-finances.php:657
 msgid "Gridlines"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:667
+#: admin/class-vca-asm-admin-finances.php:658
 msgid "Do you want the file to show gridlines?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:680
+#: admin/class-vca-asm-admin-finances.php:671
 #: admin/class-vca-asm-admin-slot-allocation.php:996
 msgid "Download Spreadsheet"
 msgstr ""
 
+#: admin/class-vca-asm-admin-finances.php:759
+#: admin/class-vca-asm-admin-finances.php:760
+#: admin/class-vca-asm-admin-finances.php:761
+#: admin/class-vca-asm-admin-finances.php:762
+#: admin/class-vca-asm-admin-finances.php:763
+#: admin/class-vca-asm-admin-finances.php:764
+#: admin/class-vca-asm-admin-finances.php:765
+#: admin/class-vca-asm-admin-finances.php:766
+#: admin/class-vca-asm-admin-finances.php:767
 #: admin/class-vca-asm-admin-finances.php:768
 #: admin/class-vca-asm-admin-finances.php:769
 #: admin/class-vca-asm-admin-finances.php:770
-#: admin/class-vca-asm-admin-finances.php:771
-#: admin/class-vca-asm-admin-finances.php:772
-#: admin/class-vca-asm-admin-finances.php:773
-#: admin/class-vca-asm-admin-finances.php:774
-#: admin/class-vca-asm-admin-finances.php:775
-#: admin/class-vca-asm-admin-finances.php:776
-#: admin/class-vca-asm-admin-finances.php:777
-#: admin/class-vca-asm-admin-finances.php:778
-#: admin/class-vca-asm-admin-finances.php:779
 msgctxt "Cities"
 msgid "None..."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:786
+#: admin/class-vca-asm-admin-finances.php:777
 msgid "Structural Accounts"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:795
+#: admin/class-vca-asm-admin-finances.php:786
 msgid "With surplus"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:798
-#: admin/class-vca-asm-admin-finances.php:824
+#: admin/class-vca-asm-admin-finances.php:789
+#: admin/class-vca-asm-admin-finances.php:815
 msgid "Transfers to be confirmed"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:801
+#: admin/class-vca-asm-admin-finances.php:792
 msgid "Receipts to be sent, previous month"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:804
+#: admin/class-vca-asm-admin-finances.php:795
 msgid "Receipts to be sent, current month"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:807
+#: admin/class-vca-asm-admin-finances.php:798
 msgid "Receipts to be confirmed"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:810
-#: admin/class-vca-asm-admin-finances.php:830
+#: admin/class-vca-asm-admin-finances.php:801
+#: admin/class-vca-asm-admin-finances.php:821
 msgid "Last month not yet balanced"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:813
-#: admin/class-vca-asm-admin-finances.php:833
+#: admin/class-vca-asm-admin-finances.php:804
+#: admin/class-vca-asm-admin-finances.php:824
 msgid "Multiple months not yet balanced"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:818
+#: admin/class-vca-asm-admin-finances.php:809
 msgid "Donation Accounts"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:821
+#: admin/class-vca-asm-admin-finances.php:812
 msgid "Transfers required"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:827
+#: admin/class-vca-asm-admin-finances.php:818
 msgid "External Donations to be confirmed"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:871
-#: admin/class-vca-asm-admin-finances.php:876
-#: admin/class-vca-asm-admin-finances.php:1032
+#: admin/class-vca-asm-admin-finances.php:862
+#: admin/class-vca-asm-admin-finances.php:867
+#: admin/class-vca-asm-admin-finances.php:1023
 #: admin/class-vca-asm-admin.php:223 admin/class-vca-asm-admin.php:224
 #: models/class-vca-asm-workbook-finances.php:258
 msgid "Structural Funds"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:871
+#: admin/class-vca-asm-admin-finances.php:862
 msgid "cash in stock"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:876
-#: admin/class-vca-asm-admin-finances.php:886
+#: admin/class-vca-asm-admin-finances.php:867
+#: admin/class-vca-asm-admin-finances.php:877
 msgid "Last balanced month"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:881
-#: admin/class-vca-asm-admin-finances.php:886
-#: admin/class-vca-asm-admin-finances.php:1075
-#: admin/class-vca-asm-admin-finances.php:1614
+#: admin/class-vca-asm-admin-finances.php:872
+#: admin/class-vca-asm-admin-finances.php:877
+#: admin/class-vca-asm-admin-finances.php:1066
+#: admin/class-vca-asm-admin-finances.php:1605
 #: admin/class-vca-asm-admin.php:215 admin/class-vca-asm-admin.php:216
 msgid "Donations"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:881
-#: admin/class-vca-asm-admin-finances.php:1989
+#: admin/class-vca-asm-admin-finances.php:872
+#: admin/class-vca-asm-admin-finances.php:1980
 msgid "cash"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:896
+#: admin/class-vca-asm-admin-finances.php:887
 #: admin/class-vca-asm-admin-home.php:245
 msgid "Tasks"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:904
-#: admin/class-vca-asm-admin-finances.php:905
-#: admin/class-vca-asm-admin-finances.php:1035
-#: admin/class-vca-asm-admin-finances.php:1078
+#: admin/class-vca-asm-admin-finances.php:895
+#: admin/class-vca-asm-admin-finances.php:896
+#: admin/class-vca-asm-admin-finances.php:1026
+#: admin/class-vca-asm-admin-finances.php:1069
 msgid "Further Details"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:904
-#: admin/class-vca-asm-admin-finances.php:905
-#: admin/class-vca-asm-admin-finances.php:1035
-#: admin/class-vca-asm-admin-finances.php:1078
+#: admin/class-vca-asm-admin-finances.php:895
+#: admin/class-vca-asm-admin-finances.php:896
+#: admin/class-vca-asm-admin-finances.php:1026
+#: admin/class-vca-asm-admin-finances.php:1069
 msgid "View Transactions"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:999
+#: admin/class-vca-asm-admin-finances.php:990
 msgid "Whatever"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1038
+#: admin/class-vca-asm-admin-finances.php:1029
 msgid "Account Balance"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1041
+#: admin/class-vca-asm-admin-finances.php:1032
 msgid "Revenue this year"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1044
+#: admin/class-vca-asm-admin-finances.php:1035
 msgid "Expenses this year"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1047
-#: admin/class-vca-asm-admin-finances.php:1087
+#: admin/class-vca-asm-admin-finances.php:1038
+#: admin/class-vca-asm-admin-finances.php:1078
 msgid "Account balanced until the end of"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1052
-#: admin/class-vca-asm-admin-finances.php:1092
+#: admin/class-vca-asm-admin-finances.php:1043
+#: admin/class-vca-asm-admin-finances.php:1083
 msgid "The city needs to balance a previous month"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1058
+#: admin/class-vca-asm-admin-finances.php:1049
 msgid "The city needs to send receipts from last month"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1064
+#: admin/class-vca-asm-admin-finances.php:1055
 msgid "The reception of sent receipts needs to be confirmed by the office"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1070
-#: admin/class-vca-asm-admin-finances.php:1104
+#: admin/class-vca-asm-admin-finances.php:1061
+#: admin/class-vca-asm-admin-finances.php:1095
 msgid "The reception of transfer(s) from the city itsself needs confirmation"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1081
-#: admin/class-vca-asm-admin-finances.php:1992
+#: admin/class-vca-asm-admin-finances.php:1072
+#: admin/class-vca-asm-admin-finances.php:1983
 msgid "Cash money"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1084
+#: admin/class-vca-asm-admin-finances.php:1075
 msgid "Total Donations this year"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1098
+#: admin/class-vca-asm-admin-finances.php:1089
 msgid "The city needs to transfer donations it gathered in cash"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1110
+#: admin/class-vca-asm-admin-finances.php:1101
 msgid ""
 "The reception of donations transferred to the office directly by third "
 "parties needs confirmation"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1177
-#: admin/class-vca-asm-admin-finances.php:2676
+#: admin/class-vca-asm-admin-finances.php:1168
+#: admin/class-vca-asm-admin-finances.php:2667
 #: admin/class-vca-asm-admin-geography.php:70
 msgid "You cannot delete this data. Sorry."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1188
+#: admin/class-vca-asm-admin-finances.php:1179
 msgid "The selected transaction has been successfully deleted."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1193
-#: admin/class-vca-asm-admin-finances.php:1200
-#: admin/class-vca-asm-admin-finances.php:2670
-#: admin/class-vca-asm-admin-finances.php:2682
+#: admin/class-vca-asm-admin-finances.php:1184
+#: admin/class-vca-asm-admin-finances.php:1191
+#: admin/class-vca-asm-admin-finances.php:2661
+#: admin/class-vca-asm-admin-finances.php:2673
 #: admin/class-vca-asm-admin-geography.php:82
 #: admin/class-vca-asm-admin-geography.php:89
 msgid "There was an error deleting this data. Sorry."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1391
+#: admin/class-vca-asm-admin-finances.php:1382
 msgid "%s saved."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1416
+#: admin/class-vca-asm-admin-finances.php:1407
 msgid "Receipt sent to the office."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1430
+#: admin/class-vca-asm-admin-finances.php:1421
 msgid "Reception confirmed."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1458
+#: admin/class-vca-asm-admin-finances.php:1449
 msgid "Receipt was not sent yet."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1472
+#: admin/class-vca-asm-admin-finances.php:1463
 msgid "Reception confirmation canceled."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1558
+#: admin/class-vca-asm-admin-finances.php:1549
 msgctxt " Admin Menu"
 msgid "Donation Accounts"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1560
+#: admin/class-vca-asm-admin-finances.php:1551
 msgctxt " Admin Menu"
 msgid "Economical Accounts"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1590
+#: admin/class-vca-asm-admin-finances.php:1581
 #: templates/class-vca-asm-admin-table.php:984
 msgid "View %s"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1600
+#: admin/class-vca-asm-admin-finances.php:1591
 msgid "Balance"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1606
+#: admin/class-vca-asm-admin-finances.php:1597
 msgid "Balanced until"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1620
+#: admin/class-vca-asm-admin-finances.php:1611
 #: models/class-vca-asm-workbook-finances.php:300
 #: models/class-vca-asm-workbook-finances.php:302
 msgid "Revenues"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1625
+#: admin/class-vca-asm-admin-finances.php:1616
 #: models/class-vca-asm-workbook-finances.php:301
 #: models/class-vca-asm-workbook-finances.php:302
 msgid "Expenditures"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1693
+#: admin/class-vca-asm-admin-finances.php:1684
 msgctxt " Admin Menu"
 msgid "All entries"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1699
+#: admin/class-vca-asm-admin-finances.php:1690
 msgctxt " Admin Menu"
 msgid "Donation Account of %s"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1701
+#: admin/class-vca-asm-admin-finances.php:1692
 msgctxt " Admin Menu"
 msgid "Donations"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1706
+#: admin/class-vca-asm-admin-finances.php:1697
 msgctxt " Admin Menu"
 msgid "Economical Account of %s"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1708
+#: admin/class-vca-asm-admin-finances.php:1699
 msgctxt " Admin Menu"
 msgid "Revenues"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1713
+#: admin/class-vca-asm-admin-finances.php:1704
 msgctxt " Admin Menu"
 msgid "Expenditures"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1719
+#: admin/class-vca-asm-admin-finances.php:1710
 msgctxt " Admin Menu"
 msgid "Transfers"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1728
-#: admin/class-vca-asm-admin-finances.php:1735
+#: admin/class-vca-asm-admin-finances.php:1719
+#: admin/class-vca-asm-admin-finances.php:1726
 #: admin/class-vca-asm-admin-geography.php:486
 msgid "add %s"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1837
-#: admin/class-vca-asm-admin-finances.php:2236
-#: admin/class-vca-asm-admin-finances.php:2317
-#: admin/class-vca-asm-admin-finances.php:2389
-#: admin/class-vca-asm-admin-finances.php:2492
-#: admin/class-vca-asm-admin-finances.php:2526
+#: admin/class-vca-asm-admin-finances.php:1828
+#: admin/class-vca-asm-admin-finances.php:2227
+#: admin/class-vca-asm-admin-finances.php:2308
+#: admin/class-vca-asm-admin-finances.php:2380
+#: admin/class-vca-asm-admin-finances.php:2483
+#: admin/class-vca-asm-admin-finances.php:2517
 #: templates/class-vca-asm-frontend-activities.php:57
 msgid "Date"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1842
-#: admin/class-vca-asm-admin-finances.php:2226
-#: admin/class-vca-asm-admin-finances.php:2307
-#: admin/class-vca-asm-admin-finances.php:2379
-#: admin/class-vca-asm-admin-finances.php:2482
-#: admin/class-vca-asm-admin-finances.php:2516
+#: admin/class-vca-asm-admin-finances.php:1833
+#: admin/class-vca-asm-admin-finances.php:2217
+#: admin/class-vca-asm-admin-finances.php:2298
+#: admin/class-vca-asm-admin-finances.php:2370
+#: admin/class-vca-asm-admin-finances.php:2473
+#: admin/class-vca-asm-admin-finances.php:2507
 msgid "Amount"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1845
-#: admin/class-vca-asm-admin-finances.php:2100
-#: admin/class-vca-asm-admin-finances.php:3366
-#: admin/class-vca-asm-admin-finances.php:3537
-#: admin/class-vca-asm-admin-finances.php:3758
-#: admin/class-vca-asm-admin-finances.php:3937
+#: admin/class-vca-asm-admin-finances.php:1836
+#: admin/class-vca-asm-admin-finances.php:2091
+#: admin/class-vca-asm-admin-finances.php:3357
+#: admin/class-vca-asm-admin-finances.php:3528
+#: admin/class-vca-asm-admin-finances.php:3749
+#: admin/class-vca-asm-admin-finances.php:3928
 #: admin/class-vca-asm-admin-geography.php:529
 #: templates/class-vca-asm-admin-form.php:621
 #: templates/class-vca-asm-admin-table.php:939
@@ -1610,395 +1607,395 @@ msgstr ""
 msgid "Edit %s"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1880
+#: admin/class-vca-asm-admin-finances.php:1871
 msgid "Receipt"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1899
+#: admin/class-vca-asm-admin-finances.php:1890
 #: admin/class-vca-asm-admin-geography.php:907
 msgid "Status"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1916
+#: admin/class-vca-asm-admin-finances.php:1907
 msgid "Occasion"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1927
-#: admin/class-vca-asm-admin-finances.php:2285
+#: admin/class-vca-asm-admin-finances.php:1918
+#: admin/class-vca-asm-admin-finances.php:2276
 msgid "From whom?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1989
-#: admin/class-vca-asm-admin-finances.php:1992
+#: admin/class-vca-asm-admin-finances.php:1980
+#: admin/class-vca-asm-admin-finances.php:1983
 msgid "external transfer"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1990
+#: admin/class-vca-asm-admin-finances.php:1981
 msgid "to city"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:1990
+#: admin/class-vca-asm-admin-finances.php:1981
 msgid "to office"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2009
+#: admin/class-vca-asm-admin-finances.php:2000
 msgid "Receipt not sent"
 msgstr ""
 
+#: admin/class-vca-asm-admin-finances.php:2002
 #: admin/class-vca-asm-admin-finances.php:2011
-#: admin/class-vca-asm-admin-finances.php:2020
 msgid "Unconfirmed"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2018
+#: admin/class-vca-asm-admin-finances.php:2009
 msgid "Receipt sent"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2026
+#: admin/class-vca-asm-admin-finances.php:2017
 msgid "Confirmed"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2076
+#: admin/class-vca-asm-admin-finances.php:2067
 #: includes/class-vca-asm-activities.php:1051
 #: includes/class-vca-asm-validation.php:83
 msgctxt "Validation Error"
 msgid "You have not filled out all the required fields"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2077
+#: admin/class-vca-asm-admin-finances.php:2068
 #: includes/class-vca-asm-activities.php:1052
 #: includes/class-vca-asm-validation.php:84
 msgctxt "Validation Error"
 msgid "Some fields only accept numeric values"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2078
+#: admin/class-vca-asm-admin-finances.php:2069
 #: includes/class-vca-asm-activities.php:1053
 #: includes/class-vca-asm-validation.php:85
 msgctxt "Validation Error"
 msgid "A phone number you have entered is not valid"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2079
+#: admin/class-vca-asm-admin-finances.php:2070
 #: includes/class-vca-asm-activities.php:1054
 #: includes/class-vca-asm-validation.php:86
 msgctxt "Validation Error"
 msgid "The end of the application phase must come after its beginning"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2080
+#: admin/class-vca-asm-admin-finances.php:2071
 #: includes/class-vca-asm-activities.php:1055
 msgctxt "Validation Error"
 msgid "Some of the entered dates are in an invalid order"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2095
-#: admin/class-vca-asm-admin-finances.php:2105
+#: admin/class-vca-asm-admin-finances.php:2086
+#: admin/class-vca-asm-admin-finances.php:2096
 #: admin/class-vca-asm-admin-geography.php:640
 msgid "Add New %s"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2114
-#: admin/class-vca-asm-admin-finances.php:2130
+#: admin/class-vca-asm-admin-finances.php:2105
+#: admin/class-vca-asm-admin-finances.php:2121
 #: admin/class-vca-asm-admin-geography.php:655
 msgid "Add new"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2117
+#: admin/class-vca-asm-admin-finances.php:2108
 msgid "New Donation"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2119
+#: admin/class-vca-asm-admin-finances.php:2110
 #: includes/class-vca-asm-finances.php:75
 msgid "Donation"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2123
-#: admin/class-vca-asm-admin-finances.php:2145
+#: admin/class-vca-asm-admin-finances.php:2114
+#: admin/class-vca-asm-admin-finances.php:2136
 msgid "New Transfer"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2125
-#: admin/class-vca-asm-admin-finances.php:2147
+#: admin/class-vca-asm-admin-finances.php:2116
+#: admin/class-vca-asm-admin-finances.php:2138
 #: includes/class-vca-asm-finances.php:78
 msgid "Transfer"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2133
+#: admin/class-vca-asm-admin-finances.php:2124
 msgid "New Revenue"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2135
+#: admin/class-vca-asm-admin-finances.php:2126
 #: includes/class-vca-asm-finances.php:77
 msgid "Revenue"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2139
+#: admin/class-vca-asm-admin-finances.php:2130
 msgid "New Expenditure"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2141
+#: admin/class-vca-asm-admin-finances.php:2132
 #: includes/class-vca-asm-finances.php:76
 msgid "Expenditure"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2168
+#: admin/class-vca-asm-admin-finances.php:2159
 #: admin/class-vca-asm-admin-geography.php:725
 msgid "You do not have the rights to edit this. Sorry."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2222
+#: admin/class-vca-asm-admin-finances.php:2213
 msgid "The Donation"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2230
+#: admin/class-vca-asm-admin-finances.php:2221
 msgid "How much was gathered?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2238
+#: admin/class-vca-asm-admin-finances.php:2229
 msgid "When did you receive the donation?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2245
-#: admin/class-vca-asm-admin-finances.php:2348
-#: admin/class-vca-asm-admin-finances.php:2447
+#: admin/class-vca-asm-admin-finances.php:2236
+#: admin/class-vca-asm-admin-finances.php:2339
+#: admin/class-vca-asm-admin-finances.php:2438
 msgid "Category of activity"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2253
-#: admin/class-vca-asm-admin-finances.php:2355
-#: admin/class-vca-asm-admin-finances.php:2454
+#: admin/class-vca-asm-admin-finances.php:2244
+#: admin/class-vca-asm-admin-finances.php:2346
+#: admin/class-vca-asm-admin-finances.php:2445
 msgid "How can the activity be categorized?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2257
-#: admin/class-vca-asm-admin-finances.php:2360
-#: admin/class-vca-asm-admin-finances.php:2458
+#: admin/class-vca-asm-admin-finances.php:2248
+#: admin/class-vca-asm-admin-finances.php:2351
+#: admin/class-vca-asm-admin-finances.php:2449
 msgid "Name of activity"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2259
+#: admin/class-vca-asm-admin-finances.php:2250
 msgid "What was the name of the activity the donation was gathered at?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2259
-#: admin/class-vca-asm-admin-finances.php:2362
-#: admin/class-vca-asm-admin-finances.php:2460
+#: admin/class-vca-asm-admin-finances.php:2250
+#: admin/class-vca-asm-admin-finances.php:2353
+#: admin/class-vca-asm-admin-finances.php:2451
 msgid "Name of the concert, festival or party, for instance"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2266
+#: admin/class-vca-asm-admin-finances.php:2257
 msgid "Cash flow"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2268
+#: admin/class-vca-asm-admin-finances.php:2259
 msgid ""
 "Did you receive cash or was the donation transferred to the office directly?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2271
+#: admin/class-vca-asm-admin-finances.php:2262
 msgid "Cash"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2275
+#: admin/class-vca-asm-admin-finances.php:2266
 msgid "Donation was transferred"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2287
+#: admin/class-vca-asm-admin-finances.php:2278
 msgid "Who will transfer the donation?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2287
+#: admin/class-vca-asm-admin-finances.php:2278
 msgid ""
 "Enter the name of the transferring (legal) party; The company name of a "
 "venue for instance."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2303
+#: admin/class-vca-asm-admin-finances.php:2294
 msgid "The Revenue"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2311
+#: admin/class-vca-asm-admin-finances.php:2302
 msgid "How much was gained?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2319
+#: admin/class-vca-asm-admin-finances.php:2310
 msgid "When did you gain the revenue?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2326
-#: admin/class-vca-asm-admin-finances.php:2426
+#: admin/class-vca-asm-admin-finances.php:2317
+#: admin/class-vca-asm-admin-finances.php:2417
 #: models/class-vca-asm-workbook-finances.php:276
 msgid "Item(s)"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2328
+#: admin/class-vca-asm-admin-finances.php:2319
 msgid "How did you gain the income?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2328
+#: admin/class-vca-asm-admin-finances.php:2319
 msgid "What did you sell?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2335
+#: admin/class-vca-asm-admin-finances.php:2326
 msgid "Kind of revenue"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2343
+#: admin/class-vca-asm-admin-finances.php:2334
 msgid "Of what category is this revenue?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2362
+#: admin/class-vca-asm-admin-finances.php:2353
 msgid "What was the name of the activity the money was earned at?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2375
+#: admin/class-vca-asm-admin-finances.php:2366
 msgid "The Expenditure"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2383
+#: admin/class-vca-asm-admin-finances.php:2374
 msgid "How much was spent?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2391
+#: admin/class-vca-asm-admin-finances.php:2382
 msgid "When did you take the money from your cities structural account?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2398
+#: admin/class-vca-asm-admin-finances.php:2389
 msgid "Date of Receipt"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2400
+#: admin/class-vca-asm-admin-finances.php:2391
 msgid "When was the money spent? (What is the date on the rerceipt?)"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2407
+#: admin/class-vca-asm-admin-finances.php:2398
 msgid "Receipt ID"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2410
+#: admin/class-vca-asm-admin-finances.php:2401
 msgid ""
 "Please mark the receipt belonging to this expenditure with the above ID "
 "before sending it. Thanks!"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2414
+#: admin/class-vca-asm-admin-finances.php:2405
 msgid "Kind of expense"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2422
+#: admin/class-vca-asm-admin-finances.php:2413
 msgid "Of what category is this expenditure?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2428
+#: admin/class-vca-asm-admin-finances.php:2419
 msgid "What did you buy?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2435
+#: admin/class-vca-asm-admin-finances.php:2426
 msgid "Tax Rate"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2442
+#: admin/class-vca-asm-admin-finances.php:2433
 msgid "How much revenue tax did you have top pay?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2442
+#: admin/class-vca-asm-admin-finances.php:2433
 msgid "Check the receipt..."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2460
+#: admin/class-vca-asm-admin-finances.php:2451
 msgid "What was the name of the activity the money was spent for?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2478
-#: admin/class-vca-asm-admin-finances.php:2512
+#: admin/class-vca-asm-admin-finances.php:2469
+#: admin/class-vca-asm-admin-finances.php:2503
 msgid "The Transfer"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2486
-#: admin/class-vca-asm-admin-finances.php:2520
+#: admin/class-vca-asm-admin-finances.php:2477
+#: admin/class-vca-asm-admin-finances.php:2511
 msgid "How much did you transfer?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2494
-#: admin/class-vca-asm-admin-finances.php:2528
+#: admin/class-vca-asm-admin-finances.php:2485
+#: admin/class-vca-asm-admin-finances.php:2519
 msgid "When did you make the transfer?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2544
+#: admin/class-vca-asm-admin-finances.php:2535
 msgid "Direction?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2546
+#: admin/class-vca-asm-admin-finances.php:2537
 msgid ""
 "Was money transferred from a city to the office or the other way around?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2549
+#: admin/class-vca-asm-admin-finances.php:2540
 msgid "from city to office"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2553
+#: admin/class-vca-asm-admin-finances.php:2544
 msgid "from office to city"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2665
+#: admin/class-vca-asm-admin-finances.php:2656
 msgid "The selected metadata has been successfully deleted."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2950
+#: admin/class-vca-asm-admin-finances.php:2941
 msgid "Saved."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2958
+#: admin/class-vca-asm-admin-finances.php:2949
 msgid "Cash Accounts successfully updated."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2966
+#: admin/class-vca-asm-admin-finances.php:2957
 msgid "Cost center successfully updated."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2974
+#: admin/class-vca-asm-admin-finances.php:2965
 msgid "Cost center successfully added."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2982
+#: admin/class-vca-asm-admin-finances.php:2973
 msgid "Account successfully updated."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2990
+#: admin/class-vca-asm-admin-finances.php:2981
 msgid "Account successfully added."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:2998
+#: admin/class-vca-asm-admin-finances.php:2989
 msgid "Revenue Tax Rates successfully updated."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3006
+#: admin/class-vca-asm-admin-finances.php:2997
 msgid "Revenue Tax Rate successfully added."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3015
+#: admin/class-vca-asm-admin-finances.php:3006
 msgid "Default Revenue Tax Rates successfully updated."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3023
+#: admin/class-vca-asm-admin-finances.php:3014
 msgid "Occasion successfully updated."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3031
+#: admin/class-vca-asm-admin-finances.php:3022
 msgid "Occasion successfully added."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3060
+#: admin/class-vca-asm-admin-finances.php:3051
 msgid "Switch Country"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3070
+#: admin/class-vca-asm-admin-finances.php:3061
 msgid "The country this data belongs to"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3089
+#: admin/class-vca-asm-admin-finances.php:3080
 #: admin/class-vca-asm-admin-settings.php:218
 #: admin/class-vca-asm-admin.php:231 admin/class-vca-asm-admin.php:232
 #: admin/class-vca-asm-admin.php:251 admin/class-vca-asm-admin.php:252
@@ -2006,296 +2003,296 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3095
+#: admin/class-vca-asm-admin-finances.php:3086
 msgctxt "Finances Admin Menu"
 msgid "General"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3100
+#: admin/class-vca-asm-admin-finances.php:3091
 msgctxt "Finances Admin Menu"
 msgid "Revenue Tax"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3105
+#: admin/class-vca-asm-admin-finances.php:3096
 msgctxt "Finances Admin Menu"
 msgid "Occasions / Activities"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3110
+#: admin/class-vca-asm-admin-finances.php:3101
 msgctxt "Finances Admin Menu"
 msgid "Income/Expense Accounts"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3115
+#: admin/class-vca-asm-admin-finances.php:3106
 msgctxt "Finances Admin Menu"
 msgid "Cash Accounts"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3120
+#: admin/class-vca-asm-admin-finances.php:3111
 msgctxt "Finances Admin Menu"
 msgid "Cost Centers"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3182
+#: admin/class-vca-asm-admin-finances.php:3173
 msgid "Structural Cash, City"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3189
+#: admin/class-vca-asm-admin-finances.php:3180
 msgid "Structural Cash, Crew"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3196
+#: admin/class-vca-asm-admin-finances.php:3187
 msgid "Structural Cash, Cell"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3207
+#: admin/class-vca-asm-admin-finances.php:3198
 msgid "Maximum Structural Cash"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3218
+#: admin/class-vca-asm-admin-finances.php:3209
 #: admin/class-vca-asm-admin-geography.php:911
 #: includes/class-vca-asm-geography.php:730
 #: templates/class-vca-asm-admin-table.php:1252
 msgid "Crew"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3225
+#: admin/class-vca-asm-admin-finances.php:3216
 #: admin/class-vca-asm-admin-geography.php:915
 msgid "(old-school) Cell"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3243
-#: admin/class-vca-asm-admin-finances.php:3333
-#: admin/class-vca-asm-admin-finances.php:3471
-#: admin/class-vca-asm-admin-finances.php:3642
-#: admin/class-vca-asm-admin-finances.php:3698
-#: admin/class-vca-asm-admin-finances.php:3863
-#: admin/class-vca-asm-admin-finances.php:4050
+#: admin/class-vca-asm-admin-finances.php:3234
+#: admin/class-vca-asm-admin-finances.php:3324
+#: admin/class-vca-asm-admin-finances.php:3462
+#: admin/class-vca-asm-admin-finances.php:3633
+#: admin/class-vca-asm-admin-finances.php:3689
+#: admin/class-vca-asm-admin-finances.php:3854
+#: admin/class-vca-asm-admin-finances.php:4041
 #: templates/class-vca-asm-admin-form.php:58
 #: templates/class-vca-asm-admin-form.php:603
 msgid "Save"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3265
-#: admin/class-vca-asm-admin-finances.php:3499
-#: admin/class-vca-asm-admin-finances.php:3720
-#: admin/class-vca-asm-admin-finances.php:3891
+#: admin/class-vca-asm-admin-finances.php:3256
+#: admin/class-vca-asm-admin-finances.php:3490
+#: admin/class-vca-asm-admin-finances.php:3711
+#: admin/class-vca-asm-admin-finances.php:3882
 msgctxt "%s is a country"
 msgid "for %s"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3274
+#: admin/class-vca-asm-admin-finances.php:3265
 msgid "add tax rate"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3294
+#: admin/class-vca-asm-admin-finances.php:3285
 msgid "Default rate"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3311
+#: admin/class-vca-asm-admin-finances.php:3302
 msgid "Default value"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3314
+#: admin/class-vca-asm-admin-finances.php:3305
 msgid ""
 "Which of the above rates should be selected by default, when the SPOC has to "
 "choose?"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3362
-#: admin/class-vca-asm-admin-finances.php:3434
+#: admin/class-vca-asm-admin-finances.php:3353
+#: admin/class-vca-asm-admin-finances.php:3425
 msgid "Percentage Points"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3376
-#: admin/class-vca-asm-admin-finances.php:3441
+#: admin/class-vca-asm-admin-finances.php:3367
+#: admin/class-vca-asm-admin-finances.php:3432
 msgctxt "Tax Rates"
 msgid "Name"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3381
-#: admin/class-vca-asm-admin-finances.php:3448
-#: admin/class-vca-asm-admin-finances.php:3773
-#: admin/class-vca-asm-admin-finances.php:3840
-#: admin/class-vca-asm-admin-finances.php:3952
-#: admin/class-vca-asm-admin-finances.php:4027
+#: admin/class-vca-asm-admin-finances.php:3372
+#: admin/class-vca-asm-admin-finances.php:3439
+#: admin/class-vca-asm-admin-finances.php:3764
+#: admin/class-vca-asm-admin-finances.php:3831
+#: admin/class-vca-asm-admin-finances.php:3943
+#: admin/class-vca-asm-admin-finances.php:4018
 msgid "Description"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3413
-#: admin/class-vca-asm-admin-finances.php:3584
-#: admin/class-vca-asm-admin-finances.php:3805
+#: admin/class-vca-asm-admin-finances.php:3404
+#: admin/class-vca-asm-admin-finances.php:3575
+#: admin/class-vca-asm-admin-finances.php:3796
 #: admin/class-vca-asm-admin-geography.php:643
 #: templates/class-vca-asm-admin-table.php:1161
 msgid "Edit &quot;%s&quot;"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3416
+#: admin/class-vca-asm-admin-finances.php:3407
 msgid "Add new tax rate"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3430
+#: admin/class-vca-asm-admin-finances.php:3421
 msgid "The Revenue Tax Rate"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3437
+#: admin/class-vca-asm-admin-finances.php:3428
 msgid "The tax rate itsself"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3444
+#: admin/class-vca-asm-admin-finances.php:3435
 msgid "The (short-)name of the tax rate"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3451
+#: admin/class-vca-asm-admin-finances.php:3442
 msgid "A description of what is taxed at this rate"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3508
+#: admin/class-vca-asm-admin-finances.php:3499
 msgid "add occasion"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3533
-#: admin/class-vca-asm-admin-finances.php:3605
+#: admin/class-vca-asm-admin-finances.php:3524
+#: admin/class-vca-asm-admin-finances.php:3596
 msgctxt "Occasions"
 msgid "Name"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3547
-#: admin/class-vca-asm-admin-finances.php:3612
+#: admin/class-vca-asm-admin-finances.php:3538
+#: admin/class-vca-asm-admin-finances.php:3603
 msgid "Description for Donations"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3552
-#: admin/class-vca-asm-admin-finances.php:3619
+#: admin/class-vca-asm-admin-finances.php:3543
+#: admin/class-vca-asm-admin-finances.php:3610
 msgid "Description for Structural Funds"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3587
+#: admin/class-vca-asm-admin-finances.php:3578
 msgid "Add new occasion"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3601
+#: admin/class-vca-asm-admin-finances.php:3592
 msgid "The Occasion"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3608
+#: admin/class-vca-asm-admin-finances.php:3599
 msgid "The (short-)name of the occasion"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3608
-#: admin/class-vca-asm-admin-finances.php:4030
+#: admin/class-vca-asm-admin-finances.php:3599
+#: admin/class-vca-asm-admin-finances.php:4021
 #: templates/class-vca-asm-admin-table.php:1304
 msgid "This is, what the Finances-SPOC sees."
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3615
-#: admin/class-vca-asm-admin-finances.php:3622
+#: admin/class-vca-asm-admin-finances.php:3606
+#: admin/class-vca-asm-admin-finances.php:3613
 msgid "A description of what qualifies as this category of occasion"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3667
+#: admin/class-vca-asm-admin-finances.php:3658
 msgid "Cash Accounts per City"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3729
+#: admin/class-vca-asm-admin-finances.php:3720
 msgid "add cost center"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3754
-#: admin/class-vca-asm-admin-finances.php:3826
+#: admin/class-vca-asm-admin-finances.php:3745
+#: admin/class-vca-asm-admin-finances.php:3817
 msgctxt "Cost Centers"
 msgid "Name"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3768
-#: admin/class-vca-asm-admin-finances.php:3833
+#: admin/class-vca-asm-admin-finances.php:3759
+#: admin/class-vca-asm-admin-finances.php:3824
 msgid "Cost Center"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3808
+#: admin/class-vca-asm-admin-finances.php:3799
 msgid "Add new cost center"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3822
+#: admin/class-vca-asm-admin-finances.php:3813
 msgid "The Cost Center"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3829
+#: admin/class-vca-asm-admin-finances.php:3820
 msgid "The (short-)name of the cost center"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3829
+#: admin/class-vca-asm-admin-finances.php:3820
 msgid "for the tax statement"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3836
+#: admin/class-vca-asm-admin-finances.php:3827
 msgid "The ID of the cost center, usually numeric"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3843
+#: admin/class-vca-asm-admin-finances.php:3834
 msgid "A description of what all belongs in this category of costs"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3843
+#: admin/class-vca-asm-admin-finances.php:3834
 msgid "for city users"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3900
+#: admin/class-vca-asm-admin-finances.php:3891
 msgid "add Expense Account"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3903
+#: admin/class-vca-asm-admin-finances.php:3894
 msgid "add Income Account"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3909
+#: admin/class-vca-asm-admin-finances.php:3900
 msgid "Expense Accounts"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3912
+#: admin/class-vca-asm-admin-finances.php:3903
 msgid "Income Accounts"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3933
+#: admin/class-vca-asm-admin-finances.php:3924
 msgctxt "Name"
 msgid "Name"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3947
+#: admin/class-vca-asm-admin-finances.php:3938
 msgid "Account Number"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3986
+#: admin/class-vca-asm-admin-finances.php:3977
 msgid "Edit &quot;%1$s&quot; (%2$s)"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:3990
+#: admin/class-vca-asm-admin-finances.php:3981
 msgid "Add new %s"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:4004
+#: admin/class-vca-asm-admin-finances.php:3995
 msgctxt "The xyz Account"
 msgid "The %s"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:4013
+#: admin/class-vca-asm-admin-finances.php:4004
 msgctxt "Income/Expense Accounts"
 msgid "Name"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:4016
+#: admin/class-vca-asm-admin-finances.php:4007
 msgid "The (short-)name of the account"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:4020
+#: admin/class-vca-asm-admin-finances.php:4011
 msgid "Account ID"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:4023
+#: admin/class-vca-asm-admin-finances.php:4014
 msgid "The ID of the account, usually numeric"
 msgstr ""
 
-#: admin/class-vca-asm-admin-finances.php:4030
+#: admin/class-vca-asm-admin-finances.php:4021
 msgid "A description of what all should be booked under this account"
 msgstr ""
 
@@ -7120,5 +7117,5 @@ msgid "Johannes Pilkahn"
 msgstr ""
 
 #. Author URI of the plugin/theme
-msgid "http://karlgehttanzen.de // subject to change"
+msgid "http://karlgehttanzen.de"
 msgstr ""

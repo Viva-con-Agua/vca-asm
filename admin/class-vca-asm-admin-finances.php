@@ -127,7 +127,7 @@ class VCA_ASM_Admin_Finances
 
 	private function overview_city( $id = NULL, $messages = array() )
 	{
-		global $vca_asm_finances;
+		global $vca_asm_finances, $vca_asm_geography;
 
 		$url = 'admin.php?page=vca-asm-finances';
 
@@ -386,6 +386,9 @@ class VCA_ASM_Admin_Finances
 				'</tr>' .
 				'<tr>' .
 					'<td>' . __( 'BIC', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . 'COBADEFFXXX' . '</td>' .
+				'</tr>' .
+				'<tr>' .
+					'<td>' . __( 'Transaction Reference', 'vca-asm' ) . '</td><td>&nbsp;&nbsp;' . __( 'Excess Funds', 'vca-asm' ) . ' / ' . $vca_asm_geography->get_name( $city ) . '</td>' .
 				'</tr>' .
 			'</table>';
 		}
