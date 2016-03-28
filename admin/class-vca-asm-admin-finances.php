@@ -183,6 +183,13 @@ class VCA_ASM_Admin_Finances
 	{
 		global $vca_asm_finances, $vca_asm_geography;
 		
+		$active_tab = 'summary';
+		if ( isset( $_GET['tab'] ) && in_array( $_GET['tab'], array( 'summary', 'download' ) ) ) {
+			$active_tab = $_GET['tab'];
+		}
+
+		$url = 'admin.php?page=vca-asm-finances&tab=' . $active_tab;
+		
 		$output = '';
 
 		$the_city_finances = new VCA_ASM_City_Finances( $city );
