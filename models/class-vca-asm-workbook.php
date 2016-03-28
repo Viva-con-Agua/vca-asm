@@ -347,6 +347,8 @@ class VCA_ASM_Workbook
 				if ( ! array_key_exists( $col, $non_autosized_columns ) ) {
 					$this->workbook->getActiveSheet()->getColumnDimension( $col )->setAutoSize( true );
 				} else {
+                    // would prevent PHPExcel from throwing a notice, but size columns incorrectly...
+					//$this->workbook->getActiveSheet()->getColumnDimension( $col )->setAutoSize( true );
 					$this->workbook->getActiveSheet()->getColumnDimension( $col )->setWidth( $non_autosized_columns[$col] );
 				}
 
@@ -367,7 +369,7 @@ class VCA_ASM_Workbook
 		switch ( $this->format ) {
 			case 'xls':
 				$writer = new PHPExcel_Writer_Excel5( $this->workbook );
-				$writer->setPreCalculateFormulas( false );
+				$writer->setPreCalculateFormulas( true );
 				$extension = '.xls';
 				$mime_type = 'application/vnd.ms-excel';
 			break;
@@ -375,7 +377,7 @@ class VCA_ASM_Workbook
 			case 'xlsx2003':
 				$writer = new PHPExcel_Writer_Excel2007( $this->workbook );
 				$writer->setOffice2003Compatibility( true );
-				$writer->setPreCalculateFormulas( false );
+				$writer->setPreCalculateFormulas( true );
 				$extension = '.xlsx';
 				$mime_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 			break;
@@ -383,7 +385,7 @@ class VCA_ASM_Workbook
 			case 'xlsx':
 			default:
 				$writer = new PHPExcel_Writer_Excel2007( $this->workbook );
-				$writer->setPreCalculateFormulas( false );
+				$writer->setPreCalculateFormulas( true );
 				$extension = '.xlsx';
 				$mime_type = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet';
 			break;
