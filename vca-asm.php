@@ -192,7 +192,6 @@ function vca_asm_user_locale()
 function vca_asm_set_locale( $locale )
 {
 	global $current_user;
-	get_currentuserinfo();
 
 	setlocale( LC_TIME, "" );
 

@@ -191,8 +191,9 @@ class VCA_ASM_Admin_Emails {
 	 * @access public
 	 */
 	public function sent_control() {
-		global $current_user, $wpdb, $vca_asm_geography, $vca_asm_mailer, $vca_asm_utilities;
-		get_currentuserinfo();
+		global $current_user, $wpdb,
+			$vca_asm_geography, $vca_asm_mailer, $vca_asm_utilities;
+		
 		$admin_region = get_user_meta( $current_user->ID, 'city', true );
 
 		$url = "admin.php?page=vca-asm-emails";
@@ -522,8 +523,8 @@ class VCA_ASM_Admin_Emails {
 	 * @access public
 	 */
 	public function compose_control() {
-		global $wpdb, $current_user, $vca_asm_geography;
-		get_currentuserinfo();
+		global $current_user, $wpdb,
+			$vca_asm_geography;
 
 		if ( isset( $_GET['tab'] ) && in_array( $_GET['tab'], array( 'newsletter', 'activity' ) ) ) {
 			$active_tab = $_GET['tab'];

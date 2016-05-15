@@ -1346,7 +1346,7 @@ class VCA_ASM_Activities
 	public function meta_boxes()
 	{
 		global $current_user, $pagenow;
-		get_currentuserinfo();
+        
 		$roles = $current_user->roles;
 		$role =  array_shift( $roles );
 
@@ -1714,8 +1714,8 @@ class VCA_ASM_Activities
 	 */
 	public function save_meta( $ID = false, $post = false )
 	{
-	    global $current_user, $pagenow, $wpdb, $vca_asm_geography, $vca_asm_registrations;
-		get_currentuserinfo();
+	    global $current_user, $pagenow, $wpdb,
+            $vca_asm_geography, $vca_asm_registrations;
 
 		$all_fields = $this->custom_fields( 'all' );
 

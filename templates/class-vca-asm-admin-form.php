@@ -609,7 +609,6 @@ class VCA_ASM_Admin_Form {
 
 			case 'groups':
 				global $current_user;
-				get_currentuserinfo();
 
 				if ( ! empty( $field['value'] ) && is_array( $field['value'] ) ) {
 					$fc = count( $field['value'] );

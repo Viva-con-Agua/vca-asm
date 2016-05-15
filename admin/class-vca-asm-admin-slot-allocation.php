@@ -819,8 +819,8 @@ class VCA_ASM_Admin_Slot_Allocation {
 	 * @access private
 	 */
 	private function data_links( $the_activity, $url ) {
-		global $current_user, $vca_asm_registrations;
-		get_currentuserinfo();
+		global $current_user,
+			$vca_asm_registrations;
 
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
 		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
@@ -1103,8 +1103,8 @@ class VCA_ASM_Admin_Slot_Allocation {
 	 * @access private
 	 */
 	private function slot_allocation_list( $the_activity, $list_type = 'apps' ) {
-		global $current_user, $wpdb, $vca_asm_admin_supporters, $vca_asm_geography, $vca_asm_registrations, $vca_asm_utilities;
-		get_currentuserinfo();
+		global $current_user, $wpdb,
+			$vca_asm_admin_supporters, $vca_asm_geography, $vca_asm_registrations, $vca_asm_utilities;
 
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
 		$admin_city_status = $vca_asm_geography->get_type( $admin_city );

@@ -46,7 +46,6 @@ class VCA_ASM_Registrations
 		/* default action (if called from frontend) */
 		if( $supporter === NULL ) {
 			global $current_user;
-			get_currentuserinfo();
 			$supporter = $current_user->ID;
 		}
 		$activity_id = intval( $activity_id );
@@ -348,7 +347,6 @@ class VCA_ASM_Registrations
 		/* default action (if called from frontend) */
 		if( $supporter_id === NULL ) {
 			global $current_user;
-			get_currentuserinfo();
 			$supporter_id = $current_user->ID;
 		}
 
@@ -969,7 +967,6 @@ class VCA_ASM_Registrations
 		/* default action (if called from frontend) */
 		if( $supporter === NULL ) {
 			global $current_user;
-			get_currentuserinfo();
 			$supporter = $current_user->ID;
 		}
 

@@ -7,8 +7,8 @@
  * Currently in use for activities
  **/
 
-global $post, $wpdb, $current_user, $vca_asm_activities, $vca_asm_geography, $vca_asm_registrations, $vca_asm_admin_supporters;
-get_currentuserinfo();
+global $post, $wpdb, $current_user,
+	$vca_asm_activities, $vca_asm_geography, $vca_asm_registrations, $vca_asm_admin_supporters;
 
 $admin_city = get_user_meta( $current_user->ID, 'city', true );
 $admin_region = $admin_city;
