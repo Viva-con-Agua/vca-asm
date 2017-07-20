@@ -80,50 +80,35 @@ class VCA_ASM_Admin_Update {
 		if ( isset( $_GET['todo'] ) && 'update' === $_GET['todo'] ) {
 			$updated = true;
 
-			$nations = $vca_asm_geography->get_all( 'name', 'ASC', 'nation' );
-			
-			foreach( $nations as $nation ) {
-				$vca_asm_admin_settings->insert_autoresponses( $nation['id'], 'ge' );
+			$args = array(
+				'meta_query' => array(
+					array(
+						'key' => 'vca_asm_last_activity',
+						'value' => '1420070400',
+						'type'    => 'numeric',
+						'compare' => '<'
+					)
+				)
+			);
+
+			$user_query = new WP_User_Query( $args );
+
+			//print '<pre>$user_query->results[0] = '
+			//	. htmlspecialchars( print_r( $user_query->results[0], TRUE ), ENT_QUOTES, 'utf-8', FALSE )
+			//	. "</pre>\n";
+
+			if ( ! empty( $user_query->results ) ) {
+				foreach ( $user_query->results as $user ) {
+					wp_delete_user( $user->ID );
+				}
 			}
 
-			//$users = get_users();
-			//
-			//$cases = 0;
-			//$cases2 = 0;
-			//$vals = array();
-			//$vals2 = array();
-			//
-			//foreach ( $users as $user ) {
-			//	$result = get_user_meta( $user->ID, 'simple_local_avatar', true );
-			//	if ( empty( $result ) ) {
-			//		continue;
-			//	}
-			//	$new = array();
-			//	$write_it = false;
-			//	foreach ( $result as $key => $value ) {
-			//		$url = $value;
-			//
-			//		if ( $this->remote_file_exists( $url ) ) {
-			//			$new[$key] = $value;
-			//		} else {
-			//			$write_it = true;
-			//		}
-			//	}
-			//	if ( true === $write_it ) {
-			//		$cases2++;
-			//		update_user_meta( $user->ID, 'simple_local_avatar', $new );
-			//	} else {
-			//		$cases++;
-			//	}
-			//}
-			//
-			//print '<pre>EXIST = '
-			//	. htmlspecialchars( print_r( $cases, TRUE ), ENT_QUOTES, 'utf-8', FALSE )
-			//	. "</pre>\n";
-			//
-			//print '<pre>DOES NOT = '
-			//	. htmlspecialchars( print_r( $cases2, TRUE ), ENT_QUOTES, 'utf-8', FALSE )
-			//	. "</pre>\n";
+			$messages = array(
+				array(
+					'type' => 'message-pa',
+					'message' => 'Count: ' + count($user_query->results) + ' deleted!'
+				)
+			);
 
 			//$activities = get_posts(
 			//	array(
@@ -145,19 +130,10 @@ class VCA_ASM_Admin_Update {
 
 		}
 
-		if ( ! empty( $updated ) && true === $updated ) {
-			$messages = array(
-				array(
-					'type' => 'message-pa',
-					'message' => 'Done!'//'Updated ' . $cases . ' Data Sets.'
-				)
-			);
-		}
-
 		$admin_page = new VCA_ASM_Admin_Page( array(
 			'echo' => true,
 			'icon' => 'icon-settings',
-			'title' => 'Datenstruktur anpassen / Funktionen Testen',
+			'title' => 'Karteileichen Löschen',
 			'url' => '?page=vca-asm-update',
 			'messages' => $messages
 		));
