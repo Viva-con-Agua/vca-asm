@@ -195,8 +195,7 @@ function vca_asm_user_locale()
  */
 function vca_asm_set_locale( $locale )
 {
-	global $current_user;
-	wp_get_current_user();
+	$current_user = wp_get_current_user();
 	
 	setlocale( LC_TIME, "" );
 
