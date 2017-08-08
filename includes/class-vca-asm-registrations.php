@@ -45,7 +45,7 @@ class VCA_ASM_Registrations
 
 		/* default action (if called from frontend) */
 		if( $supporter === NULL ) {
-			global $current_user;
+			$current_user = wp_get_current_user();
 			$supporter = $current_user->ID;
 		}
 		$activity_id = intval( $activity_id );
@@ -346,7 +346,7 @@ class VCA_ASM_Registrations
 
 		/* default action (if called from frontend) */
 		if( $supporter_id === NULL ) {
-			global $current_user;
+			$current_user = wp_get_current_user();
 			$supporter_id = $current_user->ID;
 		}
 
@@ -966,7 +966,7 @@ class VCA_ASM_Registrations
 
 		/* default action (if called from frontend) */
 		if( $supporter === NULL ) {
-			global $current_user;
+			$current_user = wp_get_current_user();
 			$supporter = $current_user->ID;
 		}
 

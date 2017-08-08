@@ -430,8 +430,8 @@ class VCA_ASM_Admin_Geography {
 	 * @access public
 	 */
 	public function view( $messages = array(), $active_tab = 'city' ) {
-		global $current_user,
-			$vca_asm_geography, $vca_asm_admin;
+		global $vca_asm_geography, $vca_asm_admin;
+				$current_user = wp_get_current_user();
 
 		if ( isset( $_GET['tab'] ) && in_array( $_GET['tab'], array( 'city', 'cg', 'nation', 'ng' ) ) ) {
 			$active_tab = $_GET['tab'];
@@ -507,8 +507,8 @@ class VCA_ASM_Admin_Geography {
 	 * @access private
 	 */
 	private function list_geography( $type ) {
-		global $current_user,
-			$vca_asm_geography, $vca_asm_utilities;
+		global $vca_asm_geography, $vca_asm_utilities;
+		$current_user = wp_get_current_user();
 
 		if ( ! get_transient( 'vca-asm-update-member-count' ) ) {
 			$vca_asm_geography->update_member_count();
@@ -1033,9 +1033,9 @@ class VCA_ASM_Admin_Geography {
 	 * @access private
 	 */
 	private function populate_fields( $id ) {
-		global $current_user, $wpdb,
-			$vca_asm_geography;
-
+		global $wpdb, $vca_asm_geography;
+		$current_user = wp_get_current_user();
+		
 		$type = $vca_asm_geography->get_meta_type( $id );
 		$fields = $this->create_fields( $type );
 

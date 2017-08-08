@@ -601,7 +601,8 @@ class VCA_ASM_Admin_Settings {
 	 * @access public
 	 */
 	public function initialize_options() {
-		global $current_user;
+		
+		$current_user = wp_get_current_user();
 
 		/* check capabilities */
 		if ( $current_user->has_cap( 'vca_asm_set_mode' ) && isset( $_GET['page'] ) && 'vca-asm-mode-settings' === $_GET['page'] ) {
