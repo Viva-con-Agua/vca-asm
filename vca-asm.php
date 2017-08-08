@@ -50,6 +50,10 @@ if ( ! defined( 'VCA_ASM_FILE' ) ) {
 	define( 'VCA_ASM_FILE', __FILE__ );
 }
 
+if ( ! defined( 'LC_MESSAGES' ) ) {
+	define( 'LC_MESSAGES', 5 );
+}
+
 /**
  * Holds the absolute location of VcA Activity & Supporter Management
  *
@@ -191,8 +195,8 @@ function vca_asm_user_locale()
  */
 function vca_asm_set_locale( $locale )
 {
-	global $current_user;
-
+	$current_user = wp_get_current_user();
+	
 	setlocale( LC_TIME, "" );
 
 	if ( 'en' === get_user_meta( $current_user->ID, 'pool_lang', true ) ) {

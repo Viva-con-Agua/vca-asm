@@ -36,8 +36,8 @@ class VCA_ASM_Admin_Supporters {
 	 * @access public
 	 */
 	public function control() {
-		global $current_user,
-			$vca_asm_mailer, $vca_asm_geography;
+		global $vca_asm_mailer, $vca_asm_geography;
+		$current_user = wp_get_current_user();
 
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
 		$admin_nation = $vca_asm_geography->has_nation( $admin_city );
@@ -360,8 +360,8 @@ class VCA_ASM_Admin_Supporters {
 	 * @access private
 	 */
 	public function supporter_profile( $supporter, $back_action = 'admin.php?page=vca-asm-supporters' ) {
-		global $current_user, $wp_roles,
-			$vca_asm_geography, $vca_asm_roles, $vca_asm_utilities, $vca_asm_admin;
+		global $wp_roles, $vca_asm_geography, $vca_asm_roles, $vca_asm_utilities, $vca_asm_admin;
+		$current_user = wp_get_current_user();
 
 		$messages = array();
 
@@ -679,8 +679,8 @@ class VCA_ASM_Admin_Supporters {
 	 * @access private
 	 */
 	private function list_supporters( $messages = array() ) {
-		global $current_user, $wpdb,
-			$vca_asm_admin, $vca_asm_geography, $vca_asm_utilities;
+		global $wpdb, $vca_asm_admin, $vca_asm_geography, $vca_asm_utilities;
+		$current_user = wp_get_current_user();
 
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
 		$status = $vca_asm_geography->get_type( $admin_city );
