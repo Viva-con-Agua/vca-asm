@@ -1155,7 +1155,10 @@ class VCA_ASM_Admin_Supporters {
 						$region_option['checked'] = true;
 					}
 				} elseif( isset( $_GET['gf'] ) ) {
+					var_dump($_GET['gf']);
 					$gf_unserialized = json_decode( htmlspecialchars_decode( $_GET['gf'] ) );
+					echo "<br/>";
+					var_dump($_GET['gf']);
 					if( in_array( $region_option['value'], $gf_unserialized ) ) {
 						$region_option['checked'] = true;
 					}
