@@ -761,7 +761,7 @@ class VCA_ASM_Admin_Supporters {
 						$query_units[] = '';
 					}
 
-					$gf_serialized = htmlspecialchars( serialize( $units ) );
+					$gf_serialized = htmlspecialchars($units);
 					$sort_url .= '&gf=' . $gf_serialized .'&gfb=' . $geo_filter_by;
 
 					if ( in_array( $geo_filter_by, array( 'nation', 'ng' ) ) ) {
