@@ -792,7 +792,7 @@ class VCA_ASM_Admin_Supporters {
 					'compare' => 'IN'
 				);
 			} elseif( isset( $_GET['mf'] ) ) {
-				$sort_url .= '&mf=' . htmlspecialchars( $_GET['mf'] );
+				$sort_url .= '&mf=' . htmlspecialchars( serialize($_GET['mf']) );
 				$mf_unserialized = unserialize( htmlspecialchars_decode( $_GET['mf'] ) );
 				$metaqueries[] = array(
 					'key' => 'membership',
