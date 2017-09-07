@@ -862,6 +862,12 @@ class VCA_ASM_Admin_Supporters {
 					}
 				} else {
 					foreach ( $terms as $partial_term ) {
+						
+						$partial_term = trim($partial_term);
+						if (empty($partial_term)) {
+							continue;
+						}
+						
 						if (
 							(
 								strstr( mb_strtolower( get_user_meta( $temp_supp->ID, 'first_name', true ) ), mb_strtolower( $partial_term ) ) ||
