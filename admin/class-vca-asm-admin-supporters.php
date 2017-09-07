@@ -73,14 +73,14 @@ class VCA_ASM_Admin_Supporters {
 						$profile_url .= '&df=1';
 					}
 					if( isset( $_POST['membership-filter'] ) ) {
-						$profile_url .= '&mf=' . htmlspecialchars( serialize( $_POST['membership-filter'] ) );
+						$profile_url .= '&mf=' . json_encode($_POST['membership-filter']);
 					} elseif( isset( $_GET['mf'] ) ) {
-						$profile_url .= '&mf=' . htmlspecialchars( $_GET['mf'] );
+						$profile_url .= '&mf=' . $_GET['mf'];
 					}
 					if( isset( $_POST['geo-filter'] ) ) {
-						$profile_url .= '&gf=' . htmlspecialchars( serialize( $_POST['geo-filter'] ) );
+						$profile_url .= '&gf=' . json_encode( $_POST['geo-filter'] );
 					} elseif( isset( $_GET['gf'] ) ) {
-						$profile_url .= '&gf=' . htmlspecialchars( $_GET['gf'] );
+						$profile_url .= '&gf=' . $_GET['gf'];
 					}
 					if( isset( $_POST['geo-filter-by'] ) ) {
 						$profile_url .= '&gfb=' . $_POST['geo-filter-by'];
@@ -88,9 +88,9 @@ class VCA_ASM_Admin_Supporters {
 						$profile_url .= '&gfb=' . $_GET['gfb'];
 					}
 					if( isset( $_POST['role-filter'] ) ) {
-						$profile_url .= '&rf=' . htmlspecialchars( serialize( $_POST['role-filter'] ) );
+						$profile_url .= '&rf=' . json_encode( $_POST['role-filter']);
 					} elseif( isset( $_GET['rf'] ) ) {
-						$profile_url .= '&rf=' . htmlspecialchars( $_GET['rf'] );
+						$profile_url .= '&rf=' . $_GET['rf'];
 					}
 			   }
 			}
@@ -561,7 +561,7 @@ class VCA_ASM_Admin_Supporters {
 						$role_fields[] = array(
 							'type' => 'hidden',
 							'id' => 'gf',
-							'value' => htmlspecialchars( $_GET['gf'] )
+							'value' => $_GET['gf'] 
 						);
 					}
 					if ( isset( $_GET['gfb'] ) ) {
@@ -575,7 +575,7 @@ class VCA_ASM_Admin_Supporters {
 						$role_fields[] = array(
 							'type' => 'hidden',
 							'id' => 'mf',
-							'value' => htmlspecialchars( $_GET['mf'] )
+							'value' => $_GET['mf'] 
 						);
 					}
 					if ( isset( $_GET['rf'] ) ) {
@@ -729,7 +729,7 @@ class VCA_ASM_Admin_Supporters {
 				if( isset( $_POST['geo-filter-'.$geo_filter_by] ) && is_array( $_POST['geo-filter-'.$geo_filter_by] ) ||
 				    isset( $_GET['gf'] )
 				) {
-					$units = isset( $_POST['geo-filter-'.$geo_filter_by] ) ? $_POST['geo-filter-'.$geo_filter_by] : unserialize( htmlspecialchars_decode( $_GET['gf'] ) );
+					$units = isset( $_POST['geo-filter-'.$geo_filter_by] ) ? $_POST['geo-filter-'.$geo_filter_by] : json_decode( $_GET['gf'] );
 					$query_units = $units;
 					if ( ! in_array( $geo_filter_by, array( 'city', 'nation' ) ) ) {
 						switch ( $geo_filter_by ) {
@@ -761,7 +761,7 @@ class VCA_ASM_Admin_Supporters {
 						$query_units[] = '';
 					}
 
-					$gf_serialized = htmlspecialchars( serialize( $units ) );
+					$gf_serialized = json_encode( $units );
 					$sort_url .= '&gf=' . $gf_serialized .'&gfb=' . $geo_filter_by;
 
 					if ( in_array( $geo_filter_by, array( 'nation', 'ng' ) ) ) {
@@ -784,7 +784,7 @@ class VCA_ASM_Admin_Supporters {
 						_x( 'Filtered Supporters of your %region_status%', 'Admin Supporters', 'vca-asm' ) );
 			}
 			if( isset( $_POST['membership-filter'] ) && is_array( $_POST['membership-filter'] ) ) {
-				$mf_serialized = htmlspecialchars( serialize( $_POST['membership-filter'] ) );
+				$mf_serialized = json_encode( $_POST['membership-filter'] );
 				$sort_url .= '&amp;mf=' . $mf_serialized;
 				$metaqueries[] = array(
 					'key' => 'membership',
@@ -792,8 +792,8 @@ class VCA_ASM_Admin_Supporters {
 					'compare' => 'IN'
 				);
 			} elseif( isset( $_GET['mf'] ) ) {
-				$sort_url .= '&mf=' . htmlspecialchars( $_GET['mf'] );
-				$mf_unserialized = unserialize( htmlspecialchars_decode( $_GET['mf'] ) );
+				$sort_url .= '&mf=' . json_encode($_GET['mf']);
+				$mf_unserialized = json_decode( $_GET['mf'] );
 				$metaqueries[] = array(
 					'key' => 'membership',
 					'value' => $mf_unserialized,
@@ -1161,7 +1161,7 @@ class VCA_ASM_Admin_Supporters {
 						$region_option['checked'] = true;
 					}
 				} elseif( isset( $_GET['gf'] ) ) {
-					$gf_unserialized = unserialize( htmlspecialchars_decode( $_GET['gf'] ) );
+					$gf_unserialized = json_decode( $_GET['gf'] );
 					if( in_array( $region_option['value'], $gf_unserialized ) ) {
 						$region_option['checked'] = true;
 					}
@@ -1209,7 +1209,7 @@ class VCA_ASM_Admin_Supporters {
 						$region_option['checked'] = true;
 					}
 				} elseif( isset( $_GET['gf'] ) ) {
-					$gf_unserialized = unserialize( htmlspecialchars_decode( $_GET['gf'] ) );
+					$gf_unserialized = json_decode( $_GET['gf'] );
 					if( in_array( $region_option['value'], $gf_unserialized ) ) {
 						$region_option['checked'] = true;
 					}
@@ -1244,7 +1244,7 @@ class VCA_ASM_Admin_Supporters {
 						$region_option['checked'] = true;
 					}
 				} elseif( isset( $_GET['gf'] ) ) {
-					$gf_unserialized = unserialize( htmlspecialchars_decode( $_GET['gf'] ) );
+					$gf_unserialized = json_decode( $_GET['gf'] );
 					if( in_array( $region_option['value'], $gf_unserialized ) ) {
 						$region_option['checked'] = true;
 					}
@@ -1276,7 +1276,7 @@ class VCA_ASM_Admin_Supporters {
 						$region_option['checked'] = true;
 					}
 				} elseif( isset( $_GET['gf'] ) ) {
-					$gf_unserialized = unserialize( htmlspecialchars_decode( $_GET['gf'] ) );
+					$gf_unserialized = json_decode( $_GET['gf'] );
 					if( in_array( $region_option['value'], $gf_unserialized ) ) {
 						$region_option['checked'] = true;
 					}
@@ -1326,7 +1326,7 @@ class VCA_ASM_Admin_Supporters {
 				2 => ( in_array( 2, $_POST['membership-filter'] ) ? true : false )
 			);
 		} elseif( isset( $_GET['mf'] ) ) {
-			$mf_unserialized = unserialize( htmlspecialchars_decode( $_GET['mf'] ) );
+			$mf_unserialized = json_decode( $_GET['mf'] );
 			$checked_mem_options = array(
 				0 => ( in_array( 0, $mf_unserialized ) ? true : false ),
 				1 => ( in_array( 1, $mf_unserialized ) ? true : false ),
