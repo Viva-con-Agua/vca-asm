@@ -52,6 +52,8 @@ class VCA_ASM_List_Activities
 	 * @access private
 	 */
 	private function handle_applications() {
+        /** @var vca_asm_utilities $vca_asm_utilities */
+        /** @var vca_asm_registrations $vca_asm_registrations */
 		global $vca_asm_registrations, $vca_asm_utilities;
 
 		if ( ! is_admin() ) {
@@ -110,6 +112,8 @@ class VCA_ASM_List_Activities
 	 */
 	public function list_activities( $atts = array() )
 	{
+        /** @var vca_asm_activities $vca_asm_activities */
+        /** @var vca_asm_registrations $vca_asm_registrations */
 		global $vca_asm_activities, $vca_asm_registrations;
 
 		$faq_link = '<a href="' . get_bloginfo( 'url' ) . '/faq" title="' . __( 'Read the FAQ', 'vca-asm' ) . '">' . __( 'FAQ', 'vca-asm' ) . '</a>';
@@ -131,17 +135,8 @@ class VCA_ASM_List_Activities
 
 		if ( isset( $_GET['dir'] ) && isset( $_GET['sort'] ) && 'date' === $_GET['sort'] ) {
 			$order = $_GET['dir'];
-			if ( 'DESC' === $order ) {
-				$toggle_order = 'ASC';
-			} else {
-				$toggle_order = 'DESC';
-				if ( $order !== 'ASC' ) {
-					$order = 'ASC';
-				}
-			}
 		} else {
 			$order = 'ASC';
-			$toggle_order = 'DESC';
 		}
 
 		$args = array(
@@ -220,6 +215,8 @@ class VCA_ASM_List_Activities
 	 */
 	public function my_activities( $atts = array() )
 	{
+        /** @var vca_asm_activities $vca_asm_activities */
+        /** @var vca_asm_registrations $vca_asm_registrations */
 		global $vca_asm_activities, $vca_asm_registrations;
 
 		wp_enqueue_style( 'vca-asm-activities-style' );

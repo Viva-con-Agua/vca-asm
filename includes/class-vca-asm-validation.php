@@ -320,18 +320,19 @@ class VCA_ASM_Validation
 		return true;
 	}
 
-	/**
-	 * Sets an error message transient
-	 *
-	 * @param bool $set_transient
-	 * @param array $force_errors
-	 * @return array $errors
-	 *
-	 * @global object $current_user
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
+    /**
+     * Sets an error message transient
+     *
+     * @param bool $as_transient
+     * @param array $force_errors
+     * @return array $errors
+     *
+     * @internal param bool $set_transient
+     * @global object $current_user
+     *
+     * @since 1.3
+     * @access public
+     */
 	public function set_errors( $as_transient = true, $force_errors = array() )
 	{
 		global $current_user;

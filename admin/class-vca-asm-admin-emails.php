@@ -32,8 +32,9 @@ class VCA_ASM_Admin_Emails {
 	 * @access public
 	 */
 	public function outbox_control() {
-		global $wpdb, $vca_asm_utilities,
-			$vca_asm_mailer;
+        /** @var vca_asm_utilities $vca_asm_utilities */
+        /** @var vca_asm_mailer $vca_asm_mailer */
+		global $wpdb, $vca_asm_utilities, $vca_asm_mailer;
 
 		$messages = array();
 
@@ -67,12 +68,9 @@ class VCA_ASM_Admin_Emails {
 						'?page=vca-asm-outbox&todo=processed&id=' .$mail_id . '&cnt=' . $receipients_count .
 					'</span>'
 			);
-		} elseif( isset( $_GET['todo'] ) && $_GET['todo'] == 'test' ) {
-			echo $vca_asm_mailer->check_outbox();
 		}
 
 		$url = "admin.php?page=vca-asm-outbox";
-		$sort_url = $url;
 
 		extract( $vca_asm_utilities->table_order( 'id' ) );
 
@@ -140,9 +138,9 @@ class VCA_ASM_Admin_Emails {
 
 		$tbl_args = array(
 			'echo' => true,
-			'orderby' => $orderby,
-			'order' => $order,
-			'toggle_order' => $toggle_order,
+			'orderby' => null,
+			'order' => null,
+			'toggle_order' => null,
 			'page_slug' => 'vca-asm-outbox',
 			'base_url' => $url,
 			'sort_url' => $url,
@@ -191,9 +189,11 @@ class VCA_ASM_Admin_Emails {
 	 * @access public
 	 */
 	public function sent_control() {
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_mailer $vca_asm_mailer */
+        /** @var vca_asm_utilities $vca_asm_utilities */
 		global $wpdb, $vca_asm_geography, $vca_asm_mailer, $vca_asm_utilities;
 		$current_user = wp_get_current_user();
-		$admin_region = get_user_meta( $current_user->ID, 'city', true );
 
 		$url = "admin.php?page=vca-asm-emails";
 		$sort_url = $url;
@@ -206,14 +206,8 @@ class VCA_ASM_Admin_Emails {
 		}
 		if( isset( $_GET['order'] ) ) {
 			$order = $_GET['order'];
-			if( $order == 'ASC') {
-				$toggle_order = 'DESC';
-			} else {
-				$toggle_order = 'ASC';
-			}
 		} else {
 			$order = 'DESC';
-			$toggle_order = 'ASC';
 		}
 
 		/* query arguments */
@@ -222,6 +216,7 @@ class VCA_ASM_Admin_Emails {
 			$where = ' WHERE sent_by = ' . $current_user->ID;
 		}
 
+        $term = '';
 		if( isset( $_GET['search'] ) &&
 		   1 ==  $_GET['search'] &&
 		   ( isset( $_POST['term'] ) || isset( $_GET['term'] ) )
@@ -239,6 +234,7 @@ class VCA_ASM_Admin_Emails {
 			}
 		}
 
+        $sbf = '';
 		if( isset( $_GET['filter'] ) &&
 		   1 ==  $_GET['filter'] &&
 		   ( isset( $_POST['sent-by-filter'] ) || isset( $_GET['sent-by-filter'] ) )
@@ -326,7 +322,6 @@ class VCA_ASM_Admin_Emails {
 			$pagination_html = str_replace( '%colon%', ':', str_replace( '%lcurl%', '{', str_replace( '%rcurl%', '}', $pagination_html ) ) );
 
 		} else {
-			$cur_page = 1;
 			$pagination_offset = 0;
 			$pagination_html = '';
 			$cur_end = $email_count;
@@ -400,8 +395,6 @@ class VCA_ASM_Admin_Emails {
 				'value' => isset( $sbf ) ? $sbf : 'all'
 			)
 		);
-
-		$skip_wrap = true;
 
 		$output = '<div class="wrap">' .
 				'<div id="icon-emails" class="icon32-pa"></div>' .
@@ -522,7 +515,6 @@ class VCA_ASM_Admin_Emails {
 	 * @access public
 	 */
 	public function compose_control() {
-		global $wpdb, $vca_asm_geography;
 		$current_user = wp_get_current_user();
 
 		if ( isset( $_GET['tab'] ) && in_array( $_GET['tab'], array( 'newsletter', 'activity' ) ) ) {
@@ -531,7 +523,6 @@ class VCA_ASM_Admin_Emails {
 			$active_tab = 'newsletter';
 		}
 
-		$format = 'html';
 		if( ! in_array( 'city', $current_user->roles ) ) {
 			$format = ! empty( $this->emails_options['email_format_admin'] ) ? $this->emails_options['email_format_admin'] : 'html';
 		} else {
@@ -541,15 +532,19 @@ class VCA_ASM_Admin_Emails {
 		$this->compose_view( array(), $active_tab, $format );
 	}
 
-	/**
-	 * Outputs the form to compose an email
-	 *
-	 * @since 1.3.3
-	 * @access public
-	 */
+    /**
+     * Outputs the form to compose an email
+     *
+     * @since 1.3.3
+     * @access public
+     * @param array $messages
+     * @param string $active_tab
+     * @param string $editor_type
+     */
 	public function compose_view( $messages = array(), $active_tab = 'newsletter', $editor_type = 'plain' ) {
-		global $current_user, $wpdb,
-			$vca_asm_activities, $vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_activities $vca_asm_activities */
+		global $current_user, $wpdb, $vca_asm_activities, $vca_asm_geography;
 
 		/* Check whether a city user's last mail is sufficiently long ago */
 		$waiting_period = intval( ( ! empty( $this->emails_options['email_restrictions_city'] ) ? $this->emails_options['email_restrictions_city'] : 0 ) );
@@ -570,6 +565,7 @@ class VCA_ASM_Admin_Emails {
 		$period_string = ! empty( $periods[$waiting_period] ) ? $periods[$waiting_period] : $waiting_period . ' ' . _x( 'Hours', 'Settings Admin Menu', 'vca-asm' );
 
 		$blocked = false;
+        $waiting_message = '';
 		if ( 'newsletter' === $active_tab && 0 !== $waiting_period_seconds && in_array( 'city', $current_user->roles ) )
 		{
 			$mails = $wpdb->get_results(
@@ -649,9 +645,7 @@ class VCA_ASM_Admin_Emails {
 		wp_localize_script( 'vca-asm-admin-email-compose', 'activeTab', array( 'name' => $active_tab ) );
 		wp_localize_script( 'vca-asm-admin-email-compose', 'noActivity', array( 'string' => __( 'No activities for the currently selected criteria...', 'vca-asm' ) ) );
 
-		$admin_city = get_user_meta( $current_user->ID, 'city', true );
 		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
-		$admin_city_name = $vca_asm_geography->get_name( $admin_city );
 		$admin_nation_name = $vca_asm_geography->get_name( $admin_nation );
 
 		/* form parameters */
@@ -918,6 +912,7 @@ class VCA_ASM_Admin_Emails {
 		}
 		$newsletter_meta_fields[] = $sender_field;
 
+        $newsletter_meta_admins = array();
 		if ( $current_user->has_cap('vca_asm_send_emails_global') || $current_user->has_cap('vca_asm_send_emails_nation') )
 		{
 			$newsletter_meta_admins = array(
@@ -1215,18 +1210,15 @@ class VCA_ASM_Admin_Emails {
 	 * @access private
 	 */
 	private function process() {
-		global $current_user, $wpdb,
-			$vca_asm_mailer, $vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_mailer $vca_asm_mailer */
+		global $current_user, $vca_asm_mailer, $vca_asm_geography;
 
-		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
 		$membership = ( isset( $_POST['membership'] ) && in_array( $_POST['membership'], array( 'all', 'active', 'inactive' ) ) ) ? $_POST['membership'] : 'all';
 		$receipient_group = isset( $_POST['receipient-group'] ) ? $_POST['receipient-group'] : '';
-		$receipient_id = 0;
-		$activity_id = isset( $_POST['activity'] ) ? $_POST['activity'] : 0;
 		$save = true;
 		$mail_type = isset( $_POST['mail_type'] ) ? $_POST['mail_type'] : '';
 		$ignore_switch = isset( $_POST['ignore_switch'] ) ? true : false;
-		$receipients = array();
 
 		if ( ! empty( $receipient_group ) ) {
 
@@ -1245,7 +1237,7 @@ class VCA_ASM_Admin_Emails {
 			$from_email = ( isset( $_POST['sender'] ) && $_POST['sender'] === 'own' ) ? $current_user->user_email : 'no-reply@vivaconagua.org';
 
 			$queue_args = array(
-				'receipients' => $receipients,
+				'receipients' => array(),
 				'subject' => $_POST['subject'],
 				'message' => $_POST['message'],
 				'from_name' => $from_name,

@@ -22,6 +22,9 @@ class VCA_ASM_Admin_Geography {
 	 * @access public
 	 */
 	public function control() {
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_finances $vca_asm_finances */
+        /** @var vca_asm_admin_settings $vca_asm_admin_settings */
 		global $current_user, $wpdb,
 			$vca_asm_finances, $vca_asm_geography,
 			$vca_asm_admin_settings;
@@ -424,15 +427,19 @@ class VCA_ASM_Admin_Geography {
 		}
 	}
 
-	/**
-	 * Region administration menu
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
+    /**
+     * Region administration menu
+     *
+     * @since 1.0
+     * @access public
+     * @param array $messages
+     * @param string $active_tab
+     */
 	public function view( $messages = array(), $active_tab = 'city' ) {
-		global $vca_asm_geography, $vca_asm_admin;
-				$current_user = wp_get_current_user();
+        /** @var vca_asm_geography $vca_asm_geography */
+		global $vca_asm_geography;
+
+		$current_user = wp_get_current_user();
 
 		if ( isset( $_GET['tab'] ) && in_array( $_GET['tab'], array( 'city', 'cg', 'nation', 'ng' ) ) ) {
 			$active_tab = $_GET['tab'];
@@ -501,22 +508,23 @@ class VCA_ASM_Admin_Geography {
 		echo $output;
 	}
 
-	/**
-	 * Lists geographical units of specified type
-	 *
-	 * @since 1.0
-	 * @access private
-	 */
+    /**
+     * Lists geographical units of specified type
+     *
+     * @since 1.0
+     * @access private
+     * @param $type
+     * @return string
+     */
 	private function list_geography( $type ) {
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_utilities $vca_asm_utilities */
 		global $vca_asm_geography, $vca_asm_utilities;
-		$current_user = wp_get_current_user();
 
-		if ( ! get_transient( 'vca-asm-update-member-count' ) ) {
+        if ( ! get_transient( 'vca-asm-update-member-count' ) ) {
 			$vca_asm_geography->update_member_count();
 			set_transient( 'vca-asm-update-member-count', 1, 60*60*24 );
 		}
-
-		$url = "admin.php?page=vca-asm-geography";
 
 		extract( $vca_asm_utilities->table_order() );
 		$rows = $vca_asm_geography->get_all( $orderby, $order, $type );
@@ -611,14 +619,17 @@ class VCA_ASM_Admin_Geography {
 		return $the_table->output();
 	}
 
-	/**
-	 * Edit a region
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
+    /**
+     * Edit a region
+     *
+     * @since 1.0
+     * @access public
+     * @param array $args
+     */
 	public function edit( $args = array() )
 	{
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_admin $vca_asm_admin */
 		global $current_user, $vca_asm_admin, $vca_asm_geography;
 
 		$default_args = array(
@@ -734,13 +745,16 @@ class VCA_ASM_Admin_Geography {
 		echo $output;
 	}
 
-	/**
-	 * Returns an array of fields for a city
-	 *
-	 * @since 1.0
-	 * @access private
-	 */
+    /**
+     * Returns an array of fields for a city
+     *
+     * @since 1.0
+     * @access private
+     * @param string $type
+     * @return array
+     */
 	private function create_fields( $type = 'city' ) {
+        /** @var vca_asm_geography $vca_asm_geography */
 		global $current_user, $vca_asm_geography;
 
 		$ccbg_label = '';
@@ -1027,15 +1041,17 @@ class VCA_ASM_Admin_Geography {
 		return $fields;
 	}
 
-	/**
-	 * Populates region fields with values
-	 *
-	 * @since 1.0
-	 * @access private
-	 */
+    /**
+     * Populates region fields with values
+     *
+     * @since 1.0
+     * @access private
+     * @param $id
+     * @return array
+     */
 	private function populate_fields( $id ) {
+        /** @var vca_asm_geography $vca_asm_geography */
 		global $wpdb, $vca_asm_geography;
-		$current_user = wp_get_current_user();
 		
 		$type = $vca_asm_geography->get_meta_type( $id );
 		$fields = $this->create_fields( $type );

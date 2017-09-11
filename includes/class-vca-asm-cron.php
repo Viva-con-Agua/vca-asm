@@ -32,14 +32,12 @@ class VCA_ASM_Cron
 
 	/* ============================= CONSTRUCTOR ============================= */
 
-	/**
-	 * Constructor
-	 *
-	 * @return void
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
+    /**
+     * Constructor
+     *
+     * @since 1.3
+     * @access public
+     */
 	public function __construct()
 	{
 		add_filter( 'cron_schedules', array( $this, 'add_non_core_scheduling_intervals' ) );

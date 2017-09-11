@@ -156,8 +156,8 @@ class VCA_ASM_Activities
 	 */
 	public function __construct()
 	{
-		global $post,
-			$vca_asm_utilities;
+        /** @var vca_asm_utilities $vca_asm_utilities */
+		global $post, $vca_asm_utilities;
 
 		/* Populate translatable/dynamic class properties, which can't be set in the class head */
 
@@ -266,8 +266,8 @@ class VCA_ASM_Activities
 	 */
 	private function custom_fields( $group = 'all' )
 	{
-		global $current_user, $post_type,
-			$vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+		global $current_user, $post_type, $vca_asm_geography;
 
 		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
@@ -624,17 +624,6 @@ class VCA_ASM_Activities
 			'edit_post' => 'vca_asm_edit_actions_activity',
 			'delete_post' => 'vca_asm_delete_actions_activity',
 			'read_post' => 'vca_asm_read_actions_activity'
-		);
-		$education_capabilities = array(
-			'publish_posts' => 'vca_asm_publish_education_activities',
-			'edit_posts' => 'vca_asm_edit_education_activities',
-			'edit_others_posts' => 'vca_asm_edit_others_education_activities',
-			'delete_posts' => 'vca_asm_delete_education_activities',
-			'delete_others_posts' => 'vca_asm_delete_others_education_activities',
-			'read_private_posts' => 'vca_asm_read_private_education_activities',
-			'edit_post' => 'vca_asm_edit_education_activity',
-			'delete_post' => 'vca_asm_delete_education_activity',
-			'read_post' => 'vca_asm_read_education_activity'
 		);
 		$network_capabilities = array(
 			'publish_posts' => 'vca_asm_publish_network_activities',
@@ -1041,8 +1030,8 @@ class VCA_ASM_Activities
 	 */
 	public function set_script_params()
 	{
-		global $current_user, $pagenow, $post,
-			$vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+		global $pagenow, $post,	$vca_asm_geography;
 
 		if( is_admin() && ( 'post.php' === $pagenow || 'post-new.php' === $pagenow ) ) {
 
@@ -1159,19 +1148,18 @@ class VCA_ASM_Activities
 		}
 	}
 
-	/**
-	 * Columns of post type tables in the backend
-	 *
-	 * Here: concerts
-	 * 'manage_edit-%post_type%_columns' filter callback
-	 *
-	 * @param array $columns
-	 * @return array $columns
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function concert_columns( $columns )
+    /**
+     * Columns of post type tables in the backend
+     *
+     * Here: concerts
+     * 'manage_edit-%post_type%_columns' filter callback
+     * @return array $columns
+     *
+     * @internal param array $columns
+     * @since 1.0
+     * @access public
+     */
+	public function concert_columns()
 	{
 		$columns = array(
 			'cb' => '<input type="checkbox" />',
@@ -1185,19 +1173,18 @@ class VCA_ASM_Activities
 		return $columns;
 	}
 
-	/**
-	 * Columns of post type tables in the backend
-	 *
-	 * Here: festivals
-	 * 'manage_edit-%post_type%_columns' filter callback
-	 *
-	 * @param array $columns
-	 * @return array $columns
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function festival_columns( $columns )
+    /**
+     * Columns of post type tables in the backend
+     *
+     * Here: festivals
+     * 'manage_edit-%post_type%_columns' filter callback
+     * @return array $columns
+     *
+     * @internal param array $columns
+     * @since 1.0
+     * @access public
+     */
+	public function festival_columns()
 	{
 		$columns = array(
 			'cb' => '<input type="checkbox" />',
@@ -1211,19 +1198,18 @@ class VCA_ASM_Activities
 		return $columns;
 	}
 
-	/**
-	 * Columns of post type tables in the backend
-	 *
-	 * Here: miscellaneous actions
-	 * 'manage_edit-%post_type%_columns' filter callback
-	 *
-	 * @param array $columns
-	 * @return array $columns
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function miscactions_columns( $columns )
+    /**
+     * Columns of post type tables in the backend
+     *
+     * Here: miscellaneous actions
+     * 'manage_edit-%post_type%_columns' filter callback
+     * @return array $columns
+     *
+     * @internal param array $columns
+     * @since 1.0
+     * @access public
+     */
+	public function miscactions_columns()
 	{
 		$columns = array(
 			'cb' => '<input type="checkbox" />',
@@ -1237,19 +1223,18 @@ class VCA_ASM_Activities
 		return $columns;
 	}
 
-	/**
-	 * Columns of post type tables in the backend
-	 *
-	 * Here: network gathering
-	 * 'manage_edit-%post_type%_columns' filter callback
-	 *
-	 * @param array $columns
-	 * @return array $columns
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function nwgathering_columns( $columns )
+    /**
+     * Columns of post type tables in the backend
+     *
+     * Here: network gathering
+     * 'manage_edit-%post_type%_columns' filter callback
+     * @return array $columns
+     *
+     * @internal param array $columns
+     * @since 1.0
+     * @access public
+     */
+	public function nwgathering_columns()
 	{
 		$columns = array(
 			'cb' => '<input type="checkbox" />',
@@ -1263,19 +1248,18 @@ class VCA_ASM_Activities
 		return $columns;
 	}
 
-	/**
-	 * Columns of post type tables in the backend
-	 *
-	 * Here: goldeimer events
-	 * 'manage_edit-%post_type%_columns' filter callback
-	 *
-	 * @param array $columns
-	 * @return array $columns
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
-	public function goldeimerfestival_columns( $columns )
+    /**
+     * Columns of post type tables in the backend
+     *
+     * Here: goldeimer events
+     * 'manage_edit-%post_type%_columns' filter callback
+     * @return array $columns
+     *
+     * @internal param array $columns
+     * @since 1.0
+     * @access public
+     */
+	public function goldeimerfestival_columns()
 	{
 		$columns = array(
 			'cb' => '<input type="checkbox" />',
@@ -1302,7 +1286,8 @@ class VCA_ASM_Activities
 	 */
 	public function custom_column( $column )
 	{
-		global $post, $wpdb, $vca_asm_registrations;
+        /** @var vca_asm_registrations $vca_asm_registrations */
+		global $post, $vca_asm_registrations;
 
 		switch ($column) {
 		    case 'location':
@@ -1348,7 +1333,6 @@ class VCA_ASM_Activities
 		global $pagenow;
 		$current_user = wp_get_current_user();
 		$roles = $current_user->roles;
-		$role =  array_shift( $roles );
 
 		add_meta_box(
 			'vca-asm-meta',
@@ -1615,21 +1599,25 @@ class VCA_ASM_Activities
 	public function box_contact()
 	{
 		$fields = $this->custom_fields( 'contact' );
-
 		require( VCA_ASM_ABSPATH . '/templates/admin-custom-fields.php' );
 		echo $output;
 	}
 
-	/**
-	 * Maps meta capabilities to wordpress core capabilities
-	 *
-	 * Meta capabilities are capabilities a user is granted on a per-post basis.
-	 *
-	 * @see: http://codex.wordpress.org/Function_Reference/map_meta_cap
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
+    /**
+     * Maps meta capabilities to wordpress core capabilities
+     *
+     * Meta capabilities are capabilities a user is granted on a per-post basis.
+     *
+     * @see: http://codex.wordpress.org/Function_Reference/map_meta_cap
+     *
+     * @since 1.0
+     * @access public
+     * @param $caps
+     * @param $cap
+     * @param $user_id
+     * @param $args
+     * @return array
+     */
 	public function vca_asm_map_meta_cap( $caps, $cap, $user_id, $args )
 	{
 
@@ -1703,18 +1691,20 @@ class VCA_ASM_Activities
 		return $caps;
 	}
 
-	/**
-	 * Saves the data
-	 *
-	 * @param bool|int $ID			Post ID
-	 * @param bool|object $post		WordPress Post Object
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
+    /**
+     * Saves the data
+     *
+     * @param bool|int $ID Post ID
+     * @param bool|object $post WordPress Post Object
+     *
+     * @since 1.0
+     * @access public
+     * @return bool
+     */
 	public function save_meta( $ID = false, $post = false )
 	{
-	    global $pagenow, $wpdb, $vca_asm_geography, $vca_asm_registrations;
+        /** @var vca_asm_geography $vca_asm_geography */
+	    global $pagenow, $wpdb, $vca_asm_geography;
 		$current_user = wp_get_current_user();
 
 		$all_fields = $this->custom_fields( 'all' );
@@ -1937,6 +1927,7 @@ class VCA_ASM_Activities
 	 */
 	public function notice_handler()
 	{
+        /** @var vca_asm_admin $vca_asm_admin */
 		global $current_user, $vca_asm_admin;
 
 		$notices = get_transient( 'admin_notices_'.$current_user->ID );
@@ -2166,13 +2157,6 @@ class VCA_ASM_Activities
 			'phase' => $phase,
 			'type' => $type
 		));
-
-		$admin_nation = 0;
-		$admin_city = 0;
-		if ( $check_caps ) {
-			$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
-			$admin_city = get_user_meta( $current_user->ID, 'city', true );
-		}
 
 		$options_array = array();
 

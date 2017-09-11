@@ -197,16 +197,15 @@ class VCA_ASM_Utilities
 		return $number;
 	}
 
-	/**
-	 * Handles determination of how to order tabular data
-	 * (Often recurring code block in Administrative Backend)
-	 *
-	 * @param string $default_orderby		(optional) DB column to sort by, used if $_GET['orderby'] is not set, defaults to 'name'
-	 * @return
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
+    /**
+     * Handles determination of how to order tabular data
+     * (Often recurring code block in Administrative Backend)
+     *
+     * @param string $default_orderby (optional) DB column to sort by, used if $_GET['orderby'] is not set, defaults to 'name'
+     * @return array
+     * @since 1.3
+     * @access public
+     */
 	public function table_order( $default_orderby = 'name' )
 	{
 		if( isset( $_GET['orderby'] ) ) {
@@ -233,16 +232,17 @@ class VCA_ASM_Utilities
 		);
 	}
 
-	/**
-	 * Sort a nested associative array by the value of a given key
-	 *
-	 * @param array @arr		the array to sort
-	 * @param string $key		the key of whose value to sort by
-	 * @param string $order		(optional) what direction to sort in (either 'ASC' oder 'DESC')
-	 *
-	 * @since 1.3
-	 * @access public
-	 */
+    /**
+     * Sort a nested associative array by the value of a given key
+     *
+     * @param array @arr        the array to sort
+     * @param string $key the key of whose value to sort by
+     * @param string $order (optional) what direction to sort in (either 'ASC' oder 'DESC')
+     *
+     * @since 1.3
+     * @access public
+     * @return mixed
+     */
 	public function sort_by_key( $arr, $key, $order = 'ASC' )
 	{
 		$this->sort_key = $key;
@@ -289,7 +289,7 @@ class VCA_ASM_Utilities
 	/**
 	 * Custom do_settings_sections (originally WP-core function)
 	 *
-	 * @param object $page				WP_Post object
+	 * @param string $page				WP_Post object
 	 *
 	 * @global $wp_settings_sections
 	 * @global $wp_settings_fields
@@ -352,7 +352,7 @@ class VCA_ASM_Utilities
 	 * Checks whether a session has already been started
 	 * (pre PHP 5.4)
 	 *
-	 * @return void
+	 * @return boolean
 	 *
 	 * @since 1.3
 	 * @access public

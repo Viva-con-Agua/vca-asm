@@ -21,8 +21,7 @@ class VCA_ASM_Admin_Home {
 	 * @access public
 	 */
 	public function home() {
-		global $current_user,
-			$vca_asm_geography;
+		global $current_user;
 
 		$has_tasks = false;
 
@@ -91,11 +90,10 @@ class VCA_ASM_Admin_Home {
 	 * @access public
 	 */
 	public function view_stats() {
-		global $current_user, $wpdb, $vca_asm_geography;
+		global $current_user, $vca_asm_geography;
 
 		$stats = new VCA_ASM_Stats();
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
-		$admin_city_name = $vca_asm_geography->get_name( $admin_city );
 		$admin_city_status = $vca_asm_geography->get_type( $admin_city );
 
 		$output = '<div id="poststuff">' .
@@ -215,8 +213,7 @@ class VCA_ASM_Admin_Home {
 	 * @access public
 	 */
 	public function view_tasks() {
-		global $current_user,
-			$vca_asm_geography;
+		global $current_user;
 
 		$has_tasks = false;
 
