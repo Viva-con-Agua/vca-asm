@@ -1926,7 +1926,7 @@ class VCA_ASM_Admin_Finances
 		if ( $this->has_cap ) {
 			if ( $active_tab !== 'all' ) {
 				$button .= '<form method="post" action="admin.php?page=' . $page . '&todo=new&tab=' . $active_tab . '&type=' . $active_tab . '&acc_type=' . $account_type . '&cid=' . $city_id . '">' .
-					'<input type="submit" class="button-secondary" value="+ ' . sprintf( __( 'add %s', 'vca-asm' ), $vca_asm_finances->types_to_nicenames[$tab] ) . '" />' .
+					'<input type="submit" class="button-secondary" value="+ ' . sprintf( __( 'add %s', 'vca-asm' ), $vca_asm_finances->types_to_nicenames[$active_tab] ) . '" />' .
 				'</form>';
 			} else {
 				$button .= '<div>';
@@ -2234,7 +2234,6 @@ class VCA_ASM_Admin_Finances
 			'order' => 'DESC'
 		);
 		$tbl_args = array_merge( $tbl_args, $pagination_args );
-
 		$the_table = new VCA_ASM_Admin_Table( $tbl_args, $columns, $rows );
 		return $the_table->output();
 	}

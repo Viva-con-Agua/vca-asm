@@ -68,7 +68,9 @@ class VCA_ASM_Admin_Emails {
 						'?page=vca-asm-outbox&todo=processed&id=' .$mail_id . '&cnt=' . $receipients_count .
 					'</span>'
 			);
-		}
+		} elseif( isset( $_GET['todo'] ) && $_GET['todo'] == 'test' ) {
+            echo $vca_asm_mailer->check_outbox();
+ 		}
 
 		$url = "admin.php?page=vca-asm-outbox";
 
@@ -138,9 +140,9 @@ class VCA_ASM_Admin_Emails {
 
 		$tbl_args = array(
 			'echo' => true,
-			'orderby' => null,
-			'order' => null,
-			'toggle_order' => null,
+			'orderby' => $orderby,
+			'order' => $order,
+			'toggle_order' => $toggle_order,
 			'page_slug' => 'vca-asm-outbox',
 			'base_url' => $url,
 			'sort_url' => $url,
@@ -234,7 +236,6 @@ class VCA_ASM_Admin_Emails {
 			}
 		}
 
-        $sbf = '';
 		if( isset( $_GET['filter'] ) &&
 		   1 ==  $_GET['filter'] &&
 		   ( isset( $_POST['sent-by-filter'] ) || isset( $_GET['sent-by-filter'] ) )
@@ -285,7 +286,6 @@ class VCA_ASM_Admin_Emails {
 
 		$email_count = count( $emails );
 
-
 		if( isset( $_GET['search'] ) && $_GET['search'] == 1 ) {
 			$table_headline = str_replace( '%results%', $email_count, str_replace( '%term%', $term, _x( 'Showing %results% search results for &quot;%term%&quot;', 'Admin Supporters', 'vca-asm' ) ) );
 		}
@@ -330,7 +330,7 @@ class VCA_ASM_Admin_Emails {
 		$rows = array();
 		for ( $i = $pagination_offset; $i < $cur_end; $i++ ) {
 			$rows[$i]['id'] = $emails[$i]['id'];
-			$rows[$i]['time'] = strftime( '%d. %B %G, %H:%M', $emails[$i]['time'] );
+            $rows[$i]['time'] = strftime( '%d. %B %Y, %H:%M', $emails[$i]['time'] );
 			$rows[$i]['sent_by'] = $emails[$i]['sent_by'];
 			$rows[$i]['from'] = $emails[$i]['from'];
 			$rows[$i]['to'] = $emails[$i]['to'];

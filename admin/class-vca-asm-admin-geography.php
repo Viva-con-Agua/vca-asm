@@ -333,7 +333,8 @@ class VCA_ASM_Admin_Geography {
 							);
 
 						} else {
-							$user = empty($_POST['user']) ? '' : $_POST['user'];
+                            $user = empty($_POST['user']) ? '' : $_POST['user'];
+                            $pass = empty($_POST['pass']) ? '' : base64_encode( mcrypt_encrypt( MCRYPT_RIJNDAEL_256, md5(REGION_KEY), $_POST['pass'], MCRYPT_MODE_CBC, md5(md5(REGION_KEY)) ) );
 							$wpdb->insert(
 								$wpdb->prefix.'vca_asm_geography',
 								array(
@@ -346,7 +347,7 @@ class VCA_ASM_Admin_Geography {
 									'has_user' => $has_user,
 									'user_id' => isset( $region_user_id ) ? $region_user_id : 0,
 									'user' => $user,
-									'pass' => base64_encode( mcrypt_encrypt( MCRYPT_RIJNDAEL_256, md5(REGION_KEY), $_POST['pass'], MCRYPT_MODE_CBC, md5(md5(REGION_KEY)) ) ),
+									'pass' => $pass,
 									'supporters' => 0,
 									'members' => 0
 								),
