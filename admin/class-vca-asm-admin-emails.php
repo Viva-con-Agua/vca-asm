@@ -56,7 +56,7 @@ class VCA_ASM_Admin_Emails {
 					sprintf(
 						_x( 'It has been saved to %1$s and you can view it %2$s.', 'Admin Email Interface', 'vca-asm' ),
 						'<a href="admin.php?page=vca-asm-emails" title="' . __( 'View Sent Items', 'vca-asm' ) . '">' . __( 'Sent Items', 'vca-asm' ) . '</a>',
-						'<a href="' . get_site_url() . '/email/?id=' . $mail_id . '" title="' . __( 'Read the E-Mail', 'vca-asm' ) . '">' . __( 'here', 'vca-asm' ) . '</a>'
+						'<a href="' . get_option( 'siteurl' ) . '/email/?id=' . $mail_id . '" title="' . __( 'Read the E-Mail', 'vca-asm' ) . '">' . __( 'here', 'vca-asm' ) . '</a>'
 					) .
 					'<br /><br />' .
 					'<a title="' . _x( 'One more...', 'Admin Email Interface', 'vca-asm' ) . '" ' .
