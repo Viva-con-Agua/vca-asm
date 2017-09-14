@@ -8864,8 +8864,8 @@ msgstr ""
 
 # @ vca-asm
 #. Plugin URI of the plugin/theme
-msgid "http://pool.vivaconagua.org"
-msgstr "http://pool.vivaconagua.org"
+msgid "https://pool.vivaconagua.org"
+msgstr "https://pool.vivaconagua.org"
 
 #. Description of the plugin/theme
 msgid ""
