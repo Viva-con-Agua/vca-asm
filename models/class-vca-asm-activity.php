@@ -159,7 +159,7 @@ class VCA_ASM_Activity
 	 * @since 1.5
 	 * @access public
 	 */
-	public $icon_url = 'http://vivaconagua.org/wp-content/plugins/vca-asm/img/icon-festival_32.png';
+	public $icon_url = 'https://vivaconagua.org/wp-content/plugins/vca-asm/img/icon-festival_32.png';
 
 	/**
 	 * The ID of the nation the activity is associated with
@@ -987,7 +987,7 @@ class VCA_ASM_Activity
 
 		$this->type = 'festival';
 		$this->nice_type = 'Festival';
-		$this->icon_url = 'http://vivaconagua.org/wp-content/plugins/vca-asm/img/icon-festivals_32.png';
+		$this->icon_url = 'https://vivaconagua.org/wp-content/plugins/vca-asm/img/icon-festivals_32.png';
 
 		$this->nation = 0;
 		$this->nation_name = '';
