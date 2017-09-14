@@ -1237,7 +1237,7 @@ class VCA_ASM_Admin_Emails {
 			$from_email = ( isset( $_POST['sender'] ) && $_POST['sender'] === 'own' ) ? $current_user->user_email : 'no-reply@vivaconagua.org';
 
 			$queue_args = array(
-				'receipients' => array(),
+				'receipients' => $receipients,
 				'subject' => $_POST['subject'],
 				'message' => $_POST['message'],
 				'from_name' => $from_name,
