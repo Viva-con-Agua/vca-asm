@@ -71,14 +71,10 @@ class VCA_ASM_Admin_Update {
 	 * @access public
 	 */
 	public function control() {
-		global $wpdb,
-			$vca_asm_activities, $vca_asm_finances, $vca_asm_geography, $vca_asm_mailer,
-			$vca_asm_admin, $vca_asm_admin_settings;
 
 		$messages = array();
 
 		if ( isset( $_GET['todo'] ) && 'update' === $_GET['todo'] ) {
-			$updated = true;
 
 			$args = array(
 				'meta_query' => array(
@@ -97,7 +93,7 @@ class VCA_ASM_Admin_Update {
 			//	. htmlspecialchars( print_r( $user_query->results[0], TRUE ), ENT_QUOTES, 'utf-8', FALSE )
 			//	. "</pre>\n";
 
-			if ( ! empty( $user_query->results ) ) {
+			if ( !empty( $user_query->results ) ) {
 				foreach ( $user_query->results as $user ) {
 					wp_delete_user( $user->ID );
 				}

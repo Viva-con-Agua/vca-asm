@@ -66,14 +66,12 @@ class VCA_ASM_Security
 
 	/* ============================= CONSTRUCTOR (AND IMMEDIATELY RELATED CODE) ============================= */
 
-	/**
-	 * Constructor
-	 *
-	 * @return void
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
+    /**
+     * Constructor
+     *
+     * @since 1.0
+     * @access public
+     */
 	public function __construct()
 	{
 		$this->init();
@@ -248,13 +246,17 @@ class VCA_ASM_Security
 		return $errors;
 	}
 
-	/**
-	 * Processed when a user logs in
-	 * Hooked with 'login_redirect'
-	 *
-	 * @since 1.2
-	 * @access public
-	 */
+    /**
+     * Processed when a user logs in
+     * Hooked with 'login_redirect'
+     *
+     * @since 1.2
+     * @access public
+     * @param $redirect_to
+     * @param string $url_redirect_to
+     * @param null $user
+     * @return string
+     */
 	public function pass_reset_redirect( $redirect_to, $url_redirect_to = '', $user = null )
 	{
 		if( isset( $user->ID ) && ! $this->check_pass_age( $user, true ) ) {
@@ -424,7 +426,7 @@ class VCA_ASM_Security
 	 * Retrieves the last activity timestamp
 	 *
 	 * @param NULL|object $user		(optional) WP_User object
-	 * @return string				timestamp of last login from the user_meta table
+	 * @return integer				timestamp of last login from the user_meta table
 	 *
 	 * @since 1.2
 	 * @access private

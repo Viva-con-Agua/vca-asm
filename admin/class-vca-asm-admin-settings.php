@@ -210,6 +210,7 @@ class VCA_ASM_Admin_Settings {
 	 * @access public
 	 */
 	public function mode_control() {
+        /** @var vca_asm_utilities $vca_asm_utilities */
 		global $vca_asm_utilities;
 
 		$page = new VCA_ASM_Admin_Page( array(
@@ -530,6 +531,7 @@ class VCA_ASM_Admin_Settings {
 	 * @access private
 	 */
 	private function security_menu() {
+        /** @var vca_asm_utilities $vca_asm_utilities */
 		global $vca_asm_utilities;
 
 		wp_enqueue_script( 'vca-asm-admin-settings' );
@@ -564,6 +566,7 @@ class VCA_ASM_Admin_Settings {
 	 * @access private
 	 */
 	private function emails_menu() {
+        /** @var vca_asm_utilities $vca_asm_utilities */
 		global $vca_asm_utilities;
 
 		wp_enqueue_script( 'vca-asm-admin-settings' );
@@ -1077,17 +1080,20 @@ class VCA_ASM_Admin_Settings {
 
 	/******************** UTILITY METHODS ********************/
 
-	/**
-	 * Scope Selector
-	 * ( Countries + Goldeimer )
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
+    /**
+     * Scope Selector
+     * ( Countries + Goldeimer )
+     *
+     * @since 1.5
+     * @access public
+     * @param $tab
+     * @param bool $include_goldeimer
+     * @return string
+     */
 	private function scope_selector( $tab, $include_goldeimer = true )
 	{
-		global $current_user,
-			$vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+		global $current_user, $vca_asm_geography;
 
 		$options = $vca_asm_geography->options_array( array( 'type' => 'nation' ));
 
@@ -1163,12 +1169,14 @@ class VCA_ASM_Admin_Settings {
 		return $output;
 	}
 
-	/**
-	 * Inserts a new set of autoresponses
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
+    /**
+     * Inserts a new set of autoresponses
+     *
+     * @since 1.5
+     * @access public
+     * @param $scope
+     * @param bool $preset
+     */
 	public function insert_autoresponses( $scope, $preset = false )
 	{
 		global $wpdb;
@@ -1208,12 +1216,13 @@ class VCA_ASM_Admin_Settings {
 		}
 	}
 
-	/**
-	 * Deletes a set of autoresponses
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
+    /**
+     * Deletes a set of autoresponses
+     *
+     * @since 1.5
+     * @access public
+     * @param string $scope
+     */
 	public function delete_autoresponses( $scope = 'dummy' )
 	{
 		global $wpdb;
