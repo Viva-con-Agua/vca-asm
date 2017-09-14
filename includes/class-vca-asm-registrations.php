@@ -23,25 +23,25 @@ class VCA_ASM_Registrations
 
 	/* ============================= CONTROLLERS / DB OPERATIONS ============================= */
 
-	/**
-	 * Writes an application to the database
-	 *
-	 * @param int $activity_id				the (post-)ID of the activity
-	 * @param string $notes					(optional) notes sent with the application by the supporter
-	 * @param NULL|int $activity_id			(optional) the (user-)ID of the supporter
-	 * @return bool $success
-	 *
-	 * @global object $current_user
-	 * @global object $wpdb
-	 * @global object $vca_asm_mailer
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
+    /**
+     * Writes an application to the database
+     *
+     * @param NULL|int $activity_id (optional) the (user-)ID of the supporter
+     * @param string $notes (optional) notes sent with the application by the supporter
+     * @global object $current_user
+     * @return bool $success
+     *
+     * @global object $current_user
+     * @global object $wpdb
+     * @global object $vca_asm_mailer
+     *
+     * @since 1.0
+     * @access public
+     */
 	public function set_application( $activity_id, $notes = '', $supporter = NULL )
 	{
-		global $current_user, $wpdb,
-			$vca_asm_mailer;
+        /** @var vca_asm_mailer $vca_asm_mailer */
+		global $current_user, $wpdb, $vca_asm_mailer;
 
 		/* default action (if called from frontend) */
 		if( $supporter === NULL ) {
@@ -105,8 +105,8 @@ class VCA_ASM_Registrations
 	 * @access public
 	 */
 	public function deny_application( $activity_id, $supporter_id ) {
-		global $wpdb,
-			$vca_asm_mailer;
+        /** @var vca_asm_mailer $vca_asm_mailer */
+		global $wpdb, $vca_asm_mailer;
 
 		$success = $wpdb->update(
 			$wpdb->prefix . 'vca_asm_applications',
@@ -161,8 +161,8 @@ class VCA_ASM_Registrations
 	 */
 	public function accept_application( $activity_id, $supporter_id )
 	{
-		global $wpdb,
-			$vca_asm_mailer;
+        /** @var vca_asm_mailer $vca_asm_mailer */
+		global $wpdb, $vca_asm_mailer;
 
 		$the_activity = new VCA_ASM_Activity( $activity_id, array( 'minimalistic' => true ) );
 
@@ -376,8 +376,8 @@ class VCA_ASM_Registrations
 	 */
 	public function revoke_registration( $activity_id, $supporter_id )
 	{
-		global $wpdb,
-			$vca_asm_mailer;
+        /** @var vca_asm_mailer $vca_asm_mailer */
+		global $wpdb, $vca_asm_mailer;
 
 		$success = $wpdb->query(
 			'DELETE FROM ' . $wpdb->prefix . 'vca_asm_registrations ' .
@@ -422,8 +422,6 @@ class VCA_ASM_Registrations
 	 */
 	public function get_free_slots( $activity_id, $user_id )
 	{
-		global $wpdb,
-			$vca_asm_geography;
 
 		$the_activity = new VcA_ASM_Activity( $activity_id );
 
@@ -431,20 +429,17 @@ class VCA_ASM_Registrations
 		$nation = intval( get_user_meta( $user_id, 'nation', true ) );
 
 		if ( ! empty( $city ) && array_key_exists( $city, $the_activity->cty_slots ) ) {
-			$quota = $city;
 			$participants = isset( $the_activity->participants_count_by_slots[$city] ) ?
 				$the_activity->participants_count_by_slots[$city] :
 				0;
 			$free = $the_activity->cty_slots[$city] - $participants;
 		} else {
 			if ( ! empty( $nation ) && array_key_exists( $nation, $the_activity->ctr_slots ) ) {
-				$quota = $nation;
 				$participants = isset( $the_activity->participants_count_by_slots[$nation] ) ?
 					$the_activity->participants_count_by_slots[$nation] :
 					0;
 				$free = $the_activity->ctr_slots[$nation] - $participants;
 			} else {
-				$quota = 0;
 				$participants = isset( $the_activity->participants_count_by_slots[0] ) ?
 					$the_activity->participants_count_by_slots[0] :
 					0;
@@ -459,8 +454,8 @@ class VCA_ASM_Registrations
 	 * Returns an array containing all supporters that have applied to an activity
 	 *
 	 * @param int $activity_id		the (post-)ID of the activity
-	 * @return int $free
-	 *
+	 * @return array
+     *
 	 * @global object $wpdb
 	 *
 	 * @since 1.0
@@ -555,7 +550,7 @@ class VCA_ASM_Registrations
 	/**
 	 * Returns the count of current supporters on the waiting list for an activity
 	 *
-	 * @param int $activity_id		the (post-)ID of the activity
+	 * @param int $activity		the (post-)ID of the activity
 	 * @param string|int $city		(optional) (geographical) ID of the city, defaults to 'all'
 	 * @return int $count
 	 *
@@ -666,7 +661,7 @@ class VCA_ASM_Registrations
 	/**
 	 * Returns an array containing all supporters that have participated in a past activity
 	 *
-	 * @param int $activity_id		the (post-)ID of the activity
+	 * @param int $activity		the (post-)ID of the activity
 	 * @param array $args			(optional) parameters defining the format of the return, see code
 	 * @return array $participants
 	 *
@@ -707,7 +702,7 @@ class VCA_ASM_Registrations
 	/**
 	 * Returns the count of current registrations to an activity
 	 *
-	 * @param int $activity_id		the (post-)ID of the activity
+	 * @param int $activity		the (post-)ID of the activity
 	 * @param string|int $city		(optional) (geographical) ID of the city, defaults to 'all'
 	 * @return int $count
 	 *
@@ -716,7 +711,7 @@ class VCA_ASM_Registrations
 	 */
 	public function get_activity_registration_count( $activity, $city = 'all' )
 	{
-		global $wpdb, $vca_asm_activities;
+		global $wpdb;
 
 		if ( time() > get_post_meta( $activity, 'end_act', true ) ) {
 			$tbl_name = 'vca_asm_registrations_old';
@@ -732,11 +727,6 @@ class VCA_ASM_Registrations
 				$wpdb->prefix . $tbl_name . " " .
 				"WHERE activity= %d", $activity
 			) );
-			$end_date = intval( get_post_meta( $activity, 'end_act', true ) );
-			$today = time();
-			if( $today < $end_date ) {
-				$dummy = 0;
-			}
 		} else {
 			$count = 0;
 			$registrations = $wpdb->get_results(
@@ -1004,8 +994,8 @@ class VCA_ASM_Registrations
 	 */
 	public function scope_from_activity( $activity_id )
 	{
-		global $current_user, $wpdb,
-			$vca_asm_activities, $vca_asm_mailer;
+        /** @var vca_asm_activities $vca_asm_activities */
+		global $current_user, $vca_asm_activities;
 
 		$type = get_post_type( $activity_id );
 

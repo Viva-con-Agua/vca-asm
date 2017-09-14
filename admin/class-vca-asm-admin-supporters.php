@@ -36,6 +36,8 @@ class VCA_ASM_Admin_Supporters {
 	 * @access public
 	 */
 	public function control() {
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_mailer $vca_asm_mailer */
 		global $vca_asm_mailer, $vca_asm_geography;
 		$current_user = wp_get_current_user();
 
@@ -43,7 +45,6 @@ class VCA_ASM_Admin_Supporters {
 		$admin_nation = $vca_asm_geography->has_nation( $admin_city );
 
 		$cities = $vca_asm_geography->get_names( 'city' );
-		$nations = $vca_asm_geography->get_names( 'nation' );
 
 		$messages = array();
 
@@ -353,14 +354,19 @@ class VCA_ASM_Admin_Supporters {
 
 	/**** VIEWS *****/
 
-	/**
-	 * Outputs a complete Supporter Profile
-	 *
-	 * @since 1.2
-	 * @access private
-	 */
+    /**
+     * Outputs a complete Supporter Profile
+     *
+     * @since 1.2
+     * @access private
+     * @param $supporter
+     * @param string $back_action
+     */
 	public function supporter_profile( $supporter, $back_action = 'admin.php?page=vca-asm-supporters' ) {
-		global $wp_roles, $vca_asm_geography, $vca_asm_roles, $vca_asm_utilities, $vca_asm_admin;
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_roles $vca_asm_roles */
+        /** @var vca_asm_admin $vca_asm_admin */
+		global $wp_roles, $vca_asm_geography, $vca_asm_roles, $vca_asm_admin;
 		$current_user = wp_get_current_user();
 
 		$messages = array();
@@ -672,14 +678,17 @@ class VCA_ASM_Admin_Supporters {
 		$page->bottom();
 	}
 
-	/**
-	 * Lists all supporters
-	 *
-	 * @since 1.0
-	 * @access private
-	 */
+    /**
+     * Lists all supporters
+     *
+     * @since 1.0
+     * @access private
+     * @param array $messages
+     */
 	private function list_supporters( $messages = array() ) {
-		global $wpdb, $vca_asm_admin, $vca_asm_geography, $vca_asm_utilities;
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_utilities $vca_asm_utilities */
+		global $wpdb, $vca_asm_geography, $vca_asm_utilities;
 		$current_user = wp_get_current_user();
 
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
@@ -888,8 +897,6 @@ class VCA_ASM_Admin_Supporters {
 			$empty_message = sprintf( __( 'No results for the search term &quot;%s&quot;...', 'vca-asm' ), $term );
 		}
 
-		$profile_url = $sort_url . '&orderby=' . $orderby . '&order=' . $order;
-
 		$cities = $vca_asm_geography->get_names( 'city' );
 		$nations = $vca_asm_geography->get_names( 'nation' );
 		$stati = $vca_asm_geography->get_types();
@@ -961,7 +968,6 @@ class VCA_ASM_Admin_Supporters {
 				'current_page' => $cur_page
 			);
 		} else {
-			$cur_page = 1;
 			$pagination_offset = 0;
 			$cur_end = $user_count;
 			$pagination_args = array( 'pagination' => false );
@@ -1505,12 +1511,15 @@ class VCA_ASM_Admin_Supporters {
 
 	/**** UTILITY METHODS *****/
 
-	/**
-	 * Fetches membership status from databse and converts to human readable form
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
+    /**
+     * Fetches membership status from databse and converts to human readable form
+     *
+     * @since 1.0
+     * @access public
+     * @param $id
+     * @param $region_status
+     * @return string
+     */
 	public function get_membership_status( $id, $region_status ) {
 		$status = get_user_meta( $id, 'membership', true );
 		if( $region_status != 'city' ) {
@@ -1531,12 +1540,14 @@ class VCA_ASM_Admin_Supporters {
 		}
 	}
 
-	/**
-	 * Builds the HTML for the avatar pop-up on mouseover for the backend
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
+    /**
+     * Builds the HTML for the avatar pop-up on mouseover for the backend
+     *
+     * @since 1.0
+     * @access public
+     * @param $supporter
+     * @return string
+     */
 	public function photo_info( $supporter ) {
 
 		$avatar = preg_replace( '/"/', '&quot;', get_avatar( $supporter ) );
@@ -1547,13 +1558,18 @@ class VCA_ASM_Admin_Supporters {
 		return $photo_info;
 	}
 
-	/**
-	 * Builds the HTML for the note-info pop-up on mouseover for the backend
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
+    /**
+     * Builds the HTML for the note-info pop-up on mouseover for the backend
+     *
+     * @since 1.0
+     * @access public
+     * @param $activity
+     * @param $supporter
+     * @param $type
+     * @return bool|string
+     */
 	public function note_info( $activity, $supporter, $type ) {
+        /** @var wpdb $wpdb */
 		global $wpdb;
 
 		if( 'accepted' == $type ) {

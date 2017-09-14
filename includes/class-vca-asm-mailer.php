@@ -181,8 +181,7 @@ class VCA_ASM_Mailer
 	 */
 	public function queue( $args = array() )
 	{
-		global $current_user, $wpdb,
-			$vca_asm_geography;
+		global $current_user, $wpdb;
 
 		$default_args = array(
 			'receipients' => 1,
@@ -202,7 +201,6 @@ class VCA_ASM_Mailer
 		if ( ! is_array( $receipients ) ) $receipients = array( $receipients );
 
 		$save_message = trim( $message );
-		$message = wordwrap( $save_message, 70 );
 
 		$wpdb->insert(
 			$wpdb->prefix . 'vca_asm_emails',
@@ -241,7 +239,7 @@ class VCA_ASM_Mailer
 	 * Checks for queued mails.
 	 * Sends a parcel, if mails are scheduled for sending.
 	 *
-	 * @return void
+	 * @return boolean
 	 *
 	 * @global object $wpdb
 	 * @global object $vca_asm_geography
@@ -251,8 +249,8 @@ class VCA_ASM_Mailer
 	 */
 	public function check_outbox()
 	{
-		global $wpdb,
-			$vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+		global $wpdb, $vca_asm_geography;
 
 		$queued = $wpdb->get_results(
 			"SELECT * FROM " .
@@ -336,15 +334,15 @@ class VCA_ASM_Mailer
 
 		$log_file = VCA_ASM_ABSPATH . '/logs/mailer.log';
 		$log_msg = 'Time: ' . time() . "\n" .
-			'Total sent: ' . $mailer_return[total] . "\n" .
-			'Successes: ' . $mailer_return[successes] . "\n" .
-			'Failures: ' . $mailer_return[failures];
-		if ( ! empty( $mailer_return[failures] ) ) {
+			'Total sent: ' . $mailer_return['total'] . "\n" .
+			'Successes: ' . $mailer_return['successes'] . "\n" .
+			'Failures: ' . $mailer_return['failures'];
+		if ( ! empty( $mailer_return['failures'] ) ) {
 			$i = 1;
-			foreach ( $mailer_return[failed_ids] as $user_id ) {
+			foreach ( $mailer_return['failed_ids'] as $user_id ) {
 				$log_msg .= "\n" . 'Failure #' . $i . ', User ID: ' . $user_id;
-				if ( isset( $mailer_return[error_msgs][$i-1] ) ) {
-					$log_msg .= "\n" . 'Failure #' . $i . ', msg: ' . $mailer_return[error_msgs][$i-1];
+				if ( isset( $mailer_return['error_msgs'][$i-1] ) ) {
+					$log_msg .= "\n" . 'Failure #' . $i . ', msg: ' . $mailer_return['error_msgs'][$i-1];
 				}
 				$i++;
 			}
@@ -416,8 +414,8 @@ class VCA_ASM_Mailer
 	 */
 	public function send_smtp( $args = array() )
 	{
-		global $current_user,
-			$vca_asm_geography, $vca_asm_utilities;
+        /** @var vca_asm_utilities $vca_asm_utilities */
+		global $vca_asm_utilities;
 
 		$emails_options = get_option( 'vca_asm_emails_options' );
 
@@ -602,16 +600,8 @@ class VCA_ASM_Mailer
 	 */
 	public function send_sendmail( $args = array() )
 	{
-		global $current_user,
-			$vca_asm_geography, $vca_asm_utilities;
-
-		$results = array(
-			'total' => 0,
-			'successes' => 0,
-			'failures' => 0,
-			'failed_ids' => array(),
-			'error_msgs' => array()
-		);
+        /** @var vca_asm_utilities $vca_asm_utilities */
+		global $vca_asm_utilities;
 
 		$results = array(
 			'total' => 0,
@@ -816,8 +806,8 @@ class VCA_ASM_Mailer
 	 * @param int $user_id				the ID of the user getting the mail
 	 * @param string $action			action/activity slug / array key
 	 * @param array $message_args		(optional) the parameters of the message, see code
-	 * @return void
-	 *
+	 * @return bool
+     *
 	 * @global object $current_user
 	 * @global object $wpdb
 	 * @global object $vca_asm_geography
@@ -827,8 +817,8 @@ class VCA_ASM_Mailer
 	 */
 	public function auto_response( $user_id, $action, $message_args = array() )
 	{
-		global $current_user, $wpdb,
-			$vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+		global $current_user, $wpdb, $vca_asm_geography;
 
 		$emails_options = get_option( 'vca_asm_emails_options' );
 		$format = ! empty( $emails_options['email_format_auto'] ) ? $emails_options['email_format_auto'] : 'plain';
@@ -984,6 +974,7 @@ class VCA_ASM_Mailer
 	 */
 	public function determine_for_field( $receipient_group, $receipient_id, $membership )
 	{
+        /** @var vca_asm_geography $vca_asm_geography */
 		global $vca_asm_geography;
 
 		switch( $receipient_group ) {
@@ -1061,7 +1052,7 @@ class VCA_ASM_Mailer
 	/**
 	 * Returns the id of a receipient group based on the kind of group
 	 *
-	 * @param string receipient_group		here: type of delimiter (activity, city, nation), little ambiguous
+	 * @param string $receipient_group		here: type of delimiter (activity, city, nation), little ambiguous
 	 * @param bool $with_users				(optional) whether to return only an ID or an array including all useres also
 	 * @param bool $ignore_switch			(optional) whether to ignore a users newsletter settings
 	 * @param string|int $membership		(optional) limit results by membership status, defaults to 'all'
@@ -1081,8 +1072,9 @@ class VCA_ASM_Mailer
 			$membership = 'all'
 		)
 	{
-		global $current_user,
-			$vca_asm_activities, $vca_asm_geography;
+        /** @var vca_asm_activities $vca_asm_activities */
+        /** @var vca_asm_geography $vca_asm_geography */
+		global $current_user, $vca_asm_activities, $vca_asm_geography;
 
 		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
 		$receipient_id = 0;

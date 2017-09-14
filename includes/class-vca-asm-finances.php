@@ -62,12 +62,13 @@ class VCA_ASM_Finances
 
 	/* ============================= CONSTRUCTOR ============================= */
 
-	/**
-	 * Constructor
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
+    /**
+     * Constructor
+     *
+     * @since 1.5
+     * @access public
+     * @param array $args
+     */
 	public function __construct( $args = array() )
 	{
 		/* Populate $types_to_nicenames property with translatable strings (not possbile in class head) */
@@ -83,24 +84,25 @@ class VCA_ASM_Finances
 
 	/* ============================= MANAGE ACCOUNTS ============================= */
 
-	/**
-	 * Set up a new account in the database
-	 *
-	 * This method is generally called from within the VCA_ASM_Geography class when adding a new cell
-	 *
-	 * @param int $city_id		The city the account will be for
-	 * @param string $type		(optional) the account type to create, defaults to 'econ'
-	 *
-	 * @global object $wpdb
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
+    /**
+     * Set up a new account in the database
+     *
+     * This method is generally called from within the VCA_ASM_Geography class when adding a new cell
+     *
+     * @param int $city_id The city the account will be for
+     * @param string $type (optional) the account type to create, defaults to 'econ'
+     *
+     * @global object $wpdb
+     *
+     * @since 1.5
+     * @access public
+     * @return int
+     */
 	public function create_account( $city_id, $type = 'econ' )
 	{
 		global $wpdb;
 
-		$data = $wpdb->insert(
+		$wpdb->insert(
 			$wpdb->prefix . "vca_asm_finances_accounts",
 			array(
 				'city_id' => $city_id,
@@ -115,21 +117,22 @@ class VCA_ASM_Finances
 		return $wpdb->insert_id;
 	}
 
-	/**
-	 * Delete an account from the database
-	 *
-	 * Clean-up callback.
-	 * This method is generally called from within the VCA_ASM_Geography class when deleting cell
-	 *
-	 * @param int $city_id				The city the account was for
-	 * @param string $type				(optional) the account type(s) to delete, defaults to 'all'
-	 * @param bool $with_transactions	(optional) whether to remove the associated transactions as well, defaults to false
-	 *
-	 * @global object $wpdb
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
+    /**
+     * Delete an account from the database
+     *
+     * Clean-up callback.
+     * This method is generally called from within the VCA_ASM_Geography class when deleting cell
+     *
+     * @param int $city_id The city the account was for
+     * @param string $account_type (optional) the account type(s) to delete, defaults to 'all'
+     * @param bool $with_transactions (optional) whether to remove the associated transactions as well, defaults to false
+     *
+     * @global object $wpdb
+     *
+     * @since 1.5
+     * @access public
+     * @return false|int
+     */
 	public function delete_account( $city_id, $account_type = 'all', $with_transactions = false )
 	{
 		global $wpdb;
@@ -212,8 +215,9 @@ class VCA_ASM_Finances
 	 */
 	public function get_accounts( $type = 'econ', $nation_id = 0, $with_extra_data = false, $sorted = false )
 	{
-		global $wpdb,
-			$vca_asm_geography, $vca_asm_utilities;
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_utilities $vca_asm_utilities */
+		global $wpdb, $vca_asm_geography, $vca_asm_utilities;
 
 		$where = "WHERE type = '" . $type . "'";
 		if ( ! empty( $nation_id ) ) {
@@ -264,8 +268,8 @@ class VCA_ASM_Finances
 	 */
 	public function get_transactions( $args = array() )
 	{
-		global $wpdb,
-			$vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+		global $wpdb, $vca_asm_geography;
 
 		$default_args = array(
 			'id' => 0,
@@ -669,7 +673,14 @@ class VCA_ASM_Finances
 
 		return $data;
 	}
-	/** Backwards compatibility */
+
+    /** Backwards compatibility
+     * @param string $orderby
+     * @param string $order
+     * @param string $type
+     * @param int $nation
+     * @return array
+     */
 	public function get_metas( $orderby = 'value', $order = 'ASC', $type = 'cost-center', $nation = 0 )
 	{
 		return $this->get_national_meta( $orderby, $order, $type, $nation );
@@ -747,11 +758,11 @@ class VCA_ASM_Finances
 	 * Fetches all cost centers ("Kostenstellen") related to a nation
 	 * (wrapper for get_meta)
 	 *
-	 * @param string $order_by	(optional) the DB column to order by, defaults to 'value'
+	 * @param string $orderby	(optional) the DB column to order by, defaults to 'value'
 	 * @param string $order		(optional) the direction to order in ('ASC' or 'DESC'), defaults to 'ASC'
 	 * @param int $nation		(optional) the ID of nation the cost centers are related to, defaults to 0
-	 * @return string			the occasion
-	 *
+	 * @return array
+     *
 	 * @since 1.5
 	 * @access public
 	 */
@@ -764,7 +775,7 @@ class VCA_ASM_Finances
 	 * Fetches a cost center's ("Kostenstelle") data
 	 * (wrapper for get_meta)
 	 *
-	 * @param int $city_id			the city's geographical ID
+	 * @param int $id			the city's geographical ID
 	 * @param string $data_type		what related data to fetch (DB column)
 	 * @return array|mixed			the metadata
 	 *
@@ -780,7 +791,7 @@ class VCA_ASM_Finances
 	 * Fetches saved tax rates, optionally (and usually used that way) for one nation only
 	 * (wrapper for get_national_meta)
 	 *
-	 * @param string $order_by		(optional) the DB column to order by, defaults to 'value'
+	 * @param string $orderby		(optional) the DB column to order by, defaults to 'value'
 	 * @param string $order			(optional) the direction to order in ('ASC' or 'DESC'), defaults to 'ASC'
 	 * @param int $nation			(optional) the ID of nation the tax rates are related to, defaults to 0
 	 * @return array				the tax rates
@@ -793,16 +804,16 @@ class VCA_ASM_Finances
 		return $this->get_national_meta( $orderby, $order, 'tax-rate', $nation );
 	}
 
-	/**
-	 * Fetches a tax rate by ID (returns an integer representing a percentage value)
-	 * (wrapper for get_meta)
-	 *
-	 * @param string $id		(optional) the ID of the rate in the metadata table, defaults to 0
-	 * @return int				the tax rate
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
+    /**
+     * Fetches a tax rate by ID (returns an integer representing a percentage value)
+     * (wrapper for get_meta)
+     *
+     * @param int|string $id (optional) the ID of the rate in the metadata table, defaults to 0
+     * @return int the tax rate
+     *
+     * @since 1.5
+     * @access public
+     */
 	public function get_tax_rate( $id = 0 )
 	{
 		if ( ! is_numeric( $id ) ) {
@@ -815,16 +826,16 @@ class VCA_ASM_Finances
 		return $value;
 	}
 
-	/**
-	 * Fetches the default (i.e. most used) tax rate by related nation ID
-	 * (wrapper for get_meta)
-	 *
-	 * @param string $id		(optional) the ID of the related nation
-	 * @return int				the tax rate
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
+    /**
+     * Fetches the default (i.e. most used) tax rate by related nation ID
+     * (wrapper for get_meta)
+     *
+     * @param int|string $id (optional) the ID of the related nation
+     * @return int the tax rate
+     *
+     * @since 1.5
+     * @access public
+     */
 	public function get_default_tax_rate( $id = 0 )
 	{
 		return $this->get_meta( $id, 'related_id', 'default-tax-rate', 'value' );
@@ -835,7 +846,7 @@ class VCA_ASM_Finances
 	 * (wrapper for get_national_meta)
 	 *
 	 *
-	 * @param string $order_by		(optional) the DB column to order by, defaults to 'value'
+	 * @param string $orderby		(optional) the DB column to order by, defaults to 'value'
 	 * @param string $order			(optional) the direction to order in ('ASC' or 'DESC'), defaults to 'ASC'
 	 * @param int $nation			(optional) the ID of nation the occasions are related to, defaults to 0
 	 * @return array				the occasions
@@ -848,50 +859,51 @@ class VCA_ASM_Finances
 		return $this->get_national_meta( $orderby, $order, 'occasion', $nation );
 	}
 
-	/**
-	 * Fetches an occasion ("Anlass/VWZ") by its ID
-	 * (wrapper for get_meta)
-	 *
-	 * @param string $id		(optional) the ID of the occasion in the metadata table, defaults to 0
-	 * @return string			the occasion
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
+    /**
+     * Fetches an occasion ("Anlass/VWZ") by its ID
+     * (wrapper for get_meta)
+     *
+     * @param int|string $id (optional) the ID of the occasion in the metadata table, defaults to 0
+     * @return string the occasion
+     *
+     * @since 1.5
+     * @access public
+     */
 	public function get_occasion( $id = 0 )
 	{
 		return $this->get_meta( $id, 'id' );
 	}
 
-	/**
-	 * Fetches income or expense accounts ("Aufwand- & Ertragskonten") related to a nation
-	 * (wrapper for get_national_meta)
-	 *
-	 *
-	 * @param string $order_by		(optional) the DB column to order by, defaults to 'value'
-	 * @param string $order			(optional) the direction to order in ('ASC' or 'DESC'), defaults to 'ASC'
-	 * @param int $nation			(optional) the ID of nation the occasions are related to, defaults to 0
-	 * @return array				the accounts
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
+    /**
+     * Fetches income or expense accounts ("Aufwand- & Ertragskonten") related to a nation
+     * (wrapper for get_national_meta)
+     *
+     *
+     * @param string $orderby (optional) the DB column to order by, defaults to 'value'
+     * @param string $order (optional) the direction to order in ('ASC' or 'DESC'), defaults to 'ASC'
+     * @param string $type
+     * @param int $nation (optional) the ID of nation the occasions are related to, defaults to 0
+     * @return array the accounts
+     *
+     * @since 1.5
+     * @access public
+     */
 	public function get_ei_accounts( $orderby = 'value', $order = 'ASC', $type = 'income', $nation = 0 )
 	{
 		return $this->get_national_meta( $orderby, $order, $type, $nation );
 	}
 
-	/**
-	 * Fetches an income or expense account ("Aufwand-/Ertragskonto") by its ID
-	 * (wrapper for get_meta)
-	 *
-	 * @param string $id		(optional) the ID of the account in the metadata table, defaults to 0
-	 * @param bool $number		(optional) whether to return the account number only or an array of metadata
-	 * @return int|array		the account
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
+    /**
+     * Fetches an income or expense account ("Aufwand-/Ertragskonto") by its ID
+     * (wrapper for get_meta)
+     *
+     * @param int|string $id (optional) the ID of the account in the metadata table, defaults to 0
+     * @param bool $number (optional) whether to return the account number only or an array of metadata
+     * @return array|int the account
+     *
+     * @since 1.5
+     * @access public
+     */
 	public function get_ei_account( $id = 0, $number = false )
 	{
 		if ( $number ) {
@@ -914,7 +926,6 @@ class VCA_ASM_Finances
 	 * @access public
 	 */
 	public function tax_options_array( $args = array() ) {
-		global $vca_asm_utilities;
 
 		$default_args = array(
 			'orderby' => 'name',
@@ -930,7 +941,7 @@ class VCA_ASM_Finances
 		);
 		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
 
-		$data = $this->get_tax_rates( $orderby, $order, $type, $nation );
+		$data = $this->get_tax_rates( $orderby, $order, $nation );
 
 		$options_array = array();
 
@@ -974,7 +985,6 @@ class VCA_ASM_Finances
 	 * @access public
 	 */
 	public function occasions_options_array( $args ) {
-		global $vca_asm_utilities;
 
 		$default_args = array(
 			'orderby' => 'name',
@@ -990,7 +1000,7 @@ class VCA_ASM_Finances
 		);
 		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
 
-		$data = $this->get_occasions( $orderby, $order, $type, $nation );
+		$data = $this->get_occasions( $orderby, $order, $nation );
 
 		$options_array = array();
 
@@ -1034,7 +1044,6 @@ class VCA_ASM_Finances
 	 * @access public
 	 */
 	public function ei_options_array( $args ) {
-		global $vca_asm_utilities;
 
 		$default_args = array(
 			'orderby' => 'name',
@@ -1095,8 +1104,8 @@ class VCA_ASM_Finances
 	 */
 	public function generate_receipt( $city_id, $type = 'econ' )
 	{
-		global $wpdb,
-			$vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+		global $wpdb, $vca_asm_geography;
 
 		$data = $wpdb->get_results(
 			"SELECT last_receipt " .

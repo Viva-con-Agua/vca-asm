@@ -36,11 +36,9 @@ class VCA_ASM_Admin_Slot_Allocation {
 	 */
 	public function control()
 	{
-		global $current_user,
-			$vca_asm_activities, $vca_asm_utilities;
-
-		$admin_city = get_user_meta( $current_user->ID, 'city', true );
-		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
+        /** @var vca_asm_activities $vca_asm_activities */
+        /** @var vca_asm_utilities $vca_asm_utilities */
+		global $current_user, $vca_asm_activities, $vca_asm_utilities;
 
 		if ( isset( $_GET['page'] ) ) {
 			$dep = explode( '-', $_GET['page'] );
@@ -235,19 +233,13 @@ class VCA_ASM_Admin_Slot_Allocation {
 				$act_cnt = count( $activities_ordered );
 				if ( $act_cnt > 100 ) {
 					$cur_page = isset( $_GET['p'] ) ? $_GET['p'] : 1;
-					$pagination_offset = 100 * ( $cur_page - 1 );
 					$total_pages = ceil( $act_cnt / 100 );
-					$cur_end = $total_pages == $cur_page ? $pagination_offset + ( $act_cnt % 100 ) : $pagination_offset + 100;
 
 					$pagination_args = array(
 						'pagination' => true,
 						'total_pages' => $total_pages,
 						'current_page' => $cur_page
 					);
-				} else {
-					$cur_page = 1;
-					$pagination_offset = 0;
-					$cur_end = $act_cnt;
 				}
 
 				$rows = array();
@@ -447,52 +439,17 @@ class VCA_ASM_Admin_Slot_Allocation {
 		$page->bottom();
 	}
 
-	/**
-	 * Returns a query object of activities
-	 * where the application phase has begun and the activity itself has not
-	 *
-	 * @since 1.1
-	 * @access private
-	 */
-	private function get_activites_in_application_phase() {
-
-		$args = array(
-			'posts_per_page' 	=>	-1,
-			'post_type'         =>	'festival',
-			'post_status'       =>	'publish',
-			'meta_query' => array(
-				'relation' => 'AND',
-				array(
-					'key' => 'start_app',
-					'value' => time(),
-					'compare' => '<=',
-					'type' => 'numeric'
-				),
-				array(
-					'key' => 'start_date',
-					'value' => time(),
-					'compare' => '>=',
-					'type' => 'numeric'
-				)
-			),
-			'orderby'           =>	'title',
-			'order'             =>	'ASC'
-
-		);
-
-		$activities = new WP_Query( $args );
-
-		return $activities;
-	}
-
-	/**
-	 * Slot allocation menu controller
-	 *
-	 * @since 1.2
-	 * @access public
-	 */
+    /**
+     * Slot allocation menu controller
+     *
+     * @since 1.2
+     * @access public
+     * @param $activity_id
+     */
 	public function slot_allocation_control( $activity_id ) {
-		global $current_user, $vca_asm_registrations, $vca_asm_admin, $vca_asm_admin_supporters;
+        /** @var vca_asm_admin_supporters $vca_asm_admin_supporters */
+        /** @var vca_asm_registrations $vca_asm_registrations */
+		global $vca_asm_registrations, $vca_asm_admin_supporters;
 
 		$active_tab = isset( $_GET['tab'] ) ? $_GET['tab'] : 'apps';
 		$this->active_tab = $active_tab;
@@ -522,10 +479,10 @@ class VCA_ASM_Admin_Slot_Allocation {
 		$success = 0;
 		$slots_fail = false;
 
+        $multiple_names = '';
 		if( isset( $_GET['id'] ) ) {
 			$name = get_user_meta( $_GET['id'], 'first_name', true );
 		} else {
-			$multiple_names = '';
 			$name_arr = array();
 		}
 
@@ -811,15 +768,16 @@ class VCA_ASM_Admin_Slot_Allocation {
 		$page->bottom();
 	}
 
-	/**
-	 * Displays Links to download activity specific data
-	 * and to contact participant groups
-	 *
-	 * @since 1.3
-	 * @access private
-	 */
+    /**
+     * Displays Links to download activity specific data
+     * and to contact participant groups
+     *
+     * @since 1.3
+     * @access private
+     * @param $the_activity
+     * @param $url
+     */
 	private function data_links( $the_activity, $url ) {
-		global $vca_asm_registrations;
 		$current_user = wp_get_current_user();
 
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
@@ -851,12 +809,10 @@ class VCA_ASM_Admin_Slot_Allocation {
 			$applicants = $the_activity->applicants;
 			$waiting = $the_activity->waiting;
 			$participants = $the_activity->participants;
-			$scope = 'global';
 		} elseif (
 			$current_user->has_cap( 'vca_asm_manage_' . $department . '_nation' ) &&
 			$admin_nation
 		) {
-			$scope = 'nation';
 			if (
 				array_key_exists( $admin_nation, $the_activity->applicants_count_by )
 			) {
@@ -876,7 +832,6 @@ class VCA_ASM_Admin_Slot_Allocation {
 			$current_user->has_cap( 'vca_asm_manage_' . $department ) &&
 			$admin_city
 		) {
-			$scope = 'city';
 			if (
 				array_key_exists( $admin_city, $the_activity->applicants_count_by_slots )
 			) {
@@ -1093,21 +1048,23 @@ class VCA_ASM_Admin_Slot_Allocation {
 		$mb_env->bottom();
 	}
 
-	/**
-	 * List all supporters
-	 * - applying to the currently selected activity
-	 * - or on the waiting list for the currently selected activity
-	 * - or accepted to the currently selected activity
-	 *
-	 * @since 1.2
-	 * @access private
-	 */
+    /**
+     * List all supporters
+     * - applying to the currently selected activity
+     * - or on the waiting list for the currently selected activity
+     * - or accepted to the currently selected activity
+     *
+     * @since 1.2
+     * @access private
+     * @param $the_activity
+     * @param string $list_type
+     */
 	private function slot_allocation_list( $the_activity, $list_type = 'apps' ) {
-		global $wpdb, $vca_asm_admin_supporters, $vca_asm_geography, $vca_asm_registrations, $vca_asm_utilities;
+        /** @var vca_asm_geography $vca_asm_geography */
+		global $vca_asm_geography;
 		$current_user = wp_get_current_user();
 
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
-		$admin_city_status = $vca_asm_geography->get_type( $admin_city );
 		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
 
 		$columns = array(
@@ -1190,8 +1147,6 @@ class VCA_ASM_Admin_Slot_Allocation {
 			'sortable' => true,
 			'legacy-screen' => false
 		);
-
-		$bulk_actions = array();
 
 		if ( ! $the_activity->upcoming ) {
 
@@ -1365,7 +1320,6 @@ class VCA_ASM_Admin_Slot_Allocation {
 			}
 		}
 
-		$empty_flag = true;
 		foreach ( $tables as $table ) {
 			$occupied = isset( $the_activity->participants_count_by_slots[$table['quota']] ) ?
 				$the_activity->participants_count_by_slots[$table['quota']] :
@@ -1376,73 +1330,33 @@ class VCA_ASM_Admin_Slot_Allocation {
 				'<br />' . sprintf( __( 'Slots: %1$s, of which %2$s are free', 'vca-asm' ), $table['slots'], $free );
 
 			$rows = $this->gimme_rows( $table['supps_of_quota'], $the_activity->ID, $list_type );
-			if ( ! empty( $rows ) ) {
-				$empty_flag = false;
-			}
 
 			$tbl = new VCA_ASM_Admin_Table( $tbl_args, $columns, $rows );
 
 			$tbl->output();
 		}
-
-		/* Possibly a future feature
-		if ( ! $empty_flag ) {
-
-			$excel_params = array(
-				'relpath' => VCA_ASM_RELPATH,
-				'pID' => $the_activity->ID
-			);
-			wp_localize_script( 'vca-asm-excel-export', 'excelParams', $excel_params );
-
-			$mb_args = array(
-				'echo' => true,
-				'columns' => 1,
-				'running' => 1,
-				'id' => '',
-				'title' => __( 'Lists &amp; Mailing', 'vca-asm' ),
-				'js' => false
-			);
-			$mb_env = new VCA_ASM_Admin_Metaboxes( $mb_args );
-
-			$mb_env->top();
-			$mb_env->mb_top();
-
-			switch ( $list_type ) {
-
-				case 'apps':
-
-				break;
-
-				case 'waiting':
-
-				break;
-
-				case 'participants':
-				default:
-
-				break;
-
-			}
-
-			$mb_env->mb_bottom();
-			$mb_env->bottom();
-		}*/
 	}
 
-	/**
-	 * Populates the rows for a particular table
-	 *
-	 * @since 1.3
-	 * @access private
-	 */
+    /**
+     * Populates the rows for a particular table
+     *
+     * @since 1.3
+     * @access private
+     * @param $supps_of_quota
+     * @param int $activity_id
+     * @param string $list_type
+     * @return array
+     */
 	private function gimme_rows( $supps_of_quota, $activity_id = 0, $list_type = 'apps' ) {
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_utilities $vca_asm_utilities */
+        /** @var vca_asm_admin_supporters $vca_asm_admin_supporters */
 		global $vca_asm_geography, $vca_asm_utilities, $vca_asm_admin_supporters;
 
 		$rows = array();
 		$soq_count = count( $supps_of_quota );
 
 		$cities = $vca_asm_geography->get_names();
-		$stati = $vca_asm_geography->get_types();
 		$stati_conv = $vca_asm_geography->get_region_id_to_type();
 
 		$stati = $vca_asm_geography->get_types();
@@ -1502,14 +1416,8 @@ class VCA_ASM_Admin_Slot_Allocation {
 		}
 		if( isset( $_GET['order'] ) ) {
 			$order = $_GET['order'];
-			if( $order == 'ASC') {
-				$toggle_order = 'DESC';
-			} else {
-				$toggle_order = 'ASC';
-			}
 		} else {
 			$order = 'ASC';
-			$toggle_order = 'DESC';
 		}
 
 		if ( 'age' === $orderby || 'mobile' === $orderby ) {
@@ -1521,12 +1429,13 @@ class VCA_ASM_Admin_Slot_Allocation {
 		return $rows;
 	}
 
-	/**
-	 * Reallocate Slots
-	 *
-	 * @since 1.2
-	 * @access private
-	 */
+    /**
+     * Reallocate Slots
+     *
+     * @since 1.2
+     * @access private
+     * @param $the_activity
+     */
 	private function reallocate_slots( $the_activity ) {
 		$feech = new VCA_ASM_Admin_Future_Feech( array(
 			'echo' => true,

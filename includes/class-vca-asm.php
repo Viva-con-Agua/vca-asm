@@ -51,9 +51,9 @@ class VCA_ASM
 		$GLOBALS['vca_asm_registrations'] = new VCA_ASM_Registrations();
 
 		/* other objects */
-		$vca_asm_list_activities = new VCA_ASM_List_Activities();
-		$vca_asm_profile = new VCA_ASM_Profile();
-		$vca_asm_security = new VCA_ASM_Security();
+        $vca_asm_list_activities = new VCA_ASM_List_Activities();
+        $vca_asm_profile = new VCA_ASM_Profile();
+        $vca_asm_security = new VCA_ASM_Security();
 
 		if ( is_admin() ) {
 			$GLOBALS['vca_asm_admin'] = new VCA_ASM_Admin();

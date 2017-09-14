@@ -22,8 +22,7 @@ class VCA_ASM_Admin {
 	 * @access public
 	 */
 	public function high_priority_admin_menu() {
-		global $wpdb, $current_user,
-			$vca_asm_registrations, $vca_asm_admin_actions, $vca_asm_admin_emails, $vca_asm_admin_education, $vca_asm_admin_finances, $vca_asm_admin_geography, $vca_asm_admin_goldeimer, $vca_asm_admin_home, $vca_asm_admin_network, $vca_asm_admin_settings, $vca_asm_admin_slot_allocation, $vca_asm_admin_supporters;
+		global $vca_asm_admin_actions, $vca_asm_admin_emails, $vca_asm_admin_education, $vca_asm_admin_finances, $vca_asm_admin_geography, $vca_asm_admin_goldeimer, $vca_asm_admin_home, $vca_asm_admin_network, $vca_asm_admin_settings, $vca_asm_admin_supporters;
 
 		/* Home */
 		add_menu_page(
@@ -325,12 +324,14 @@ class VCA_ASM_Admin {
 		);
 	}
 
-	/**
-	 * Converts message arrays into html output
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
+    /**
+     * Converts message arrays into html output
+     *
+     * @since 1.0
+     * @access public
+     * @param array $messages
+     * @return string
+     */
 	public function convert_messages( $messages = array() ) {
 		$output = '';
 
