@@ -733,7 +733,7 @@ class VCA_ASM_Profile
 							'</a>',
 							str_replace(
 								'%LINK_OPEN%',
-								'<a href="' . get_option( 'siteurl' ) . '/' . VCA_ASM_PROFILE_URI . '" title="' . __( 'Click to check your profile', 'vca-asm' ) . '">',
+								'<a href="' . site_url('', 'https') . '/' . VCA_ASM_PROFILE_URI . '" title="' . __( 'Click to check your profile', 'vca-asm' ) . '">',
 								str_replace(
 									'%NAME%',
 									$firstname,
