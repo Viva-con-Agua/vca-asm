@@ -80,7 +80,7 @@ class VCA_ASM_Email_Html {
 			case 'at':
 				$logo = 'logo@2x.gif';
 				$logo_height = '79';
-				$link_url = 'http://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
+				$link_url = 'https://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
 				$link_title = __( 'Visit the Viva con Agua website', 'vca-asm' );
 				$organization_title = __( 'Viva con Agua de Sankt Pauli e.V.', 'vca-asm' );
 			break;
@@ -88,7 +88,7 @@ class VCA_ASM_Email_Html {
 			case 'nl':
 				$logo = 'logo@2x.gif';
 				$logo_height = '79';
-				$link_url = 'http://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
+				$link_url = 'https://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
 				$link_title = __( 'Visit the Viva con Agua website', 'vca-asm' );
 				$organization_title = __( 'Viva con Agua de Sankt Pauli e.V.', 'vca-asm' );
 			break;
@@ -96,7 +96,7 @@ class VCA_ASM_Email_Html {
 			case 'goldeimer':
 				$logo = 'logo-goldeimer@2x.gif';
 				$logo_height = '18';
-				$link_url = 'http://' . _x( 'goldeimer.vivaconagua.org', 'utility translation', 'vca-asm' );
+				$link_url = 'https://' . _x( 'goldeimer.vivaconagua.org', 'utility translation', 'vca-asm' );
 				$link_title = __( 'Visit the Goldeimer website', 'vca-asm' );
 				$organization_title = __( 'Goldeimer', 'vca-asm' );
 			break;
@@ -105,7 +105,7 @@ class VCA_ASM_Email_Html {
 			default:
 				$logo = 'logo@2x.gif';
 				$logo_height = '79';
-				$link_url = 'http://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
+				$link_url = 'https://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
 				$link_title = __( 'Visit the Viva con Agua website', 'vca-asm' );
 				$organization_title = __( 'Viva con Agua de Sankt Pauli e.V.', 'vca-asm' );
 		}
