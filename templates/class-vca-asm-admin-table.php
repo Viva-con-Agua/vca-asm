@@ -1186,7 +1186,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<span class="edit">' .
 								'<a title="' .
 									__( 'View the Email', 'vca-asm' ) .
-									'" target="_blank" href="' . get_option( 'siteurl' ) . '/email?id=' . $row['id'] . '">' .
+									'" target="_blank" href="' . site_url('', 'https' ) . '/email?id=' . $row['id'] . '">' .
 									__( 'Read', 'vca-asm' ) .
 								'</a>' .
 							'</span> | ' .
@@ -1203,7 +1203,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<span class="edit">' .
 								'<a title="' .
 									__( 'View the Email', 'vca-asm' ) .
-									'" target="_blank" href="' . get_option( 'siteurl' ) . '/email?id=' . $row['mail_id'] . '">' .
+									'" target="_blank" href="' . site_url('', 'https' ) . '/email?id=' . $row['mail_id'] . '">' .
 									__( 'Read', 'vca-asm' ) .
 								'</a>' .
 							'</span> | ' .
