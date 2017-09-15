@@ -80,7 +80,7 @@ class VCA_ASM_Email_Html {
 			case 'at':
 				$logo = 'logo@2x.gif';
 				$logo_height = '79';
-				$link_url = 'http://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
+				$link_url = 'https://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
 				$link_title = __( 'Visit the Viva con Agua website', 'vca-asm' );
 				$organization_title = __( 'Viva con Agua de Sankt Pauli e.V.', 'vca-asm' );
 			break;
@@ -88,7 +88,7 @@ class VCA_ASM_Email_Html {
 			case 'nl':
 				$logo = 'logo@2x.gif';
 				$logo_height = '79';
-				$link_url = 'http://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
+				$link_url = 'https://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
 				$link_title = __( 'Visit the Viva con Agua website', 'vca-asm' );
 				$organization_title = __( 'Viva con Agua de Sankt Pauli e.V.', 'vca-asm' );
 			break;
@@ -96,7 +96,7 @@ class VCA_ASM_Email_Html {
 			case 'goldeimer':
 				$logo = 'logo-goldeimer@2x.gif';
 				$logo_height = '18';
-				$link_url = 'http://' . _x( 'goldeimer.vivaconagua.org', 'utility translation', 'vca-asm' );
+				$link_url = 'https://' . _x( 'goldeimer.vivaconagua.org', 'utility translation', 'vca-asm' );
 				$link_title = __( 'Visit the Goldeimer website', 'vca-asm' );
 				$organization_title = __( 'Goldeimer', 'vca-asm' );
 			break;
@@ -105,7 +105,7 @@ class VCA_ASM_Email_Html {
 			default:
 				$logo = 'logo@2x.gif';
 				$logo_height = '79';
-				$link_url = 'http://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
+				$link_url = 'https://' . _x( 'vivaconagua.org', 'utility translation', 'vca-asm' );
 				$link_title = __( 'Visit the Viva con Agua website', 'vca-asm' );
 				$organization_title = __( 'Viva con Agua de Sankt Pauli e.V.', 'vca-asm' );
 		}
@@ -129,13 +129,13 @@ class VCA_ASM_Email_Html {
 			if ( true === $in_browser ) {
 				$pool_link .= 'onclick="preventIt(event)" ';
 			}
-			$pool_link .= 'title="' . __( 'To the Pool!', 'vca-asm' ) . '" href="' . get_option( 'siteurl' ) . '" style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span>' . __( 'Pool', 'vca-asm' ) . '</span></span></a>';
+			$pool_link .= 'title="' . __( 'To the Pool!', 'vca-asm' ) . '" href="' . site_url('', 'https') . '" style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span>' . __( 'Pool', 'vca-asm' ) . '</span></span></a>';
 
 			$direct_cancellation_link = '<a ';
 			if ( true === $in_browser ) {
 				$direct_cancellation_link .= 'onclick="preventIt(event)" ';
 			}
-			$direct_cancellation_link .= 'title="' . __( 'Click to cancel newsletter', 'vca-asm' ) . '" href="' . get_option( 'siteurl' ) . '/newsletter-preferences?uid=' . $receipient_id . '&hash=' . md5( $receipient_email_address ) . '" style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span>';
+			$direct_cancellation_link .= 'title="' . __( 'Click to cancel newsletter', 'vca-asm' ) . '" href="' . site_url('', 'https') . '" style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span>';
 
 			switch ( $reason ) {
 				case 'activity':
@@ -159,7 +159,7 @@ class VCA_ASM_Email_Html {
 					if ( true === $in_browser ) {
 						$append_reason .= 'onclick="preventIt(event)" ';
 					}
-					$append_reason .= 'title="' . __( 'Read the mail in your browser', 'vca-asm' ) . '" href="' . get_option( 'siteurl' ) . '/email?id=' . $mail_id . '&hash=' . md5( $time );
+					$append_reason .= 'title="' . __( 'Read the mail in your browser', 'vca-asm' ) . '" href="' . site_url('', 'https') . '/email?id=' . $mail_id . '&hash=' . md5( $time );
 			if ( ! empty( $auto_action ) && in_array( $reason, array( 'membership', 'activity' ) ) ) {
 				$append_reason .= '&auto_action=' . $auto_action;
 				if ( ! empty( $user_id ) ) {
@@ -181,7 +181,7 @@ class VCA_ASM_Email_Html {
 			"<head>" .$lf .
 			'	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />' .$lf .
 			'	<meta property="og:title" content="' . $subject . '" />' . $lf .
-			'	<meta property="og:url" content="' . get_option( 'siteurl' ) . '" />' . $lf .
+			'	<meta property="og:url" content="' . site_url('', 'https') . '" />' . $lf .
 			"	<title>" . $subject . "</title>" . $lf;
 		if ( true === $in_browser ) {
 			$output .= '	<link rel="stylesheet" type="text/css" media="all" href="' . get_bloginfo('template_url') . '/css/reset.css?ver=1.2" />' . $lf;
@@ -435,10 +435,10 @@ class VCA_ASM_Email_Html {
 
 		if ( $with_images ) {
 			$output .= '<td class="header-center mobile-hide" width="34%" valign="middle" style="width:34%;text-align:center;padding-top:21px;padding-right:0;padding-bottom:16px;padding-left:0;border-collapse:collapse;vertical-align:middle;">' .
-					'<h1 style="display:block;color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-weight:bold;font-size:30px;line-height:1;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;"><span style="font-family:\'Museo Sans\',Museo,\'Gill Sans Condensed\',\'Gill Sans MT Condensed\',\'Gill Sans\',\'Gill Sans MT\',Verdana,Helvetica,Arial,sans-serif;"><img alt="' . $center_alt . '" src="' . get_option( 'siteurl' ) . '/email_assets/' . $center_image . '" align="middle" style="border:0;height:auto;line-height:100%;outline:none;text-decoration:none;margin-top:0;margin-right:auto;margin-bottom:0;margin-left:auto;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;display:block;vertical-align:middle;" height="36" width="153"></span></h1>' .
+					'<h1 style="display:block;color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-weight:bold;font-size:30px;line-height:1;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;"><span style="font-family:\'Museo Sans\',Museo,\'Gill Sans Condensed\',\'Gill Sans MT Condensed\',\'Gill Sans\',\'Gill Sans MT\',Verdana,Helvetica,Arial,sans-serif;"><img alt="' . $center_alt . '" src="' . site_url('', 'https') . '/email_assets/' . $center_image . '" align="middle" style="border:0;height:auto;line-height:100%;outline:none;text-decoration:none;margin-top:0;margin-right:auto;margin-bottom:0;margin-left:auto;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;display:block;vertical-align:middle;" height="36" width="153"></span></h1>' .
 				'</td>' .
 				'<td class="header-right mobile-legacy-hide" width="33%" valign="baseline" style="width:33%;text-align:right;padding-top:21px;padding-right:21px;padding-bottom:16px;padding-left:0;border-collapse:collapse;vertical-align:baseline;">' .
-					'<a title="' . $link_title . '" href="' . $link_url . '"><h1 style="display:block;color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-weight:bold;font-size:42px;line-height:1;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;"><span style="font-family:\'Museo Sans\',Museo,\'Gill Sans Condensed\',\'Gill Sans MT Condensed\',\'Gill Sans\',\'Gill Sans MT\',Verdana,Helvetica,Arial,sans-serif;"><img alt="VcA" src="' . get_option( 'siteurl' ) . '/email_assets/' . $logo . '" align="right" style="border:0;height:auto;line-height:100%;outline:none;text-decoration:none;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;display:block;" height="' . $logo_height . '" width="153"></span></h1></a>' .
+					'<a title="' . $link_title . '" href="' . $link_url . '"><h1 style="display:block;color:#ffffff;font-family:Verdana,Geneva,Helvetica,Arial,sans-serif;font-weight:bold;font-size:42px;line-height:1;margin-top:0px;margin-right:0px;margin-bottom:0px;margin-left:0px;padding-top:0px;padding-right:0px;padding-bottom:0px;padding-left:0px;"><span style="font-family:\'Museo Sans\',Museo,\'Gill Sans Condensed\',\'Gill Sans MT Condensed\',\'Gill Sans\',\'Gill Sans MT\',Verdana,Helvetica,Arial,sans-serif;"><img alt="VcA" src="' . site_url('', 'https') . '/email_assets/' . $logo . '" align="right" style="border:0;height:auto;line-height:100%;outline:none;text-decoration:none;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;display:block;" height="' . $logo_height . '" width="153"></span></h1></a>' .
 				'</td>';
 		}
 
@@ -450,7 +450,7 @@ class VCA_ASM_Email_Html {
 		if ( $with_images ) {
 			$output .= '<!--[if !(mso)]><!--><tr>' . $lf .
 				'<td valign="top" align="center" style="min-height:0px;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;border-collapse:collapse;vertical-align:top;">' .
-					'<div style="width:100%;height:42px;background-image:url(' . get_option( 'siteurl' ) . '/email_assets/edge-top.png);background-repeat:repeat-x;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;">&nbsp;</div>' .
+					'<div style="width:100%;height:42px;background-image:url(' . site_url('', 'https') . '/email_assets/edge-top.png);background-repeat:repeat-x;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;">&nbsp;</div>' .
 				'</td>' . $lf .
 				'</tr><!--<![endif]-->' . $lf;
 		}
@@ -472,7 +472,7 @@ class VCA_ASM_Email_Html {
 		if ( $with_images ) {
 			$output .= '<!--[if !(mso)]><!--><tr>' . $lf .
 				'<td valign="bottom" align="center" style="min-height:0px;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;border-collapse:collapse;vertical-align:bottom;">' .
-					'<div style="width:100%;height:42px;background-image:url(' . get_option( 'siteurl' ) . '/email_assets/edge-bottom.png);background-reoeat:repeat-x;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;">&nbsp;</div>' .
+					'<div style="width:100%;height:42px;background-image:url(' . site_url('', 'https') . '/email_assets/edge-bottom.png);background-reoeat:repeat-x;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;">&nbsp;</div>' .
 				'</td>' . $lf .
 				'</tr><!--<![endif]-->' . $lf;
 		}
@@ -489,7 +489,7 @@ class VCA_ASM_Email_Html {
 		if ( true === $in_browser ) {
 			$output .= '</div>' . $lf .
 					'</div>' . $lf .
-				'<script src="' . get_option( 'siteurl' ) . '/wp-includes/js/jquery/jquery.js"></script>' . $lf .
+				'<script src="' . site_url('', 'https') . '/wp-includes/js/jquery/jquery.js"></script>' . $lf .
 				'<script type="text/javascript">' . $lf .
 				'	function preventIt(e) {' . $lf .
 				'		e.preventDefault();' . $lf .
