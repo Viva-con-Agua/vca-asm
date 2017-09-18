@@ -17,6 +17,23 @@ class VcA_ASM_Certificate
 
     private $regions;
 
+    private $langguage_templates = array(
+        'de' => array(
+            'date_format' => 'd.m.Y',
+            'output_filename' => 'viva_con_agua_ehrenamtsbestaetigung',
+            'registration' => array(
+                'x' => 64.5, 'y' => 66.3
+            )
+        ),
+        'en' => array(
+            'date_format' => 'm-d-Y',
+            'output_filename' => 'viva_con_agua_volunteer_certificate',
+            'registration' => array(
+                'x' => 124.8, 'y' => 66.3
+            )
+        )
+    );
+
     /**
      * class-vca-asm-certificate constructor.
      */
@@ -45,7 +62,8 @@ class VcA_ASM_Certificate
             return $this->cerificate;
         }
 
-        $user_registration = $this->parseRegistration();
+        $lang = $this->getLanguage();
+        $user_registration = $this->parseRegistration($lang);
 
         // Prepare PDF and load
 
@@ -53,7 +71,7 @@ class VcA_ASM_Certificate
 
         $pdf->AddPage();
 
-        $pdf->setSourceFile(VCA_ASM_ABSPATH . '/pdf-templates/volunteer_certificate.pdf');
+        $pdf->setSourceFile(VCA_ASM_ABSPATH . '/pdf-templates/volunteer_certificate_' . $lang . '.pdf');
 
         $tplIdx = $pdf->importPage(1);
         $pdf->useTemplate($tplIdx, 0, 0, 0, 0, true);
@@ -68,23 +86,24 @@ class VcA_ASM_Certificate
 
         // Write date of registration
 
-        $pdf->SetFont('Arial', '', '13');
+        $pdf->SetFont('Arial', '', '14');
         $pdf->SetTextColor(0,0,0);
 
-        $pdf->SetXY(70.2, 67.2);
-        $pdf->Write(8, $user_registration);
+        $registration_position = $this->langguage_templates[$lang]['registration'];
+        $pdf->SetXY($registration_position['x'], $registration_position['y']);
+        $pdf->Write(9, $user_registration);
 
         // Write active city
 
         $pdf->SetX(0);
-        $pdf->Cell(0, 20, utf8_decode($this->regions[$this->user->city]), 0, 1, 'C');
+        $pdf->Cell(0, 20, utf8_decode($this->regions[$this->user->city]) . '.', 0, 1, 'C');
 
         // Write date of creation
 
         $pdf->SetFont('Arial', '', '11');
 
         $pdf->SetXY(39, 160);
-        $pdf->Write(0, date('d.m.Y'));
+        $pdf->Write(0, date($this->langguage_templates[$lang]['date_format']));
 
         // Write Thanks
 
@@ -92,24 +111,48 @@ class VcA_ASM_Certificate
         $pdf->Rotate(10);
         $pdf->Write(0, $this->user->first_name);
 
-        $pdf->Output('viva_con_agua_ehrenamtsbestaetigung.pdf', 'D');
+        $pdf->Output($this->langguage_templates[$lang]['output_filename'] . '.pdf', 'D');
 
     }
 
-    private function parseRegistration()
+    private function parseRegistration($lang)
     {
 
         $user_registration = strtotime($this->user->user_registered);
-
-        $month = date('F', $user_registration);
+        $month = date('m', $user_registration);
         $registration_month = _x( $month, 'Months', 'vca-asm' );
         $registration_year = date('Y', $user_registration);
 
-        $registration_string = $registration_month  . ' ' . $registration_year;
-        $registration_string = $registration_year;
+        switch ($lang) {
+            case 'de':
+                $registration_string = $registration_month  . '.' . $registration_year;
+                break;
+            case 'en':
+            default:
+                $registration_string = $registration_year;
+                break;
+        }
 
         return $registration_string;
 
+    }
+
+    private function getLanguage()
+    {
+        $lang = get_bloginfo('language');
+        $lang_parts = explode('-', $lang);
+
+        switch ($lang_parts[0]) {
+            case 'de':
+                $real_language = 'de';
+                break;
+            case 'en':
+            default:
+                $real_language = 'en';
+                break;
+        }
+
+        return $real_language;
     }
 
 }
