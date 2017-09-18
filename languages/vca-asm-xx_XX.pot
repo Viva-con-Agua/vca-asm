@@ -7162,7 +7162,7 @@ msgid "VcA Activity & Supporter Management"
 msgstr ""
 
 #. Plugin URI of the plugin/theme
-msgid "http://pool.vivaconagua.org"
+msgid "https://pool.vivaconagua.org"
 msgstr ""
 
 #. Description of the plugin/theme

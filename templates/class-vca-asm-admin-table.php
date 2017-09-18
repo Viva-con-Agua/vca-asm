@@ -435,7 +435,7 @@ class VCA_ASM_Admin_Table {
 					}
 
 					if( ! empty( $column['link'] ) && true /*$capable*/ ) {
-						$title = empty( $column['link']['title_row_data'] ) ? $column['link']['title'] : sprintf( $column['link']['title'], $row[$column['link']['title_row_data']] );
+						$title = empty( $column['link']['title_row_data'] ) ? $column['link']['title'] : sprintf( $column['link']['title'], $column['link']['title_row_data'] );
 						$url = empty( $column['link']['url_row_data'] ) ? $column['link']['url'] : sprintf( $column['link']['url'], $row[$column['link']['url_row_data']] );
 						$output .= '<a title="' . $title . '" href="' . $url . '">';
 					}
@@ -1004,7 +1004,7 @@ class VCA_ASM_Admin_Table {
 					case 'edit-transaction':
 						$output .= '<span class="edit">' .
 							'<a title="' .
-								sprintf( __( 'Edit %s', 'vca-asm' ), $name ) .
+                                __( 'Edit this transaction', 'vca-asm' ) .
 								'" href="' . $url . '&todo=edit&id=' . $row['id'] . '&cid=' . $row['city_id'] . '">' .
 								__( 'Edit', 'vca-asm' ) .
 							'</a></span>';
@@ -1186,7 +1186,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<span class="edit">' .
 								'<a title="' .
 									__( 'View the Email', 'vca-asm' ) .
-									'" target="_blank" href="' . get_option( 'siteurl' ) . '/email?id=' . $row['id'] . '">' .
+									'" target="_blank" href="' . site_url('', 'https' ) . '/email?id=' . $row['id'] . '">' .
 									__( 'Read', 'vca-asm' ) .
 								'</a>' .
 							'</span> | ' .
@@ -1203,7 +1203,7 @@ class VCA_ASM_Admin_Table {
 						$output .= '<span class="edit">' .
 								'<a title="' .
 									__( 'View the Email', 'vca-asm' ) .
-									'" target="_blank" href="' . get_option( 'siteurl' ) . '/email?id=' . $row['mail_id'] . '">' .
+									'" target="_blank" href="' . site_url('', 'https' ) . '/email?id=' . $row['mail_id'] . '">' .
 									__( 'Read', 'vca-asm' ) .
 								'</a>' .
 							'</span> | ' .

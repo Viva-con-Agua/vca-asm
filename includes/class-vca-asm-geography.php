@@ -116,6 +116,8 @@ class VCA_ASM_Geography
 	 */
 	public function delete( $id )
 	{
+        /** @var vca_asm_finances $vca_asm_finances */
+        /** @var vca_asm_admin_settings $vca_asm_admin_settings */
 		global $wpdb,
 			$vca_asm_finances,
 			$vca_asm_admin_settings;
@@ -275,8 +277,8 @@ class VCA_ASM_Geography
 	 */
 	public function get_ancestors( $id, $args = array() )
 	{
-		global $wpdb,
-			$vca_asm_utilities;
+        /** @var vca_asm_utilities $vca_asm_utilities */
+		global $wpdb, $vca_asm_utilities;
 
 		$default_args = array(
 			'data' => 'name',		// what type of data to return per geo-unit
@@ -476,8 +478,8 @@ class VCA_ASM_Geography
 	 */
 	public function get_name( $id )
 	{
-		global $wpdb,
-			$vca_asm_utilities;
+        /** @var vca_asm_utilities $vca_asm_utilities */
+		global $wpdb, $vca_asm_utilities;
 
 		$geo_query = $wpdb->get_results(
 			"SELECT name FROM " .
@@ -1030,6 +1032,7 @@ class VCA_ASM_Geography
 	 */
 	public function options_array( $args = array() )
 	{
+	    /** @var vca_asm_utilities $vca_asm_utilities */
 		global $vca_asm_utilities;
 
 		$default_args = array(

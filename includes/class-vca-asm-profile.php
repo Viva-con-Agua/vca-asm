@@ -116,18 +116,20 @@ class VCA_ASM_Profile
 		require_once( VCA_ASM_ABSPATH . '/templates/admin-profile.php' );
 	}
 
-	/**
-	 * Saves additional data when updating a profile
-	 * Hooked with 'edit_user_profile_update' and 'personal_options_update'
-	 *
-	 * @param object $user		WP_User object
-	 * @return void
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
+    /**
+     * Saves additional data when updating a profile
+     * Hooked with 'edit_user_profile_update' and 'personal_options_update'
+     *
+     * @param $user_id
+     * @return bool
+     * @internal param object $user WP_User object
+     * @since 1.0
+     * @access public
+     */
 	public function save_extra_profile_fields( $user_id )
 	{
+        /** @var vca_asm_mailer $vca_asm_mailer */
+        /** @var vca_asm_geography $vca_asm_geography */
 		global $vca_asm_geography, $vca_asm_mailer;
 
         if ( ! current_user_can( 'edit_user', $user_id ) ) {
@@ -151,7 +153,6 @@ class VCA_ASM_Profile
 			wp_delete_user( $user_id );
 			wp_redirect( get_bloginfo('url'), 200 );
 			exit;
-			return false;
 		}
 
 		$fields = $this->create_extra_profile_fields();
@@ -241,8 +242,8 @@ class VCA_ASM_Profile
 	 */
 	private function create_extra_profile_fields( $part = '' )
 	{
-		global $current_user,
-			$vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+		global $current_user, $vca_asm_geography;
 
 		if ( in_array( 'city', $current_user->roles ) ) {
 			$is_city = true;
@@ -415,6 +416,8 @@ class VCA_ASM_Profile
 	 */
 	private function geo_options()
 	{
+        /** @var vca_asm_utilities $vca_asm_utilities */
+        /** @var vca_asm_geography $vca_asm_geography */
 		global $vca_asm_geography, $vca_asm_utilities;
 
 		$disable_field = false;
@@ -422,12 +425,10 @@ class VCA_ASM_Profile
 			global $user_id;
 			$edited_user = new WP_User( $user_id );
 			$mem = get_user_meta( $edited_user->ID, 'membership', true );
-			$user_city = get_user_meta( $edited_user->ID, 'city', true );
-			$user_nation = get_user_meta( $edited_user->ID, 'nation', true );
+            $user_nation = get_user_meta( $edited_user->ID, 'nation', true );
 		} else {
 			global $current_user;
 			$mem = get_user_meta( $current_user->ID, 'membership', true );
-			$user_city = get_user_meta( $current_user->ID, 'city', true );
 			$user_nation = get_user_meta( $current_user->ID, 'nation', true );
 			if ( ( is_array( $current_user->roles ) && ( in_array( 'head_of', $current_user->roles ) ) || in_array( 'city', $current_user->roles ) ) ) {
 				$disable_field = true;
@@ -745,7 +746,7 @@ class VCA_ASM_Profile
 							'</a>',
 							str_replace(
 								'%LINK_OPEN%',
-								'<a href="' . get_option( 'siteurl' ) . '/' . VCA_ASM_PROFILE_URI . '" title="' . __( 'Click to check your profile', 'vca-asm' ) . '">',
+								'<a href="' . site_url('', 'https') . '/' . VCA_ASM_PROFILE_URI . '" title="' . __( 'Click to check your profile', 'vca-asm' ) . '">',
 								str_replace(
 									'%NAME%',
 									$firstname,

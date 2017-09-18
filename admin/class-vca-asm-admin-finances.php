@@ -62,8 +62,7 @@ class VCA_ASM_Admin_Finances
 	 */
 	public function overview_control()
 	{
-		global $wpdb,
-			$vca_asm_finances;
+		global $wpdb;
 
 		if ( isset( $_GET['todo'] ) ) {
 			switch ( $_GET['todo'] ) {
@@ -90,17 +89,6 @@ class VCA_ASM_Admin_Finances
 				break;
 
 				case 'download-data':
-					$args = array(
-						'scope' => $this->cap_lvl,
-						'account' => isset( $_POST['account'] ) ? $_POST['account'] : 'econ',
-						'id' => $this->admin_nation,
-						'format' => isset( $_POST['format'] ) ? $_POST['format'] : 'month',
-						'year' => isset( $_POST['year'] ) ? $_POST['year'] : date( 'Y' ),
-						'month' => isset( $_POST['month'] ) ? $_POST['month'] : date( 'm' ),
-						'type' => isset( $_POST['type'] ) ? $_POST['type'] : 'city',
-						'format' => isset( $_POST['format'] ) ? $_POST['format'] : 'xlsx',
-						'gridlines' => ( isset( $_POST['gridlines'] ) && 2 == $_POST['gridlines'] ) ? false : true
-					);
 					$data = new VCA_ASM_Workbook_Finances(
 						array(
 							'scope' => $this->cap_lvl,
@@ -165,7 +153,7 @@ class VCA_ASM_Admin_Finances
 		switch ( $active_tab ) {
 			
 			case 'download':
-				$output .= $this->overview_city_download( $city );
+				$output .= $this->overview_city_download();
 			break;
 
 			case 'summary':
@@ -181,7 +169,8 @@ class VCA_ASM_Admin_Finances
 	
 	private function overview_city_summary( $city = NULL )
 	{
-		global $vca_asm_finances, $vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+		global $vca_asm_geography;
 		
 		$active_tab = 'summary';
 		if ( isset( $_GET['tab'] ) && in_array( $_GET['tab'], array( 'summary', 'download' ) ) ) {
@@ -224,14 +213,12 @@ class VCA_ASM_Admin_Finances
 				'label' => _x( 'Structural Account', 'short', 'vca-asm' ),
 				'desc' => __( 'You hereby confirm to have entered all transactions until the end of the selected month.', 'vca-asm' )
 			);
-			$balanced_econ = false;
 		} else {
 			$fields[] = array(
 				'type' => 'note',
 				'label' => _x( 'Structural Account', 'short', 'vca-asm' ),
 				'value' => __( 'The account is up to date.', 'vca-asm' )
 			);
-			$balanced_econ = true;
 			$balanced++;
 		}
 
@@ -252,14 +239,12 @@ class VCA_ASM_Admin_Finances
 				'label' => _x( 'Donations Account', 'short', 'vca-asm' ),
 				'desc' => __( 'You hereby confirm to have entered all donations until the end of the selected month.', 'vca-asm' )
 			);
-			$balanced_don = false;
 		} else {
 			$fields[] = array(
 				'type' => 'note',
 				'label' => _x( 'Donations Account', 'short', 'vca-asm' ),
 				'value' => __( 'The account is up to date.', 'vca-asm' )
 			);
-			$balanced_don = true;
 			$balanced++;
 		}
 
@@ -511,7 +496,7 @@ class VCA_ASM_Admin_Finances
 		return $output;
 	}
 	
-	private function overview_city_download( $city = NULL )
+	private function overview_city_download()
 	{
 		wp_enqueue_script( 'vca-asm-admin-finances-spreadsheet-form' );
 
@@ -714,20 +699,20 @@ class VCA_ASM_Admin_Finances
 
 		switch ( $active_tab ) {
 			case 'cities':
-				$output .= $this->overview_global_cities( $messages );
+				$output .= $this->overview_global_cities();
 			break;
 
 			case 'tabular':
-				$output .= $this->overview_global_tabular( $messages );
+				$output .= $this->overview_global_tabular();
 			break;
 
 			case 'download':
-				$output .= $this->overview_global_download( $messages );
+				$output .= $this->overview_global_download();
 			break;
 
 			case 'summary':
 			default:
-				$output .= $this->overview_global_summary( $messages );
+				$output .= $this->overview_global_summary();
 			break;
 		}
 
@@ -736,7 +721,7 @@ class VCA_ASM_Admin_Finances
 		echo $output;
 	}
 
-	private function overview_global_download( $messages = array() )
+	private function overview_global_download()
 	{
 		wp_enqueue_script( 'vca-asm-admin-finances-spreadsheet-form' );
 
@@ -911,8 +896,9 @@ class VCA_ASM_Admin_Finances
 		return $output;
 	}
 
-	private function overview_global_summary( $messages = array() )
+	private function overview_global_summary()
 	{
+        /** @var vca_asm_geography $vca_asm_geography */
 		global $vca_asm_geography;
 
 		$output = '';
@@ -936,10 +922,8 @@ class VCA_ASM_Admin_Finances
 				$the_city_finances = new VCA_ASM_City_Finances( $city['id'] );
 
 				$anchor_city_overview = '<a title="' . __( 'See details', 'vca-asm' ) . '" href="?page=vca-asm-finances&cid=' . $city['id'] . '&referrer=overview-summary">';
-				$anchor_econ_revenue = '<a title="' . __( 'See details', 'vca-asm' ) . '" href="?page=vca-asm-finances-accounts-econ&acc_type=econ&tab=revenue&cid=' . $city['id'] . '&referrer=overview-summary">';
 				$anchor_econ_expenditure = '<a title="' . __( 'See details', 'vca-asm' ) . '" href="?page=vca-asm-finances-accounts-econ&acc_type=econ&tab=expenditure&cid=' . $city['id'] . '&referrer=overview-summary">';
 				$anchor_econ_transfer = '<a title="' . __( 'See details', 'vca-asm' ) . '" href="?page=vca-asm-finances-accounts-econ&acc_type=econ&tab=transfer&cid=' . $city['id'] . '&referrer=overview-summary">';
-				$anchor_don_donation = '<a title="' . __( 'See details', 'vca-asm' ) . '" href="?page=vca-asm-finances-accounts-donations&acc_type=donations&tab=donation&cid=' . $city['id'] . '&referrer=overview-summary">';
 				$anchor_don_transfer = '<a title="' . __( 'See details', 'vca-asm' ) . '" href="?page=vca-asm-finances-accounts-donations&acc_type=donations&tab=transfer&cid=' . $city['id'] . '&referrer=overview-summary">';
 
 				if ( $the_city_finances->has_econ_surplus ) {
@@ -1054,9 +1038,10 @@ class VCA_ASM_Admin_Finances
 		return $output;
 	}
 
-	private function overview_global_tabular( $messages = array() )
+	private function overview_global_tabular()
 	{
-		global $vca_asm_finances, $vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+		global $vca_asm_geography;
 
 		if ( 'global' === $this->cap_lvl ) {
 			$cities = $vca_asm_geography->get_all( 'name', 'ASC', 'city' );
@@ -1070,8 +1055,6 @@ class VCA_ASM_Admin_Finances
 				)
 			);
 		}
-
-		$attention = '<span class="tbl-icon tbl-icon-warning"></span>';
 
 		$columns = array(
 			array(
@@ -1186,9 +1169,10 @@ class VCA_ASM_Admin_Finances
 		return $output;
 	}
 
-	private function overview_global_cities( $messages = array() )
+	private function overview_global_cities()
 	{
-		global $vca_asm_finances, $vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+		global $vca_asm_geography;
 
 		if ( 'gobal' === $this->cap_lvl ) {
 			$cities = $vca_asm_geography->get_all( 'name', 'ASC', 'city' );
@@ -1344,8 +1328,9 @@ class VCA_ASM_Admin_Finances
 	 */
 	public function accounts_control()
 	{
-		global $current_user, $wpdb,
-			$vca_asm_finances, $vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $current_user, $wpdb, $vca_asm_finances, $vca_asm_geography;
 
 		$validation = new VCA_ASM_Validation();
 
@@ -1749,16 +1734,16 @@ class VCA_ASM_Admin_Finances
 		}
 	}
 
-	/**
-	 * A single account overview
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
+    /**
+     * A single account overview
+     *
+     * @since 1.0
+     * @access public
+     * @param array $args
+     */
 	public function accounts_list( $args = array() )
 	{
-		global $current_user,
-			$vca_asm_finances, $vca_asm_geography;
+		global $vca_asm_finances;
 
 		$default_args = array(
 			'account_type' => 'donations',
@@ -1866,16 +1851,18 @@ class VCA_ASM_Admin_Finances
 		echo $output;
 	}
 
-	/**
-	 * A single account overview
-	 *
-	 * @since 1.0
-	 * @access public
-	 */
+    /**
+     * A single account overview
+     *
+     * @since 1.0
+     * @access public
+     * @param array $args
+     */
 	public function single_view( $args = array() )
 	{
-		global $current_user,
-			$vca_asm_finances, $vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $vca_asm_finances, $vca_asm_geography;
 
 		$default_args = array(
 			'city_id' => 0,
@@ -1939,7 +1926,7 @@ class VCA_ASM_Admin_Finances
 		if ( $this->has_cap ) {
 			if ( $active_tab !== 'all' ) {
 				$button .= '<form method="post" action="admin.php?page=' . $page . '&todo=new&tab=' . $active_tab . '&type=' . $active_tab . '&acc_type=' . $account_type . '&cid=' . $city_id . '">' .
-					'<input type="submit" class="button-secondary" value="+ ' . sprintf( __( 'add %s', 'vca-asm' ), $vca_asm_finances->types_to_nicenames[$tab] ) . '" />' .
+					'<input type="submit" class="button-secondary" value="+ ' . sprintf( __( 'add %s', 'vca-asm' ), $vca_asm_finances->types_to_nicenames[$active_tab] ) . '" />' .
 				'</form>';
 			} else {
 				$button .= '<div>';
@@ -2018,16 +2005,19 @@ class VCA_ASM_Admin_Finances
 		echo $output;
 	}
 
-	/**
-	 * Lists entries of a single account
-	 *
-	 * @since 1.5
-	 * @access private
-	 */
+    /**
+     * Lists entries of a single account
+     *
+     * @since 1.5
+     * @access private
+     * @param array $args
+     * @return string
+     */
 	private function list_entries( $args = array() )
 	{
-		global $current_user,
-			$vca_asm_finances, $vca_asm_geography, $vca_asm_utilities;
+        /** @var vca_asm_utilities $vca_asm_utilities */
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $vca_asm_finances, $vca_asm_utilities;
 
 		$default_args = array(
 			'city_id' => 0,
@@ -2038,10 +2028,6 @@ class VCA_ASM_Admin_Finances
 		);
 		$args = wp_parse_args( $args, $default_args );
 		extract( $args );
-
-		$admin_nation = get_user_meta( $current_user->ID, 'nation', true );
-
-		$url = '?page=' . $page;
 
 		extract( $vca_asm_utilities->table_order() );
 
@@ -2173,9 +2159,7 @@ class VCA_ASM_Admin_Finances
 		$transaction_count = count( $transactions );
 		if ( $transaction_count > $this->per_page ) {
 			$cur_page = isset( $_GET['p'] ) ? $_GET['p'] : 1;
-			$pagination_offset = $this->per_page * ( $cur_page - 1 );
 			$total_pages = ceil( $transaction_count / $this->per_page );
-			$cur_end = $total_pages == $cur_page ? $pagination_offset + ( $transaction_count % $this->per_page ) : $pagination_offset + $this->per_page;
 
 			$pagination_args = array(
 				'pagination' => true,
@@ -2183,9 +2167,6 @@ class VCA_ASM_Admin_Finances
 				'current_page' => $cur_page
 			);
 		} else {
-			$cur_page = 1;
-			$pagination_offset = 0;
-			$cur_end = $transaction_count;
 			$pagination_args = array( 'pagination' => false );
 		}
 
@@ -2218,7 +2199,6 @@ class VCA_ASM_Admin_Finances
 
 			switch ( $transaction['receipt_status'] ) {
 				case 1:
-				case '1':
 					if ( 'expenditure' === $transaction['transaction_type'] ) {
 						$rows[$i]['status'] = __( 'Receipt not sent', 'vca-asm' );
 					} else {
@@ -2227,7 +2207,6 @@ class VCA_ASM_Admin_Finances
 				break;
 
 				case 2:
-				case '2':
 					if ( 'expenditure' === $transaction['transaction_type'] ) {
 						$rows[$i]['status'] = __( 'Receipt sent', 'vca-asm' );
 					} else {
@@ -2236,12 +2215,10 @@ class VCA_ASM_Admin_Finances
 				break;
 
 				case 3:
-				case '3':
 					$rows[$i]['status'] = __( 'Confirmed', 'vca-asm' );
 				break;
 
 				case 0:
-				case '0':
 				default:
 					$rows[$i]['status'] = '---';
 				break;
@@ -2257,20 +2234,21 @@ class VCA_ASM_Admin_Finances
 			'order' => 'DESC'
 		);
 		$tbl_args = array_merge( $tbl_args, $pagination_args );
-
 		$the_table = new VCA_ASM_Admin_Table( $tbl_args, $columns, $rows );
 		return $the_table->output();
 	}
 
-	/**
-	 * Edit a transaction
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
+    /**
+     * Edit a transaction
+     *
+     * @since 1.5
+     * @access public
+     * @param array $args
+     */
 	public function edit( $args = array() )
 	{
-		global $current_user, $vca_asm_finances;
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $vca_asm_finances;
 
 		$default_args = array(
 			'id' => NULL,
@@ -2312,57 +2290,12 @@ class VCA_ASM_Admin_Finances
 			if( ! empty( $id ) ) {
 				$fields = $this->populate_fields( $id );
 				$title = sprintf( __( 'Edit %s', 'vca-asm' ), $vca_asm_finances->types_to_nicenames[$type] );
-				$type = $vca_asm_finances->get_transaction_type( $id, false );
 				$transaction_city = $vca_asm_finances->get_transaction_city( $id );
 			} else {
 				$fields = $this->populate_fields( false, $account_type.'-'.$type );
 				$title = sprintf( __( 'Add New %s', 'vca-asm' ), $vca_asm_finances->types_to_nicenames[$type] );
 				$transaction_city = ! empty( $_GET['cid'] ) ? $_GET['cid'] : 0;
 			}
-		}
-
-		if( empty( $id ) && $this->has_cap ) {
-			$extra_html = '<ul class="horiz-list">';
-			if ( 'donations' === $account_type ) {
-					$extra_html .= '<li>' .
-						__( 'Add new', 'vca-asm' ) . ': ' .
-					'</li>' .
-					'<li>' .
-						'<a title="' . __( 'New Donation', 'vca-asm' ) . '" ' .
-						'href="admin.php?page=' . $page . '&todo=new&type=donation&acc_type=donations">' .
-							__( 'Donation', 'vca-asm' ) .
-						'</a>' .
-					'</li>' .
-					'<li>' .
-						'<a title="' . __( 'New Transfer', 'vca-asm' ) . '" ' .
-						'href="admin.php?page=' . $page . '&todo=new&type=transfer&acc_type=donations">' .
-							__( 'Transfer', 'vca-asm' ) .
-						'</a>' .
-					'</li>';
-			} else {
-					$extra_html .= '<li>' .
-						__( 'Add new', 'vca-asm' ) . ': ' .
-					'</li>' .
-					'<li>' .
-						'<a title="' . __( 'New Revenue', 'vca-asm' ) . '" ' .
-						'href="admin.php?page=' . $page . '&todo=new&type=revenue&acc_type=econ">' .
-							__( 'Revenue', 'vca-asm' ) .
-						'</a>' .
-					'</li>' .
-					'<li>' .
-						'<a title="' . __( 'New Expenditure', 'vca-asm' ) . '" ' .
-						'href="admin.php?page=' . $page . '&todo=new&type=expenditure&acc_type=econ">' .
-							__( 'Expenditure', 'vca-asm' ) .
-						'</a>' .
-					'</li>' .
-					'<li>' .
-						'<a title="' . __( 'New Transfer', 'vca-asm' ) . '" ' .
-						'href="admin.php?page=' . $page . '&todo=new&type=transfer&acc_type=econ">' .
-							__( 'Transfer', 'vca-asm' ) .
-						'</a>' .
-					'</li>';
-			}
-			$extra_html .= '</ul><br />';
 		}
 
 		if (
@@ -2412,15 +2345,20 @@ class VCA_ASM_Admin_Finances
 		$the_page->bottom();
 	}
 
-	/**
-	 * Returns an array of fields for a transactions
-	 *
-	 * @since 1.5
-	 * @access private
-	 */
+    /**
+     * Returns an array of fields for a transactions
+     *
+     * @since 1.5
+     * @access private
+     * @param string $type
+     * @param int $nation
+     * @param int $city
+     * @return array
+     */
 	private function create_fields( $type = 'donations-donation', $nation = 0, $city = 0 ) {
-		global $current_user,
-			$vca_asm_finances, $vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $vca_asm_finances, $vca_asm_geography;
 
 		$nation = empty( $nation ) ? $this->admin_nation : $nation;
 		$city = empty( $city ) ? $this->admin_city : $city;
@@ -2777,19 +2715,25 @@ class VCA_ASM_Admin_Finances
 					);
 				}
 			break;
+            default:
+                $fields = array();
 		}
 
 		return $fields;
 	}
 
-	/**
-	 * Populates region fields with values
-	 *
-	 * @since 1.0
-	 * @access private
-	 */
+    /**
+     * Populates region fields with values
+     *
+     * @since 1.0
+     * @access private
+     * @param bool $id
+     * @param string $type
+     * @return array
+     */
 	private function populate_fields( $id = false, $type = 'donations-donation' ) {
-		global $current_user, $wpdb, $vca_asm_finances;
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $wpdb, $vca_asm_finances;
 
 		if ( is_numeric( $id ) ) {
 			$type = $vca_asm_finances->get_transaction_type( $id, true );
@@ -2843,8 +2787,9 @@ class VCA_ASM_Admin_Finances
 	 */
 	public function settings_control()
 	{
-		global $current_user, $wpdb,
-			$vca_asm_finances, $vca_asm_geography;
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $current_user, $wpdb, $vca_asm_finances, $vca_asm_geography;
 
 		$messages = array();
 
@@ -3252,14 +3197,17 @@ class VCA_ASM_Admin_Finances
 		}
 	}
 
-	/**
-	 * Settings, Nation Selector
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
+    /**
+     * Settings, Nation Selector
+     *
+     * @since 1.5
+     * @access public
+     * @param $tab
+     * @return string
+     */
 	private function settings_nation_selector( $tab )
 	{
+        /** @var vca_asm_geography $vca_asm_geography */
 		global $vca_asm_geography;
 
 		$form = new VCA_ASM_Admin_Form( array(
@@ -3289,12 +3237,14 @@ class VCA_ASM_Admin_Finances
 		return $form->output();
 	}
 
-	/**
-	 * Settings View
-	 *
-	 * @since 1.5
-	 * @access public
-	 */
+    /**
+     * Settings View
+     *
+     * @since 1.5
+     * @access public
+     * @param array $messages
+     * @param string $active_tab
+     */
 	public function settings_view( $messages = array(), $active_tab = 'general' )
 	{
 		$url = '?page=vca-asm-finances-settings';
@@ -3374,6 +3324,8 @@ class VCA_ASM_Admin_Finances
 
 	private function settings_general()
 	{
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_finances $vca_asm_finances */
 		global $vca_asm_finances, $vca_asm_geography;
 
 		$url = '?page=vca-asm-finances-settings&tab=general';
@@ -3466,20 +3418,16 @@ class VCA_ASM_Admin_Finances
 
 	private function settings_tax_rates()
 	{
-		global $vca_asm_finances, $vca_asm_geography, $vca_asm_utilities;
+        /** @var vca_asm_utilities $vca_asm_utilities */
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $vca_asm_finances, $vca_asm_utilities;
 
 		$nation = isset( $_POST['ctr'] ) ? $_POST['ctr'] : ( isset( $_GET['ctr'] ) ? $_GET['ctr'] : $this->admin_nation );
 
 		$output = '';
-		$extra_string = '';
+
 		if ( 'global' === $this->cap_lvl ) {
 			$output .= $this->settings_nation_selector( 'tax-rates' );
-			$extra_string = ' (' .
-				sprintf(
-					_x( 'for %s', '%s is a country', 'vca-asm' ),
-					$vca_asm_geography->get_name( $nation )
-				) .
-				')';
 		}
 
 		$button = '';
@@ -3563,7 +3511,9 @@ class VCA_ASM_Admin_Finances
 
 	private function settings_list_tax_rates( $nation = 0 )
 	{
-		global $current_user, $vca_asm_finances, $vca_asm_utilities;
+        /** @var vca_asm_utilities $vca_asm_utilities */
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $vca_asm_finances, $vca_asm_utilities;
 
 		$url = '?page=vca-asm-finances-settings&tab=tax-rates&ctr=' . $nation;
 
@@ -3609,8 +3559,8 @@ class VCA_ASM_Admin_Finances
 
 	private function settings_edit_tax_rate( $args = array() )
 	{
-		global $current_user,
-			$vca_asm_finances, $vca_asm_geography;
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $vca_asm_finances;
 
 		$default_args = array(
 			'id' => NULL,
@@ -3700,21 +3650,14 @@ class VCA_ASM_Admin_Finances
 
 	private function settings_occasions()
 	{
-		global $vca_asm_geography;
 
 		$nation = isset( $_POST['ctr'] ) ? $_POST['ctr'] : ( isset( $_GET['ctr'] ) ? $_GET['ctr'] : $this->admin_nation );
 
 		$output = '';
-		$extra_string = '';
+
 		if ( 'global' === $this->cap_lvl ) {
 			$output .= $this->settings_nation_selector( 'occasions' );
-			$extra_string = ' (' .
-				sprintf(
-					_x( 'for %s', '%s is a country', 'vca-asm' ),
-					$vca_asm_geography->get_name( $nation )
-				) .
-				')';
-		}
+        }
 
 		$button = '';
 		if ( $this->has_cap ) {
@@ -3734,7 +3677,9 @@ class VCA_ASM_Admin_Finances
 
 	private function settings_list_occasions( $nation = 0 )
 	{
-		global $current_user, $vca_asm_finances, $vca_asm_utilities;
+        /** @var vca_asm_utilities $vca_asm_utilities */
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $vca_asm_finances, $vca_asm_utilities;
 
 		$url = '?page=vca-asm-finances-settings&tab=occasions&ctr=' . $nation;
 
@@ -3780,8 +3725,8 @@ class VCA_ASM_Admin_Finances
 
 	private function settings_edit_occasion( $args = array() )
 	{
-		global $current_user,
-			$vca_asm_finances, $vca_asm_geography;
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $vca_asm_finances;
 
 		$default_args = array(
 			'id' => NULL,
@@ -3871,6 +3816,8 @@ class VCA_ASM_Admin_Finances
 
 	private function settings_cash_accounts()
 	{
+        /** @var vca_asm_geography $vca_asm_geography */
+        /** @var vca_asm_finances $vca_asm_finances */
 		global $vca_asm_finances, $vca_asm_geography;
 
 		$url = '?page=vca-asm-finances-settings&tab=cash-accs';
@@ -3921,20 +3868,10 @@ class VCA_ASM_Admin_Finances
 
 	private function settings_cost_centers()
 	{
-		global $vca_asm_geography;
-
-		$nation = isset( $_POST['ctr'] ) ? $_POST['ctr'] : ( isset( $_GET['ctr'] ) ? $_GET['ctr'] : $this->admin_nation );
-
 		$output = '';
-		$extra_string = '';
+
 		if ( 'global' === $this->cap_lvl ) {
 			$output .= $this->settings_nation_selector( 'cost-centers' );
-			$extra_string = ' (' .
-				sprintf(
-					_x( 'for %s', '%s is a country', 'vca-asm' ),
-					$vca_asm_geography->get_name( $nation )
-				) .
-				')';
 		}
 
 		$button = '';
@@ -3955,7 +3892,9 @@ class VCA_ASM_Admin_Finances
 
 	private function settings_list_ccs( $nation = 0 ) //todo extend beyond Germany
 	{
-		global $current_user, $vca_asm_finances, $vca_asm_utilities;
+        /** @var vca_asm_utilities $vca_asm_utilities */
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $vca_asm_finances, $vca_asm_utilities;
 
 		$url = '?page=vca-asm-finances-settings&tab=cost-centers&ctr=' . $nation;
 
@@ -4001,8 +3940,8 @@ class VCA_ASM_Admin_Finances
 
 	private function settings_edit_cc( $args = array() )
 	{
-		global $current_user,
-			$vca_asm_finances, $vca_asm_geography;
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $vca_asm_finances;
 
 		$default_args = array(
 			'id' => NULL,
@@ -4092,20 +4031,10 @@ class VCA_ASM_Admin_Finances
 
 	private function settings_income_expense_accounts()
 	{
-		global $vca_asm_geography;
-
-		$nation = isset( $_POST['ctr'] ) ? $_POST['ctr'] : ( isset( $_GET['ctr'] ) ? $_GET['ctr'] : $this->admin_nation );
-
 		$output = '';
-		$extra_string = '';
+
 		if ( 'global' === $this->cap_lvl ) {
 			$output .= $this->settings_nation_selector( 'ei-accs' );
-			$extra_string = ' (' .
-				sprintf(
-					_x( 'for %s', '%s is a country', 'vca-asm' ),
-					$vca_asm_geography->get_name( $nation )
-				) .
-				')';
 		}
 
 		$button = '';
@@ -4133,8 +4062,9 @@ class VCA_ASM_Admin_Finances
 
 	private function settings_list_ei_accs( $type = 'income', $nation = 0 )
 	{
-		global $current_user,
-			$vca_asm_finances, $vca_asm_utilities;
+        /** @var vca_asm_utilities $vca_asm_utilities */
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $vca_asm_finances, $vca_asm_utilities;
 
 		$url = '?page=vca-asm-finances-settings&tab=ei-accs&ctr=' . $nation;
 
@@ -4180,8 +4110,8 @@ class VCA_ASM_Admin_Finances
 
 	private function settings_edit_ei_account( $args = array() )
 	{
-		global $current_user,
-			$vca_asm_finances, $vca_asm_geography;
+        /** @var vca_asm_finances $vca_asm_finances */
+		global $vca_asm_finances;
 
 		$default_args = array(
 			'id' => NULL,
