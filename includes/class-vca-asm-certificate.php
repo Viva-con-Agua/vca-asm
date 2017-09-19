@@ -68,6 +68,8 @@ class VcA_ASM_Certificate
         // Prepare PDF and load
 
         $pdf = new FPDI();
+        $pdf->AddFont('Museo500', '', 'museo500.php');
+        $pdf->AddFont('Museo300', '', 'museo300.php');
 
         $pdf->AddPage();
 
@@ -78,7 +80,7 @@ class VcA_ASM_Certificate
 
         // Write Name of supporter
 
-        $pdf->SetFont('Arial', 'B', '20');
+        $pdf->SetFont('Museo500', '', '20');
         $pdf->SetTextColor(255,255,255);
 
         $pdf->SetY(27);
@@ -86,7 +88,7 @@ class VcA_ASM_Certificate
 
         // Write date of registration
 
-        $pdf->SetFont('Arial', '', '14');
+        $pdf->SetFont('Museo300', '', '14');
         $pdf->SetTextColor(0,0,0);
 
         $registration_position = $this->langguage_templates[$lang]['registration'];
@@ -100,7 +102,7 @@ class VcA_ASM_Certificate
 
         // Write date of creation
 
-        $pdf->SetFont('Arial', '', '11');
+        $pdf->SetFont('Museo500', '', '11');
 
         $pdf->SetXY(39, 160);
         $pdf->Write(0, date($this->langguage_templates[$lang]['date_format']));
