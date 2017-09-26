@@ -17,7 +17,7 @@ class VcA_ASM_Certificate
 
     private $regions;
 
-    private $langguage_templates = array(
+    private $language_templates = array(
         'de' => array(
             'date_format' => 'd.m.Y',
             'output_filename' => 'viva_con_agua_ehrenamtsbestaetigung',
@@ -73,6 +73,8 @@ class VcA_ASM_Certificate
 
         $pdf->AddPage();
 
+        //$lang = 'en';
+
         $pdf->setSourceFile(VCA_ASM_ABSPATH . '/pdf-templates/volunteer_certificate_' . $lang . '.pdf');
 
         $tplIdx = $pdf->importPage(1);
@@ -91,7 +93,7 @@ class VcA_ASM_Certificate
         $pdf->SetFont('Museo300', '', '14');
         $pdf->SetTextColor(0,0,0);
 
-        $registration_position = $this->langguage_templates[$lang]['registration'];
+        $registration_position = $this->language_templates[$lang]['registration'];
         $pdf->SetXY($registration_position['x'], $registration_position['y']);
         $pdf->Write(9, $user_registration);
 
@@ -105,7 +107,7 @@ class VcA_ASM_Certificate
         $pdf->SetFont('Museo500', '', '11');
 
         $pdf->SetXY(39, 160);
-        $pdf->Write(0, date($this->langguage_templates[$lang]['date_format']));
+        $pdf->Write(0, date($this->language_templates[$lang]['date_format']));
 
         // Write Thanks
 
@@ -113,7 +115,7 @@ class VcA_ASM_Certificate
         $pdf->Rotate(10);
         $pdf->Write(0, $this->user->first_name);
 
-        $pdf->Output($this->langguage_templates[$lang]['output_filename'] . '.pdf', 'D');
+        $pdf->Output($this->language_templates[$lang]['output_filename'] . '.pdf', 'D');
 
     }
 
