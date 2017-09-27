@@ -36,9 +36,21 @@ class VCA_ASM_Admin_Supporters {
 	 * @access public
 	 */
 	public function control() {
-        /** @var vca_asm_geography $vca_asm_geography */
-        /** @var vca_asm_mailer $vca_asm_mailer */
-		global $vca_asm_mailer, $vca_asm_geography;
+
+	    /**
+         * TODO:
+         * - CHANGE check if it is _POST or _GET and REWRITE the creation of the profile-URL
+         * - RENAME the _POST fields so that its corresponding to the _GET fields
+         * - MOVE cases in the todo switch to another function or class
+         * - CREATE an extra class for the profile
+         * - REMOVE SQLs from the class
+         * - Global change: REMOVE or COMBINE geography types for city, cell and lc to >> city
+         */
+
+
+        $vca_asm_mailer = new VCA_ASM_Mailer();
+        $vca_asm_geography = new VCA_ASM_Geography();
+
 		$current_user = wp_get_current_user();
 
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
@@ -49,6 +61,8 @@ class VCA_ASM_Admin_Supporters {
 		$messages = array();
 
 		if( isset( $_GET['profile'] ) ) {
+		    var_dump($_POST);
+		    die();
 			$profile_url = 'admin.php?page=vca-asm-supporters';
 			if( isset( $_GET['orderby'] ) ) {
 				$profile_url .= '&orderby=' . $_GET['orderby'];
@@ -61,6 +75,7 @@ class VCA_ASM_Admin_Supporters {
 					( isset( $_POST['term'] ) || isset( $_GET['term'] ) )
 				) {
 					if( isset( $_POST['term'] ) ) {
+					    die();
 						$term = $_POST['term'];
 					} else {
 						$term = $_GET['term'];

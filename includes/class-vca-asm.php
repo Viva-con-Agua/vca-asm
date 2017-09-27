@@ -56,21 +56,61 @@ class VCA_ASM
         $vca_asm_security = new VCA_ASM_Security();
 
 		if ( is_admin() ) {
-			$GLOBALS['vca_asm_admin'] = new VCA_ASM_Admin();
-			$GLOBALS['vca_asm_admin_actions'] = new VCA_ASM_Admin_Actions();
-			$GLOBALS['vca_asm_admin_education'] = new VCA_ASM_Admin_Education();
-			$GLOBALS['vca_asm_admin_emails'] = new VCA_ASM_Admin_Emails();
-			$GLOBALS['vca_asm_admin_finances'] = new VCA_ASM_Admin_Finances();
-			$GLOBALS['vca_asm_admin_geography'] = new VCA_ASM_Admin_Geography();
-			$GLOBALS['vca_asm_admin_goldeimer'] = new VCA_ASM_Admin_Goldeimer();
-			$GLOBALS['vca_asm_admin_home'] = new VCA_ASM_Admin_Home();
-			$GLOBALS['vca_asm_admin_network'] = new VCA_ASM_Admin_Network();
-			$GLOBALS['vca_asm_admin_settings'] = new VCA_ASM_Admin_Settings();
-			$GLOBALS['vca_asm_admin_slot_allocation'] = new VCA_ASM_Admin_Slot_Allocation();
-			$GLOBALS['vca_asm_admin_applications'] = new VCA_ASM_Admin_Slot_Allocation();
-			$GLOBALS['vca_asm_admin_supporters'] = new VCA_ASM_Admin_Supporters();
 
-			/* so far only used in the backend */
+		    $current_page = isset($_GET['page']) ? $_GET['page'] : '';
+
+			$GLOBALS['vca_asm_admin'] = new VCA_ASM_Admin();
+
+            if(stristr($current_page, 'vca-asm-actions')) {
+                $GLOBALS['vca_asm_admin_actions'] = new VCA_ASM_Admin_Actions();
+            }
+
+			if(stristr($current_page, 'vca-asm-education')) {
+                $GLOBALS['vca_asm_admin_education'] = new VCA_ASM_Admin_Education();
+            }
+
+            if(stristr($current_page, 'vca-asm-emails') ||
+                stristr($current_page, 'vca-asm-compose') ||
+                stristr($current_page, 'vca-asm-outbox')) {
+                $GLOBALS['vca_asm_admin_emails'] = new VCA_ASM_Admin_Emails();
+            }
+
+            if(stristr($current_page, 'vca-asm-finances')) {
+                $GLOBALS['vca_asm_admin_finances'] = new VCA_ASM_Admin_Finances();
+            }
+
+            if(stristr($current_page, 'vca-asm-geography')) {
+                $GLOBALS['vca_asm_admin_geography'] = new VCA_ASM_Admin_Geography();
+            }
+
+            if(stristr($current_page, 'vca-asm-goldeimer')) {
+                $GLOBALS['vca_asm_admin_goldeimer'] = new VCA_ASM_Admin_Goldeimer();
+            }
+
+            if(stristr($current_page, 'vca-asm-home')) {
+                $GLOBALS['vca_asm_admin_home'] = new VCA_ASM_Admin_Home();
+            }
+
+            if(stristr($current_page, 'vca-asm-network')) {
+                $GLOBALS['vca_asm_admin_network'] = new VCA_ASM_Admin_Network();
+            }
+
+            if(stristr($current_page, 'vca-asm-settings') ||
+                stristr($current_page, 'vca-asm-mode-settings')) {
+                $GLOBALS['vca_asm_admin_settings'] = new VCA_ASM_Admin_Settings();
+            }
+
+            if(stristr($current_page, 'slot-allocation')) {
+                $GLOBALS['vca_asm_admin_slot_allocation'] = new VCA_ASM_Admin_Slot_Allocation();
+            }
+
+            if(stristr($current_page, 'vca-asm-supporters') ||
+                stristr($current_page, 'slot-allocation')) {
+                $GLOBALS['vca_asm_admin_supporters'] = new VCA_ASM_Admin_Supporters();
+            }
+
+
+            /* so far only used in the backend */
 			$GLOBALS['vca_asm_roles'] = new VCA_ASM_Roles();
 
 			/* sporadically used to alter data structure or the like */

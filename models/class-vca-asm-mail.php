@@ -69,22 +69,22 @@ class VCA_ASM_Mail
 
 			$the_mail = $mail_query[0];
 
-			$this->$receipient_id = $the_mail['receipient_id'];
-			$this->$receipient_type = $the_mail['receipient_type'];
-			$this->$receipient_membership = $the_mail['membership'];
-			$this->$receipient_pref_override = $the_mail['pref_override'];
+			$this->receipient_id = $the_mail['receipient_id'];
+			$this->receipient_type = $the_mail['receipient_type'];
+			$this->receipient_membership = $the_mail['membership'];
+			$this->receipient_pref_override = $the_mail['pref_override'];
 
-			$this->$sender_id = $the_mail['sent_by'];
-			$this->$sender_email = $the_mail['from'];
+			$this->sender_id = $the_mail['sent_by'];
+			$this->sender_email = $the_mail['from'];
 
-			$this->$time_stamp = $the_mail['from'];
+			$this->time_stamp = $the_mail['from'];
 
-			$this->$subject = $the_mail['subject'];
-			$this->$message_body = $the_mail['message'];
+			$this->subject = $the_mail['subject'];
+			$this->message_body = $the_mail['message'];
 
 			/* TMP */
 
-			if ( 'region' === $this->$receipient_type ) {
+			if ( 'region' === $this->receipient_type ) {
 				global $vca_asm_geography;
 
 				$new_type = 'region2';
@@ -108,19 +108,19 @@ class VCA_ASM_Mail
 
 			/* END TMP */
 
-			$this->$receipient_display_name = '';
+			$this->receipient_display_name = '';
 
-			$this->$sender_first_name = '';
+			$this->sender_first_name = '';
 
-			$this->$sender_last_name = '';
+			$this->sender_last_name = '';
 
-			$this->$sender_display_name = 'Viva con Agua';
+			$this->sender_display_name = 'Viva con Agua';
 
-			$this->$time_time = '';
+			$this->time_time = '';
 
-			$this->$time_date = '';
+			$this->time_date = '';
 
-			$this->$time_full = '';
+			$this->time_full = '';
 		}
 	}
 

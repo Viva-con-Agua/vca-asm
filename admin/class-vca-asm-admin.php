@@ -30,17 +30,9 @@ class VCA_ASM_Admin {
 			__( 'Home', 'vca-asm' ),
 			'read',
 			'vca-asm-home',
-			array( $vca_asm_admin_home, 'home' ),
+			array( new VCA_ASM_Admin_Home(), 'home' ),
 			VCA_ASM_RELPATH . 'img/icon-home_32.png',
 			101
-		);
-		add_submenu_page(
-			'vca-asm-home',
-			'',
-			'',
-			'read',
-			'vca-asm-home',
-			array( $vca_asm_admin_home, 'home' )
 		);
 
 		/* Supporter / User */
@@ -60,17 +52,9 @@ class VCA_ASM_Admin {
 			__( 'Actions', 'vca-asm' ),
 			'vca_asm_view_actions',
 			'vca-asm-actions',
-			array( $vca_asm_admin_actions, 'actions_overview' ),
+			array( new VCA_ASM_Admin_Actions(), 'actions_overview' ),
 			VCA_ASM_RELPATH . 'img/icon-actions_32.png',
 			103
-		);
-		add_submenu_page(
-			'vca-asm-actions',
-			'',
-			'',
-			'vca_asm_view_actions',
-			'vca-asm-actions',
-			array( $vca_asm_admin_actions, 'actions_overview' )
 		);
 
 		/* + low prio submenus */
