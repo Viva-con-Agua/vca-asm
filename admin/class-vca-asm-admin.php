@@ -6,7 +6,7 @@
  * This class contains properties and methods to set up
  * the administration backend.
  *
- * @package VcA Activity & Supporter Management
+ * @package VcA Activity & supporter Management
  * @since 1.0
  */
 
@@ -35,7 +35,7 @@ class VCA_ASM_Admin {
 			101
 		);
 
-		/* Supporter / User */
+		/* supporter / User */
 		add_menu_page(
 			__( 'Supporters', 'vca-asm' ),
 			__( 'Supporters', 'vca-asm' ),
@@ -52,10 +52,18 @@ class VCA_ASM_Admin {
 			__( 'Actions', 'vca-asm' ),
 			'vca_asm_view_actions',
 			'vca-asm-actions',
-			array( new VCA_ASM_Admin_Actions(), 'actions_overview' ),
+			array( $vca_action = new VCA_ASM_Admin_Actions(), 'actions_overview' ),
 			VCA_ASM_RELPATH . 'img/icon-actions_32.png',
 			103
 		);
+        add_submenu_page(
+            'vca-asm-actions',
+            '',
+            '',
+            'vca_asm_view_actions',
+            'vca-asm-actions',
+            array( $vca_action, 'actions_overview' )
+        );
 
 		/* + low prio submenus */
 

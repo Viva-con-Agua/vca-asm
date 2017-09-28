@@ -1,7 +1,7 @@
 <?php
 
 /*
-Plugin Name: VcA Activity & Supporter Management
+Plugin Name: VcA Activity & Supporter.class Management
 Plugin URI: https://pool.vivaconagua.org
 Description: Tool for Viva con Agua (NGO) to manage its supporters and the activities within their network
 Version: 1.6.1
@@ -55,7 +55,7 @@ if ( ! defined( 'LC_MESSAGES' ) ) {
 }
 
 /**
- * Holds the absolute location of VcA Activity & Supporter Management
+ * Holds the absolute location of VcA Activity & Supporter.class Management
  *
  * @var const VCA_ASM_ABSPATH
  * @since 1.0
@@ -65,7 +65,7 @@ if ( ! defined( 'VCA_ASM_ABSPATH' ) ) {
 }
 
 /**
- * Holds the URL of VcA Activity & Supporter Management
+ * Holds the URL of VcA Activity & Supporter.class Management
  *
  * @var const VCA_ASM_RELPATH
  * @since 1.0
@@ -75,7 +75,7 @@ if ( ! defined( 'VCA_ASM_RELPATH' ) ) {
 }
 
 /**
- * Holds the name of the VcA Activity & Supporter Management directory
+ * Holds the name of the VcA Activity & Supporter.class Management directory
  *
  * @var const VCA_ASM_DIRNAME
  * @since 1.0
