@@ -158,7 +158,7 @@ class VCA_ASM_Security
 	 */
 	public function on_login( $user_login, $user )
 	{
-		if ( $user->ID != null && $user->ID > 0 ) {
+		if ( isset($user) && $user->ID != null && $user->ID > 0 ) {
 			if (
 				'maintenance' === $this->mode_options['mode'] &&
 				! in_array( 'administrator', $user->roles ) &&
