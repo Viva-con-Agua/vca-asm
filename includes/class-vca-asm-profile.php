@@ -136,40 +136,53 @@ class VCA_ASM_Profile
 			return false;
 		}
 
-		if ( isset( $_POST['deleteme'] ) && $_POST['deleteme'] == 'forever' ) {
-			wp_delete_user( $user_id );
-			wp_redirect( get_bloginfo('url'), 200 );
-			exit;
-		}
+        if (isset($_POST['vca-membership-accept'])) {
+		    $_POST['membership'] = '2';
+            update_user_meta( $user_id, 'agreement', '1' );
+        } elseif (isset($_POST['vca-membership-decline'])) {
+            update_user_meta( $user_id, 'agreement', '0' );
+        }
 
-		$fields = $this->create_extra_profile_fields();
-		if ( ! empty( $fields ) ) {
-			foreach ( $fields as $field ) {
-				switch( $field['type'] ) {
+        if ( isset( $_POST['deleteme'] ) && $_POST['deleteme'] == 'forever' ) {
+            wp_delete_user( $user_id );
+            wp_redirect( get_bloginfo('url'), 200 );
+            exit;
+        }
+
+        $fields = $this->create_extra_profile_fields();
+        if ( ! empty( $fields ) ) {
+            foreach ( $fields as $field ) {
+                switch( $field['type'] ) {
 					case 'date':
-						update_user_meta(
-							$user_id,
-							$field['id'],
-							mktime( 0, 0, 0,
-								$_POST[ $field['id'] . '-month' ],
-								$_POST[ $field['id'] . '-day' ],
-								$_POST[ $field['id'] . '-year' ]
-							)
-						);
-					break;
 
-					case 'membership':
-						$this_user = new WP_User( $user_id );
-						if( in_array( 'city', $this_user->roles ) ) {
-							update_user_meta( $user_id, $field['id'], '2' );
-						} else {
-							$regions = $vca_asm_geography->get_names();
-							$city_id = get_user_meta( $user_id, 'city', true );
-							$geo_name = isset( $_POST['city'] ) ? $regions[$_POST['city']] : $regions[$city_id];
-							$old = get_user_meta( $user_id, $field['id'], true );
-							if( isset( $_POST[ $field['id'] ] ) ) {
-								if( ( ( is_array( $this_user->roles ) && ! in_array( 'supporter', $this_user->roles ) ) || ( ! is_array( $this_user->roles ) && 'supporter' != $this_user->roles ) ) && $old != '2' ) {
-									update_user_meta( $user_id, $field['id'], '2' );
+                        if (isset($_POST[ $field['id'] . '-month' ])) {
+                            update_user_meta(
+                                $user_id,
+                                $field['id'],
+                                mktime( 0, 0, 0,
+                                    $_POST[ $field['id'] . '-month' ],
+                                    $_POST[ $field['id'] . '-day' ],
+                                    $_POST[ $field['id'] . '-year' ]
+                                )
+                            );
+                        }
+
+                        break;
+
+                    case 'membership':
+                        $this_user = new WP_User( $user_id );
+                        if( in_array( 'city', $this_user->roles ) ) {
+                            update_user_meta( $user_id, $field['id'], '2' );
+                            update_user_meta( $user_id, 'agreement', '1' );
+                        } else {
+                            $regions = $vca_asm_geography->get_names();
+                            $city_id = get_user_meta( $user_id, 'city', true );
+                            $geo_name = isset( $_POST['city'] ) ? $regions[$_POST['city']] : $regions[$city_id];
+                            $old = get_user_meta( $user_id, $field['id'], true );
+                            if( isset( $_POST[ $field['id'] ] ) ) {
+                                if( ( ( is_array( $this_user->roles ) && ! in_array( 'supporter', $this_user->roles ) ) || ( ! is_array( $this_user->roles ) && 'supporter' != $this_user->roles ) ) && $old != '2' ) {
+                                    update_user_meta( $user_id, $field['id'], '2' );
+                                    update_user_meta( $user_id, 'agreement', '1' );
 									$vca_asm_mailer->auto_response(
 										$user_id,
 										'mem_accepted',
@@ -182,7 +195,8 @@ class VCA_ASM_Profile
 									update_user_meta( $user_id, $field['id'], '1' );
 								}
 							} elseif( ! isset( $_POST[ $field['id'] ] ) && ( $old !== '0' || $old !== 0 ) ) {
-								update_user_meta( $user_id, $field['id'], '0' );
+							    update_user_meta( $user_id, $field['id'], '0' );
+                                update_user_meta( $user_id, 'agreement', '0' );
 								if( $old == '2' ) {
 									$vca_asm_mailer->auto_response(
 										$user_id,
@@ -199,7 +213,7 @@ class VCA_ASM_Profile
 
 					default:
 						if( isset( $field['id'] ) && ( ! isset( $field['disabled'] ) || $field['disabled'] !== true ) ) {
-							$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : '';
+							$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : get_user_meta($user_id, $field['id'], true);
 							update_user_meta( $user_id, $field['id'], $new );
 							if ( 'city' === $field['id'] ) {
 								update_user_meta( $user_id, 'region', $new );

@@ -208,13 +208,13 @@ class VCA_ASM_Security
 			$error = __( 'You must enter something...', 'vca-asm' );
 			$errors->add( 'pass', $error );
 		} elseif ( ! $errors->get_error_data('pass') &&
-			$_POST['pass1'] && $_POST['pass2'] &&
+			isset($_POST['pass1']) && isset($_POST['pass2']) &&
 			$_POST['pass1'] !== $_POST['pass2']
 		) {
 			$error = __( 'The passwords you entered do not match...', 'vca-asm' );
 			$errors->add( 'pass', $error );
 		} elseif ( ! $errors->get_error_data('pass') &&
-			$_POST['pass1'] && $_POST['pass2'] &&
+            isset($_POST['pass1']) && isset($_POST['pass2']) &&
 			$this->password_strength( $_POST['pass1'], $user_login, $is_kevin ) < $level
 		) {
 			$error = __( 'The password you have chosen is not strong enough.', 'vca-asm' ) . '<br />' .
@@ -223,7 +223,7 @@ class VCA_ASM_Security
 					$this->strength_terms[$level]
 				);
 			$errors->add( 'pass', $error );
-		} elseif ( ! $errors->get_error_data('pass') && $_POST['pass1'] && $_POST['pass2']  ) {
+		} elseif ( ! $errors->get_error_data('pass') && isset($_POST['pass1']) && isset($_POST['pass2'])  ) {
 			$same = wp_check_password( $_POST['pass1'], $user_obj->user_pass );
 			if ( false !== $same && ! $is_kevin ) {
 				$error = __( 'You cannot replace your old password with itsself...', 'vca-asm' );

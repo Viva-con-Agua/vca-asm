@@ -187,6 +187,59 @@ function vca_asm_user_locale()
 }
 
 /**
+ * Function to redirect to the profile page, if the user is active member without agreement
+ */
+function vca_asm_user_membership()
+{
+
+    // If user is logged in, we have to check if hes a member and if has set the agreement to yes
+    if (is_user_logged_in()) {
+
+        $userMetaMembership = get_user_meta(get_current_user_id(), 'membership', true);
+        $userMetaAgreement = get_user_meta(get_current_user_id(), 'agreement', true);
+
+        $country = get_user_meta(get_current_user_id(), 'nation', true);
+
+        // If its a member and theres no agreement, we have to redirect to the profile
+        if (!empty($userMetaMembership) && $userMetaMembership == '2' &&
+            empty($userMetaAgreement) &&
+            $country == '40') {
+
+            $url = $_SERVER['REQUEST_URI'];
+
+            // If user wants to logout, we finally let him go
+            $logout = '/rausloggen/';
+            $isLogout = stristr($url, $logout);
+
+            if ($isLogout) {
+                return;
+            }
+
+            $whiteList = [
+                '/profil/', '/faq/', '/festivals/', '/goldeimer/', '/meine-actions/',
+                '/nutzungsbedingungen/', '/datenschutzerklaerung/'
+            ];
+
+            $isProfile = false;
+            foreach ($whiteList as $entry) {
+                $isProfile = stristr($url, $entry);
+                if($isProfile) {
+                    return;
+                }
+            }
+
+
+
+            if (!$isProfile) {
+                wp_redirect(get_site_url(null, 'profil/'));
+                die();
+            }
+
+        }
+    }
+}
+
+/**
  * Sets the locale depending on a user's settings
  *
  * @return void
@@ -213,6 +266,7 @@ function vca_asm_set_locale( $locale )
 	return $locale;
 }
 add_action( 'plugins_loaded', 'vca_asm_user_locale' );
+add_action( 'parse_request', 'vca_asm_user_membership' );
 
 /**
  * VCA_ASM Initial Object
