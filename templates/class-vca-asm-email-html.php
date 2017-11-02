@@ -72,7 +72,7 @@ class VCA_ASM_Email_Html {
 			case 'ch':
 				$logo = 'logo-ch@2x.gif';
 				$logo_height = '79';
-				$link_url = 'http://' . _x( 'vivaconagua.ch', 'utility translation', 'vca-asm' );
+				$link_url = 'https://' . _x( 'vivaconagua.ch', 'utility translation', 'vca-asm' );
 				$link_title = __( 'Visit the Viva con Agua website', 'vca-asm' );
 				$organization_title = __( 'Viva con Agua Switzerland', 'vca-asm' );
 			break;
@@ -135,7 +135,7 @@ class VCA_ASM_Email_Html {
 			if ( true === $in_browser ) {
 				$direct_cancellation_link .= 'onclick="preventIt(event)" ';
 			}
-			$direct_cancellation_link .= 'title="' . __( 'Click to cancel newsletter', 'vca-asm' ) . '" href="' . site_url('', 'https') . '" style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span>';
+			$direct_cancellation_link .= 'title="' . __( 'Click to cancel newsletter', 'vca-asm' ) . '" href="' . site_url('', 'https') . '/newsletter-preferences?uid=' . $receipient_id . '&hash=' . md5( $receipient_email_address ) . '" style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span style="color:#0B0B0B;margin-top:0;margin-right:0;margin-bottom:0;margin-left:0;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-decoration:none;border-bottom: 1px dotted #008fc1;"><span>';
 
 			switch ( $reason ) {
 				case 'activity':
@@ -464,7 +464,7 @@ class VCA_ASM_Email_Html {
 			$output .= '<td valign="middle" align="center" style="padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;text-align:center;border-collapse:collapse;vertical-align:middle;">' .
 			'<table cellspacing="0" border="0" style="display:block;max-width:800px;margin:42px auto 21px;padding-top:0;padding-right:0;padding-bottom:0;padding-left:0;"><tbody><tr><td style="max-width:800px;padding-top:0;padding-right:21px;padding-bottom:0;padding-left:21px;text-align:left;border-collapse:collapse;">';
 		}
-						$output .= $message . $append . $append_reason .
+						$output .= str_replace('\\', '', $message) . $append . $append_reason .
 					'</td></tr></tbody></table>' .
 				'</td>' . $lf .
 				'</tr>' . $lf;
@@ -507,7 +507,6 @@ class VCA_ASM_Email_Html {
 		} else {
 			$output .= '</center></body></html>';
 		}
-
 		if ( $echo ) {
 			echo $output;
 		}
