@@ -22,14 +22,22 @@ class VcA_ASM_Certificate
             'date_format' => 'd.m.Y',
             'output_filename' => 'viva_con_agua_ehrenamtsbestaetigung',
             'registration' => array(
-                'x' => 64.5, 'y' => 66.3
+                'x' => 70, 'y' => 86.5
+            ),'date' => array(
+                'x' => 41.1, 'y' => 177.3
+            ),'thankyou' => array(
+                'x' => 161.7, 'y' => 176, 'rotation' => 10
             )
         ),
         'en' => array(
             'date_format' => 'm-d-Y',
             'output_filename' => 'viva_con_agua_volunteer_certificate',
             'registration' => array(
-                'x' => 124.8, 'y' => 66.3
+                'x' => 121, 'y' => 86.5
+            ),'date' => array(
+                'x' => 41.1, 'y' => 177.3
+            ),'thankyou' => array(
+                'x' => 161.7, 'y' => 176, 'rotation' => 10
             )
         )
     );
@@ -68,8 +76,8 @@ class VcA_ASM_Certificate
         // Prepare PDF and load
 
         $pdf = new FPDI();
-        $pdf->AddFont('Museo500', '', 'museo500.php');
-        $pdf->AddFont('Museo300', '', 'museo300.php');
+        $pdf->AddFont('MuseoSans500', '', 'MuseoSans500.php');
+        $pdf->AddFont('MuseoSans300', '', 'MuseoSans300.php');
 
         $pdf->AddPage();
 
@@ -82,15 +90,15 @@ class VcA_ASM_Certificate
 
         // Write Name of supporter
 
-        $pdf->SetFont('Museo500', '', '20');
+        $pdf->SetFont('MuseoSans500', '', '20');
         $pdf->SetTextColor(255,255,255);
 
-        $pdf->SetY(27);
+        $pdf->SetY(22);
         $pdf->Cell(0, 20, utf8_decode($this->user->first_name . " " . $this->user->last_name), 0, 1, 'C');
 
         // Write date of registration
 
-        $pdf->SetFont('Museo300', '', '14');
+        $pdf->SetFont('MuseoSans300', '', '13');
         $pdf->SetTextColor(0,0,0);
 
         $registration_position = $this->language_templates[$lang]['registration'];
@@ -104,15 +112,19 @@ class VcA_ASM_Certificate
 
         // Write date of creation
 
-        $pdf->SetFont('Museo500', '', '11');
+        $pdf->SetFont('MuseoSans300', '', '12');
 
-        $pdf->SetXY(39, 160);
+        $date_position = $this->language_templates[$lang]['date'];
+        $pdf->SetXY($date_position['x'], $date_position['y']);
         $pdf->Write(0, date($this->language_templates[$lang]['date_format']));
 
         // Write Thanks
 
-        $pdf->SetXY(165, 156);
-        $pdf->Rotate(10);
+        $pdf->SetFont('MuseoSans500', '', '11');
+
+        $thankyou_position = $this->language_templates[$lang]['thankyou'];
+        $pdf->SetXY($thankyou_position['x'], $thankyou_position['y']);
+        $pdf->Rotate($thankyou_position['rotation']);
         $pdf->Write(0, $this->user->first_name);
 
         $pdf->Output($this->language_templates[$lang]['output_filename'] . '.pdf', 'D');
@@ -123,13 +135,11 @@ class VcA_ASM_Certificate
     {
 
         $user_registration = strtotime($this->user->user_registered);
-        $month = date('m', $user_registration);
-        $registration_month = _x( $month, 'Months', 'vca-asm' );
         $registration_year = date('Y', $user_registration);
 
         switch ($lang) {
             case 'de':
-                $registration_string = $registration_month  . '.' . $registration_year;
+                $registration_string = $registration_year;
                 break;
             case 'en':
             default:
