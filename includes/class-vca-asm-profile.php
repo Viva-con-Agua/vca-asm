@@ -132,9 +132,22 @@ class VCA_ASM_Profile
         /** @var vca_asm_geography $vca_asm_geography */
 		global $vca_asm_geography, $vca_asm_mailer;
 
-		if ( ! current_user_can( 'edit_user', $user_id ) ) {
-			return false;
-		}
+        if ( ! current_user_can( 'edit_user', $user_id ) ) {
+            return false;
+        }
+
+        $this_user = new WP_User( $user_id );
+
+        if ( isset($_POST['download-certificate'] )) {
+
+            require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-certificate.php' );
+
+            $certificate = new VcA_ASM_Certificate();
+            $certificate->setUser($this_user);
+            echo $certificate->getCertificate();
+            //die();
+
+        }
 
 		if ( isset( $_POST['deleteme'] ) && $_POST['deleteme'] == 'forever' ) {
 			wp_delete_user( $user_id );
@@ -159,7 +172,6 @@ class VCA_ASM_Profile
 					break;
 
 					case 'membership':
-						$this_user = new WP_User( $user_id );
 						if( in_array( 'city', $this_user->roles ) ) {
 							update_user_meta( $user_id, $field['id'], '2' );
 						} else {
