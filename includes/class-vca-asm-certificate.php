@@ -12,11 +12,17 @@ require_once VCA_ASM_ABSPATH . '/lib/fpdi162/fpdi.php';
 class VcA_ASM_Certificate
 {
 
+    /** @var  wp_user $user */
     private $user;
-    private $cerificate;
 
+    /**
+     * @var string[]
+     */
     private $regions;
 
+    /**
+     * @var array
+     */
     private $template_informations = array(
         'de' => array(
             'date_format' => 'd.m.Y',
@@ -28,7 +34,7 @@ class VcA_ASM_Certificate
         ),
         'positions' => array(
             'registration' => array(
-                'x' => 0, 'y' => 86.5
+                'x' => 10, 'y' => 86.5
             ),'date' => array(
                 'x' => 20, 'y' => 177.3
             ),'thankyou' => array(
@@ -58,18 +64,15 @@ class VcA_ASM_Certificate
     /**
      * @return mixed
      */
-    public function getCertificate()
+    public function outputCertificate()
     {
-
-        if (!empty($this->cerificate)) {
-            return $this->cerificate;
-        }
 
         $lang = $this->getLanguage();
         $user_registration = $this->parseRegistration($lang);
 
         // Prepare PDF and load
 
+        /** @var fpdf $pdf */
         $pdf = new FPDI();
         $pdf->AddFont('MuseoSans500', '', 'MuseoSans500.php');
         $pdf->AddFont('MuseoSans300', '', 'MuseoSans300.php');
@@ -130,6 +133,10 @@ class VcA_ASM_Certificate
 
     }
 
+    /**
+     * @param string $lang
+     * @return string
+     */
     private function parseRegistration($lang)
     {
 
@@ -151,6 +158,9 @@ class VcA_ASM_Certificate
 
     }
 
+    /**
+     * @return string
+     */
     private function getLanguage()
     {
         $lang = get_bloginfo('language');
