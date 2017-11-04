@@ -137,15 +137,17 @@ class VCA_ASM_Profile
         }
 
         $this_user = new WP_User( $user_id );
+        $membership = get_user_meta($user_id, 'membership', true);
+        $isMembership = (!empty($membership) && $membership == 2);
 
-        if ( isset($_POST['download-certificate'] )) {
+        // If user wants to download certificate
+        if ( isset($_POST['download-certificate'] ) && $isMembership) {
 
             require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-certificate.php' );
 
             $certificate = new VcA_ASM_Certificate();
             $certificate->setUser($this_user);
-            echo $certificate->getCertificate();
-            //die();
+            echo $certificate->outputCertificate();
 
         }
 
