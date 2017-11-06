@@ -67,29 +67,36 @@ class VCA_ASM_Admin_Supporters {
 					}
 					$profile_url .= '&todo=search&term=' . $term;
 			   } elseif( 'filter' ===  $_GET['todo'] ) {
-					$profile_url .= '&todo=filter';
+                    if( isset( $_POST['term'] ) ) {
+                        $term = $_POST['term'];
+                    } else {
+                        $term = $_GET['term'];
+                    }
+					$profile_url .= '&todo=filter&term=' . $term;
 					if( isset( $_POST['dead-filter'] ) ) {
 						$profile_url .= '&df=1';
 					} elseif( isset( $_GET['df'] ) && $_GET['df'] == 1 ) {
 						$profile_url .= '&df=1';
 					}
 					if( isset( $_POST['membership-filter'] ) ) {
-						$profile_url .= '&mf=' . json_encode($_POST['membership-filter']);
+						$profile_url .= '&mf=' . wp_json_encode($_POST['membership-filter']);
 					} elseif( isset( $_GET['mf'] ) ) {
-						$profile_url .= '&mf=' . $_GET['mf'];
+                        $mf = str_replace('\\', '', $_GET['mf']);
+						$profile_url .= '&mf=' . urlencode($mf);
 					}
 					if( isset( $_POST['geo-filter'] ) ) {
-						$profile_url .= '&gf=' . json_encode( $_POST['geo-filter'] );
+						$profile_url .= '&gf=' . wp_json_encode( $_POST['geo-filter'] );
 					} elseif( isset( $_GET['gf'] ) ) {
-						$profile_url .= '&gf=' . $_GET['gf'];
-					}
+                        $gf = str_replace('\\', '', $_GET['gf']);
+                        $profile_url .= '&gf=' . urlencode($gf);
+                    }
 					if( isset( $_POST['geo-filter-by'] ) ) {
 						$profile_url .= '&gfb=' . $_POST['geo-filter-by'];
 					} elseif( isset( $_GET['gfb'] ) ) {
 						$profile_url .= '&gfb=' . $_GET['gfb'];
 					}
 					if( isset( $_POST['role-filter'] ) ) {
-						$profile_url .= '&rf=' . json_encode( $_POST['role-filter']);
+						$profile_url .= '&rf=' . wp_json_encode( $_POST['role-filter']);
 					} elseif( isset( $_GET['rf'] ) ) {
 						$profile_url .= '&rf=' . $_GET['rf'];
 					}
@@ -670,6 +677,7 @@ class VCA_ASM_Admin_Supporters {
 
 		echo '<form name="vca_asm_supporter_all" method="post" action="' . $back_action . '">' .
 					'<input type="hidden" name="submitted" value="y"/>' .
+					'<input type="hidden" id="bfp" value="1"/>' .
 					'<p class="submit">' .
 						'<input type="submit" name="submit" id="submit" class="button"' .
 							' value="&larr; ' . _x( 'back', 'Admin Supporters', 'vca-asm' ) .
@@ -738,7 +746,7 @@ class VCA_ASM_Admin_Supporters {
 				if( isset( $_POST['geo-filter-'.$geo_filter_by] ) && is_array( $_POST['geo-filter-'.$geo_filter_by] ) ||
 				    isset( $_GET['gf'] )
 				) {
-					$units = isset( $_POST['geo-filter-'.$geo_filter_by] ) ? $_POST['geo-filter-'.$geo_filter_by] : json_decode( $_GET['gf'] );
+					$units = isset( $_POST['geo-filter-'.$geo_filter_by] ) ? $_POST['geo-filter-'.$geo_filter_by] : json_decode(str_replace('\\', '', $_GET['gf']));
 					$query_units = $units;
 					if ( ! in_array( $geo_filter_by, array( 'city', 'nation' ) ) ) {
 						switch ( $geo_filter_by ) {
@@ -770,10 +778,10 @@ class VCA_ASM_Admin_Supporters {
 						$query_units[] = '';
 					}
 
-					$gf_serialized = json_encode( $units );
-					$sort_url .= '&gf=' . $gf_serialized .'&gfb=' . $geo_filter_by;
+                    $gf_serialized = json_encode( $units );
+                    $sort_url .= '&gf=' . urlencode($gf_serialized) .'&gfb=' . $geo_filter_by;
 
-					if ( in_array( $geo_filter_by, array( 'nation', 'ng' ) ) ) {
+                    if ( in_array( $geo_filter_by, array( 'nation', 'ng' ) ) ) {
 						$metaqueries[] = array(
 							'key' => 'nation',
 							'value' => $query_units,
@@ -793,17 +801,19 @@ class VCA_ASM_Admin_Supporters {
 						_x( 'Filtered Supporters of your %region_status%', 'Admin Supporters', 'vca-asm' ) );
 			}
 			if( isset( $_POST['membership-filter'] ) && is_array( $_POST['membership-filter'] ) ) {
-				$mf_serialized = json_encode( $_POST['membership-filter'] );
-				$sort_url .= '&amp;mf=' . $mf_serialized;
+				$mf_serialized = wp_json_encode( $_POST['membership-filter'] );
+				$sort_url .= '&amp;mf=' . urlencode($mf_serialized);
 				$metaqueries[] = array(
 					'key' => 'membership',
 					'value' => $_POST['membership-filter'],
 					'compare' => 'IN'
 				);
 			} elseif( isset( $_GET['mf'] ) ) {
-				$sort_url .= '&mf=' . json_encode($_GET['mf']);
-				$mf_unserialized = json_decode( $_GET['mf'] );
-				$metaqueries[] = array(
+                $mf = str_replace('\\', '', $_GET['mf']);
+                $mf_unserialized = json_decode( $mf );
+                $sort_url .= '&mf=' . urlencode(wp_json_encode($mf_unserialized));
+
+                $metaqueries[] = array(
 					'key' => 'membership',
 					'value' => $mf_unserialized,
 					'compare' => 'IN'
@@ -838,6 +848,7 @@ class VCA_ASM_Admin_Supporters {
 				'meta_query' => $metaqueries
 			);
 		}
+
 		$supporters = get_users( $args );
 
 		if( isset( $_GET['todo'] ) &&
@@ -1109,6 +1120,7 @@ class VCA_ASM_Admin_Supporters {
 				'type' => 'text',
 				'label' =>  _x( 'Search Term', 'Admin Supporters', 'vca-asm' ),
 				'id' => 'term',
+				'value' => isset($term) ? $term : '',
 				'desc' => _x( "You can search the Pool's userbase by first and last name as well as email address.", 'Admin Supporters', 'vca-asm' ) . '<br />' . _x( 'If you only want to filter the list and not search for anything specific, simply leave this field empty.', 'Admin Supporters', 'vca-asm' )
 			)
 		);
@@ -1167,8 +1179,9 @@ class VCA_ASM_Admin_Supporters {
 						$region_option['checked'] = true;
 					}
 				} elseif( isset( $_GET['gf'] ) ) {
-					$gf_unserialized = json_decode( $_GET['gf'] );
-					if( in_array( $region_option['value'], $gf_unserialized ) ) {
+				    $gf = str_replace('\\', '', $_GET['gf']);
+                    $gf_unserialized = json_decode( $gf );
+                    if( in_array( $region_option['value'], $gf_unserialized ) ) {
 						$region_option['checked'] = true;
 					}
 				} else {
@@ -1215,7 +1228,8 @@ class VCA_ASM_Admin_Supporters {
 						$region_option['checked'] = true;
 					}
 				} elseif( isset( $_GET['gf'] ) ) {
-					$gf_unserialized = json_decode( $_GET['gf'] );
+                    $gf = str_replace('\\', '', $_GET['gf']);
+                    $gf_unserialized = json_decode( $gf );
 					if( in_array( $region_option['value'], $gf_unserialized ) ) {
 						$region_option['checked'] = true;
 					}
@@ -1250,7 +1264,8 @@ class VCA_ASM_Admin_Supporters {
 						$region_option['checked'] = true;
 					}
 				} elseif( isset( $_GET['gf'] ) ) {
-					$gf_unserialized = json_decode( $_GET['gf'] );
+                    $gf = str_replace('\\', '', $_GET['gf']);
+                    $gf_unserialized = json_decode( $gf );
 					if( in_array( $region_option['value'], $gf_unserialized ) ) {
 						$region_option['checked'] = true;
 					}
@@ -1282,7 +1297,8 @@ class VCA_ASM_Admin_Supporters {
 						$region_option['checked'] = true;
 					}
 				} elseif( isset( $_GET['gf'] ) ) {
-					$gf_unserialized = json_decode( $_GET['gf'] );
+                    $gf = str_replace('\\', '', $_GET['gf']);
+                    $gf_unserialized = json_decode( $gf );
 					if( in_array( $region_option['value'], $gf_unserialized ) ) {
 						$region_option['checked'] = true;
 					}
@@ -1321,9 +1337,9 @@ class VCA_ASM_Admin_Supporters {
 				),
 				'desc' => _x( 'Choose whether to only show supporters, administrative users or both.', 'Admin Supporters', 'vca-asm' ),
 				'cols' => 1,
-				'value' => ( isset( $_POST['role-filter'] ) ) ? $_POST['role-filter'] : ( ( isset( $_GET['rf'] ) ) ? ( 'all' === $_GET['rf'] ? array( 'supporter', '!supp' ) : $_GET['rf'] ) : array( 'supporter', '!supp' ) )
+				'value' => ( isset( $_POST['role-filter'] ) ) ? $_POST['role-filter'] : ( ( isset( $_GET['rf'] ) ) ? ( 'all' === $_GET['rf'] ? array( 'supporter', '!supp' ) : array($_GET['rf']) ) : array( 'supporter', '!supp' ) )
 			);
-		}
+        }
 
 		if( isset( $_POST['membership-filter'] ) && is_array( $_POST['membership-filter'] ) ) {
 			$checked_mem_options = array(
@@ -1332,7 +1348,10 @@ class VCA_ASM_Admin_Supporters {
 				2 => ( in_array( 2, $_POST['membership-filter'] ) ? true : false )
 			);
 		} elseif( isset( $_GET['mf'] ) ) {
-			$mf_unserialized = json_decode( $_GET['mf'] );
+
+			$mf = str_replace('\\', '', $_GET['mf']);
+			$mf_unserialized = json_decode( $mf );
+
 			$checked_mem_options = array(
 				0 => ( in_array( 0, $mf_unserialized ) ? true : false ),
 				1 => ( in_array( 1, $mf_unserialized ) ? true : false ),
