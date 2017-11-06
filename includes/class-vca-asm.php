@@ -389,6 +389,7 @@ class VCA_ASM
 		add_action( 'admin_init', array( $this, 'clean_unwanted_caps' ) );
 		add_action( 'init', array( $this, 'start_session' ), 1 );
 		add_action( 'wp_logout', array( $this, 'end_session' ) );
+		add_action( 'wp_login', array( $this, 'end_session' ) );
 	}
 
 } // class
