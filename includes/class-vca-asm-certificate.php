@@ -89,8 +89,23 @@ class VcA_ASM_Certificate
         $pdf->SetFont('MuseoSans500', '', '20');
         $pdf->SetTextColor(255,255,255);
 
-        $pdf->SetY(22);
+        $pdf->SetY(20);
+
         $pdf->Cell(0, 20, utf8_decode($this->user->first_name . " " . $this->user->last_name), 0, 1, 'C');
+
+        // Write birthday
+
+        $birthDayMeta = get_user_meta( $this->user->ID, 'birthday', true );
+
+        if (!empty($birthDayMeta)) {
+
+            $textBirthday =  '(* ' . date('d.m.Y', $birthDayMeta ) . ')';
+
+            $pdf->SetY(26);
+            $pdf->SetFont('MuseoSans500', '', '12');
+            $pdf->Cell(0, 20, utf8_decode($textBirthday), 0, 1, 'C');
+
+        }
 
         // Write content
 
