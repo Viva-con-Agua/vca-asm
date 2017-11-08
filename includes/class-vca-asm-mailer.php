@@ -524,7 +524,16 @@ class VCA_ASM_Mailer
 		$mailer->Subject = html_entity_decode( $subject, ENT_QUOTES, 'UTF-8' );
 
 		$mailer->WordWrap = 70;
-		var_dump($mailer);
+        echo '<br/>';
+        var_dump($mailer->Host);
+        echo '<br/>';
+        var_dump($mailer->Port);
+        echo '<br/>';
+        var_dump($mailer->SMTPKeepAlive);
+        echo '<br/>';
+        var_dump($mailer->Username);
+        echo '<br/>';
+        var_dump($mailer->Password);
         die('HERE: ' . __FILE__ . ':' . __LINE__);
 		/***** SENDING LOOP *****/
 
