@@ -509,7 +509,7 @@ class VCA_ASM_Mailer
 
 		$mailer->CharSet = 'UTF-8';
 
-		$mailer->Host = ! empty( $emails_options['email_protocol_url'] ) ? $emails_options['email_protocol_url'] : 'smtp.vivaconagua.org';
+		$mailer->Host = ! empty( $emails_options['email_protocol_url'] ) ? $emails_options['email_protocol_url'] : 'smtp.artfiles.de';
 		$mailer->Port = ! empty( $emails_options['email_protocol_port'] ) ? $emails_options['email_protocol_port'] : 25;
 		$mailer->SMTPAuth = true;
 		$mailer->SMTPKeepAlive = true;
