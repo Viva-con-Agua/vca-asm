@@ -536,7 +536,6 @@ class VCA_ASM_Mailer
         var_dump($mailer->Username);
         echo '<br/>';
         var_dump($mailer->Password);
-        die('HERE: ' . __FILE__ . ':' . __LINE__);
 		/***** SENDING LOOP *****/
 
 		foreach ( $receipients as $receipient ) {
@@ -594,6 +593,9 @@ class VCA_ASM_Mailer
 
 			$mailer->ClearAddresses();
 		}
+
+
+        die('HERE: ' . __FILE__ . ':' . __LINE__);
 
 		return $results;
 	}
