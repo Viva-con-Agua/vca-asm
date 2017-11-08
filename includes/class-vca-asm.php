@@ -48,7 +48,7 @@ class VCA_ASM
 
 		$GLOBALS['vca_asm_geography'] = new VCA_ASM_Geography();
 		$GLOBALS['vca_asm_regions'] = new VCA_ASM_Geography(); // legacy
-        $a->check_outbox();
+        //$a->check_outbox();
 		$GLOBALS['vca_asm_finances'] = new VCA_ASM_Finances();
 		$GLOBALS['vca_asm_registrations'] = new VCA_ASM_Registrations();
 
