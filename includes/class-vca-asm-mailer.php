@@ -70,7 +70,7 @@ class VCA_ASM_Mailer
 	 * @since 1.5
 	 * @access private
 	 */
-	private $url = 'smtp.vivaconagua.org';
+	private $url = 'smtp.artfiles.de';
 
 	/**
 	 * The (SMTP!) port to use
