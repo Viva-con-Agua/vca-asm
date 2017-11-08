@@ -281,14 +281,14 @@ class VCA_ASM_Mailer
 
 		if ( $end === $queue_count ) {
 			$current_batch = $receipients;
-			$wpdb->query(
+			/*$wpdb->query(
 				"DELETE FROM " . $wpdb->prefix."vca_asm_emails_queue " .
 				"WHERE id = " . $queued['id']
-			);
+			);*/
 		} else {
 			$current_batch = array_slice( $receipients, 0, $end );
 			$receipients = array_slice( $receipients, $end );
-			$wpdb->update(
+			/*$wpdb->update(
 				$wpdb->prefix.'vca_asm_emails_queue',
 				array(
 					'receipients' => serialize( $receipients )
@@ -296,7 +296,7 @@ class VCA_ASM_Mailer
 				array( 'id' => $queued['id'] ),
 				array( '%s' ),
 				array( '%d' )
-			);
+			);*/
 		}
 
 		$log_file = VCA_ASM_ABSPATH . '/logs/mailer.log';
@@ -317,6 +317,8 @@ class VCA_ASM_Mailer
 		}
 		$mail_nation = ! empty( $mail_nation ) ? $mail_nation : 'de';
 
+        var_dump($the_mail);
+
 		$mailer_return = $this->send_pre( array(
 			'mail_id' => $queued['mail_id'],
 			'receipients' => $current_batch,
@@ -331,7 +333,7 @@ class VCA_ASM_Mailer
 			'mail_nation' => $mail_nation,
 			'reason' => $type
 		));
-
+        die('HERE: ' . __FILE__ . ':' . __LINE__);
 		$log_file = VCA_ASM_ABSPATH . '/logs/mailer.log';
 		$log_msg = 'Time: ' . time() . "\n" .
 			'Total sent: ' . $mailer_return['total'] . "\n" .
@@ -503,7 +505,7 @@ class VCA_ASM_Mailer
 		$mailer = new PHPMailer();
 
 		$mailer->IsSMTP();
-
+        die('HERE: ' . __FILE__ . ':' . __LINE__);
 		//$mailer->SMTPDebug  = 2;
 		//$mailer->Debugoutput = 'html';
 

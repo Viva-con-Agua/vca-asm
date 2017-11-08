@@ -44,9 +44,11 @@ class VCA_ASM
 		$GLOBALS['vca_asm_utilities'] = new VCA_ASM_Utilities(); // used in other constructors, needs to be instantiated first
 
 		$GLOBALS['vca_asm_activities'] = new VCA_ASM_Activities();
-		$GLOBALS['vca_asm_mailer'] = new VCA_ASM_Mailer();
+		$GLOBALS['vca_asm_mailer'] = $a = new VCA_ASM_Mailer();
+
 		$GLOBALS['vca_asm_geography'] = new VCA_ASM_Geography();
 		$GLOBALS['vca_asm_regions'] = new VCA_ASM_Geography(); // legacy
+        $a->check_outbox();
 		$GLOBALS['vca_asm_finances'] = new VCA_ASM_Finances();
 		$GLOBALS['vca_asm_registrations'] = new VCA_ASM_Registrations();
 
