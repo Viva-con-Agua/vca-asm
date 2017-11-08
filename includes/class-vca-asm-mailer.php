@@ -525,6 +525,8 @@ class VCA_ASM_Mailer
 
 		$mailer->WordWrap = 70;
         echo '<br/>';
+        var_dump($emails_options['email_protocol_url']);
+        echo '<br/>';
         var_dump($mailer->Host);
         echo '<br/>';
         var_dump($mailer->Port);
