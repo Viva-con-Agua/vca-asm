@@ -505,7 +505,7 @@ class VCA_ASM_Mailer
 		$mailer = new PHPMailer();
 
 		$mailer->IsSMTP();
-        die('HERE: ' . __FILE__ . ':' . __LINE__);
+
 		//$mailer->SMTPDebug  = 2;
 		//$mailer->Debugoutput = 'html';
 
@@ -524,7 +524,8 @@ class VCA_ASM_Mailer
 		$mailer->Subject = html_entity_decode( $subject, ENT_QUOTES, 'UTF-8' );
 
 		$mailer->WordWrap = 70;
-
+		var_dump($mailer);
+        die('HERE: ' . __FILE__ . ':' . __LINE__);
 		/***** SENDING LOOP *****/
 
 		foreach ( $receipients as $receipient ) {
