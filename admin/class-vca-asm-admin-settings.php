@@ -588,7 +588,7 @@ class VCA_ASM_Admin_Settings {
 		settings_fields( 'vca_asm_emails_options' );
 		$vca_asm_utilities->do_settings_sections( 'vca_asm_emails_options' );
 		if ( $this->has_cap ) {
-			submit_button();
+        submit_button();
 		}
 
 		$mb_env->bottom();
