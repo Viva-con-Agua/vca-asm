@@ -186,6 +186,10 @@ function vca_asm_user_locale()
 	add_filter( 'locale', 'vca_asm_set_locale', 1 );
 }
 
+if (stripos(get_option('siteurl'), 'https://') === 0) {
+    $_SERVER['HTTPS'] = 'on';
+}
+
 /**
  * Sets the locale depending on a user's settings
  *
