@@ -373,7 +373,9 @@ class VCA_ASM
 	 */
 	public function end_session()
 	{
-		session_destroy ();
+        if (session_status() == PHP_SESSION_ACTIVE) {
+            session_destroy ();
+        }
 	}
 
 	/**
