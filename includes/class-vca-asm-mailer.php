@@ -181,6 +181,7 @@ class VCA_ASM_Mailer
 	 */
 	public function queue( $args = array() )
 	{
+	    /** @var wpdb $wpdb */
 		global $current_user, $wpdb;
 
 		$default_args = array(
@@ -221,15 +222,17 @@ class VCA_ASM_Mailer
 		);
 		$mail_id = $wpdb->insert_id;
 
-		$wpdb->insert(
-			$wpdb->prefix . 'vca_asm_emails_queue',
-			array(
-				'mail_id' => $mail_id,
-				'receipients' => serialize( $receipients ),
-				'total_receipients' => count( $receipients )
-			),
-			array( '%d', '%s', '%d' )
-		);
+		if (!empty($mail_id)) {
+            $wpdb->insert(
+                $wpdb->prefix . 'vca_asm_emails_queue',
+                array(
+                    'mail_id' => $mail_id,
+                    'receipients' => serialize( $receipients ),
+                    'total_receipients' => count( $receipients )
+                ),
+                array( '%d', '%s', '%d' )
+            );
+        }
 
 		return $mail_id;
 	}
