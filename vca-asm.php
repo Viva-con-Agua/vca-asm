@@ -71,7 +71,7 @@ if ( ! defined( 'VCA_ASM_ABSPATH' ) ) {
  * @since 1.0
  */
 if ( ! defined( 'VCA_ASM_RELPATH' ) ) {
-	define( 'VCA_ASM_RELPATH', plugin_dir_url( __FILE__ ) );
+	define( 'VCA_ASM_RELPATH', str_replace('http://', 'https://', plugin_dir_url( __FILE__ )) );
 }
 
 /**
@@ -184,6 +184,10 @@ if ( is_admin() ) {
 function vca_asm_user_locale()
 {
 	add_filter( 'locale', 'vca_asm_set_locale', 1 );
+}
+
+if (stripos(get_option('siteurl'), 'https://') === 0) {
+    $_SERVER['HTTPS'] = 'on';
 }
 
 /**

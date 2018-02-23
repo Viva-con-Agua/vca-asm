@@ -70,7 +70,7 @@ class VCA_ASM_Mailer
 	 * @since 1.5
 	 * @access private
 	 */
-	private $url = 'smtp.vivaconagua.org';
+	private $url = 'smtp.artfiles.de';
 
 	/**
 	 * The (SMTP!) port to use
@@ -181,6 +181,7 @@ class VCA_ASM_Mailer
 	 */
 	public function queue( $args = array() )
 	{
+	    /** @var wpdb $wpdb */
 		global $current_user, $wpdb;
 
 		$default_args = array(
@@ -221,15 +222,17 @@ class VCA_ASM_Mailer
 		);
 		$mail_id = $wpdb->insert_id;
 
-		$wpdb->insert(
-			$wpdb->prefix . 'vca_asm_emails_queue',
-			array(
-				'mail_id' => $mail_id,
-				'receipients' => serialize( $receipients ),
-				'total_receipients' => count( $receipients )
-			),
-			array( '%d', '%s', '%d' )
-		);
+		if (!empty($mail_id)) {
+            $wpdb->insert(
+                $wpdb->prefix . 'vca_asm_emails_queue',
+                array(
+                    'mail_id' => $mail_id,
+                    'receipients' => serialize( $receipients ),
+                    'total_receipients' => count( $receipients )
+                ),
+                array( '%d', '%s', '%d' )
+            );
+        }
 
 		return $mail_id;
 	}
@@ -509,7 +512,7 @@ class VCA_ASM_Mailer
 
 		$mailer->CharSet = 'UTF-8';
 
-		$mailer->Host = ! empty( $emails_options['email_protocol_url'] ) ? $emails_options['email_protocol_url'] : 'smtp.vivaconagua.org';
+		$mailer->Host = ! empty( $emails_options['email_protocol_url'] ) ? $emails_options['email_protocol_url'] : 'smtp.artfiles.de';
 		$mailer->Port = ! empty( $emails_options['email_protocol_port'] ) ? $emails_options['email_protocol_port'] : 25;
 		$mailer->SMTPAuth = true;
 		$mailer->SMTPKeepAlive = true;

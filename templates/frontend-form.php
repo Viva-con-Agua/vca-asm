@@ -80,7 +80,7 @@ if( isset ( $fields ) &&  ! empty( $fields ) ) {
 
 			case 'select':
 				$output .= '<select name="' . $field['id'] .
-				'" id="' . $field['id'] . '"' .
+				'" id="' . $field['id'] . '"';
 				if( isset( $field['disabled'] ) && $field['disabled'] === true ) {
 					$output .= ' disabled="disabled"';
 				}
