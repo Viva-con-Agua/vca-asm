@@ -128,6 +128,7 @@ class VCA_ASM_List_Activities
 
 		extract( shortcode_atts( array(
 			'class' => '',
+			'filter' => '',
 			'heading' => 1
 		), $atts ) );
 
@@ -164,6 +165,12 @@ class VCA_ASM_List_Activities
 			)
 		);
 
+		if ($filter == 'camps') {
+		    $args['post_type'] = array('nwgathering');
+		    $args['meta_query'] = array();
+		    unset($args['post__not_in']);
+        }
+
 		$activities = new WP_Query( $args );
 
 		$output = '';
@@ -181,7 +188,7 @@ class VCA_ASM_List_Activities
 				array(
 					'action' => 'app',
 					'container_class' => 'activities-open',
-					'with_filter' => true,
+					'with_filter' => empty($filter),
 					'eligibility_check' => true,
 					'heading' => ! empty( $heading ) ? __( 'Current Activities', 'vca-asm' ) : '',
 					'pre_text' => sprintf( __( 'Before you apply for an activity, please make sure you will indeed have spare time on your hands in the given timeframe. For general infos about festivals and VcA, please refer to the %s.', 'vca-asm' ), $faq_link ) . '<br />' . __( 'The following activities are currently in the application phase:', 'vca-asm' )
