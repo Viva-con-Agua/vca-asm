@@ -511,17 +511,22 @@ class VCA_ASM_Frontend_Activities {
 							'</tr>';
 					}
 
-					if ( ! empty( $subput ) ) {
-						$output .= '<h5>' . __( 'Further Info', 'vca-asm' ) . '</h5>' .
-							'<table class="meta-table">' . $subput . '</table>';
-						$subput = '';
+                    if ( ! empty( $subput ) ) {
+                        $output .= '<h5>' . __( 'Further Info', 'vca-asm' ) . '</h5>';
+                        $output .= '<table class="meta-table">' . $subput . '</table>';
+                        $subput = '';
 					}
 
 					if( ! empty( $action ) && 'app' === $action ) {
 
 						$output .= '<h5>' . __( 'Participate', 'vca-asm' ) . '</h5>' .
-							'<form method="post" action="">' .
-							'<input type="hidden" name="unique_id" value="[' . md5( uniqid() ) . ']">' .
+							'<form method="post" action="">';
+
+                            $output .= '<br/><span style="font-size: 14px; font-weight: bold;"><input type="checkbox" name="read_confirmation" required> ';
+                            $output .= __( 'I have read and understood the ', 'vca-asm' );
+                            $output .= '<a href="" target="_blank" title="">information sheet</a></span><br/><br/>';
+
+                            $output .= '<input type="hidden" name="unique_id" value="[' . md5( uniqid() ) . ']">' .
 							'<input type="hidden" name="todo" id="todo" value="apply" />' .
 							'<input type="hidden" name="activity" id="activity" value="' . get_the_ID() . '" />' .
 							'<div class="form-row">' .
