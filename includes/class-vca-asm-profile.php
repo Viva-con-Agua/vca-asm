@@ -163,7 +163,7 @@ class VCA_ASM_Profile
                 switch( $field['type'] ) {
 					case 'agreement':
 
-					    if ($_POST[$field['id']] == 'on') {
+					    if ($_POST[$field['id']] == 'on' && isset($_POST['membership']) && $_POST['membership'] == 'on') {
                             update_user_meta($user_id, 'agreement', 1);
                         } else {
 					        update_user_meta($user_id, 'agreement', 0);
@@ -211,6 +211,7 @@ class VCA_ASM_Profile
 								}
 							} elseif( ! isset( $_POST[ $field['id'] ] ) && ( $old !== '0' || $old !== 0 ) ) {
 							    update_user_meta( $user_id, $field['id'], '0' );
+                                update_user_meta($user_id, 'agreement', 0);
 								if( $old == '2' ) {
 									$vca_asm_mailer->auto_response(
 										$user_id,
@@ -408,12 +409,18 @@ class VCA_ASM_Profile
 			'desc' => 'Choose in what language you&apos;d like to use the Pool'
 		);
 
+		if (isset($fields[11]) && isset($fields[11]['id']) && $fields[11]['id'] == 'agreement') {
+		    $length = 12;
+        } else {
+		    $length = 11;
+        }
+
 		if ( 'custom' === $part && ! $is_city ) {
-			$fields = array_slice( $fields, 0, 12 );
+			$fields = array_slice( $fields, 0, $length );
 		} elseif ( 'custom' === $part ) {
 			$fields = array_slice( $fields, 0, 2 );
 		} elseif ( 'settings' === $part && ! $is_city ) {
-			$fields = array_slice( $fields, 12 );
+			$fields = array_slice( $fields, $length );
 		} elseif ( 'settings' === $part ) {
 			$fields = array_slice( $fields, 2 );
 		}
@@ -446,10 +453,12 @@ class VCA_ASM_Profile
 			global $user_id;
 			$edited_user = new WP_User( $user_id );
 			$mem = get_user_meta( $edited_user->ID, 'membership', true );
+            $agreement = get_user_meta( $edited_user->ID, 'agreement', true );
             $user_nation = get_user_meta( $edited_user->ID, 'nation', true );
-		} else {
-			global $current_user;
-			$mem = get_user_meta( $current_user->ID, 'membership', true );
+        } else {
+            global $current_user;
+            $mem = get_user_meta( $current_user->ID, 'membership', true );
+            $agreement = get_user_meta( $current_user->ID, 'agreement', true );
 			$user_nation = get_user_meta( $current_user->ID, 'nation', true );
 			if ( ( is_array( $current_user->roles ) && ( in_array( 'head_of', $current_user->roles ) ) || in_array( 'city', $current_user->roles ) ) ) {
 				$disable_field = true;
@@ -501,12 +510,19 @@ class VCA_ASM_Profile
                     'desc' => _x( 'Uncheck to cancel membership', 'User Profile', 'vca-asm' ),
                     'disabled' => $disable_field
                 );
+
+                $agreement_label = _x( 'Uncheck to cancel agreement', 'User Profile', 'vca-asm' );
+
+                if ($agreement == '0') {
+                    $agreement_label = _x( 'By applying for active membership you acknowledge that you accept to become an unvoiced member of Viva con Agua de Sankt Pauli e.V. This gives you the right to elect the city representative of your city at the annual general meeting. This is entitled by his choice in the name of your crew to cast his vote on the JHV', 'User Profile', 'vca-asm' );
+                }
+
                 $agreement_field = array(
                     'row-class' => 'agreement-selector',
-                    'label' => _x( 'I am a non-voting member', 'User Profile', 'vca-asm' ),
+                    'label' => _x( 'Non-voting membership', 'User Profile', 'vca-asm' ),
                     'id' => 'agreement',
                     'type' => 'agreement',
-                    'desc' => _x( 'Uncheck to cancel agreement', 'User Profile', 'vca-asm' ),
+                    'desc' => $agreement_label,
                     'disabled' => $disable_field
                 );
 			break;
@@ -549,14 +565,7 @@ class VCA_ASM_Profile
 					'desc' => _x( "You have applied for membership of this region's Crew. To withdraw your application, simply uncheck the box.", 'User Profile', 'vca-asm' ),
 					'disabled' => $disable_field
 				);
-                $agreement_field = array(
-                    'row-class' => 'agreement-selector',
-                    'label' => _x( 'I am a non-voting member', 'User Profile', 'vca-asm' ),
-                    'id' => 'agreement',
-                    'type' => 'agreement',
-                    'desc' => _x( 'Uncheck to cancel agreement', 'User Profile', 'vca-asm' ),
-                    'disabled' => $disable_field
-                );
+                $agreement_field = array();
 			break;
 
 			case '0':
@@ -598,14 +607,7 @@ class VCA_ASM_Profile
 					'desc' => _x( '<strong>Important:</strong> If you are an active member of this Crew, set this checkmark to apply for member status.', 'User Profile', 'vca-asm' ),
 					'disabled' => $disable_field
 				);
-                $agreement_field = array(
-                    'row-class' => 'agreement-selector',
-                    'label' => _x( 'I am a non-voting member', 'User Profile', 'vca-asm' ),
-                    'id' => 'agreement',
-                    'type' => 'agreement',
-                    'desc' => _x( 'Uncheck to cancel agreement', 'User Profile', 'vca-asm' ),
-                    'disabled' => $disable_field
-                );
+                $agreement_field = array();
 			break;
 		}
         if (!empty($mem) && $mem == '2' &&

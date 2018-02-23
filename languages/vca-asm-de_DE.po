@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: VcA Activity & Supporter Management v1.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/vca-asm\n"
 "POT-Creation-Date: 2016-03-28 20:25:43+00:00\n"
-"PO-Revision-Date: 2018-02-23 17:20:13+0100\n"
+"PO-Revision-Date: 2018-02-23 18:25:13+0100\n"
 "Last-Translator: Johannes Pilkahn <johannes@pilkahn.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -4517,7 +4517,7 @@ msgid "YES!"
 msgstr "JA!"
 
 #: admin/class-vca-asm-admin-slot-allocation.php:1382
-#: includes/class-vca-asm-profile.php:362
+#: includes/class-vca-asm-profile.php:367
 #@ vca-asm
 msgid "None"
 msgstr "Keine"
@@ -4654,7 +4654,7 @@ msgstr "Profil"
 
 #: admin/class-vca-asm-admin-supporters.php:478
 #: admin/class-vca-asm-admin-supporters.php:1370
-#: includes/class-vca-asm-profile.php:697
+#: includes/class-vca-asm-profile.php:732
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Membership"
@@ -4690,14 +4690,14 @@ msgid "Residence"
 msgstr "Wohnort"
 
 #: admin/class-vca-asm-admin-supporters.php:511
-#: includes/class-vca-asm-profile.php:686
+#: includes/class-vca-asm-profile.php:721
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Registered since"
 msgstr "im Pool angemeldet seit"
 
 #: admin/class-vca-asm-admin-supporters.php:516
-#: includes/class-vca-asm-profile.php:693
+#: includes/class-vca-asm-profile.php:728
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Last Login"
@@ -4909,9 +4909,9 @@ msgstr "Zeige nur Supporter aus bestimmten Städtegruppen"
 
 #: admin/class-vca-asm-admin-supporters.php:1254
 #: includes/class-vca-asm-geography.php:773
-#: includes/class-vca-asm-profile.php:469
-#: includes/class-vca-asm-profile.php:509
-#: includes/class-vca-asm-profile.php:550
+#: includes/class-vca-asm-profile.php:482
+#: includes/class-vca-asm-profile.php:537
+#: includes/class-vca-asm-profile.php:579
 #@ vca-asm
 msgid "other, non-listed country"
 msgstr "anderes, nicht gelistetes Land"
@@ -4919,9 +4919,9 @@ msgstr "anderes, nicht gelistetes Land"
 #: admin/class-vca-asm-admin-supporters.php:1257
 #: includes/class-vca-asm-geography.php:771
 #: includes/class-vca-asm-geography.php:774
-#: includes/class-vca-asm-profile.php:483
-#: includes/class-vca-asm-profile.php:523
-#: includes/class-vca-asm-profile.php:564
+#: includes/class-vca-asm-profile.php:496
+#: includes/class-vca-asm-profile.php:551
+#: includes/class-vca-asm-profile.php:593
 #@ vca-asm
 msgid "not chosen..."
 msgstr "nicht gewählt..."
@@ -6704,176 +6704,176 @@ msgctxt "User Profile"
 msgid "Geography"
 msgstr "Geographie"
 
-#: includes/class-vca-asm-profile.php:340
+#: includes/class-vca-asm-profile.php:345
 #@ vca-asm
 msgctxt "User Profile"
 msgid "Newsletter"
 msgstr "Newsletter"
 
-#: includes/class-vca-asm-profile.php:344
+#: includes/class-vca-asm-profile.php:349
 #@ vca-asm
 msgctxt "User Profile"
 msgid "News Options"
 msgstr "News Optionen"
 
-#: includes/class-vca-asm-profile.php:350
+#: includes/class-vca-asm-profile.php:355
 #@ vca-asm
 msgid "Global &amp; regional news"
 msgstr "Allgemeine &amp; regionale News"
 
-#: includes/class-vca-asm-profile.php:354
+#: includes/class-vca-asm-profile.php:359
 #@ vca-asm
 msgid "Only global news"
 msgstr "Nur allgemeine News"
 
-#: includes/class-vca-asm-profile.php:358
+#: includes/class-vca-asm-profile.php:363
 #@ vca-asm
 msgid "Only regional news"
 msgstr "Nur regionale News"
 
-#: includes/class-vca-asm-profile.php:366
+#: includes/class-vca-asm-profile.php:371
 #@ vca-asm
 msgid "Choose in what case to receive emails. News from your region, global news, both or none."
 msgstr "Wähle bitte ob und welche Neugikeiten aus dem VcA Kosmos Dir zugeschickt werden sollen."
 
-#: includes/class-vca-asm-profile.php:369
+#: includes/class-vca-asm-profile.php:374
 #@ vca-asm
 msgctxt "User Profile"
 msgid "Secondary City Newsletter"
 msgstr "Zusätzlicher Stadtnewsletter"
 
-#: includes/class-vca-asm-profile.php:377
+#: includes/class-vca-asm-profile.php:382
 #@ vca-asm
 msgid "No secondary newsletter"
 msgstr "Kein zweiter Newsletter"
 
-#: includes/class-vca-asm-profile.php:383
+#: includes/class-vca-asm-profile.php:388
 #@ vca-asm
 msgid "Choose whether to receive a secondary newsletter of a city other than your own."
 msgstr "Wähle, on du einen zweiten Newsletter einer anderen Stadt als deiner eigenen bekommen willst."
 
-#: includes/class-vca-asm-profile.php:383
+#: includes/class-vca-asm-profile.php:388
 #@ vca-asm
 msgid "This option will obviously only take effect, if you&apos;ve selected to receive &quot;regional news&quot; above."
 msgstr "Die Option zeigt nur Wirkung, wenn du oben &quot;regionale News&quot; ausgewählt hast."
 
-#: includes/class-vca-asm-profile.php:455
+#: includes/class-vca-asm-profile.php:468
 #@ vca-asm
 msgctxt "User Profile"
 msgid "Choose your city (Crew), if applicable. Should you not be able to find yours, please send an email to <a title=\"Send Mail\" href=\"mailto:zellen@vivaconagua.org\">zellen@vivaconagua.org</a>"
 msgstr "Wähle deine Stadt (Crew), sofern zutreffend. Solltest du deine nicht finden, schicke uns gerne eine E-Mail an <a title=\"Mail schicken\" href=\"mailto:zellen@vivaconagua.org\">zellen@vivaconagua.org</a>"
 
-#: includes/class-vca-asm-profile.php:458
+#: includes/class-vca-asm-profile.php:471
 #@ vca-asm
 msgctxt "User Profile"
 msgid "Choose your city (Crew), if applicable. Should you not be able to find yours, please send an email to <a title=\"Send Mail\" href=\"mailto:zellen@vivaconagua.ch\">zellen@vivaconagua.ch</a>"
 msgstr "Wähle deine Stadt (Crew), sofern zutreffend. Solltest du deine nicht finden, schicke uns gerne eine E-Mail an <a title=\"Mail schicken\" href=\"mailto:zellen@vivaconagua.ch\">zellen@vivaconagua.ch</a>"
 
-#: includes/class-vca-asm-profile.php:465
-#: includes/class-vca-asm-profile.php:505
-#: includes/class-vca-asm-profile.php:546
+#: includes/class-vca-asm-profile.php:478
+#: includes/class-vca-asm-profile.php:533
+#: includes/class-vca-asm-profile.php:575
 #@ vca-asm
 msgctxt "User Profile"
 msgid "Country"
 msgstr "Land"
 
-#: includes/class-vca-asm-profile.php:474
+#: includes/class-vca-asm-profile.php:487
 #@ vca-asm
 msgctxt "User Profile"
 msgid "You currently are a confirmed member of this Crew. You can change your regional affiliation again only if you choose to cancel your membership. You will have to apply for membership of the new region's Crew again."
 msgstr "Derzeit bist du ein bestätigtes Mitglied dieser Crew. Du kannst deine Region erst wieder ändern, wenn du deine Mitgliedsschaft beendest. In der neuen Crew musst du dich wieder um die Mitgliedsschaft bewerben."
 
-#: includes/class-vca-asm-profile.php:479
-#: includes/class-vca-asm-profile.php:519
-#: includes/class-vca-asm-profile.php:560
+#: includes/class-vca-asm-profile.php:492
+#: includes/class-vca-asm-profile.php:547
+#: includes/class-vca-asm-profile.php:589
 #@ vca-asm
 msgctxt "User Profile"
 msgid "City"
 msgstr "Stadt"
 
-#: includes/class-vca-asm-profile.php:494
-#: includes/class-vca-asm-profile.php:534
-#: includes/class-vca-asm-profile.php:575
+#: includes/class-vca-asm-profile.php:507
+#: includes/class-vca-asm-profile.php:562
+#: includes/class-vca-asm-profile.php:604
 #@ vca-asm
 msgctxt "User Profile"
 msgid "I am an active member of my region"
 msgstr "Ich bin aktiv in meiner Region"
 
-#: includes/class-vca-asm-profile.php:497
+#: includes/class-vca-asm-profile.php:510
 #@ vca-asm
 msgctxt "User Profile"
 msgid "Uncheck to cancel membership"
 msgstr "Entferne das Häkchen um die Mitgliedsschaft zu beenden"
 
-#: includes/class-vca-asm-profile.php:514
+#: includes/class-vca-asm-profile.php:542
 #@ vca-asm
 msgctxt "User Profile"
 msgid "You have applied for membership status in the selected region. You can change your regional affiliation again only if you choose to withdraw your membership application."
 msgstr "Du hast dich in der gewählten Region um Mitgliedsstatus in der entsprechenden Zelle oder Local Crew beworben. Du kannst deine Region erst wieder ändern, wenn du die Bewerbung zurückziehst."
 
-#: includes/class-vca-asm-profile.php:537
+#: includes/class-vca-asm-profile.php:565
 #@ vca-asm
 msgctxt "User Profile"
 msgid "You have applied for membership of this region's Crew. To withdraw your application, simply uncheck the box."
 msgstr "Entferne das Häkchen, um deine Bewerbung auf Crew-Mitgliedsschaft zurückzuziehen."
 
-#: includes/class-vca-asm-profile.php:578
+#: includes/class-vca-asm-profile.php:607
 #@ vca-asm
 msgctxt "User Profile"
 msgid "<strong>Important:</strong> If you are an active member of this Crew, set this checkmark to apply for member status."
-msgstr "<strong>Wichtig:</strong> Wenn Du ein aktives VcA Mitglied Deiner Region bist, dann setzte hier bitte ein Häkchen - also wenn Du z.B. bei Teamtreffen dabei bist, Dich bei Aktionen einbringst oder im Bildungsbereich engagierst. Durch das Bewerben auf aktive Mitgliedschaft bestätigst Du, dass du akzepierst, ein stimmloses Mitglied von Viva con Agua de Sankt Pauli e.V. zu werden. Dadurch hast du das Recht den Städtevertreter deiner Stadt auf der Jahreshauptversammlung zu wählen. Dieser ist durch seine Wahl berechtigt im Namen Deiner Crew seine Stimme auf der JHV abzugeben."
+msgstr "<strong>Wichtig:</strong> Wenn Du ein aktives VcA Mitglied Deiner Region bist, dann setzte hier bitte ein Häkchen - also wenn Du z.B. bei Teamtreffen dabei bist, Dich bei Aktionen einbringst oder im Bildungsbereich engagierst."
 
-#: includes/class-vca-asm-profile.php:629
+#: includes/class-vca-asm-profile.php:663
 #@ vca-asm
 msgid "Please confirm that you agree to the terms &amp; conditions."
 msgstr "Bitte bestätige, dass du die Nutzungsbedingungen und Datenschutzerklärung akzeptierst."
 
-#: includes/class-vca-asm-profile.php:683
+#: includes/class-vca-asm-profile.php:718
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Country"
 msgstr "Land"
 
-#: includes/class-vca-asm-profile.php:690
+#: includes/class-vca-asm-profile.php:725
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "City"
 msgstr "Stadt"
 
-#: includes/class-vca-asm-profile.php:709
+#: includes/class-vca-asm-profile.php:744
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Edit your Profile &amp; Settings"
 msgstr "Dein Profil &amp; deine Einstellungen bearbeiten"
 
-#: includes/class-vca-asm-profile.php:710
+#: includes/class-vca-asm-profile.php:745
 #@ vca-asm
 msgctxt "Admin Supporters"
 msgid "Edit Profile"
 msgstr "Profil editieren"
 
-#: includes/class-vca-asm-profile.php:758
+#: includes/class-vca-asm-profile.php:793
 #@ vca-asm
 msgid "Successfully cancelled!"
 msgstr "Erfolgreich ausgeschaltet!"
 
-#: includes/class-vca-asm-profile.php:766
+#: includes/class-vca-asm-profile.php:801
 #@ vca-asm
 msgid "Click to check your profile"
 msgstr "Klicken, um dein Profil zu checken"
 
-#: includes/class-vca-asm-profile.php:771
+#: includes/class-vca-asm-profile.php:806
 #, php-format
 #@ vca-asm
 msgid "Hi %NAME%,<br />you have successfully cancelled your newsletter.<br />You can reenable it in your %LINK_OPEN%profile preferences%LINK_CLOSE% anytime you like."
 msgstr "Moin %NAME%,<br />du hast den Newsletter erfolgreich abbestellt.<br />Du kannst ihn in %LINK_OPEN%Benutzerprofil%LINK_CLOSE% jederzeit wieder aktivieren."
 
-#: includes/class-vca-asm-profile.php:784
+#: includes/class-vca-asm-profile.php:819
 #@ vca-asm
 msgid "User ID and/or hash wrong..."
 msgstr "Benutzer ID und/oder Hash falsch..."
 
-#: includes/class-vca-asm-profile.php:787
+#: includes/class-vca-asm-profile.php:822
 #@ vca-asm
 msgid "Either the user ID you supplied does not exist or the hash does not match up. Either way, not this way buddy!"
 msgstr "Entweder die Benutzer ID, die du angibtst, existiert nicht oder der Hash passt nicht. So jedenfalls wird das nix!"
@@ -8473,17 +8473,17 @@ msgstr "Gib mir mehr Infos!"
 msgid "View activity"
 msgstr "Aktivität ansehen"
 
-#: templates/frontend-profile.php:232
+#: templates/frontend-profile.php:233
 #@ vca-asm
 msgid "No local avatar is set. Falling back to a gravatar, if exists."
 msgstr "Kein lokales Profilbild hochgeladen. Wenn du ein Gravatar hast, wird jenes genutzt."
 
-#: templates/frontend-profile.php:234
+#: templates/frontend-profile.php:235
 #@ vca-asm
 msgid "Delete avatar"
 msgstr "Avatar Löschen"
 
-#: templates/frontend-profile.php:234
+#: templates/frontend-profile.php:235
 #@ vca-asm
 msgid "Replace the local avatar by uploading a new avatar, or erase the local avatar (falling back to a gravatar) by checking the delete option."
 msgstr "Ersetze das aktuelle Avatar durch Hochladen eines neuen oder lösche es in dem du das Häkchen setzt."
@@ -8547,4 +8547,22 @@ msgstr ""
 #@ default
 msgid "trailer"
 msgstr ""
+
+#: includes/class-vca-asm-profile.php:514
+#@ vca-asm
+msgctxt "User Profile"
+msgid "Uncheck to cancel agreement"
+msgstr "Deaktivieren um Mitgliedschaft zu beenden"
+
+#: includes/class-vca-asm-profile.php:522
+#@ vca-asm
+msgctxt "User Profile"
+msgid "Non-voting membership"
+msgstr "Stimmrechtslose Mitgliedschaft"
+
+#: includes/class-vca-asm-profile.php:517
+#@ vca-asm
+msgctxt "User Profile"
+msgid "By applying for active membership you acknowledge that you accept to become an unvoiced member of Viva con Agua de Sankt Pauli e.V. This gives you the right to elect the city representative of your city at the annual general meeting. This is entitled by his choice in the name of your crew to cast his vote on the JHV"
+msgstr "Durch das Bestätigen der stimmrechtslosen Mitgliedschaft akzepierst du, ein stimmrechtsloses Vereinsmitglied von Viva con Agua de Sankt Pauli e.V. zu werden. Dadurch hast du das Recht den Städtevertreter deiner Stadt auf der Jahreshauptversammlung zu wählen. Dieser ist durch seine Wahl berechtigt im Namen Deiner Crew seine Stimme auf der JHV abzugeben."
 
