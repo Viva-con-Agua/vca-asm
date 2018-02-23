@@ -71,7 +71,7 @@ if ( ! defined( 'VCA_ASM_ABSPATH' ) ) {
  * @since 1.0
  */
 if ( ! defined( 'VCA_ASM_RELPATH' ) ) {
-	define( 'VCA_ASM_RELPATH', str_replace('http://', 'https://', plugin_dir_url( __FILE__ )) );
+    define( 'VCA_ASM_RELPATH', str_replace('http://', 'https://', plugin_dir_url( __FILE__ )) );
 }
 
 /**
@@ -270,7 +270,7 @@ function vca_asm_set_locale( $locale )
 	return $locale;
 }
 add_action( 'plugins_loaded', 'vca_asm_user_locale' );
-add_action( 'parse_request', 'vca_asm_user_membership' );
+//add_action( 'parse_request', 'vca_asm_user_membership' );
 
 /**
  * VCA_ASM Initial Object
