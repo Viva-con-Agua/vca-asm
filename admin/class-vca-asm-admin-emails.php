@@ -832,6 +832,10 @@ class VCA_ASM_Admin_Emails {
 				array(
 					'label' => sprintf( _x( 'City Users from %s', 'Admin Email Interface', 'vca-asm' ), $admin_nation_name ),
 					'value' => 'cun'
+				),
+				array(
+					'label' => sprintf( _x( 'Unvoiced members', 'Admin Email Interface', 'vca-asm' ), $admin_nation_name ),
+					'value' => 'agree'
 				)
 			);
 		} elseif ( $current_user->has_cap('vca_asm_send_emails_nation') ) {
@@ -843,7 +847,11 @@ class VCA_ASM_Admin_Emails {
 				array(
 					'label' => sprintf( _x( 'City Users from %s', 'Admin Email Interface', 'vca-asm' ), $admin_nation_name ),
 					'value' => 'cun'
-				)
+				),
+                array(
+                    'label' => sprintf( _x( 'Unvoiced members', 'Admin Email Interface', 'vca-asm' ), $admin_nation_name ),
+                    'value' => 'agree'
+                )
 			);
 		}
 

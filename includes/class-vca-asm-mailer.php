@@ -981,6 +981,9 @@ class VCA_ASM_Mailer
 		global $vca_asm_geography;
 
 		switch( $receipient_group ) {
+			case 'agree':
+			        $for = __( 'Unvoiced members', 'vca-asm' );
+			    break;
 			case 'all':
 				if ( 'active' === $membership ) {
 					$for = __( 'All Active Members', 'vca-asm' );
@@ -1084,6 +1087,32 @@ class VCA_ASM_Mailer
 		$receipients = array();
 
 		switch ( $receipient_group ) {
+			case 'agree':
+                $receipient_id = -10;
+
+                    $metaqueries = array( 'relation' => 'AND' );
+
+                    $metaqueries[] = array(
+                        'key' => 'membership',
+                        'value' => 2
+                    );
+
+                    $metaqueries[] = array(
+                        'key' => 'agreement',
+                        'value' => 1
+                    );
+
+					$args = array(
+                        'meta_query' => $metaqueries
+                    );
+
+					$users = get_users( $args );
+
+                    foreach( $users as $user ) {
+                        $receipients[] = $user->ID;
+                    }
+
+			    break;
 			case 'all':
 			case 'alln':
 				$receipient_id = 'alln' === $receipient_group ? $admin_nation : 0;
