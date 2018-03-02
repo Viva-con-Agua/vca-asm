@@ -339,7 +339,7 @@ function vca_asm_install()
 		from_name text NOT NULL ,
 		subject text NOT NULL ,
 		message longtext NOT NULL ,
-		membership tinyint UNSIGNED NOT NULL ,
+		membership varchar(16) NOT NULL ,
 		receipient_group varchar(255) NOT NULL ,
 		receipient_id int UNSIGNED NOT NULL ,
 		format varchar(255) NOT NULL ,

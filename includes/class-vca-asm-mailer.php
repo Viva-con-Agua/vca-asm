@@ -181,6 +181,7 @@ class VCA_ASM_Mailer
 	 */
 	public function queue( $args = array() )
 	{
+
 	    /** @var wpdb $wpdb */
 		global $current_user, $wpdb;
 
@@ -192,7 +193,7 @@ class VCA_ASM_Mailer
 			'from_email' => 'no-reply@vivaconagua.org',
 			'format' => 'plain',
 			'save' => true,
-			'membership' => 0,
+			'membership' => 'popop',
 			'receipient_group' => 'all',
 			'receipient_id' => 0,
 			'type' => 'manual',
@@ -201,7 +202,7 @@ class VCA_ASM_Mailer
 		extract( wp_parse_args( $args, $default_args ), EXTR_SKIP );
 		if ( ! is_array( $receipients ) ) $receipients = array( $receipients );
 
-		$save_message = trim( $message );
+        $save_message = trim( $message );
 
 		$wpdb->insert(
 			$wpdb->prefix . 'vca_asm_emails',
@@ -218,7 +219,7 @@ class VCA_ASM_Mailer
 				'format' => $format,
 				'type' => $type
 			),
-			array( '%d', '%d', '%s', '%s', '%s', '%s', '%d', '%s', '%d', '%s', '%s' )
+			array( '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s' )
 		);
 		$mail_id = $wpdb->insert_id;
 
@@ -981,15 +982,14 @@ class VCA_ASM_Mailer
 		global $vca_asm_geography;
 
 		switch( $receipient_group ) {
-			case 'agree':
-			        $for = __( 'Unvoiced members', 'vca-asm' );
-			    break;
 			case 'all':
 				if ( 'active' === $membership ) {
 					$for = __( 'All Active Members', 'vca-asm' );
 				} elseif ( 'inactive' === $membership ) {
-					$for = __( 'Pool Users', 'vca-asm' );
-				} else {
+                    $for = __( 'Pool Users', 'vca-asm' );
+                } elseif ( 'agree' === $membership ) {
+                    $for = __( 'Non-voting members', 'vca-asm' );
+                } else {
 					$for = __( 'All Supporters', 'vca-asm' );
 				}
 			break;
@@ -999,7 +999,9 @@ class VCA_ASM_Mailer
 					$for = sprintf( __( 'Active Members from %s', 'vca-asm' ), $vca_asm_geography->get_name( $receipient_id ) );
 				} elseif( 'inactive' === $membership ) {
 					$for = sprintf( __( 'Pool Users from %s', 'vca-asm' ), $vca_asm_geography->get_name( $receipient_id ) );
-				} else {
+				} elseif ( 'agree' === $membership ) {
+                    $for = sprintf( __( 'Non-voting members from %s', 'vca-asm' ), $vca_asm_geography->get_name( $receipient_id ) );
+                } else {
 					$for = sprintf( __( 'All Supporters from %s', 'vca-asm' ), $vca_asm_geography->get_name( $receipient_id ) );
 				}
 			break;
@@ -1030,7 +1032,9 @@ class VCA_ASM_Mailer
 					$for = sprintf( __( 'Active Members from %s', 'vca-asm' ), $vca_asm_geography->get_name( $receipient_id ) );
 				} elseif( 'inactive' === $membership ) {
 					$for = sprintf( __( 'Pool Users from %s', 'vca-asm' ), $vca_asm_geography->get_name( $receipient_id ) );
-				} else {
+				} elseif ( 'agree' === $membership ) {
+                    $for = sprintf( __( 'Non-voting members from %s', 'vca-asm' ), $vca_asm_geography->get_name( $receipient_id ) );
+                } else {
 					$for = sprintf( __( 'Supporters from %s', 'vca-asm' ), $vca_asm_geography->get_name( $receipient_id ) );
 				}
 			break;
@@ -1087,32 +1091,6 @@ class VCA_ASM_Mailer
 		$receipients = array();
 
 		switch ( $receipient_group ) {
-			case 'agree':
-                $receipient_id = -10;
-
-                    $metaqueries = array( 'relation' => 'AND' );
-
-                    $metaqueries[] = array(
-                        'key' => 'membership',
-                        'value' => 2
-                    );
-
-                    $metaqueries[] = array(
-                        'key' => 'agreement',
-                        'value' => 1
-                    );
-
-					$args = array(
-                        'meta_query' => $metaqueries
-                    );
-
-					$users = get_users( $args );
-
-                    foreach( $users as $user ) {
-                        $receipients[] = $user->ID;
-                    }
-
-			    break;
 			case 'all':
 			case 'alln':
 				$receipient_id = 'alln' === $receipient_group ? $admin_nation : 0;
@@ -1126,17 +1104,28 @@ class VCA_ASM_Mailer
 						);
 					}
 					if ( 'active' === $membership ) {
-						$metaqueries[] = array(
-							'key' => 'membership',
-							'value' => 2
-						);
-					} elseif ( 'inactive' === $membership ) {
-						$metaqueries[] = array(
-							'key' => 'membership',
-							'value' => array( 0, 1 ),
-							'compare' => 'IN'
-						);
-					}
+                        $metaqueries[] = array(
+                            'key' => 'membership',
+                            'value' => 2
+                        );
+                    } elseif ( 'inactive' === $membership ) {
+                        $metaqueries[] = array(
+                            'key' => 'membership',
+                            'value' => array( 0, 1 ),
+                            'compare' => 'IN'
+                        );
+                    } elseif ( 'agree' === $membership ) {
+                        $metaqueries[] = array(
+                            'key' => 'agreement',
+                            'value' => strtotime(date('Y-m-d')),
+                            'compare' => '>=',
+                            'type' => 'numeric'
+                        );
+                        $metaqueries[] = array(
+                            'key' => 'membership',
+                            'value' => 2
+                        );
+                    }
 					if ( 'alln' == $receipient_group ) {
 						$metaqueries[] = array(
 							'key' => 'nation',
@@ -1146,6 +1135,7 @@ class VCA_ASM_Mailer
 					$args = array(
 						'meta_query' => $metaqueries
 					);
+
 					$users = get_users( $args );
 					foreach( $users as $user ) {
 						if ( ! in_array( 'pending', $user->roles ) && ! in_array( 'city', $user->roles ) ) {
@@ -1215,7 +1205,18 @@ class VCA_ASM_Mailer
 							'value' => array( 0, 1 ),
 							'compare' => 'IN'
 						);
-					}
+					} elseif ( 'agree' === $membership ) {
+                        $metaqueries[] = array(
+                            'key' => 'agreement',
+                            'value' => strtotime(date('Y-m-d')),
+                            'compare' => '>=',
+                            'type' => 'numeric'
+                        );
+                        $metaqueries[] = array(
+                            'key' => 'membership',
+                            'value' => 2
+                        );
+                    }
 					$primary_metaqueries = $metaqueries;
 					$primary_metaqueries[] = array(
 						'key' => 'city',
@@ -1267,7 +1268,18 @@ class VCA_ASM_Mailer
 							'value' => array( 0, 1 ),
 							'compare' => 'IN'
 						);
-					}
+					} elseif ( 'agree' === $membership ) {
+                        $metaqueries[] = array(
+                            'key' => 'agreement',
+                            'value' => strtotime(date('Y-m-d')),
+                            'compare' => '>=',
+                            'type' => 'numeric'
+                        );
+                        $metaqueries[] = array(
+                            'key' => 'membership',
+                            'value' => 2
+                        );
+                    }
 					$metaqueries[] = array(
 						'key' => 'city',
 						'value' => $vca_asm_geography->get_descendants( $receipient_id, array(
@@ -1311,7 +1323,18 @@ class VCA_ASM_Mailer
 							'value' => array( 0, 1 ),
 							'compare' => 'IN'
 						);
-					}
+					} elseif ( 'agree' === $membership ) {
+                        $metaqueries[] = array(
+                            'key' => 'agreement',
+                            'value' => strtotime(date('Y-m-d')),
+                            'compare' => '>=',
+                            'type' => 'numeric'
+                        );
+                        $metaqueries[] = array(
+                            'key' => 'membership',
+                            'value' => 2
+                        );
+                    }
 					$metaqueries[] = array(
 						'key' => 'nation',
 						'value' => $receipient_id

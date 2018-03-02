@@ -832,10 +832,6 @@ class VCA_ASM_Admin_Emails {
 				array(
 					'label' => sprintf( _x( 'City Users from %s', 'Admin Email Interface', 'vca-asm' ), $admin_nation_name ),
 					'value' => 'cun'
-				),
-				array(
-					'label' => sprintf( _x( 'Unvoiced members', 'Admin Email Interface', 'vca-asm' ), $admin_nation_name ),
-					'value' => 'agree'
 				)
 			);
 		} elseif ( $current_user->has_cap('vca_asm_send_emails_nation') ) {
@@ -847,11 +843,7 @@ class VCA_ASM_Admin_Emails {
 				array(
 					'label' => sprintf( _x( 'City Users from %s', 'Admin Email Interface', 'vca-asm' ), $admin_nation_name ),
 					'value' => 'cun'
-				),
-                array(
-                    'label' => sprintf( _x( 'Unvoiced members', 'Admin Email Interface', 'vca-asm' ), $admin_nation_name ),
-                    'value' => 'agree'
-                )
+				)
 			);
 		}
 
@@ -898,10 +890,14 @@ class VCA_ASM_Admin_Emails {
 						'label' => _x( '&quot;Active Members&quot; only', 'Admin Email Interface', 'vca-asm' ),
 						'value' => 'active'
 					),
-					array(
-						'label' => __( '(Inactive) Pool Users only', 'vca-asm' ),
-						'value' => 'inactive'
-					)
+                    array(
+                        'label' => __( '(Inactive) Pool Users only', 'vca-asm' ),
+                        'value' => 'inactive'
+                    ),
+                    array(
+                        'label' => __( 'Non-voting members', 'vca-asm' ),
+                        'value' => 'agree'
+                    )
 				),
 				'default' => 'active',
 				'desc' => _x( 'Select whether to send the email to all users of the selected group or a partial selection based on  &quot;active membership&quot; status.', 'Admin Email Interface', 'vca-asm' )
@@ -1222,7 +1218,7 @@ class VCA_ASM_Admin_Emails {
         /** @var vca_asm_mailer $vca_asm_mailer */
 		global $current_user, $vca_asm_mailer, $vca_asm_geography;
 
-		$membership = ( isset( $_POST['membership'] ) && in_array( $_POST['membership'], array( 'all', 'active', 'inactive' ) ) ) ? $_POST['membership'] : 'all';
+		$membership = ( isset( $_POST['membership'] ) && in_array( $_POST['membership'], array( 'all', 'active', 'inactive', 'agree' ) ) ) ? $_POST['membership'] : 'all';
 		$receipient_group = isset( $_POST['receipient-group'] ) ? $_POST['receipient-group'] : '';
 		$save = true;
 		$mail_type = isset( $_POST['mail_type'] ) ? $_POST['mail_type'] : '';

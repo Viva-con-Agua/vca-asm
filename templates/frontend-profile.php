@@ -170,6 +170,8 @@ if ( isset ( $fields ) && ! empty( $fields ) ) {
 			break;
 
 			case 'membership':
+			case 'association-agreement':
+			case 'compliance-agreement':
 			case 'agreement':
 			case 'checkbox':
 				echo '<span class="box-test"></span><input type="checkbox"' .
