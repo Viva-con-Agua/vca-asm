@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: VcA Activity & Supporter Management v1.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/vca-asm\n"
 "POT-Creation-Date: 2016-03-28 20:25:43+00:00\n"
-"PO-Revision-Date: 2018-03-02 15:52:28+0100\n"
+"PO-Revision-Date: 2018-03-05 16:28:26+0100\n"
 "Last-Translator: Johannes Pilkahn <johannes@pilkahn.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -8571,13 +8571,13 @@ msgstr ""
 #@ vca-asm
 msgctxt "User Profile"
 msgid "I have read and understood the articles of association (esp. The member regulations)."
-msgstr "Ich habe die Vereinssatzung (insb. die Mitgliederregelungen) gelesen und verstanden."
+msgstr "Ich habe die <a href=\"/\" target=\\\"_blank\\\"><u>Vereinssatzung</u></a> (insb. die Mitgliederregelungen) gelesen und verstanden."
 
 #: includes/class-vca-asm-profile.php:552
 #@ vca-asm
 msgctxt "User Profile"
 msgid "I have read and understood the privacy policy."
-msgstr "Ich habe die Datenschutzerklärung gelesen und verstanden."
+msgstr "Ich habe die <a href=\"/datenschutzerklaerung/\" target=\\\"_blank\\\"><u>Datenschutzerklärung</u></a> gelesen und verstanden."
 
 #: includes/class-vca-asm-profile.php:532
 #@ vca-asm
