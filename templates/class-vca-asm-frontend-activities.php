@@ -356,14 +356,14 @@ class VCA_ASM_Frontend_Activities {
 					if ( 'en' === $user_lang ) {
 						$start_act_string = strftime( '%A, %e/%m/%Y, %H:%M', $the_activity->start_act );
 						$end_act_string = strftime( '%A, %e/%m/%Y, %H:%M', $the_activity->end_act );
-						$start_app_string = strftime( '%A, %e/%m/%Y', $the_activity->start_app );
+                        $start_app_string = strftime( '%A, %e/%m/%Y', $the_activity->start_app );
 						$end_app_string = strftime( '%A, %e/%m/%Y', $the_activity->end_app );
 					} else {
 						$start_act_string = strftime( '%A, %e.%m.%Y, %H:%M', $the_activity->start_act );
 						$end_act_string = strftime( '%A, %e.%m.%Y, %H:%M', $the_activity->end_act );
 						$start_app_string = strftime( '%A, %e.%m.%Y', $the_activity->start_app );
 						$end_app_string = strftime( '%A, %e.%m.%Y', $the_activity->end_app );
-					}
+                    }
 
 					$type_addition = ! empty( $the_activity->nation_name ) ? ' (' . $the_activity->nation_name . ')' : '';
 
@@ -523,8 +523,14 @@ class VCA_ASM_Frontend_Activities {
 							'<form method="post" action="">' .
 							'<input type="hidden" name="unique_id" value="[' . md5( uniqid() ) . ']">' .
 							'<input type="hidden" name="todo" id="todo" value="apply" />' .
-							'<input type="hidden" name="activity" id="activity" value="' . get_the_ID() . '" />' .
-							'<div class="form-row">' .
+							'<input type="hidden" name="activity" id="activity" value="' . get_the_ID() . '" />';
+
+
+                            // Check if application is possible (maybe its not because of the camp site)
+
+                        if ($the_activity->start_app <= time() && $the_activity->end_app >= time()) {
+
+                            $output .= '<div class="form-row">' .
 								'<textarea name="notes" id="notes" rows="5"></textarea>' .
 								'<br class="no-js-toggle" /><span class="description no-js-toggle">' .
 									_x( 'If you wish to send a message with your application, do so here.', 'Frontend: Application Process', 'vca-asm' ) .
@@ -534,10 +540,21 @@ class VCA_ASM_Frontend_Activities {
 								if ( 'goldeimerfestival' === $the_activity->type ) {
 									$output .= __( 'Apply', 'vca-asm' );
 								} else {
-									$output .= __( 'Apply', 'vca-asm' );
-								}
-								$output .= '" />' .
-							'</div></form>';
+                                        $output .= __( 'Apply', 'vca-asm' );
+                                }
+								$output .= '" /></div>';
+
+                        } else {
+
+                            $application_string = sprintf(
+                                __( 'The application phase has not started yet. You can apply for the action from %s to %s', 'vca-asm' ),
+                                $start_app_string,
+                                $end_app_string);
+
+
+                            $output .= '<br/>' . $application_string . '<br/><br/>';
+                        }
+                        $output .= '</form>';
 					}
 
 					if( ! empty( $action ) && 'rev_app' === $action ) {

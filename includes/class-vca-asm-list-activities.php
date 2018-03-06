@@ -183,6 +183,8 @@ class VCA_ASM_List_Activities
 			wp_enqueue_style( 'vca-asm-activities-style' );
 			wp_enqueue_style( 'vca-asm-isotope-style' );
 
+			$pre_text = sprintf( __( 'Before you apply for an activity, please make sure you will indeed have spare time on your hands in the given timeframe. For general infos about festivals and VcA, please refer to the %s.', 'vca-asm' ), $faq_link ) . '<br />' . __( 'The following activities are currently in the application phase:', 'vca-asm' );
+
 			$template = new VCA_ASM_Frontend_Activities(
 				$activities,
 				array(
@@ -191,7 +193,7 @@ class VCA_ASM_List_Activities
 					'with_filter' => empty($filter),
 					'eligibility_check' => true,
 					'heading' => ! empty( $heading ) ? __( 'Current Activities', 'vca-asm' ) : '',
-					'pre_text' => sprintf( __( 'Before you apply for an activity, please make sure you will indeed have spare time on your hands in the given timeframe. For general infos about festivals and VcA, please refer to the %s.', 'vca-asm' ), $faq_link ) . '<br />' . __( 'The following activities are currently in the application phase:', 'vca-asm' )
+					'pre_text' => empty($filter) ? $pre_text : ''
 				)
 			);
 
