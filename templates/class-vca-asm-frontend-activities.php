@@ -519,14 +519,22 @@ class VCA_ASM_Frontend_Activities {
 
 					if( ! empty( $action ) && 'app' === $action ) {
 
-						$output .= '<h5>' . __( 'Participate', 'vca-asm' ) . '</h5>' .
-							'<form method="post" action="">';
+                            $output .= '<form method="post" action="">';
 
-                            $output .= '<br/><span style="font-size: 14px; font-weight: bold;"><input type="checkbox" name="read_confirmation" required> ';
-                            $output .= __( 'I have read and understood the ', 'vca-asm' );
-                            $output .= '<a href="" target="_blank" title="">information sheet</a></span><br/><br/>';
+                            if( ! empty( $tools_enc ) && in_array( '1', $tools_enc )) {
 
-                            $output .= '<input type="hidden" name="unique_id" value="[' . md5( uniqid() ) . ']">' .
+                                $cup_hunt = __("Check the <a href='' target='_blank'>information sheet</a> before applying! Here you will find all the information you need for a successful cup hunt. FAQ's, project information, overview of the use of funds, brief information on VcA and and and... Always up-to-date and interactive processed.<br/><br/>Don´t miss out!", 'vca-asm');
+
+                                $output .= '<h5>' . __( 'All about the cup-hunt', 'vca-asm' ) . '</h5>';
+                                $output .= '<p class="metadata">' . $cup_hunt . '</p>';
+
+                                $output .= '<br/><span style="font-size: 14px; font-weight: bold;"><input type="checkbox" name="read_confirmation" required> ';
+                                $output .= __( 'I have read it!', 'vca-asm' );
+                                $output .= '</span><br/><br/>';
+                            }
+
+                            $output .= '<h5>' . __( 'Participate', 'vca-asm' ) . '</h5>' .
+                            '<input type="hidden" name="unique_id" value="[' . md5( uniqid() ) . ']">' .
 							'<input type="hidden" name="todo" id="todo" value="apply" />' .
 							'<input type="hidden" name="activity" id="activity" value="' . get_the_ID() . '" />' .
 							'<div class="form-row">' .
