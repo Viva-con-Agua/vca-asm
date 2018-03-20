@@ -190,7 +190,12 @@ class VCA_ASM_List_Activities
 			wp_enqueue_style( 'vca-asm-activities-style' );
 			wp_enqueue_style( 'vca-asm-isotope-style' );
 
-			$pre_text = sprintf( __( 'Before you apply for an activity, please make sure you will indeed have spare time on your hands in the given timeframe. For general infos about festivals and VcA, please refer to the %s.', 'vca-asm' ), $faq_link ) . '<br />' . __( 'The following activities are currently in the application phase:', 'vca-asm' );
+
+            if (empty($filter)) {
+                $pre_text = sprintf(__('Before you apply for an activity, please make sure you will indeed have spare time on your hands in the given timeframe. For general infos about festivals and VcA, please refer to the %s.', 'vca-asm'), $faq_link) . '<br />' . __('The following activities are currently in the application phase:', 'vca-asm');
+            } else {
+                $pre_text = __( 'Here you can see all upcoming camps and network gatherings.', 'vca-asm' );
+            }
 
 			$template = new VCA_ASM_Frontend_Activities(
 				$activities,

@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: VcA Activity & Supporter Management v1.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/vca-asm\n"
 "POT-Creation-Date: 2016-03-28 20:25:43+00:00\n"
-"PO-Revision-Date: 2018-03-06 16:24:17+0100\n"
+"PO-Revision-Date: 2018-03-20 20:54:08+0100\n"
 "Last-Translator: Johannes Pilkahn <johannes@pilkahn.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -999,7 +999,7 @@ msgstr "Teilnehmer"
 #: admin/class-vca-asm-admin-slot-allocation.php:867
 #: admin/class-vca-asm-admin-slot-allocation.php:1006
 #: admin/class-vca-asm-admin-slot-allocation.php:1186
-#: includes/class-vca-asm-list-activities.php:331
+#: includes/class-vca-asm-list-activities.php:345
 #: models/class-vca-asm-workbook-participants.php:106
 #@ vca-asm
 msgid "Waiting List"
@@ -6393,88 +6393,88 @@ msgstr "FAQ"
 msgid "Why this is a neccessity is explained in the %s."
 msgstr "Warum dies notwendig ist erfährst du in den %s."
 
-#: includes/class-vca-asm-list-activities.php:193
+#: includes/class-vca-asm-list-activities.php:207
 #@ vca-asm
 msgid "Current Activities"
 msgstr "Aktuelle Aktivitäten"
 
-#: includes/class-vca-asm-list-activities.php:194
+#: includes/class-vca-asm-list-activities.php:195
 #, php-format
 #@ vca-asm
 msgid "Before you apply for an activity, please make sure you will indeed have spare time on your hands in the given timeframe. For general infos about festivals and VcA, please refer to the %s."
 msgstr "Bevor du dich für eine Aktivität bewirbst, check bitte nochmal deinen Terminkalender, ob du auch wirklich Zeit hast. Für generelle Infos über VcA und die Festivals, kuck bitte in die %s."
 
-#: includes/class-vca-asm-list-activities.php:194
+#: includes/class-vca-asm-list-activities.php:195
 #@ vca-asm
 msgid "The following activities are currently in the application phase:"
 msgstr "Die folgenden Aktivitäten sind in der Bewerbungsphase:"
 
-#: includes/class-vca-asm-list-activities.php:202
+#: includes/class-vca-asm-list-activities.php:216
 #@ vca-asm
 msgid "Currently there are no activities in the registration phase."
 msgstr "Aktuell sind keine Aktivitäten in der Bewerbungsphase."
 
-#: includes/class-vca-asm-list-activities.php:244
+#: includes/class-vca-asm-list-activities.php:258
 #@ vca-asm
 msgid "My Activities"
 msgstr "Meine Aktivitäten"
 
-#: includes/class-vca-asm-list-activities.php:247
+#: includes/class-vca-asm-list-activities.php:261
 #@ vca-asm
 msgid "Activities you are participating in"
 msgstr "Aktivitäten an denen du teilnimmst"
 
-#: includes/class-vca-asm-list-activities.php:253
+#: includes/class-vca-asm-list-activities.php:267
 #@ vca-asm
 msgid "These are the future activities you are participating in."
 msgstr "Für diese zukünftigen Aktivitäten ist deine Bewerbung angenommen und du als Teilnehmer registriert worden."
 
-#: includes/class-vca-asm-list-activities.php:282
+#: includes/class-vca-asm-list-activities.php:296
 #@ vca-asm
 msgid "You are currently not registered for future activities."
 msgstr "Du bist aktuell für keine zukünftigen Aktivitäten angemeldet."
 
-#: includes/class-vca-asm-list-activities.php:289
+#: includes/class-vca-asm-list-activities.php:303
 #@ vca-asm
 msgid "Current Applications"
 msgstr "Aktuelle Bewerbungen"
 
-#: includes/class-vca-asm-list-activities.php:295
+#: includes/class-vca-asm-list-activities.php:309
 #@ vca-asm
 msgid "You have applied to participate in the following activities. You will get an answer at the latest one day after the application deadline has passed."
 msgstr "Du hast dich für die folgenden Aktivitäten beworben. Dir wird spätestens kurz nach Ende der Bewerbungsphase Bescheid gesagt."
 
-#: includes/class-vca-asm-list-activities.php:324
+#: includes/class-vca-asm-list-activities.php:338
 #@ vca-asm
 msgid "You currently have not applied to any future activities."
 msgstr "Du hast dich aktuell nicht auf zukünftige Aktivitäten beworben."
 
-#: includes/class-vca-asm-list-activities.php:337
+#: includes/class-vca-asm-list-activities.php:351
 #@ vca-asm
 msgid "Your application to these activites was denied. You are now on the waiting list and will be contacted, if slots open up again."
 msgstr "Deine Bewerbung für diese Aktivitäten ist (vorläufig) abgelehnt worden. Du stehst jetzt auf der Warteliste und wirst kontaktiert werden, sollten Plätze wieder frei werden."
 
-#: includes/class-vca-asm-list-activities.php:366
+#: includes/class-vca-asm-list-activities.php:380
 #@ vca-asm
 msgid "You currently are not on any waiting lists."
 msgstr "Du stehst derzeit auf keiner Warteliste."
 
-#: includes/class-vca-asm-list-activities.php:373
+#: includes/class-vca-asm-list-activities.php:387
 #@ vca-asm
 msgid "Past Activities"
 msgstr "Vergangene Aktivitäten"
 
-#: includes/class-vca-asm-list-activities.php:379
+#: includes/class-vca-asm-list-activities.php:393
 #@ vca-asm
 msgid "These are the activities you have participated in in the past."
 msgstr "An diesen Aktivitäten hast du teilgenommen."
 
-#: includes/class-vca-asm-list-activities.php:408
+#: includes/class-vca-asm-list-activities.php:422
 #@ vca-asm
 msgid "So far, you have not participated in any activities."
 msgstr "Bis jetzt hast du an keinen Aktivitäten teilgenommen."
 
-#: includes/class-vca-asm-list-activities.php:451
+#: includes/class-vca-asm-list-activities.php:465
 #@ vca-asm
 msgid "In order to be able to register for activities, you should at least have filled out first- and lastname, your mobile phone and date of birth, as well as selected a country in your user profile."
 msgstr "Um dich für Aktivitäten anmelden, bzw. bewerben, zu können, musst du deinen Vor- und Nachnamen, deine Telefonnummer und dein Geburtsdatum in deinem Profil angegeben, sowie ein Land gewählt haben."
@@ -8553,4 +8553,9 @@ msgstr ""
 #@ vca-asm
 msgid "The application phase has not started yet. You can apply for the action from %s to %s"
 msgstr "Die Bewerbungsphase hat noch nicht begonnen. Du kannst dich vom %s bis %s bewerben!"
+
+#: includes/class-vca-asm-list-activities.php:197
+#@ vca-asm
+msgid "Here you can see all upcoming camps and network gatherings."
+msgstr "Hier kannst du alle bevorstehenden Camps und Netzwerktreffen sehen."
 
