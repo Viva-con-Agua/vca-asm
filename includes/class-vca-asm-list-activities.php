@@ -205,7 +205,7 @@ class VCA_ASM_List_Activities
 					'with_filter' => empty($filter),
 					'eligibility_check' => true,
 					'heading' => ! empty( $heading ) ? __( 'Current Activities', 'vca-asm' ) : '',
-					'pre_text' => empty($filter) ? $pre_text : ''
+					'pre_text' => $pre_text
 				)
 			);
 
