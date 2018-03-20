@@ -169,9 +169,9 @@ class VCA_ASM_List_Activities
 		    $args['post_type'] = array('nwgathering');
 		    $args['meta_query'] = array(
                 array(
-                    'key' => 'start_app',
+                    'key' => 'end_app',
                     'value' => time(),
-                    'compare' => '<=',
+                    'compare' => '>=',
                     'type' => 'numeric'
                 )
             );
