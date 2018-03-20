@@ -167,7 +167,14 @@ class VCA_ASM_List_Activities
 
 		if ($filter == 'camps') {
 		    $args['post_type'] = array('nwgathering');
-		    $args['meta_query'] = array();
+		    $args['meta_query'] = array(
+                array(
+                    'key' => 'start_app',
+                    'value' => time(),
+                    'compare' => '<=',
+                    'type' => 'numeric'
+                )
+            );
 		    unset($args['post__not_in']);
         }
 
