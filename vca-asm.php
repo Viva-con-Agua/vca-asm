@@ -71,7 +71,7 @@ if ( ! defined( 'VCA_ASM_ABSPATH' ) ) {
  * @since 1.0
  */
 if ( ! defined( 'VCA_ASM_RELPATH' ) ) {
-	define( 'VCA_ASM_RELPATH', str_replace('http://', 'https://', plugin_dir_url( __FILE__ )) );
+	define( 'VCA_ASM_RELPATH', str_replace('http://', 'http://', plugin_dir_url( __FILE__ )) );
 }
 
 /**
