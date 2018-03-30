@@ -1777,6 +1777,7 @@ class VCA_ASM_Admin_Finances
 			$rows[$i]['balanced_month'] = $the_city_finances->{'balanced_month_' . ( 'donations' === $account_type ? 'don' : 'econ' ) . '_name'};
 			$rows[$i]['annual_out'] = 'donations' === $account_type ? 0 : $the_city_finances->econ_annual_expenses_formatted;
 			$rows[$i]['annual_in'] = 'donations' === $account_type ? $the_city_finances->donations_current_year_formatted : $the_city_finances->econ_annual_revenue_formatted;
+			$rows[$i]['annual_in_last'] = 'donations' === $account_type ? $the_city_finances->donations_last_year_formatted : 0;
 			$i++;
 		}
 
@@ -1811,6 +1812,11 @@ class VCA_ASM_Admin_Finances
 			$columns[] = array(
 				'id' => 'annual_in',
 				'title' => sprintf( __( 'Donations', 'vca-asm' ) . '  %d', date( 'Y' ) ),
+				'sortable' => false//true
+			);
+			$columns[] = array(
+				'id' => 'annual_in_last',
+				'title' => sprintf( __( 'Donations', 'vca-asm' ) . '  %d', date( 'Y' ) - 1 ),
 				'sortable' => false//true
 			);
 		} else {

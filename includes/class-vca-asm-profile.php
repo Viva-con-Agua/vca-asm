@@ -153,7 +153,7 @@ class VCA_ASM_Profile
 
 		if ( isset( $_POST['deleteme'] ) && $_POST['deleteme'] == 'forever' ) {
 			wp_delete_user( $user_id );
-			wp_redirect( get_bloginfo('url'), 200 );
+			wp_redirect( get_bloginfo('url'));
 			exit;
 		}
 
