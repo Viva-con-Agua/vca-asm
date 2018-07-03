@@ -30,6 +30,7 @@ class VCA_ASM_Profile
 	 */
 	public function __construct()
 	{
+		add_action( 'wp_head', array( $this, 'newsletter_preferences' ), 1, 2 );
 		add_action( 'register_post', array( $this, 'verify_tc_acceptance' ), 1, 3 );
 		add_action( 'user_register', array( $this, 'save_on_registration' ), 100 );
 		add_action( 'show_user_profile', array( $this, 'user_extra_profile_fields' ) );
@@ -42,6 +43,8 @@ class VCA_ASM_Profile
 		add_action( 'edit_user_profile_update', array( $this, 'save_extra_profile_fields' ) );
 		add_shortcode( 'vca-asm-supporter-vcard', array( $this, 'supporter_vcard' ) );
 		add_shortcode( 'vca-asm-newsletter-preferences', array( $this, 'newsletter_preferences' ) );
+		
+		
 	}
 
 	/* ============================= WORDPRESS INTEGRATION & SAVING ============================= */
@@ -714,6 +717,12 @@ class VCA_ASM_Profile
 	 */
 	public function newsletter_preferences( $atts )
 	{
+		
+		$url = wp_parse_url($_SERVER['REQUEST_URI']);
+		if ( $url['path'] != '/newsletter-preferences' ) {
+			return;
+		}
+		
 		if ( is_user_logged_in() )
 		{
 			// to do: edge case handling
@@ -761,6 +770,7 @@ class VCA_ASM_Profile
 						) .
 					'</p>' .
 				'</div>';
+				echo $output;die();
 		}
 		else
 		{
