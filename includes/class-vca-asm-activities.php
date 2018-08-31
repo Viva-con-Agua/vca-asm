@@ -440,7 +440,7 @@ class VCA_ASM_Activities
 					'id' => 'total_slots',
 					'type' => 'total_slots',
 					'min' => 1,
-					'max' => ( 'nwgathering' === $post_type ) ? 1000 : 50,
+					'max' => ( 'nwgathering' === $post_type ) ? 5000 : 1000,
 					'step' => 1,
 					'required' => true,
 					'validation' => 'numbers'

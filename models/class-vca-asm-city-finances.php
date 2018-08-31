@@ -59,9 +59,11 @@ class VCA_ASM_City_Finances
 
 	public $donations_total = 0;
 	public $donations_by_years = array();
-	public $donations_current_year = 0;
-	public $donations_total_formatted = '';
+    public $donations_current_year = 0;
+    public $donations_last_year = 0;
+    public $donations_total_formatted = '';
 	public $donations_current_year_formatted = '';
+	public $donations_last_year_formatted = '';
 
 	public $balance_econ = 0;
 	public $balance_don = 0;
@@ -251,8 +253,8 @@ class VCA_ASM_City_Finances
 	 */
 	private function gather_meta( $id )
 	{
-		global $wpdb,
-			$vca_asm_finances, $vca_asm_geography, $vca_asm_utilities;
+        global /** @var VCA_ASM_Finances $vca_asm_finances */
+        $vca_asm_finances, $vca_asm_geography;
 
 		$this->nation_id = $vca_asm_geography->has_nation( $id );
 
@@ -267,9 +269,11 @@ class VCA_ASM_City_Finances
 		$this->donations_by_years = $vca_asm_finances->get_donations( $id, true );
 		$this->donations_total = $this->donations_by_years['total'];
 		$this->donations_current_year = ! empty( $this->donations_by_years[date('Y')] ) ? $this->donations_by_years[date('Y')] : 0;
+		$this->donations_last_year = ! empty( $this->donations_by_years[date('Y') - 1] ) ? $this->donations_by_years[date('Y') - 1] : 0;
 
 		$this->donations_total_formatted = number_format( $this->donations_total/100, 2, ',', '.' ) . ' ' . $this->currency_symbol;
 		$this->donations_current_year_formatted = number_format( $this->donations_current_year/100, 2, ',', '.' ) . ' ' . $this->currency_symbol;
+		$this->donations_last_year_formatted = number_format( $this->donations_last_year/100, 2, ',', '.' ) . ' ' . $this->currency_symbol;
 
 		$this->balance_econ = $vca_asm_finances->get_balance( $id, 'econ' );
 		$this->balance_don = $vca_asm_finances->get_balance( $id, 'donations' );
