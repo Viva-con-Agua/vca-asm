@@ -159,21 +159,64 @@ class VCA_ASM_Profile
             wp_redirect( get_bloginfo('url'), 200 );
             exit;
         }
-
+		
+		if ((isset($_POST['first_name']) && $_POST['first_name'] == '')	||
+			(isset($_POST['last_name']) && $_POST['last_name'] == '')) {
+							
+			if (isset($_POST['agreement'])) {
+				$_POST['agreement'] = 'off';
+			}	
+			
+			update_user_meta($user_id, 'agreement', 0);
+			update_user_meta($user_id, 'association-agreement', 0);
+			update_user_meta($user_id, 'compliance-agreement', 0);		
+		}
+		
         $fields = $this->create_extra_profile_fields();
         if ( ! empty( $fields ) ) {
             foreach ( $fields as $field ) {
                 switch( $field['type'] ) {
+					case 'text':
+					
+						$agreement_required = array('postcode', 'street', 'residence');
+					
+						if (in_array($field['id'], $agreement_required) && $_POST[$field['id']] == '') {
+					        update_user_meta($user_id, 'agreement', 0);
+                            update_user_meta($user_id, 'association-agreement', 0);
+                            update_user_meta($user_id, 'compliance-agreement', 0);
+							$_POST['agreement'] = 'off';
+						}
+						
+						if( isset( $field['id'] ) && ( ! isset( $field['disabled'] ) || $field['disabled'] !== true ) ) {
+							$new = isset( $_POST[$field['id']] ) ? $_POST[$field['id']] : get_user_meta($user_id, $field['id'], true);
+							update_user_meta( $user_id, $field['id'], $new );
+							if ( 'city' === $field['id'] ) {
+								update_user_meta( $user_id, 'region', $new );
+							} else if ( 'region' === $field['id'] ) {
+								update_user_meta( $user_id, 'city', $new );
+							}
+						}
+					
+						break;
 					case 'agreement':
 
-					    if ($_POST[$field['id']] == 'on' && isset($_POST['membership']) && $_POST['membership'] == 'on') {
+					    if ($_POST[$field['id']] == 'on' && 
+							(isset($_POST['membership']) && $_POST['membership'] == 'on') && 
+							(isset($_POST['compliance-agreement']) && $_POST['compliance-agreement'] == 'on') &&
+							(isset($_POST['association-agreement']) && $_POST['association-agreement'] == 'on')) {
+								
                             update_user_meta($user_id, 'agreement', strtotime('+1 year', strtotime(date('Y-m-d'))));
-                            update_user_meta( $user_id, 'association-agreement', 1 );
-                            update_user_meta( $user_id, 'compliance-agreement', 1 );
+                            update_user_meta( $user_id, 'association-agreement', 1);
+                            update_user_meta( $user_id, 'compliance-agreement', 1);
+                        } else if ($_POST[$field['id']] == 'on' && 
+							(isset($_POST['membership']) && $_POST['membership'] == 'on') && 
+							!isset($_POST['compliance-agreement']) && 
+							!isset($_POST['association-agreement'])) {
+								continue;
                         } else {
 					        update_user_meta($user_id, 'agreement', 0);
-                            update_user_meta( $user_id, 'association-agreement', 0 );
-                            update_user_meta( $user_id, 'compliance-agreement', 0 );
+                            update_user_meta( $user_id, 'association-agreement', 0);
+                            update_user_meta( $user_id, 'compliance-agreement', 0);
                         }
 
                         break;
@@ -293,6 +336,18 @@ class VCA_ASM_Profile
 				array(
 					'label' => _x( 'About you', 'User Profile', 'vca-asm' ),
 					'type' => 'section'
+				),
+				array(
+					'label' => _x( 'Street and Number', 'User Profile', 'vca-asm' ),
+					'id' => 'street',
+					'type' => 'text',
+					'disabled' => $disable_field
+				),
+				array(
+					'label' => _x( 'Postcode', 'User Profile', 'vca-asm' ),
+					'id' => 'postcode',
+					'type' => 'text',
+					'disabled' => $disable_field
 				),
 				array(
 					'label' => _x( 'Residence', 'User Profile', 'vca-asm' ),
@@ -424,15 +479,17 @@ class VCA_ASM_Profile
 			'desc' => 'Choose in what language you&apos;d like to use the Pool'
 		);
 
-        if (isset($fields[11]) && isset($fields[11]['id']) && $fields[11]['id'] == 'agreement') {
+        if (isset($fields[13]) && isset($fields[13]['id']) && $fields[13]['id'] == 'agreement') {
+			
+			// HELPER: SHITTY LENGTH HERE
 
-            $length = 12;
-            if (isset($fields[12]) && isset($fields[12]['id']) && $fields[12]['id'] == 'association-agreement') {
-                $length = 14;
+            $length = 14;
+            if (isset($fields[14]) && isset($fields[14]['id']) && $fields[14]['id'] == 'association-agreement') {
+                $length = 16;
             }
 
         } else {
-		    $length = 11;
+		    $length = 13;
         }
 
 		if ( 'custom' === $part && ! $is_city ) {
@@ -474,17 +531,33 @@ class VCA_ASM_Profile
 			$edited_user = new WP_User( $user_id );
 			$mem = get_user_meta( $edited_user->ID, 'membership', true );
             $agreement = get_user_meta( $edited_user->ID, 'agreement', true );
+								
+			$firstname = get_user_meta($edited_user->ID, 'first_name', true );
+			$lastname = get_user_meta($edited_user->ID, 'last_name', true );
+			$street = get_user_meta($edited_user->ID, 'street', true );
+			$postcode = get_user_meta($edited_user->ID, 'postcode', true );
+			$residence = get_user_meta($edited_user->ID, 'residence', true );
+			$email = $edited_user->user_email;
+			
             $user_nation = get_user_meta( $edited_user->ID, 'nation', true );
         } else {
             global $current_user;
             $mem = get_user_meta( $current_user->ID, 'membership', true );
             $agreement = get_user_meta( $current_user->ID, 'agreement', true );
+											
+			$firstname = get_user_meta($current_user->ID, 'first_name', true );
+			$lastname = get_user_meta($current_user->ID, 'last_name', true );
+			$street = get_user_meta($current_user->ID, 'street', true );
+			$postcode = get_user_meta($current_user->ID, 'postcode', true );
+			$residence = get_user_meta($current_user->ID, 'residence', true );
+			$email = $current_user->user_email;
+			
 			$user_nation = get_user_meta( $current_user->ID, 'nation', true );
 			if ( ( is_array( $current_user->roles ) && ( in_array( 'head_of', $current_user->roles ) ) || in_array( 'city', $current_user->roles ) ) ) {
 				$disable_field = true;
 			}
 		}
-
+		
 		$geo_desc = _x( 'Choose your city (Crew), if applicable. Should you not be able to find yours, please send an email to <a title="Send Mail" href="mailto:zellen@vivaconagua.org">zellen@vivaconagua.org</a>', 'User Profile', 'vca-asm' );
 
 		if ( 'ch' === $vca_asm_utilities->current_country() ) {
@@ -538,26 +611,56 @@ class VCA_ASM_Profile
                 $compliance_field = array();
 
                 if ($agreement == '0') {
+					
+					if (empty($firstname) || 
+						empty($lastname) ||
+						empty($street) ||
+						empty($postcode) ||
+						empty($residence) ||
+						empty($email)) {
+														
+							$agreement_desc = _x( 'You can only apply for a non-voting membership, if you have entered you full name, email address and address above.', 'User Profile', 'vca-asm' );
+							$agreement_label = _x( 'Apply for non-voting membership', 'User Profile', 'vca-asm' );
 
-                    $agreement_desc = _x( 'Pursuant to §4 (2) of the Articles of Association, I hereby apply for admission to the Viva con Agua de Santa Pauli e.V. as a non-voting association member. Membership is considered accepted insofar as it is not denied by authorized representatives of the association. (To complete the membership you have to update the profile below)', 'User Profile', 'vca-asm' );
-                    $agreement_label = _x( 'Apply for non-voting membership', 'User Profile', 'vca-asm' );
+							$association_field = array();
+							$compliance_field = array();
+							$disable_field_agreement = true;
+					} else {
+						
+						$association_url = "https://www.vivaconagua.org/files/pdfs/Vereinssatzung.pdf";
+						$privacy_url = "https://www.vivaconagua.org/datenschutzerklaerung";
 
-                    $association_field = array(
-                        'row-class' => 'association-selector',
-                        'label' => _x( 'I have read and understood the articles of association (esp. The member regulations).', 'User Profile', 'vca-asm' ),
-                        'id' => 'association-agreement',
-                        'type' => 'association-agreement',
-                        'desc' => '',
-                        'disabled' => $disable_field
-                    );
-                    $compliance_field = array(
-                        'row-class' => 'compliance-selector',
-                        'label' => _x( 'I have read and understood the privacy policy.', 'User Profile', 'vca-asm' ),
-                        'id' => 'compliance-agreement',
-                        'type' => 'compliance-agreement',
-                        'desc' => '',
-                        'disabled' => $disable_field
-                    );
+						$agreement_desc = 	sprintf(
+												_x( 'Pursuant to $4 (2) of the <a title="Articles of Association" target="_blank" href="%s">Articles of Association</a>, I hereby apply for admission to the Viva con Agua de Santa Pauli e.V. as a non-voting association member. Membership is considered accepted insofar as it is not denied by authorized representatives of the association. (To complete the membership you have to update the profile below)', 'User Profile', 'vca-asm' ),
+												$association_url
+											);
+											
+						$agreement_label = _x( 'Apply for non-voting membership', 'User Profile', 'vca-asm' );
+
+						$association_field = array(
+							'row-class' => 'association-selector',
+							'label' => 	sprintf(
+											_x( 'I have read and understood the <a title="Articles of Association" target="_blank" href="%s"><u>Articles of Association</u></a> (esp. member regulations).', 'User Profile', 'vca-asm' ),
+											$association_url
+										),
+							'id' => 'association-agreement',
+							'type' => 'association-agreement',
+							'desc' => '',
+							'disabled' => $disable_field
+						);
+						$compliance_field = array(
+							'row-class' => 'compliance-selector',
+							'label' => 	sprintf(
+								_x( 'I have read and understood the <a title="Privacy Policy" target="_blank" href="%s"><u>Privacy Policy</u></a>.', 'User Profile', 'vca-asm' ),
+								$privacy_url
+							),
+							'id' => 'compliance-agreement',
+							'type' => 'compliance-agreement',
+							'desc' => '',
+							'disabled' => $disable_field
+						);
+						$disable_field_agreement = $disable_field;
+					}
 
                 } else if ($agreement <= strtotime(date('Y-m-d'))) {
                     $agreement_desc = _x( 'I would like to remain a non-voting member of Viva con Agua de St. Pauli e.V.', 'User Profile', 'vca-asm' );
@@ -571,7 +674,7 @@ class VCA_ASM_Profile
                     'id' => 'agreement',
                     'type' => 'agreement',
                     'desc' => $agreement_desc,
-                    'disabled' => $disable_field
+                    'disabled' => $disable_field_agreement
                 );
 			break;
 
@@ -732,6 +835,9 @@ class VCA_ASM_Profile
 	{
 		update_user_meta( $user_id, 'mail_switch', 'all' );
 		update_user_meta( $user_id, 'membership', 0 );
+        update_user_meta( $user_id, 'agreement', 0 );
+        update_user_meta( $user_id, 'postcode', 0 );
+        update_user_meta( $user_id, 'street', 0 );
         update_user_meta( $user_id, 'agreement', 0 );
         update_user_meta( $user_id, 'association-agreement', 0 );
         update_user_meta( $user_id, 'compliance-agreement', 0 );
