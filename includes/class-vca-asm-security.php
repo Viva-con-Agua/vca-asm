@@ -158,7 +158,7 @@ class VCA_ASM_Security
 	 */
 	public function on_login( $user_login, $user )
 	{
-		if ( isset($user) && $user->ID != null && $user->ID > 0 ) {
+		if ( $user->ID != null && $user->ID > 0 ) {
 			if (
 				'maintenance' === $this->mode_options['mode'] &&
 				! in_array( 'administrator', $user->roles ) &&
@@ -223,7 +223,7 @@ class VCA_ASM_Security
 					$this->strength_terms[$level]
 				);
 			$errors->add( 'pass', $error );
-		} elseif ( ! $errors->get_error_data('pass') && isset($_POST['pass1']) && isset($_POST['pass2'])) {
+		} elseif ( ! $errors->get_error_data('pass') && isset($_POST['pass1']) && isset($_POST['pass2'])  ) {
 			$same = wp_check_password( $_POST['pass1'], $user_obj->user_pass );
 			if ( false !== $same && ! $is_kevin ) {
 				$error = __( 'You cannot replace your old password with itsself...', 'vca-asm' );
