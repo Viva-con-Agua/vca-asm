@@ -198,6 +198,10 @@ class VCA_ASM_Profile
 						}
 					
 						break;
+					case 'association-agreement':
+					case 'compliance-agreement':
+						continue;
+						break;
 					case 'agreement':
 
 					    if ($_POST[$field['id']] == 'on' && 
