@@ -286,7 +286,7 @@ class VCA_ASM_Security
 		}
 
 		global $current_user;
-		if( $current_user->user_login === $_POST['user_login'] ) {
+		/*if( $current_user->user_login === $_POST['user_login'] ) {
 			$errors = new WP_Error();
 			$errors = $this->enforce_pass_strength( $errors, true, $current_user );
 			$errors = $errors->get_error_messages( 'pass' );
@@ -298,7 +298,7 @@ class VCA_ASM_Security
 					)
 				);
 			}
-		}
+		}*/
 
 		if( in_array( 'supporter', $current_user->roles ) ) {
 			$level = $this->options['pass_strength_supporter'];
