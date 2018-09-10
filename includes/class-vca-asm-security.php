@@ -454,6 +454,8 @@ class VCA_ASM_Security
 	 */
 	private function check_pass_age( $user = null, $set_it = false )
 	{
+		
+		return true;
 		if ( empty( $user ) ) {
 			global $current_user;
 			$user = $current_user;
