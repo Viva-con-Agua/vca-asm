@@ -3,7 +3,7 @@ msgstr ""
 "Project-Id-Version: VcA Activity & Supporter Management v1.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/vca-asm\n"
 "POT-Creation-Date: 2016-03-28 20:25:43+00:00\n"
-"PO-Revision-Date: 2018-09-10 14:38:06+0200\n"
+"PO-Revision-Date: 2018-09-10 14:49:55+0200\n"
 "Last-Translator: Johannes Pilkahn <johannes@pilkahn.org>\n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
@@ -8615,7 +8615,7 @@ msgstr "Stimmrechtsloses Mitgliedschaft abschließen"
 #@ vca-asm
 msgctxt "User Profile"
 msgid "Pursuant to $4 (2) of the <a title=\"Articles of Association\" target=\"_blank\" href=\"%s\">Articles of Association</a>, I hereby apply for admission to the Viva con Agua de Santa Pauli e.V. as a non-voting association member. Membership is considered accepted insofar as it is not denied by authorized representatives of the association. (To complete the membership you have to update the profile below)"
-msgstr "Gemäß §4 (2) der <a title=\"Vereinssatzung\" target=\"_blank\" href=\"%s\">Vereinssatzung</a> beantrage ich hiermit die Aufnahme in den Viva con Agua de Sankt Pauli e.V. als stimmrechtsloses Vereinsmitglied. Die Mitgliedschaft gilt als angenommen, insofern ihr nicht durch ermächtigte Vertrerter*innen des Vereins wiedersprochen wird. (Um die Mitgliedschaft abzuschließen musst du unten das Profil aktualisieren)"
+msgstr "Gemäß §4 (2) der <a title=\"Vereinssatzung\" target=\"_blank\" href=\"%s\">Vereinssatzung</a> beantrage ich hiermit die Aufnahme in den Viva con Agua de Sankt Pauli e.V. als stimmrechtsloses Vereinsmitglied. Die Mitgliedschaft gilt als angenommen, insofern ihr nicht durch ermächtigte Vertrerter*innen des Vereins widersprochen wird. (Um die Mitgliedschaft abzuschließen musst du unten das Profil aktualisieren)"
 
 #: includes/class-vca-asm-profile.php:649
 #, php-format
