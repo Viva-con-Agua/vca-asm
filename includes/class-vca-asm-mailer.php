@@ -193,7 +193,7 @@ class VCA_ASM_Mailer
 			'from_email' => 'no-reply@vivaconagua.org',
 			'format' => 'plain',
 			'save' => true,
-			'membership' => 'popop',
+			'membership' => '0',
 			'receipient_group' => 'all',
 			'receipient_id' => 0,
 			'type' => 'manual',

@@ -609,8 +609,10 @@ class VCA_ASM_Profile
 
                 $association_field = array();
                 $compliance_field = array();
+				
+				$disable_field_agreement = false;
 
-                if ($agreement == '0') {
+                if (empty($agreement) || $agreement == '0') {
 					
 					if (empty($firstname) || 
 						empty($lastname) ||
@@ -666,7 +668,6 @@ class VCA_ASM_Profile
                     $agreement_desc = _x( 'I would like to remain a non-voting member of Viva con Agua de St. Pauli e.V.', 'User Profile', 'vca-asm' );
                     $agreement_label = _x( 'Renew non-voting membership', 'User Profile', 'vca-asm' );
                 }
-
 
                 $agreement_field = array(
                     'row-class' => 'agreement-selector js-toggle',
