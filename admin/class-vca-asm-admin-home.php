@@ -23,6 +23,15 @@ class VCA_ASM_Admin_Home {
 	public function home() {
 		global $current_user;
 
+		/* TODO: REDIRECTION FROM ADMIN AREA TO THE MICROSERVICES
+		
+		$url = '/arise/#/profile';
+		echo '<script type="text/javascript">window.location.href = "' . $url . '";</script>';
+		echo '<META HTTP-EQUIV="refresh" content="0;URL=' . $url . '">';
+		die();
+		
+		*/
+		
 		$has_tasks = false;
 
 		$admin_city = get_user_meta( $current_user->ID, 'city', true );
