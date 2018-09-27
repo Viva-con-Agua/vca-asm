@@ -58,7 +58,7 @@ class VcA_ASM_Certificate
      */
     public function setUser($user)
     {
-        $this->user = get_user_to_edit( $user->ID );
+        $this->user = new WP_User( $user->ID );
     }
 
     /**
