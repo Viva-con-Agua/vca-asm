@@ -585,6 +585,12 @@ function logout_without_confirm($action, $result)
     }
 }
 
+add_filter( 'wp_title', 'my_wp_title', 10, 2 );
+function my_wp_title($title, $sep)
+{
+	echo 'VcA | Pool' . $title;
+}
+
 /**
  * Hooks
  *
