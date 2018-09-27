@@ -913,8 +913,8 @@ class VCA_ASM_Profile
 			'</div>';
 
 		return $output;
-	}
-
+	}	
+	
 	/**
 	 * Shortcode handler for setting newsletter preferences
 	 *

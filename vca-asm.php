@@ -272,6 +272,49 @@ function vca_asm_set_locale( $locale )
 add_action( 'plugins_loaded', 'vca_asm_user_locale' );
 //add_action( 'parse_request', 'vca_asm_user_membership' );
 
+
+
+
+/**
+ * Shortcode handler for setting newsletter preferences
+ *
+ * @param array $atts			shortcode attributes
+ * @return string $output		HTML formatted output
+ *
+ * @see constructor
+ * @todo edge-cases, see in-line comments
+ *
+ * @since 1.6
+ * @access public
+ */
+function check_certificate( $atts )
+{
+	
+	$url = wp_parse_url($_SERVER['REQUEST_URI']);
+	if ( !is_user_logged_in() || !isset($url['query']) || $url['query'] != 'download-certificate' ) {
+		return;
+	}
+	
+			
+	$current_user = wp_get_current_user();
+	$membership = get_user_meta($current_user->id, 'membership', true);
+	$isMembership = (!empty($membership) && $membership == 2);
+	
+	if (!$isMembership) {
+		return;
+	}
+
+	require_once( VCA_ASM_ABSPATH . '/includes/class-vca-asm-certificate.php' );
+
+	$certificate = new VcA_ASM_Certificate();
+	$certificate->setUser($current_user);
+	
+	echo $certificate->outputCertificate();
+
+}
+
+add_action( 'parse_request', 'check_certificate' );
+
 /**
  * VCA_ASM Initial Object
  *
