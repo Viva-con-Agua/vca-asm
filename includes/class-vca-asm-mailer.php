@@ -228,7 +228,7 @@ class VCA_ASM_Mailer
             array(
                 'time' => date('Y-m-d H:i:s'),
                 'level' => 'DEBUG',
-                'message' => print_r($mail_id, true) . ' | ' . print_r(array(
+                'message' => print_r($mail_id, true) . ' | ' . $wpdb->last_error . ' | ' . print_r(array(
 					'time' => $time,
 					'sent_by' => $current_user->ID,
 					'from' => $from_email,
