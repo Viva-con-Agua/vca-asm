@@ -232,7 +232,7 @@ class VCA_ASM_Mailer
 					'time' => $time,
 					'sent_by' => $current_user->ID,
 					'from' => $from_email,
-					'from_name' => $from_name,
+					'from_name' => 'TK',
 					'subject' => $subject,
 					'message' => $save_message,
 					'membership' => $membership,
