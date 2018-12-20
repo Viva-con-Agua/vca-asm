@@ -240,7 +240,7 @@ class VCA_ASM_Mailer
 					'receipient_id' => $receipient_id,
 					'format' => $format,
 					'type' => $type
-				))
+				), true)
             )
         );
 
@@ -264,7 +264,7 @@ class VCA_ASM_Mailer
 						'mail_id' => $mail_id,
 						'receipients' => serialize( $receipients ),
 						'total_receipients' => count( $receipients )
-					))
+					), true)
 				)
 			);
 			
