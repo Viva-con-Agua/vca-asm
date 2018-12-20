@@ -222,6 +222,27 @@ class VCA_ASM_Mailer
 			array( '%d', '%d', '%s', '%s', '%s', '%s', '%s', '%s', '%d', '%s', '%s' )
 		);
 		$mail_id = $wpdb->insert_id;
+		
+		$wpdb->insert(
+            'wp_drops_logs',
+            array(
+                'time' => date('Y-m-d H:i:s'),
+                'level' => 'DEBUG',
+                'message' => print_r($mail_id, true) . ' | ' . print_r(array(
+					'time' => $time,
+					'sent_by' => $current_user->ID,
+					'from' => $from_email,
+					'from_name' => $from_name,
+					'subject' => $subject,
+					'message' => $save_message,
+					'membership' => $membership,
+					'receipient_group' => $receipient_group,
+					'receipient_id' => $receipient_id,
+					'format' => $format,
+					'type' => $type
+				))
+            )
+        );
 
 		if (!empty($mail_id)) {
             $wpdb->insert(
@@ -233,8 +254,22 @@ class VCA_ASM_Mailer
                 ),
                 array( '%d', '%s', '%d' )
             );
+		
+			$wpdb->insert(
+				'wp_drops_logs',
+				array(
+					'time' => date('Y-m-d H:i:s'),
+					'level' => 'DEBUG',
+					'message' => print_r($mail_id, true) . ' | ' . print_r(array(
+						'mail_id' => $mail_id,
+						'receipients' => serialize( $receipients ),
+						'total_receipients' => count( $receipients )
+					))
+				)
+			);
+			
         }
-
+		
 		return $mail_id;
 	}
 
