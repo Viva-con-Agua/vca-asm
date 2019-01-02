@@ -1562,7 +1562,7 @@ class VCA_ASM_Admin_Finances
 						}
 						header( 'Location: ' . strtok( $_SERVER['REQUEST_URI'], '?' ) . '?page=' . $page . '&todo=saved&id=' . $id . '&type=' . $type . '&tab=' . $active_tab . '&cid=' . $cid );
 					} else {
-						$id = $_GET['id'];
+						$id = isset($_GET['id']) ? $_GET['id'] : 0;
 						$_SESSION['the_post'] = array_merge( $_POST );
 						header( 'Location: ' . strtok( $_SERVER['REQUEST_URI'], '?' ) . '?page=' . $page . '&todo=errors&id=' . $id . '&type=' . $type . '&tab=' . $active_tab . '&cid=' . $cid . '&errors=' . serialize( $validation->errors ) );
 					}
