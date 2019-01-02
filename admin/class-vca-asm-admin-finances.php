@@ -67,7 +67,7 @@ class VCA_ASM_Admin_Finances
 		if ( isset( $_GET['todo'] ) ) {
 			switch ( $_GET['todo'] ) {
 				case 'balance':
-					$city = ! empty( $_POST['city'] ) ? $_POST['city'] : $this->admin_city;
+					$city = $this->admin_city;
 					if ( isset( $_POST['month_econ'] ) ) {
 						$wpdb->update(
 							$wpdb->prefix . 'vca_asm_finances_accounts',
@@ -108,7 +108,7 @@ class VCA_ASM_Admin_Finances
 		}
 
 		if ( 'city' === $this->cap_lvl || isset( $_GET['cid'] ) ) {
-			$city_id = isset( $_GET['cid'] ) ? $_GET['cid'] : 0;
+			$city_id = isset( $_GET['cid'] ) ? $_GET['cid'] : $this->admin_city;
 			$this->overview_city( $city_id );
 		} else {
 			$this->overview_global();
@@ -2023,10 +2023,11 @@ class VCA_ASM_Admin_Finances
 	{
         /** @var vca_asm_utilities $vca_asm_utilities */
         /** @var vca_asm_finances $vca_asm_finances */
-		global $vca_asm_finances, $vca_asm_utilities;
+		global $current_user, $vca_asm_finances, $vca_asm_utilities;
 
+		
 		$default_args = array(
-			'city_id' => 0,
+			'city_id' => $this->admin_city,
 			'account_type' => 'donations',
 			'transaction_type' => 'all',
 			'page' => 'vca-asm-finances-accounts-donations',
