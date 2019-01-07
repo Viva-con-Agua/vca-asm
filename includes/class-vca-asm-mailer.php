@@ -204,11 +204,13 @@ class VCA_ASM_Mailer
 
         $save_message = trim( $message );
 
+		$city_id = get_user_meta($current_user->ID, 'city', true);
+		
 		$wpdb->insert(
 			$wpdb->prefix . 'vca_asm_emails',
 			array(
 				'time' => $time,
-				'sent_by' => $current_user->ID,
+				'sent_by' => $city_id,
 				'from' => $from_email,
 				'from_name' => $from_name,
 				'subject' => $subject,
