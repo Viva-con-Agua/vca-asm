@@ -1736,7 +1736,8 @@ class VCA_ASM_Activities
 		$current_post_type = isset( $_POST['post_type'] ) ? $_POST['post_type'] : $post->post_type;
 		/* check permissions */
 		if ( in_array( $current_post_type, array( 'concert', 'festival', 'miscactions' ) ) ) {
-			if( ! current_user_can( 'vca_asm_edit_actions_activities', $post->ID ) ) {
+			if( ! current_user_can( 'vca_asm_edit_actions_activity', $post->ID ) ) {
+				die('bubu');
 				return $post->ID;
 			}
 		} elseif ( in_array( $current_post_type, array( 'misceducation' ) ) ) {
