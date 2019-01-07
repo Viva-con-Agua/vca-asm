@@ -1737,7 +1737,6 @@ class VCA_ASM_Activities
 		/* check permissions */
 		if ( in_array( $current_post_type, array( 'concert', 'festival', 'miscactions' ) ) ) {
 			if( ! current_user_can( 'vca_asm_edit_actions_activity', $post->ID ) ) {
-				die('bubu');
 				return $post->ID;
 			}
 		} elseif ( in_array( $current_post_type, array( 'misceducation' ) ) ) {
