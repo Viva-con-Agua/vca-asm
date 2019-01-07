@@ -1860,8 +1860,8 @@ class VCA_ASM_Activities
 						} elseif ( empty( $new ) && $old ) {
 							$activity_data = array();
 							$activity_data['ID'] = $post->ID;
-							$activity_data['post_author'] = $current_user->ID;
-							if( $post->post_author != $current_user->ID ) {
+							$activity_data['post_author'] = get_user_meta($current_user->ID, 'city', true);
+							if( $post->post_author != get_user_meta($current_user->ID, 'city', true) ) {
 									// unhook this method so it doesn't loop infinitely
 									remove_action( 'save_post', array( $this, 'save_meta' ) );
 									wp_update_post( $activity_data );
@@ -1894,8 +1894,8 @@ class VCA_ASM_Activities
 										add_action( 'save_post', array( $this, 'save_meta' ), 10, 2 );
 									}
 								} else {
-									$activity_data['post_author'] = $current_user->ID;
-									if( $post->post_author != $current_user->ID ) {
+									$activity_data['post_author'] = get_user_meta($current_user->ID, 'city', true);
+									if( $post->post_author != get_user_meta($current_user->ID, 'city', true) ) {
 										// unhook this method so it doesn't loop infinitely
 										remove_action( 'save_post', array( $this, 'save_meta' ) );
 										wp_update_post( $activity_data );
@@ -1930,7 +1930,7 @@ class VCA_ASM_Activities
         /** @var vca_asm_admin $vca_asm_admin */
 		global $current_user, $vca_asm_admin;
 
-		$notices = get_transient( 'admin_notices_'.$current_user->ID );
+		$notices = get_transient( 'admin_notices_'.get_user_meta($current_user->ID, 'city', true) );
 
 		$output = '';
 
@@ -1959,7 +1959,7 @@ class VCA_ASM_Activities
 	{
 		global $current_user;
 
-		delete_transient( 'admin_notices_'.$current_user->ID );
+		delete_transient( 'admin_notices_'.get_user_meta($current_user->ID, 'city', true) );
 	}
 
 	/* ============================= UTILITY METHODS ============================= */
