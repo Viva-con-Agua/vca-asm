@@ -1650,7 +1650,10 @@ class VCA_ASM_Activities
 			'vca_asm_edit_network_activity' == $cap ||
 			'vca_asm_edit_goldeimer_activity' == $cap
 		) {
-			if ( $user_id == $post->post_author ) {
+			
+			$city_id = get_user_meta($user_id, 'city', true);
+			
+			if ( $user_id == $post->post_author || $city_id == $post->post_author ) {
 				$caps[] = $post_type->cap->edit_posts;
 			} else {
 				$caps[] = $post_type->cap->edit_others_posts;
