@@ -1652,8 +1652,9 @@ class VCA_ASM_Activities
 		) {
 			
 			$city_id = get_user_meta($user_id, 'city', true);
+			$author_city_id = get_user_meta($post->post_author, 'city', true);
 			
-			if ( $user_id == $post->post_author || $city_id == $post->post_author ) {
+			if ( $city_id == $author_city_id || $user_id == $post->post_author || $city_id == $post->post_author ) {
 				$caps[] = $post_type->cap->edit_posts;
 			} else {
 				$caps[] = $post_type->cap->edit_others_posts;
@@ -1667,7 +1668,11 @@ class VCA_ASM_Activities
 			'vca_asm_delete_network_activity' == $cap ||
 			'vca_asm_delete_goldeimer_activity' == $cap
 		) {
-			if ( $user_id == $post->post_author ) {
+			
+			$city_id = get_user_meta($user_id, 'city', true);
+			$author_city_id = get_user_meta($post->post_author, 'city', true);
+			
+			if ( $city_id == $author_city_id || $user_id == $post->post_author || $city_id == $post->post_author ) {
 				$caps[] = $post_type->cap->delete_posts;
 			} else {
 				$caps[] = $post_type->cap->delete_others_posts;
@@ -1683,10 +1688,11 @@ class VCA_ASM_Activities
 		) {
 			
 			$city_id = get_user_meta($user_id, 'city', true);
+			$author_city_id = get_user_meta($post->post_author, 'city', true);
 			
 			if ( 'private' != $post->post_status ) {
 				$caps[] = 'read';
-			} elseif ( $city_id == $post->post_author || $user_id == $post->post_author ) {
+			} elseif ( $city_id == $author_city_id || $city_id == $post->post_author || $user_id == $post->post_author ) {
 				$caps[] = 'read';
 			} else {
 				$caps[] = $post_type->cap->read_private_posts;
