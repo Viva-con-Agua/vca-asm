@@ -1678,9 +1678,12 @@ class VCA_ASM_Activities
 			'vca_asm_read_network_activity' == $cap ||
 			'vca_asm_read_goldeimer_activity' == $cap
 		) {
+			
+			$city_id = get_user_meta($user_id, 'city', true);
+			
 			if ( 'private' != $post->post_status ) {
 				$caps[] = 'read';
-			} elseif ( $user_id == $post->post_author ) {
+			} elseif ( $city_id == $post->post_author || $user_id == $post->post_author ) {
 				$caps[] = 'read';
 			} else {
 				$caps[] = $post_type->cap->read_private_posts;
