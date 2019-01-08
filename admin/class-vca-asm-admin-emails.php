@@ -215,7 +215,16 @@ class VCA_ASM_Admin_Emails {
 		/* query arguments */
 		$where = '';
 		if( ! ( $current_user->has_cap('vca_asm_view_emails_global') || $current_user->has_cap('vca_asm_view_emails_nation') ) ) {
-			$where = ' WHERE sent_by = ' . $current_user->ID;
+			
+			
+			$city_id = get_user_meta($current_user->ID, 'city', true);
+			$sent_by = $wpdb->get_var(
+						"SELECT user_id FROM " .
+						$wpdb->prefix . "vca_asm_geography " .
+						"WHERE id = " . $city_id
+					);
+			
+			$where = ' WHERE sent_by = ' . $sent_by;
 		}
 
         $term = '';
