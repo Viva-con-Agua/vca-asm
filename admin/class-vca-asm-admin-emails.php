@@ -1221,6 +1221,7 @@ class VCA_ASM_Admin_Emails {
 		echo "<pre>";
 		var_dump('INSIDE');
 		var_dump($_POST);
+		var_dump($_GET);
 		
 		$membership = ( isset( $_POST['membership'] ) && in_array( $_POST['membership'], array( 'all', 'active', 'inactive', 'agree' ) ) ) ? $_POST['membership'] : 'all';
 		$receipient_group = isset( $_POST['receipient-group'] ) ? $_POST['receipient-group'] : '';
