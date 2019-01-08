@@ -1246,9 +1246,6 @@ class VCA_ASM_Admin_Emails {
 		$mail_type = isset( $_POST['mail_type'] ) ? $_POST['mail_type'] : '';
 		$ignore_switch = isset( $_POST['ignore_switch'] ) ? true : false;
 
-		var_dump($_POST);
-		var_dump($receipient_group);
-		
 		if ( ! empty( $receipient_group ) ) {
 
 			list( $receipient_id, $receipients ) = $vca_asm_mailer->receipient_id_from_group( $receipient_group, true, $ignore_switch, $membership );
@@ -1300,7 +1297,7 @@ class VCA_ASM_Admin_Emails {
 		} else {
 			$success = false;
 		}
-		var_dump($success);
+
 		return $success;
 	}
 
