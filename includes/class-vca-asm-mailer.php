@@ -204,13 +204,24 @@ class VCA_ASM_Mailer
 
         $save_message = trim( $message );
 
-		$city_id = get_user_meta($current_user->ID, 'city', true);
+		if( ! in_array( 'city', $current_user->roles ) ) {
+			$sent_by = $current_user->ID;
+		} else {
+		
+			$city_id = get_user_meta($current_user->ID, 'city', true);
+			$city_user_id = $wpdb->get_var(
+						"SELECT user_id FROM " .
+						$wpdb->prefix . "vca_asm_geography " .
+						"WHERE id = " . $city_id
+					);
+			
+		}
 		
 		$wpdb->insert(
 			$wpdb->prefix . 'vca_asm_emails',
 			array(
 				'time' => $time,
-				'sent_by' => $city_id,
+				'sent_by' => $sent_by,
 				'from' => $from_email,
 				'from_name' => $from_name,
 				'subject' => $subject,

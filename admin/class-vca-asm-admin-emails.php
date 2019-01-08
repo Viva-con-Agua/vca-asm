@@ -247,10 +247,24 @@ class VCA_ASM_Admin_Emails {
 			}
 			$sort_url .= '&amp;filter=1&amp;sent-by-filter=' . $sbf;
 			if( $sbf === 'own' ) {
-				if( empty( $where ) ) {
-					$where = ' WHERE sent_by = ' . $current_user->ID;
+				
+				if (in_array( 'city', $current_user->roles ) ) {
+			
+					$city_id = get_user_meta($current_user->ID, 'city', true);
+					$sent_by = $wpdb->get_var(
+								"SELECT user_id FROM " .
+								$wpdb->prefix . "vca_asm_geography " .
+								"WHERE id = " . $city_id
+							);
+						
 				} else {
-					$where .= ' AND sent_by = ' . $current_user->ID;
+					$sent_by = $current_user->ID
+				}
+				
+				if( empty( $where ) ) {
+					$where = ' WHERE sent_by = ' . $sent_by;
+				} else {
+					$where .= ' AND sent_by = ' . $sent_by;
 				}
 			}
 		}
@@ -568,10 +582,18 @@ class VCA_ASM_Admin_Emails {
         $waiting_message = '';
 		if ( 'newsletter' === $active_tab && 0 !== $waiting_period_seconds && in_array( 'city', $current_user->roles ) )
 		{
+			
+			$city_id = get_user_meta($current_user->ID, 'city', true);
+			$city_user_id = $wpdb->get_var(
+						"SELECT user_id FROM " .
+						$wpdb->prefix . "vca_asm_geography " .
+						"WHERE id = " . $city_id
+					);
+			
 			$mails = $wpdb->get_results(
 				"SELECT time FROM " .
 				$wpdb->prefix . "vca_asm_emails " .
-				"WHERE sent_by = " . $current_user->ID,
+				"WHERE sent_by = " . $city_user_id,
 				ARRAY_A
 			);
 			$newest_stamp = 0;
