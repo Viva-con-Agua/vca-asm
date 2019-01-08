@@ -1671,6 +1671,7 @@ class VCA_ASM_Activities
 				
 				echo "<pre>";
 			var_dump($cap . ' ' . __LINE__);
+			var_dump($caps);
 			var_dump('POST_AUTHOR: ' . $post->post_author);
 			var_dump('USER_ID: ' . $user_id);
 			var_dump('CITY_ID: ' . $city_id);
