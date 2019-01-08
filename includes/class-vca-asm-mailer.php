@@ -1186,7 +1186,7 @@ class VCA_ASM_Mailer
 
 					$users = get_users( $args );
 					foreach( $users as $user ) {
-						if ( ! in_array( 'pending', $user->roles ) && ! in_array( 'city', $user->roles ) ) {
+						if ( ! in_array( 'pending', $user->roles ) ) {
 							$receipients[] = $user->ID;
 						}
 					}
