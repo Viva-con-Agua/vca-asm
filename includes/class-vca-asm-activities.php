@@ -1643,7 +1643,7 @@ class VCA_ASM_Activities
 			var_dump($cap . ' ' . __LINE__);
 			/* Set an empty array for the caps. */
 			$caps = array();
-
+		}
 
 		/* If editing an activity, assign the required capability. */
 		if (
@@ -1679,10 +1679,10 @@ class VCA_ASM_Activities
 			var_dump('AUTHOR_CITY_USER_ID: ' . $author_city_user_id);
 			
 			if ( $user_id == $post->post_author ) {
-			//if ( $city_user_id == $user_id || $city_user_id == $author_city_user_id ||  $city_user_id == $post->post_author ) {
 				var_dump('EDIT_CAPS:');
 				var_dump($post_type->cap->edit_posts);
 				$caps[] = $post_type->cap->edit_posts;
+			} else if ( $city_user_id == $user_id || $city_user_id == $author_city_user_id ||  $city_user_id == $post->post_author ) {
 			} else {
 				var_dump('EDIT_OTHERS_CAPS:');
 				var_dump($post_type->cap->edit_others_posts);
@@ -1754,7 +1754,7 @@ class VCA_ASM_Activities
 				$caps[] = $post_type->cap->read_private_posts;
 			}
 		}
-		}
+
 		/* Return the capabilities required by the user. */
 		return $caps;
 	}
