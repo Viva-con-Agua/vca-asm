@@ -1822,6 +1822,7 @@ class VCA_ASM_Activities
 		if ( in_array( $current_post_type, array( 'concert', 'festival', 'miscactions' ) ) ) {
 			
 			if( ! current_user_can( 'vca_asm_edit_actions_activity', $post->ID ) && !$can_edit ) {
+				echo "TTTTTTTTTTTTTTTTTTTTTTTTTTT";
 				return $post->ID;
 			}
 		} elseif ( in_array( $current_post_type, array( 'misceducation' ) ) ) {
