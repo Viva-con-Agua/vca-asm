@@ -1796,41 +1796,25 @@ class VCA_ASM_Activities
 			return isset( $post->ID ) ? $post->ID : false;
 		}
 
-		$city_id = get_user_meta($current_user->ID, 'city', true);
-		$city_user_id = $wpdb->get_var(
-				"SELECT user_id FROM " .
-				$wpdb->prefix . "vca_asm_geography " .
-				"WHERE id = " . $city_id
-			);
-		
-		$author_city_id = get_user_meta($post->post_author, 'city', true);
-		$author_city_id = empty($author_city_id) ? $post->post_author : $author_city_id;
-		
-		$author_city_user_id = $wpdb->get_var(
-				"SELECT user_id FROM " .
-				$wpdb->prefix . "vca_asm_geography " .
-				"WHERE id = " . $author_city_id
-			);
-	
-		$can_edit = false;
-		if ( $city_user_id == $user_id || $city_user_id == $author_city_user_id || $user_id == $post->post_author || $city_user_id == $post->post_author ) {
-			$can_edit = true;
-		}
-		
+		die();
 		$current_post_type = isset( $_POST['post_type'] ) ? $_POST['post_type'] : $post->post_type;
 		/* check permissions */
 		if ( in_array( $current_post_type, array( 'concert', 'festival', 'miscactions' ) ) ) {
 			
-			if( ! current_user_can( 'vca_asm_edit_actions_activity', $post->ID ) && !$can_edit ) {
-				echo "TTTTTTTTTTTTTTTTTTTTTTTTTTT";
+			
+			
+			
+			
+
+			if( ! current_user_can( 'vca_asm_edit_actions_activity', $post->ID ) ) {
 				return $post->ID;
 			}
 		} elseif ( in_array( $current_post_type, array( 'misceducation' ) ) ) {
-			if( ! current_user_can( 'vca_asm_edit_education_activity', $post->ID ) && !$can_edit ) {
+			if( ! current_user_can( 'vca_asm_edit_education_activity', $post->ID ) ) {
 				return $post->ID;
 			}
 		} elseif ( in_array( $current_post_type, array( 'miscnetwork', 'nwgathering' ) ) ) {
-			if( ! current_user_can( 'vca_asm_edit_network_activity', $post->ID ) && !$can_edit ) {
+			if( ! current_user_can( 'vca_asm_edit_network_activity', $post->ID ) ) {
 				return $post->ID;
 			}
 		}
