@@ -1230,15 +1230,25 @@ class VCA_ASM_Admin_Emails {
 
 			if ( ! in_array( 'city', $current_user->roles ) ) {
 				$from_name = trim( $current_user->first_name . ' ' . $current_user->last_name );
+				$from_email = $current_user->user_email;
 				$format = ! empty( $this->emails_options['email_format_admin'] ) ? $this->emails_options['email_format_admin'] : 'html';
 			} else {
 				$city_id = get_user_meta( $current_user->ID, 'city', true );
+				
+				$city_user_id = $wpdb->get_var(
+					"SELECT user_id FROM " .
+					$wpdb->prefix . "vca_asm_geography " .
+					"WHERE id = " . $author_city_id
+				);
+				
 				$city_name = $vca_asm_geography->get_name( $city_id );
 				$from_name = $vca_asm_geography->get_type( $city_id ) . ' ' . $city_name;
+				$user_info = get_userdata($city_user_id);
+				$from_email = $user_info->user_email;
 				$format = ! empty( $this->emails_options['email_format_ho'] ) ? $this->emails_options['email_format_ho'] : 'html';
 			}
 
-			$from_email = ( isset( $_POST['sender'] ) && $_POST['sender'] === 'own' ) ? $current_user->user_email : 'no-reply@vivaconagua.org';
+			$from_email = ( isset( $_POST['sender'] ) && $_POST['sender'] === 'own' ) ? $from_email : 'no-reply@vivaconagua.org';
 
 			$subject = empty($_POST['subject']) ? $from_name : $_POST['subject'];
 

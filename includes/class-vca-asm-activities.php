@@ -1652,9 +1652,20 @@ class VCA_ASM_Activities
 		) {
 			
 			$city_id = get_user_meta($user_id, 'city', true);
-			$author_city_id = get_user_meta($post->post_author, 'city', true);
+			$city_user_id = $wpdb->get_var(
+					"SELECT user_id FROM " .
+					$wpdb->prefix . "vca_asm_geography " .
+					"WHERE id = " . $author_city_id
+				);
 			
-			if ( $city_id == $author_city_id || $user_id == $post->post_author || $city_id == $post->post_author ) {
+			$author_city_id = get_user_meta($post->post_author, 'city', true);
+			$author_city_user_id = $wpdb->get_var(
+					"SELECT user_id FROM " .
+					$wpdb->prefix . "vca_asm_geography " .
+					"WHERE id = " . $author_city_id
+				);
+			
+			if ( $city_user_id == $author_city_user_id || $user_id == $post->post_author || $city_user_id == $post->post_author ) {
 				$caps[] = $post_type->cap->edit_posts;
 			} else {
 				$caps[] = $post_type->cap->edit_others_posts;
@@ -1670,9 +1681,20 @@ class VCA_ASM_Activities
 		) {
 			
 			$city_id = get_user_meta($user_id, 'city', true);
-			$author_city_id = get_user_meta($post->post_author, 'city', true);
+			$city_user_id = $wpdb->get_var(
+					"SELECT user_id FROM " .
+					$wpdb->prefix . "vca_asm_geography " .
+					"WHERE id = " . $author_city_id
+				);
 			
-			if ( $city_id == $author_city_id || $user_id == $post->post_author || $city_id == $post->post_author ) {
+			$author_city_id = get_user_meta($post->post_author, 'city', true);
+			$author_city_user_id = $wpdb->get_var(
+					"SELECT user_id FROM " .
+					$wpdb->prefix . "vca_asm_geography " .
+					"WHERE id = " . $author_city_id
+				);
+			
+			if ( $city_user_id == $author_city_user_id || $user_id == $post->post_author || $city_user_id == $post->post_author ) {
 				$caps[] = $post_type->cap->delete_posts;
 			} else {
 				$caps[] = $post_type->cap->delete_others_posts;
@@ -1688,11 +1710,22 @@ class VCA_ASM_Activities
 		) {
 			
 			$city_id = get_user_meta($user_id, 'city', true);
-			$author_city_id = get_user_meta($post->post_author, 'city', true);
+			$city_user_id = $wpdb->get_var(
+					"SELECT user_id FROM " .
+					$wpdb->prefix . "vca_asm_geography " .
+					"WHERE id = " . $author_city_id
+				);
 			
+			$author_city_id = get_user_meta($post->post_author, 'city', true);
+			$author_city_user_id = $wpdb->get_var(
+					"SELECT user_id FROM " .
+					$wpdb->prefix . "vca_asm_geography " .
+					"WHERE id = " . $author_city_id
+				);
+				
 			if ( 'private' != $post->post_status ) {
 				$caps[] = 'read';
-			} elseif ( $city_id == $author_city_id || $city_id == $post->post_author || $user_id == $post->post_author ) {
+			} elseif ( $city_user_id == $author_city_user_id || $user_id == $post->post_author || $city_user_id == $post->post_author ) {
 				$caps[] = 'read';
 			} else {
 				$caps[] = $post_type->cap->read_private_posts;
