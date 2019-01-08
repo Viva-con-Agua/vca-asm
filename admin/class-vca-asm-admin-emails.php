@@ -1244,7 +1244,7 @@ class VCA_ASM_Admin_Emails {
 				$city_user_id = $wpdb->get_var(
 					"SELECT user_id FROM " .
 					$wpdb->prefix . "vca_asm_geography " .
-					"WHERE id = " . $author_city_id
+					"WHERE id = " . $city_id
 				);
 				
 		var_dump($city_user_id);
