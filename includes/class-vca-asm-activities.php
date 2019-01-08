@@ -1663,8 +1663,6 @@ class VCA_ASM_Activities
 			$author_city_id = get_user_meta($post->post_author, 'city', true);
 			$author_city_id = empty($author_city_id) ? $post->post_author : $author_city_id;
 			
-			var_dump('1 - ' . $author_city_id);
-			
 			$author_city_user_id = $wpdb->get_var(
 					"SELECT user_id FROM " .
 					$wpdb->prefix . "vca_asm_geography " .
@@ -1696,8 +1694,6 @@ class VCA_ASM_Activities
 			$author_city_id = get_user_meta($post->post_author, 'city', true);
 			$author_city_id = empty($author_city_id) ? $post->post_author : $author_city_id;
 			
-			var_dump('2 - ' . $author_city_id);
-			
 			$author_city_user_id = $wpdb->get_var(
 					"SELECT user_id FROM " .
 					$wpdb->prefix . "vca_asm_geography " .
@@ -1728,8 +1724,6 @@ class VCA_ASM_Activities
 			
 			$author_city_id = get_user_meta($post->post_author, 'city', true);
 			$author_city_id = empty($author_city_id) ? $post->post_author : $author_city_id;
-			
-			var_dump('3 - ' . $author_city_id);
 			
 			$author_city_user_id = $wpdb->get_var(
 					"SELECT user_id FROM " .
