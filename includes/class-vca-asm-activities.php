@@ -1679,17 +1679,12 @@ class VCA_ASM_Activities
 			var_dump('AUTHOR_CITY_ID: ' . $author_city_id);
 			var_dump('AUTHOR_CITY_USER_ID: ' . $author_city_user_id);
 			
-			if ( $user_id == $post->post_author ) {
+			if ( $city_user_id == $user_id || $city_user_id == $author_city_user_id ||  $user_id == $post->post_author || $city_user_id == $post->post_author ) {
 				var_dump('EDIT_CAPS:');
 				var_dump($post_type->cap->edit_posts);
 				$caps[] = $post_type->cap->edit_posts;
-			} else if ( $city_user_id == $user_id || $city_user_id == $author_city_user_id ||  $city_user_id == $post->post_author ) {
-				var_dump('EDIT_OTHERS_CAPS:');
-				var_dump($post_type->cap->edit_others_posts);
-				$caps[] = $post_type->cap->edit_others_posts;
-				$caps[] = 'edit_others_posts';
-				$caps[] = 'edit_posts';
 			} else {
+				var_dump('EDIT_OTHERS_CAPS:');
 				var_dump($post_type->cap->edit_others_posts);
 				$caps[] = $post_type->cap->edit_others_posts;
 			}
