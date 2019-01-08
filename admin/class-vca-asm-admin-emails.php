@@ -258,7 +258,7 @@ class VCA_ASM_Admin_Emails {
 							);
 						
 				} else {
-					$sent_by = $current_user->ID
+					$sent_by = $current_user->ID;
 				}
 				
 				if( empty( $where ) ) {
