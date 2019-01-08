@@ -1246,6 +1246,7 @@ class VCA_ASM_Admin_Emails {
 		$mail_type = isset( $_POST['mail_type'] ) ? $_POST['mail_type'] : '';
 		$ignore_switch = isset( $_POST['ignore_switch'] ) ? true : false;
 
+		var_dump($_POST);
 		var_dump($receipient_group);
 		
 		if ( ! empty( $receipient_group ) ) {

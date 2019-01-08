@@ -209,7 +209,7 @@ class VCA_ASM_Mailer
 		} else {
 		
 			$city_id = get_user_meta($current_user->ID, 'city', true);
-			$city_user_id = $wpdb->get_var(
+			$sent_by = $wpdb->get_var(
 						"SELECT user_id FROM " .
 						$wpdb->prefix . "vca_asm_geography " .
 						"WHERE id = " . $city_id
@@ -243,7 +243,7 @@ class VCA_ASM_Mailer
                 'level' => 'DEBUG',
                 'message' => print_r($mail_id, true) . ' | ' . $wpdb->last_error . ' | ' . print_r(array(
 					'time' => $time,
-					'sent_by' => $current_user->ID,
+					'sent_by' => $sent_by,
 					'from' => $from_email,
 					'from_name' => 'TK',
 					'subject' => $subject,
