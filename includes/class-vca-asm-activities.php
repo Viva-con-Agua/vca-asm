@@ -1676,7 +1676,7 @@ class VCA_ASM_Activities
 			var_dump('AUTHOR_CITY_ID: ' . $author_city_id);
 			var_dump('AUTHOR_CITY_USER_ID: ' . $author_city_user_id);
 			
-			if ( $city_user_id == $user_id || $city_user_id == $author_city_user_id || $user_id == $post->post_author || $city_user_id == $post->post_author ) {
+			if ( $user_id == $post->post_author ) {
 				$caps[] = $post_type->cap->edit_posts;
 			} else {
 				$caps[] = $post_type->cap->edit_others_posts;
