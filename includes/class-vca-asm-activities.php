@@ -1661,6 +1661,9 @@ class VCA_ASM_Activities
 				);
 			
 			$author_city_id = get_user_meta($post->post_author, 'city', true);
+			
+			var_dump($post->post_author);
+			
 			$author_city_user_id = $wpdb->get_var(
 					"SELECT user_id FROM " .
 					$wpdb->prefix . "vca_asm_geography " .
