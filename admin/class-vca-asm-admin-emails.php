@@ -1216,7 +1216,7 @@ class VCA_ASM_Admin_Emails {
 	private function process() {
         /** @var vca_asm_geography $vca_asm_geography */
         /** @var vca_asm_mailer $vca_asm_mailer */
-		global $current_user, $vca_asm_mailer, $vca_asm_geography;
+		global $wpdb, $current_user, $vca_asm_mailer, $vca_asm_geography;
 
 		echo "<pre>";
 		var_dump('INSIDE');
