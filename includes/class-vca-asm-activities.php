@@ -1640,7 +1640,7 @@ class VCA_ASM_Activities
 		) {
 			$post = get_post( $args[0] );
 			$post_type = get_post_type_object( $post->post_type );
-
+			var_dump($cap);
 			/* Set an empty array for the caps. */
 			$caps = array();
 		}
