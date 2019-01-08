@@ -238,6 +238,7 @@ class VCA_ASM_Activities
 
 		if ( ! empty( $post->ID ) ) {
 			$this->the_activity = new VCA_ASM_Activity( $post->ID );
+			var_dump('I AM IN THE POST OR SO');
 		}
 
 		/* Action Hooks */
