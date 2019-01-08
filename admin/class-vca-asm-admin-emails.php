@@ -1218,6 +1218,9 @@ class VCA_ASM_Admin_Emails {
         /** @var vca_asm_mailer $vca_asm_mailer */
 		global $current_user, $vca_asm_mailer, $vca_asm_geography;
 
+		echo "<pre>";
+		var_dump('INSIDE');
+		
 		$membership = ( isset( $_POST['membership'] ) && in_array( $_POST['membership'], array( 'all', 'active', 'inactive', 'agree' ) ) ) ? $_POST['membership'] : 'all';
 		$receipient_group = isset( $_POST['receipient-group'] ) ? $_POST['receipient-group'] : '';
 		$save = true;
@@ -1235,15 +1238,18 @@ class VCA_ASM_Admin_Emails {
 			} else {
 				$city_id = get_user_meta( $current_user->ID, 'city', true );
 				
+		var_dump($city_id);
 				$city_user_id = $wpdb->get_var(
 					"SELECT user_id FROM " .
 					$wpdb->prefix . "vca_asm_geography " .
 					"WHERE id = " . $author_city_id
 				);
 				
+		var_dump($city_user_id);
 				$city_name = $vca_asm_geography->get_name( $city_id );
 				$from_name = $vca_asm_geography->get_type( $city_id ) . ' ' . $city_name;
 				$user_info = get_userdata($city_user_id);
+		var_dump($user_info);
 				$from_email = $user_info->user_email;
 				$format = ! empty( $this->emails_options['email_format_ho'] ) ? $this->emails_options['email_format_ho'] : 'html';
 			}
@@ -1275,6 +1281,9 @@ class VCA_ASM_Admin_Emails {
 		} else {
 			$success = false;
 		}
+		
+		var_dump($success);
+		echo "</pre>";
 
 		return $success;
 	}
