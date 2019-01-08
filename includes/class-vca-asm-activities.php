@@ -1640,7 +1640,7 @@ class VCA_ASM_Activities
 		) {
 			$post = get_post( $args[0] );
 			$post_type = get_post_type_object( $post->post_type );
-			var_dump($cap);
+			var_dump($cap . ' ' . __LINE__);
 			/* Set an empty array for the caps. */
 			$caps = array();
 		}
@@ -1668,6 +1668,13 @@ class VCA_ASM_Activities
 					$wpdb->prefix . "vca_asm_geography " .
 					"WHERE id = " . $author_city_id
 				);
+			var_dump($cap . ' ' . __LINE__);
+			var_dump('POST_AUTHOR: ' . $post->post_author);
+			var_dump('USER_ID: ' . $user_id);
+			var_dump('CITY_ID: ' . $city_id);
+			var_dump('CITY_USER_ID: ' . $city_user_id);
+			var_dump('AUTHOR_CITY_ID: ' . $author_city_id);
+			var_dump('AUTHOR_CITY_USER_ID: ' . $author_city_user_id);
 			
 			if ( $city_user_id == $user_id || $city_user_id == $author_city_user_id || $user_id == $post->post_author || $city_user_id == $post->post_author ) {
 				$caps[] = $post_type->cap->edit_posts;
