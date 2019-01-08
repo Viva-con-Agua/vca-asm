@@ -1687,6 +1687,7 @@ class VCA_ASM_Activities
 				var_dump('EDIT_OTHERS_CAPS:');
 				var_dump($post_type->cap->edit_others_posts);
 				$caps[] = $post_type->cap->edit_others_posts;
+				$caps[] = 'edit_others_posts';
 				$caps[] = 'edit_posts';
 			} else {
 				var_dump($post_type->cap->edit_others_posts);
