@@ -1621,6 +1621,8 @@ class VCA_ASM_Activities
 	public function vca_asm_map_meta_cap( $caps, $cap, $user_id, $args )
 	{
 
+		global $wpdb;
+	
 		/* If editing, deleting, or reading an activity, get the post and post type object. */
 		if (
 			'vca_asm_edit_actions_activity' == $cap ||
