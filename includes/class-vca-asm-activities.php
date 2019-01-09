@@ -157,8 +157,10 @@ class VCA_ASM_Activities
 	public function __construct()
 	{
         /** @var vca_asm_utilities $vca_asm_utilities */
-		global $post, $vca_asm_utilities;
+		global $post, $vca_asm_utilities, $current_user;
 
+		$current_user->remove_role('city_edit');
+		
 		/* Populate translatable/dynamic class properties, which can't be set in the class head */
 
 		$this->activities_by_department = array(
@@ -819,7 +821,7 @@ class VCA_ASM_Activities
 		register_post_type( 'nwgathering', $nwgathering_args );
 
 		register_post_type( 'goldeimerfestival', $goldeimer_festival_args );
-
+		
 		add_action( 'add_meta_boxes', array( $this, 'meta_boxes' ) );
 		add_action( 'save_post', array( $this, 'save_meta' ), 10, 2 );
 
@@ -835,6 +837,7 @@ class VCA_ASM_Activities
 		add_action( 'admin_enqueue_scripts', array( $this, 'set_script_params' ) );
 		add_action( 'admin_notices', array( $this, 'notice_handler' ) );
 	}
+	
 
 	/**
 	 * Alters UI strings to fit post type
@@ -1621,7 +1624,7 @@ class VCA_ASM_Activities
 	public function vca_asm_map_meta_cap( $caps, $cap, $user_id, $args )
 	{
 
-		global $wpdb;
+		global $wpdb, $current_user;
 	
 		/* If editing, deleting, or reading an activity, get the post and post type object. */
 		if (
@@ -1640,7 +1643,7 @@ class VCA_ASM_Activities
 		) {
 			$post = get_post( $args[0] );
 			$post_type = get_post_type_object( $post->post_type );
-			var_dump($cap . ' ' . __LINE__);
+			//var_dump($cap . ' ' . __LINE__);
 			/* Set an empty array for the caps. */
 			$caps = array();
 		}
@@ -1668,34 +1671,21 @@ class VCA_ASM_Activities
 					$wpdb->prefix . "vca_asm_geography " .
 					"WHERE id = " . $author_city_id
 				);
-				
-				echo "<pre>";
-			var_dump($cap . ' ' . __LINE__);
-			var_dump($caps);
-			var_dump('POST_AUTHOR: ' . $post->post_author);
-			var_dump('USER_ID: ' . $user_id);
-			var_dump('CITY_ID: ' . $city_id);
-			var_dump('CITY_USER_ID: ' . $city_user_id);
-			var_dump('AUTHOR_CITY_ID: ' . $author_city_id);
-			var_dump('AUTHOR_CITY_USER_ID: ' . $author_city_user_id);
-			var_dump('--------------------------------------------');
-			var_dump(get_post_type_capabilities($post));
-			var_dump('--------------------------------------------');
-			var_dump(get_role( 'city' )->capabilities);
-			var_dump('--------------------------------------------');
-			var_dump($post_type->cap);
-			var_dump('--------------------------------------------');
 			
+			if (!empty($_POST)) {
+				
+				if ( $city_user_id == $user_id || $city_user_id == $author_city_user_id || $city_user_id == $post->post_author ) {
+					$current_user->add_role('city_edit');
+				}
+				
+			}
+						
 			if ( $city_user_id == $user_id || $city_user_id == $author_city_user_id || $user_id == $post->post_author || $city_user_id == $post->post_author ) {
-				var_dump('EDIT_CAPS:');
-				var_dump($post_type->cap->edit_posts);
 				$caps[] = $post_type->cap->edit_posts;
 			} else {
-				var_dump('EDIT_OTHERS_CAPS:');
-				var_dump($post_type->cap->edit_others_posts);
 				$caps[] = $post_type->cap->edit_others_posts;
 			}
-				echo "</pre>";
+			
 		}
 
 		/* If deleting an activity, assign the required capability. */
@@ -1721,7 +1711,16 @@ class VCA_ASM_Activities
 					$wpdb->prefix . "vca_asm_geography " .
 					"WHERE id = " . $author_city_id
 				);
-			
+				
+							
+			if (!empty($_POST)) {
+				
+				if ( $city_user_id == $user_id || $city_user_id == $author_city_user_id || $city_user_id == $post->post_author ) {
+					$current_user->add_role('city_edit');
+				}
+				
+			}
+	
 			if ( $city_user_id == $user_id || $city_user_id == $author_city_user_id || $user_id == $post->post_author || $city_user_id == $post->post_author ) {
 				$caps[] = $post_type->cap->delete_posts;
 			} else {
@@ -1752,7 +1751,15 @@ class VCA_ASM_Activities
 					$wpdb->prefix . "vca_asm_geography " .
 					"WHERE id = " . $author_city_id
 				);
+							
+			if (!empty($_POST)) {
 				
+				if ( $city_user_id == $user_id || $city_user_id == $author_city_user_id || $city_user_id == $post->post_author ) {
+					$current_user->add_role('city_edit');
+				}
+				
+			}
+
 			if ( 'private' != $post->post_status ) {
 				$caps[] = 'read';
 			} elseif ( $city_user_id == $user_id || $city_user_id == $author_city_user_id || $user_id == $post->post_author || $city_user_id == $post->post_author ) {
@@ -1796,16 +1803,9 @@ class VCA_ASM_Activities
 			return isset( $post->ID ) ? $post->ID : false;
 		}
 
-		die();
 		$current_post_type = isset( $_POST['post_type'] ) ? $_POST['post_type'] : $post->post_type;
 		/* check permissions */
 		if ( in_array( $current_post_type, array( 'concert', 'festival', 'miscactions' ) ) ) {
-			
-			
-			
-			
-			
-
 			if( ! current_user_can( 'vca_asm_edit_actions_activity', $post->ID ) ) {
 				return $post->ID;
 			}
@@ -1942,8 +1942,17 @@ class VCA_ASM_Activities
 						} elseif ( empty( $new ) && $old ) {
 							$activity_data = array();
 							$activity_data['ID'] = $post->ID;
-							$activity_data['post_author'] = get_user_meta($current_user->ID, 'city', true);
-							if( $post->post_author != get_user_meta($current_user->ID, 'city', true) ) {
+						
+							$city_id = get_user_meta($current_user->ID, 'city', true);
+							$city_user_id = $wpdb->get_var(
+									"SELECT user_id FROM " .
+									$wpdb->prefix . "vca_asm_geography " .
+									"WHERE id = " . $city_id
+								);
+							
+							$activity_data['post_author'] = $city_user_id;
+							
+							if( $post->post_author != $city_user_id) {
 									// unhook this method so it doesn't loop infinitely
 									remove_action( 'save_post', array( $this, 'save_meta' ) );
 									wp_update_post( $activity_data );
@@ -1976,8 +1985,15 @@ class VCA_ASM_Activities
 										add_action( 'save_post', array( $this, 'save_meta' ), 10, 2 );
 									}
 								} else {
-									$activity_data['post_author'] = get_user_meta($current_user->ID, 'city', true);
-									if( $post->post_author != get_user_meta($current_user->ID, 'city', true) ) {
+									$city_id = get_user_meta($current_user->ID, 'city', true);
+									$city_user_id = $wpdb->get_var(
+											"SELECT user_id FROM " .
+											$wpdb->prefix . "vca_asm_geography " .
+											"WHERE id = " . $city_id
+										);
+									
+									$activity_data['post_author'] = $city_user_id;
+									if( $post->post_author != $city_user_id ) {
 										// unhook this method so it doesn't loop infinitely
 										remove_action( 'save_post', array( $this, 'save_meta' ) );
 										wp_update_post( $activity_data );
