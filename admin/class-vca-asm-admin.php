@@ -369,8 +369,8 @@ class VCA_ASM_Admin {
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'high_priority_admin_menu' ), 9 );
 		add_action( 'admin_menu', array( $this, 'low_priority_admin_menu' ), 11 );
-		add_action( 'admin_head', 'add_custom_admin_header');
-		add_action( 'admin_footer', 'add_custom_admin_footer');
+		add_action( 'admin_head', array( $this, 'add_custom_admin_header' ));
+		add_action( 'admin_head', array( $this, 'add_custom_admin_footer' ));
 	}
 
 } // class
