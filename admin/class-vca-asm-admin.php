@@ -356,7 +356,8 @@ class VCA_ASM_Admin {
 		'<script src="/dispenser/javascript/dropzone.js"></script>' .
 		'<script src="/dispenser/javascript/config.js"></script>' .
 		'<link href="/arise/arise.css" rel="stylesheet">' .
-		'<link rel="stylesheet" media="screen" href="/dispenser/css/vca.css">';
+		'<link rel="stylesheet" media="screen" href="/dispenser/css/vca.css">' . 
+		'<style>.navbar { width: 100% !important; right: 0!important; position: absolute !important; z-index: 100 !important;}</style>';
 		
 	}
 
