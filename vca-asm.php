@@ -297,7 +297,7 @@ function check_certificate( $atts )
 	
 			
 	$current_user = wp_get_current_user();
-	$membership = get_user_meta($current_user->id, 'membership', true);
+	$membership = get_user_meta($current_user->ID, 'membership', true);
 	$isMembership = (!empty($membership) && $membership == 2);
 	
 	if (!$isMembership) {
