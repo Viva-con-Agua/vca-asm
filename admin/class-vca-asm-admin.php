@@ -344,21 +344,19 @@ class VCA_ASM_Admin {
 		return $output;
 	}
 	
-	public function add_admin_footer() {
-		echo '<div class="wp-navbar-vca-container">
-			<div id="navigation-widget"></div>
-			<script type="text/javascript" src="/dispenser/javascript/navigation_widget.js"></script>
-		</div>';
+	public function add_custom_admin_footer() {
+		echo '<div class="wp-navbar-vca-container"><div id="navigation-widget"></div><script type="text/javascript" src="/dispenser/javascript/navigation_widget.js"></script></div>';
 	}
-	public function add_admin_head() {
+	
+	public function add_custom_admin_header() {
 		
-		echo '<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
-		<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-		<script src="/dispenser/javascript/dropzone.js"></script>
-		<script src="/dispenser/javascript/config.js"></script>
-		<link href="/arise/arise.css" rel="stylesheet">
-		<link rel="stylesheet" media="screen" href="/dispenser/css/vca.css">';
+		echo '<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">' .
+		'<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>' .
+		'<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>' .
+		'<script src="/dispenser/javascript/dropzone.js"></script>' .
+		'<script src="/dispenser/javascript/config.js"></script>' .
+		'<link href="/arise/arise.css" rel="stylesheet">' .
+		'<link rel="stylesheet" media="screen" href="/dispenser/css/vca.css">';
 		
 	}
 
@@ -371,8 +369,8 @@ class VCA_ASM_Admin {
 	public function __construct() {
 		add_action( 'admin_menu', array( $this, 'high_priority_admin_menu' ), 9 );
 		add_action( 'admin_menu', array( $this, 'low_priority_admin_menu' ), 11 );
-		add_action( 'admin_head', 'add_admin_head');
-		add_action( 'admin_footer', 'add_admin_footer');
+		add_action( 'admin_head', 'add_custom_admin_header');
+		add_action( 'admin_footer', 'add_custom_admin_footer');
 	}
 
 } // class
