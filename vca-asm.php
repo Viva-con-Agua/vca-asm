@@ -64,7 +64,7 @@ if ( ! defined( 'VCA_ASM_ABSPATH' ) ) {
 	define( 'VCA_ASM_ABSPATH', dirname( __FILE__ ) );
 }
 
-putenv('TMPDIR=/tmp/test');
+putenv('TMPDIR=/tmp/phpexcel');
 
 var_dump(sys_get_temp_dir());
 
