@@ -69,7 +69,7 @@ class PHPExcel_Shared_ZipArchive
      */
 	public function open($fileName)
 	{
-		$this->_tempDir = PHPExcel_Shared_File::sys_get_temp_dir();
+		$this->_tempDir = PHPExcel_Shared_File::sys_get_temp_dir() . '/';
 
 		$this->_zip = new PclZip($fileName);
 
