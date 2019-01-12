@@ -359,7 +359,7 @@ class VCA_ASM_Admin {
 		'<link rel="stylesheet" media="screen" href="/dispenser/css/vca.css">' . 
 		'<style>' .
 		'.navbar { width: 100% !important; right: 0!important; position: absolute !important; z-index: 100 !important;}' .
-		'#adminmenu .wp-menu-image img { width: 16px !important; height: 16px !important; padding: 0 !important; margin-top: 2px !important;}' .
+		'#adminmenu .wp-menu-image img { width: 16px !important; height: 16px !important; padding: 0 !important; margin-top: 10px !important;}' .
 		'#wpfooter { display: none; }' .
 		'</style>';
 		
