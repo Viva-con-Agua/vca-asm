@@ -254,6 +254,7 @@ class VCA_ASM_Workbook
 		$this->title = empty( $this->title ) ? $title : $this->title;
 		$this->filename = empty( $this->filename ) ? str_replace( ' ', '_', $filename ) : $this->filename;
 
+		PHPExcel_Settings::setZipClass(PHPExcel_Settings::PCLZIP);
 		$this->workbook = new PHPExcel();
 
 		$this->workbook->getSecurity()->setLockWindows( false )
