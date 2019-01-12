@@ -22,7 +22,7 @@
  * @package    PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    ##VERSION##, ##DATE##
+ * @version    1.8.0, 2014-03-02
  */
 
 
@@ -82,11 +82,9 @@ class PHPExcel_Worksheet_Row
 	/**
 	 * Get cell iterator
 	 *
-	 * @param	string				$startColumn	The column address at which to start iterating
-	 * @param	string				$endColumn	    Optionally, the column address at which to stop iterating
 	 * @return PHPExcel_Worksheet_CellIterator
 	 */
-	public function getCellIterator($startColumn = 'A', $endColumn = null) {
-		return new PHPExcel_Worksheet_RowCellIterator($this->_parent, $this->_rowIndex, $startColumn, $endColumn);
+	public function getCellIterator() {
+		return new PHPExcel_Worksheet_CellIterator($this->_parent, $this->_rowIndex);
 	}
 }

@@ -22,7 +22,7 @@
  * @package    PHPExcel_Worksheet
  * @copyright  Copyright (c) 2006 - 2014 PHPExcel (http://www.codeplex.com/PHPExcel)
  * @license    http://www.gnu.org/licenses/old-licenses/lgpl-2.1.txt	LGPL
- * @version    ##VERSION##, ##DATE##
+ * @version    1.8.0, 2014-03-02
  */
 
 
@@ -145,7 +145,7 @@ class PHPExcel_Worksheet_RowDimension
 	 *
 	 * @return bool
 	 */
-	public function getZeroHeight() {
+	public function getzeroHeight() {
 		return $this->_zeroHeight;
 	}
 
@@ -155,7 +155,7 @@ class PHPExcel_Worksheet_RowDimension
 	 * @param bool $pValue
 	 * @return PHPExcel_Worksheet_RowDimension
 	 */
-	public function setZeroHeight($pValue = false) {
+	public function setzeroHeight($pValue = false) {
 		$this->_zeroHeight = $pValue;
 		return $this;
 	}
