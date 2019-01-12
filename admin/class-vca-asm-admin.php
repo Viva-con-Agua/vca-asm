@@ -345,12 +345,12 @@ class VCA_ASM_Admin {
 	}
 	
 	public function add_custom_admin_footer() {
-		echo '<div class="wp-navbar-vca-container"><div id="navigation-widget"></div><script type="text/javascript" src="/dispenser/javascript/navigation_widget.js"></script></div>';
+		//echo '<div class="wp-navbar-vca-container"><div id="navigation-widget"></div><script type="text/javascript" src="/dispenser/javascript/navigation_widget.js"></script></div>';
 	}
 	
 	public function add_custom_admin_header() {
 		
-		echo '<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">' .
+	/*	echo '<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">' .
 		'<script src="https://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>' .
 		'<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>' .
 		'<script src="/dispenser/javascript/dropzone.js"></script>' .
@@ -362,7 +362,7 @@ class VCA_ASM_Admin {
 		'#adminmenu .wp-menu-image img { width: 16px !important; height: 16px !important; padding: 0 !important; margin-top: 10px !important;}' .
 		'#wpfooter { display: none; }' .
 		'</style>';
-		
+		*/
 	}
 
 	/**
