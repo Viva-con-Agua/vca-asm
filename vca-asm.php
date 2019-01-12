@@ -64,7 +64,7 @@ if ( ! defined( 'VCA_ASM_ABSPATH' ) ) {
 	define( 'VCA_ASM_ABSPATH', dirname( __FILE__ ) );
 }
 
-putenv('TMPDIR=/tmp/');
+putenv('TMPDIR=/tmp');
 
 /**
  * Holds the URL of VcA Activity & Supporter Management
