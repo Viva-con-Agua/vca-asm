@@ -66,8 +66,6 @@ if ( ! defined( 'VCA_ASM_ABSPATH' ) ) {
 
 putenv('TMPDIR=/tmp/phpexcel');
 
-var_dump(sys_get_temp_dir());
-
 /**
  * Holds the URL of VcA Activity & Supporter Management
  *
