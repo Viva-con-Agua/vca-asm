@@ -1530,7 +1530,7 @@ class VCA_ASM_Mailer
 				
 				var_dump("SELECT COUNT(*) FROM " .
 					$wpdb->prefix . "vca_asm_geography " .
-					"WHERE user_id = " . $user->ID);die()
+					"WHERE user_id = " . $user->ID);die();
 
 		}
 
