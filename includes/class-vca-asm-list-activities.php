@@ -158,7 +158,7 @@ class VCA_ASM_List_Activities
 				),
 				array(
 					'key' => 'end_app',
-					'value' => time() - 60*60*22,
+					'value' => (time() - 60*60*22),
 					'compare' => '>=',
 					'type' => 'numeric'
 				)

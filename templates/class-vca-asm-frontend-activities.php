@@ -528,7 +528,7 @@ class VCA_ASM_Frontend_Activities {
 
                             // Check if application is possible (maybe its not because of the camp site)
 
-                        if ($the_activity->start_app <= time() && $the_activity->end_app >= time()) {
+                        if ($the_activity->start_app <= time() && $the_activity->end_app >= (time() - 60*60*22)) {
 
                             $output .= '<div class="form-row">' .
 								'<textarea name="notes" id="notes" rows="5"></textarea>' .
