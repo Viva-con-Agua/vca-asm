@@ -1287,7 +1287,8 @@ class VCA_ASM_Mailer
 					/* loop through all grabbed users */
 					$users = array_merge( $primary_users, $secondary_users );
 					foreach ( $users as $user ) {
-						if ( ! in_array( 'city', $user->roles ) && ! in_array( 'pending', $user->roles ) ) {
+						$realCity = $this->checkRealCity($user);
+						if (!$realCity && !in_array( 'pending', $user->roles ) ) {
 							$receipients[] = $user->ID;
 						}
 					}
@@ -1342,7 +1343,8 @@ class VCA_ASM_Mailer
 					);
 					$users = get_users( $args );
 					foreach ( $users as $user ) {
-						if ( ! in_array( 'city', $user->roles ) && ! in_array( 'pending', $user->roles ) ) {
+						$realCity = $this->checkRealCity($user);
+						if (!$realCity && !in_array( 'pending', $user->roles ) ) {
 							$receipients[] = $user->ID;
 						}
 					}
@@ -1392,7 +1394,8 @@ class VCA_ASM_Mailer
 					);
 					$users = get_users( $args );
 					foreach ( $users as $user ) {
-						if ( ! in_array( 'city', $user->roles ) && ! in_array( 'pending', $user->roles ) ) {
+						$realCity = $this->checkRealCity($user);
+						if (!$realCity && !in_array( 'pending', $user->roles ) ) {
 							$receipients[] = $user->ID;
 						}
 					}
@@ -1436,7 +1439,8 @@ class VCA_ASM_Mailer
 					);
 					$users = get_users( $args );
 					foreach ( $users as $user ) {
-						if ( ! in_array( 'city', $user->roles ) && ! in_array( 'pending', $user->roles ) ) {
+						$realCity = $this->checkRealCity($user);
+						if (!$realCity && !in_array( 'pending', $user->roles ) ) {
 							$receipients[] = $user->ID;
 						}
 					}
@@ -1506,6 +1510,28 @@ class VCA_ASM_Mailer
 		}
 
 		return $receipient_id;
+	}
+
+	private function checkRealCity($user)
+	{
+
+		global $wpdb;
+
+		// Check if user is a real city
+		$is_real_city = false;
+
+		if (in_array( 'city', $user->roles )) {
+
+			$is_real_city = $wpdb->get_var(
+					"SELECT COUNT(*) FROM " .
+					$wpdb->prefix . "vca_asm_geography " .
+					"WHERE user_id = " . $user->ID
+				);
+
+		}
+
+		return $is_real_city;
+
 	}
 
 } // class
