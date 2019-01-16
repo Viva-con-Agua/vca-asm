@@ -1273,6 +1273,10 @@ class VCA_ASM_Mailer
 					$args = array(
 						'meta_query' => $primary_metaqueries
 					);
+					
+					echo "<pre>";
+					var_dump($args);
+					
 					$primary_users = get_users( $args );
 					/* secondary city newsletter */
 					$secondary_metaqueries = $metaqueries;
