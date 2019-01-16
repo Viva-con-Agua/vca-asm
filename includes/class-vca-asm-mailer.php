@@ -1274,9 +1274,6 @@ class VCA_ASM_Mailer
 						'meta_query' => $primary_metaqueries
 					);
 					
-					echo "<pre>";
-					var_dump($args);
-					
 					$primary_users = get_users( $args );
 					/* secondary city newsletter */
 					$secondary_metaqueries = $metaqueries;
@@ -1290,8 +1287,6 @@ class VCA_ASM_Mailer
 					$secondary_users = get_users( $args );
 					/* loop through all grabbed users */
 					$users = array_merge( $primary_users, $secondary_users );
-					
-					var_dump($users);
 					
 					foreach ( $users as $user ) {
 						$realCity = $this->checkRealCity($user);
