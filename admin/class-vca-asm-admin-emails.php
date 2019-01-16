@@ -1259,8 +1259,6 @@ class VCA_ASM_Admin_Emails {
 
 			list( $receipient_id, $receipients ) = $vca_asm_mailer->receipient_id_from_group( $receipient_group, true, $ignore_switch, $membership );
 
-			var_dump($receipients);die();
-			
 			if ( ! in_array( 'city', $current_user->roles ) ) {
 				$from_name = trim( $current_user->first_name . ' ' . $current_user->last_name );
 				$from_email = $current_user->user_email;
